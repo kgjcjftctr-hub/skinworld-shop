@@ -1,0 +1,19 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hoja principal (plantita) -->
+  <g id="leaf">
+    <!-- Tallo -->
+    <path d="M 50 30 Q 48 45 50 70" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+    
+    <!-- Hoja superior izquierda -->
+    <ellipse cx="35" cy="40" rx="12" ry="18" fill="#1a1a1a" transform="rotate(-45 35 40)"/>
+    
+    <!-- Hoja superior derecha -->
+    <ellipse cx="65" cy="40" rx="12" ry="18" fill="#1a1a1a" transform="rotate(45 65 40)"/>
+    
+    <!-- Hoja media izquierda -->
+    <ellipse cx="32" cy="55" rx="12" ry="18" fill="#1a1a1a" transform="rotate(-35 32 55)"/>
+    
+    <!-- Hoja media derecha -->
+    <ellipse cx="68" cy="55" rx="12" ry="18" fill="#1a1a1a" transform="rotate(35 68 55)"/>
+  </g>
+</svg>

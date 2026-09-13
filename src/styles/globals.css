@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply border-slate-200;
+}
+
+html {
+  @apply scroll-smooth;
+  @apply text-base text-ink;
+}
+
+body {
+  @apply bg-white;
+  @apply font-sans antialiased;
+}
+
+/* Tipografía editorial */
+h1 {
+  @apply font-display text-5xl font-bold leading-tight tracking-tight;
+}
+
+h2 {
+  @apply font-display text-4xl font-bold leading-snug;
+}
+
+h3 {
+  @apply font-display text-2xl font-semibold leading-snug;
+}
+
+h4 {
+  @apply font-display text-xl font-semibold;
+}
+
+p {
+  @apply text-base leading-relaxed;
+}
+
+/* Botones */
+.btn {
+  @apply inline-flex items-center justify-center;
+  @apply px-6 py-3 rounded-md;
+  @apply font-accent font-semibold text-sm tracking-wide;
+  @apply transition-all duration-200;
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.btn-primary {
+  @apply bg-ink text-white shadow-card;
+  @apply hover:-translate-y-0.5 hover:bg-primary-800 hover:shadow-card-hover;
+  @apply focus:ring-primary-500;
+}
+
+.btn-secondary {
+  @apply bg-transparent text-ink border border-ink/20;
+  @apply hover:border-gold-500;
+  @apply focus:ring-slate-400;
+}
+
+.btn-ghost {
+  @apply bg-transparent text-primary-700;
+  @apply hover:bg-primary-50;
+  @apply focus:ring-primary-400;
+}
+
+/* Links */
+a {
+  @apply text-primary-700 hover:text-primary-900;
+  @apply transition-colors;
+}
+
+/* Forms */
+input,
+textarea,
+select {
+  @apply w-full px-4 py-2.5 rounded-md;
+  @apply border border-slate-200 bg-white;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent;
+  @apply transition-all;
+}
+
+input::placeholder,
+textarea::placeholder {
+  @apply text-slate-400;
+}
+
+/* Fade-in on scroll (paired with the Reveal component) */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Selectores reducidos */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    @apply !transition-none !animate-none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Accesibilidad - Focus visible */
+*:focus-visible {
+  @apply outline-2 outline-offset-2 outline-primary-500;
+}
+
+/* Print styles */
+@media print {
+  body {
+    @apply bg-white text-black;
+  }
+
+  a {
+    @apply text-black underline;
+  }
+}
