@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -12,10 +13,38 @@ export default function CartPage() {
   const removeItem = useCart((state) => state.removeItem);
   const updateQuantity = useCart((state) => state.updateQuantity);
   const subtotal = useCart((state) => state.getTotalPrice());
+  const [checkingOut, setCheckingOut] = useState(false);
 
-  const tax = subtotal * 0.16;
+  const handleCheckout = async () => {
+    setCheckingOut(true);
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: items.map((item) => ({ id: item.id, cartQuantity: item.cartQuantity })),
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.url) {
+        toast.error(data.error || 'No se pudo iniciar el pago');
+        return;
+      }
+
+      window.location.href = data.url;
+    } catch {
+      toast.error('Error de conexión. Intenta de nuevo.');
+    } finally {
+      setCheckingOut(false);
+    }
+  };
+
+  // subtotal ya incluye el 16% de IVA (priceWithIVA); aquí solo se
+  // desglosa para mostrarlo, no se vuelve a sumar.
+  const tax = subtotal - subtotal / 1.16;
   const shipping = subtotal > 500 ? 0 : 100;
-  const total = subtotal + tax + shipping;
+  const total = subtotal + shipping;
 
   const handleRemove = (id: string, name: string) => {
     removeItem(id);
@@ -162,10 +191,14 @@ export default function CartPage() {
                 </span>
               </div>
 
-              <Link href="/checkout" className="btn btn-primary mb-3 w-full">
-                <span>Proceder al Pago</span>
+              <button
+                onClick={handleCheckout}
+                disabled={checkingOut}
+                className="btn btn-primary mb-3 w-full disabled:opacity-50"
+              >
+                <span>{checkingOut ? 'Redirigiendo...' : 'Proceder al Pago'}</span>
                 <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
+              </button>
               <Link href="/tienda" className="btn btn-secondary w-full">
                 Seguir comprando
               </Link>
@@ -182,10 +215,14 @@ export default function CartPage() {
             {formatPrice(total)}
           </span>
         </div>
-        <Link href="/checkout" className="btn btn-primary w-full">
-          <span>Proceder al Pago</span>
+        <button
+          onClick={handleCheckout}
+          disabled={checkingOut}
+          className="btn btn-primary w-full disabled:opacity-50"
+        >
+          <span>{checkingOut ? 'Redirigiendo...' : 'Proceder al Pago'}</span>
           <ArrowRight className="ml-2 h-4 w-4" />
-        </Link>
+        </button>
       </div>
     </div>
   );
