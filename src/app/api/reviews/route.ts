@@ -1,40 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { randomUUID } from 'crypto';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { createClient } from '@supabase/supabase-js';
 
-const DATA_DIR = path.join(process.cwd(), 'data');
-const DATA_FILE = path.join(DATA_DIR, 'reviews.json');
-
-type Review = {
-  id: string;
-  rating: number;
-  comment: string;
-  createdAt: string;
-};
-
-async function readReviews(): Promise<Review[]> {
-  try {
-    const raw = await fs.readFile(DATA_FILE, 'utf-8');
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-
-async function writeReviews(reviews: Review[]) {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  await fs.writeFile(DATA_FILE, JSON.stringify(reviews, null, 2));
+function getSupabase() {
+  return createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_SECRET_KEY!
+  );
 }
 
 export async function GET() {
-  const reviews = await readReviews();
-  const sorted = [...reviews].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-  const count = sorted.length;
-  const average = count > 0 ? sorted.reduce((sum, r) => sum + r.rating, 0) / count : 0;
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from('reviews')
+    .select('id, rating, comment, created_at')
+    .order('created_at', { ascending: false })
+    .limit(60);
 
-  return NextResponse.json({ reviews: sorted.slice(0, 60), average, count });
+  if (error) {
+    console.error('Failed to fetch reviews:', error);
+    return NextResponse.json({ error: 'Error al cargar las reseñas' }, { status: 500 });
+  }
+
+  const reviews = (data ?? []).map((r) => ({
+    id: r.id,
+    rating: r.rating,
+    comment: r.comment,
+    createdAt: r.created_at,
+  }));
+  const count = reviews.length;
+  const average = count > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / count : 0;
+
+  return NextResponse.json({ reviews, average, count });
 }
 
 export async function POST(request: NextRequest) {
@@ -60,17 +56,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const reviews = await readReviews();
-    const newReview: Review = {
-      id: randomUUID(),
-      rating: ratingNum,
-      comment: trimmedComment,
-      createdAt: new Date().toISOString(),
-    };
-    reviews.push(newReview);
-    await writeReviews(reviews);
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from('reviews')
+      .insert({ rating: ratingNum, comment: trimmedComment })
+      .select('id, rating, comment, created_at')
+      .single();
 
-    return NextResponse.json({ review: newReview }, { status: 201 });
+    if (error) {
+      console.error('Failed to insert review:', error);
+      return NextResponse.json({ error: 'Error al guardar la reseña' }, { status: 500 });
+    }
+
+    return NextResponse.json(
+      {
+        review: {
+          id: data.id,
+          rating: data.rating,
+          comment: data.comment,
+          createdAt: data.created_at,
+        },
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Review submit error:', error);
     return NextResponse.json({ error: 'Error al guardar la reseña' }, { status: 500 });
