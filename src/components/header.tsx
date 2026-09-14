@@ -29,11 +29,17 @@ export function Header() {
   ];
 
   return (
-    <header
-      className={`sticky top-0 z-50 border-b bg-white/90 backdrop-blur-md transition-shadow duration-300 ${
-        isScrolled ? 'border-transparent shadow-soft' : 'border-slate-100'
-      }`}
-    >
+    <>
+      <div className="bg-ink py-2 text-center">
+        <p className="font-accent text-[11px] font-semibold uppercase tracking-[0.15em] text-white/90">
+          Envío gratis en compras mayores a $500 · 100% productos originales
+        </p>
+      </div>
+      <header
+        className={`sticky top-0 z-50 border-b bg-white/90 backdrop-blur-md transition-shadow duration-300 ${
+          isScrolled ? 'border-transparent shadow-soft' : 'border-slate-100'
+        }`}
+      >
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
@@ -120,6 +126,7 @@ export function Header() {
 
         <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
       </nav>
-    </header>
+      </header>
+    </>
   );
 }

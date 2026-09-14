@@ -62,9 +62,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        'sans': ['-apple-system', 'system-ui', 'Segoe UI', 'Roboto', 'sans-serif'],
-        'display': ['Georgia', 'Cambria', 'Times New Roman', 'serif'],
-        'accent': ['-apple-system', 'system-ui', 'Segoe UI', 'Helvetica Neue', 'sans-serif'],
+        'sans': ['var(--font-inter)', '-apple-system', 'system-ui', 'sans-serif'],
+        'display': ['var(--font-playfair)', 'Georgia', 'serif'],
+        'accent': ['var(--font-inter)', '-apple-system', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         xs: ['12px', { lineHeight: '16px' }],

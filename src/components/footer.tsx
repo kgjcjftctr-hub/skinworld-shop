@@ -1,5 +1,9 @@
+'use client';
+
+import { useState, type FormEvent } from 'react';
 import Link from 'next/link';
-import { Mail, Phone, MapPin, Facebook, Instagram } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Instagram, ArrowRight } from 'lucide-react';
+import { toast } from 'sonner';
 
 const shopLinks = [
   { label: 'Todos los productos', href: '/tienda' },
@@ -18,9 +22,50 @@ const companyLinks = [
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const [email, setEmail] = useState('');
+
+  const handleSubscribe = (e: FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    toast.success('¡Listo! Te avisaremos de nuevos lanzamientos.', { description: email });
+    setEmail('');
+  };
 
   return (
     <footer className="border-t border-gold-500/30 bg-ink text-slate-100">
+      {/* Newsletter */}
+      <div className="border-b border-white/10">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+            <div>
+              <h3 className="mb-2 font-display text-2xl font-semibold text-white">
+                Consejos dermatológicos en tu correo
+              </h3>
+              <p className="text-sm text-slate-400">
+                Rutinas, lanzamientos y recomendaciones de la Dra. Karina. Sin spam.
+              </p>
+            </div>
+            <form onSubmit={handleSubscribe} className="flex w-full max-w-md gap-3">
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="tu@email.com"
+                className="!w-auto flex-1 !rounded-md !border-white/15 !bg-white/5 !text-white placeholder:text-slate-500 focus:!border-gold-500 focus:!ring-gold-500/40"
+              />
+              <button
+                type="submit"
+                className="inline-flex shrink-0 items-center gap-2 rounded-md bg-gold-500 px-5 py-2.5 font-accent text-sm font-semibold text-ink transition-colors hover:bg-gold-400"
+              >
+                <span>Suscribirme</span>
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
         <div className="mb-12 grid grid-cols-1 gap-10 md:grid-cols-4">

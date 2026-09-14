@@ -1,11 +1,28 @@
 import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 import { Toaster } from 'sonner';
 import '@/styles/globals.css';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 
-// Fuentes del sistema (sin next/font/google): el build de Hostinger no
-// tiene acceso de red garantizado para descargar Google Fonts en build time.
+// Fuentes auto-alojadas (next/font/local): no dependen de descargar
+// Google Fonts en build time, a diferencia de next/font/google, por lo
+// que no hay riesgo de que el build falle en Hostinger por falta de red.
+const inter = localFont({
+  src: './../fonts/inter-variable.woff2',
+  variable: '--font-inter',
+  weight: '400 700',
+  display: 'swap',
+});
+
+const playfair = localFont({
+  src: [
+    { path: './../fonts/playfair-variable.woff2', weight: '400 700', style: 'normal' },
+    { path: './../fonts/playfair-italic-variable.woff2', weight: '400 700', style: 'italic' },
+  ],
+  variable: '--font-playfair',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Skin World | Dermatología Profesional',
@@ -45,7 +62,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang="es" className={`${inter.variable} ${playfair.variable}`} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
