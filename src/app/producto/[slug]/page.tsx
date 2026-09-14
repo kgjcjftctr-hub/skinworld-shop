@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import productsData from '@/data/products-data.json';
+import { getProductBySlug, getRelatedProducts } from '@/lib/products';
 import { ProductClient } from './product-client';
 
 export default async function ProductPage({
@@ -9,7 +9,7 @@ export default async function ProductPage({
 }) {
   const { slug: rawSlug } = await params;
   const slug = decodeURIComponent(rawSlug);
-  const product = (productsData as any[]).find((p) => p.slug === slug);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     return (
@@ -25,9 +25,7 @@ export default async function ProductPage({
     );
   }
 
-  const relatedProducts = (productsData as any[])
-    .filter((p) => p.category === product.category && p.slug !== product.slug)
-    .slice(0, 4);
+  const relatedProducts = await getRelatedProducts(product.category, product.slug);
 
   return <ProductClient product={product} relatedProducts={relatedProducts} />;
 }

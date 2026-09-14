@@ -1,13 +1,11 @@
-'use client';
-
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { ProductCard } from '@/components/product-card';
 import { Reveal } from '@/components/reveal';
-import productsData from '@/data/products-data.json';
+import { getFeaturedProducts } from '@/lib/products';
 
-export function FeaturedProducts() {
-  const featuredProducts = (productsData as any[]).filter((p) => p.featured);
+export async function FeaturedProducts() {
+  const featuredProducts = await getFeaturedProducts();
 
   return (
     <section className="bg-slate-50 py-20 sm:py-28">

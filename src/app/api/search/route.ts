@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import productsData from '@/data/products-data.json';
+import { getAllProducts } from '@/lib/products';
 
 export async function GET(request: NextRequest) {
   const query = request.nextUrl.searchParams.get('q');
@@ -10,12 +10,14 @@ export async function GET(request: NextRequest) {
 
   try {
     const searchTerm = query.toLowerCase();
+    const productsData = await getAllProducts();
 
-    const products = (productsData as any[])
-      .filter((p) =>
-        p.name.toLowerCase().includes(searchTerm) ||
-        p.description?.toLowerCase().includes(searchTerm) ||
-        p.brand?.toLowerCase().includes(searchTerm)
+    const products = productsData
+      .filter(
+        (p) =>
+          p.name.toLowerCase().includes(searchTerm) ||
+          p.description?.toLowerCase().includes(searchTerm) ||
+          p.brand?.toLowerCase().includes(searchTerm)
       )
       .slice(0, 10)
       .map((p) => ({
@@ -28,14 +30,14 @@ export async function GET(request: NextRequest) {
       }));
 
     const brandsSet = new Set(
-      (productsData as any[])
+      productsData
         .filter((p) => p.brand?.toLowerCase().includes(searchTerm))
         .map((p) => p.brand)
         .filter(Boolean)
     );
 
     const categoriesSet = new Set(
-      (productsData as any[])
+      productsData
         .filter((p) => p.category?.toLowerCase().includes(searchTerm))
         .map((p) => p.category)
         .filter(Boolean)

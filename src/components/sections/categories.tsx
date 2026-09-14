@@ -1,9 +1,7 @@
-'use client';
-
 import Link from 'next/link';
 import { Droplet, ShieldCheck, Sparkles, Sun, Scissors, Heart } from 'lucide-react';
 import { Reveal } from '@/components/reveal';
-import productsData from '@/data/products-data.json';
+import { getCategoryCounts } from '@/lib/products';
 
 const categories = [
   { name: 'Acné', slug: 'Acné', bg: 'bg-primary-50', icon: Droplet },
@@ -14,11 +12,8 @@ const categories = [
   { name: 'Piel de Bebé', slug: 'Piel de Bebé', bg: 'bg-accent-100', icon: Heart },
 ];
 
-export function CategoriesSection() {
-  const counts = (productsData as any[]).reduce<Record<string, number>>((acc, p) => {
-    if (p.category) acc[p.category] = (acc[p.category] || 0) + 1;
-    return acc;
-  }, {});
+export async function CategoriesSection() {
+  const counts = await getCategoryCounts();
 
   return (
     <section className="bg-white py-20 sm:py-28">
