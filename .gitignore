@@ -47,3 +47,6 @@ next-env.d.ts
 
 # Local tooling
 .claude/
+
+# Runtime data (persists on the server, not tracked in git)
+/data/reviews.json

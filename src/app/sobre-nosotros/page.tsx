@@ -1,4 +1,4 @@
-import { Award } from 'lucide-react';
+import { Award, MapPin, Phone, Clock } from 'lucide-react';
 
 export default function AboutPage() {
   return (
@@ -36,7 +36,11 @@ export default function AboutPage() {
       <section className="bg-slate-50 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
-            <div className="aspect-square rounded-[20px] bg-gradient-to-br from-primary-200 to-primary-300 lg:order-1" />
+            <img
+              src="/images/dra-karina-alfaro.jpg"
+              alt="Dra. Karina Alfaro López"
+              className="aspect-square w-full rounded-[20px] object-cover lg:order-1"
+            />
 
             <div>
               <span className="mb-4 inline-block font-accent text-xs font-bold uppercase tracking-[0.15em] text-gold-600">
@@ -50,6 +54,30 @@ export default function AboutPage() {
               </p>
 
               <div className="space-y-8">
+                <div>
+                  <h3 className="mb-3 font-display text-lg font-semibold text-ink">Consultorio</h3>
+                  <p className="mb-3 text-slate-600">
+                    Atiende en <span className="font-semibold text-ink">Grupo Médico Pediátrico</span>,
+                    sede Lomas.
+                  </p>
+                  <ul className="space-y-2 text-slate-600">
+                    <li className="flex items-start gap-2.5">
+                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary-500" />
+                      <span>Acueducto Río Hondo 30, Hospital Ángeles Lomas, CDMX</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary-500" />
+                      <a href="tel:+525511001200" className="transition-colors hover:text-primary-700">
+                        55 1100 1200
+                      </a>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary-500" />
+                      <span>Lun-Vie 10:00-19:00 · Sáb 11:00-14:00 y 16:00-18:00 · Dom 11:00-14:00 y 16:00-18:00</span>
+                    </li>
+                  </ul>
+                </div>
+
                 <div>
                   <h3 className="mb-3 font-display text-lg font-semibold text-ink">Educación</h3>
                   <ul className="space-y-1.5 text-slate-600">
