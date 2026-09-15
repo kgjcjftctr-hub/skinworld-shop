@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
   const ids = cartItems.map((item: any) => item.id).filter(Boolean);
   const { data: products, error } = await supabase
     .from('products')
-    .select('id, name, image, price_with_iva, in_stock')
+    .select('id, name, description, image, price_with_iva, in_stock')
     .in('id', ids);
 
   if (error || !products) {
@@ -64,6 +64,7 @@ export async function POST(request: NextRequest) {
         unit_amount: unitAmount,
         product_data: {
           name: product.name,
+          description: product.description ? product.description.slice(0, 500) : undefined,
           images: product.image ? [product.image] : undefined,
         },
       },
