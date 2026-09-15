@@ -19,6 +19,8 @@ export interface Product {
   ingredients?: string[];
   instructions?: string;
   presentation?: string;
+  variantGroup?: string;
+  variantLabel?: string;
   inStock: number;
   featured: boolean;
   createdAt: string;

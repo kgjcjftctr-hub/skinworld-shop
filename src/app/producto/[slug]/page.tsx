@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getProductBySlug, getRelatedProducts } from '@/lib/products';
+import { getProductBySlug, getRelatedProducts, getProductVariants } from '@/lib/products';
 import { ProductClient } from './product-client';
 
 export default async function ProductPage({
@@ -25,7 +25,10 @@ export default async function ProductPage({
     );
   }
 
-  const relatedProducts = await getRelatedProducts(product.category, product.slug);
+  const [relatedProducts, variants] = await Promise.all([
+    getRelatedProducts(product.category, product.slug),
+    getProductVariants(product.variantGroup, product.slug),
+  ]);
 
-  return <ProductClient product={product} relatedProducts={relatedProducts} />;
+  return <ProductClient product={product} relatedProducts={relatedProducts} variants={variants} />;
 }

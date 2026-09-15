@@ -20,6 +20,8 @@ type ProductRow = {
   ingredients: string | null;
   instructions: string | null;
   presentation: string | null;
+  variant_group: string | null;
+  variant_label: string | null;
   in_stock: boolean;
   featured: boolean;
   price_with_iva: number;
@@ -50,6 +52,8 @@ function mapRow(row: ProductRow): Product & Record<string, any> {
     ingredients: row.ingredients ? [row.ingredients] : undefined,
     instructions: row.instructions ?? undefined,
     presentation: row.presentation ?? undefined,
+    variantGroup: row.variant_group ?? undefined,
+    variantLabel: row.variant_label ?? undefined,
     inStock: row.in_stock ? 1 : 0,
     featured: row.featured,
     createdAt: row.created_at,
@@ -108,10 +112,40 @@ export async function getRelatedProducts(category: string | undefined, excludeSl
     .select('*')
     .eq('category', category)
     .neq('slug', excludeSlug)
-    .limit(4);
+    .limit(8);
+
+  if (error) return [];
+  return dedupeVariants((data as ProductRow[]).map(mapRow)).slice(0, 4);
+}
+
+export async function getProductVariants(variantGroup: string | undefined, excludeSlug: string) {
+  if (!variantGroup) return [];
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .eq('variant_group', variantGroup)
+    .neq('slug', excludeSlug)
+    .order('price', { ascending: true });
 
   if (error) return [];
   return (data as ProductRow[]).map(mapRow);
+}
+
+// Cuando varios productos son el mismo pero en distinta presentación (sabor,
+// tono, tamaño, concentración), sólo mostramos uno en listados de catálogo;
+// las demás opciones aparecen como variantes dentro de la página del producto.
+export function dedupeVariants(products: Product[]): Product[] {
+  const seenGroups = new Set<string>();
+  const result: Product[] = [];
+  for (const product of products) {
+    if (product.variantGroup) {
+      if (seenGroups.has(product.variantGroup)) continue;
+      seenGroups.add(product.variantGroup);
+    }
+    result.push(product);
+  }
+  return result;
 }
 
 export async function getCategoryCounts() {

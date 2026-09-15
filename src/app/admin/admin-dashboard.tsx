@@ -20,6 +20,8 @@ type FormState = {
   compareAtPrice: string;
   image: string;
   description: string;
+  variantGroup: string;
+  variantLabel: string;
   inStock: boolean;
   featured: boolean;
 };
@@ -33,6 +35,8 @@ const emptyForm: FormState = {
   compareAtPrice: '',
   image: '',
   description: '',
+  variantGroup: '',
+  variantLabel: '',
   inStock: true,
   featured: false,
 };
@@ -48,6 +52,8 @@ function productToForm(p: AdminProduct): FormState {
     compareAtPrice: p.compareAtPrice != null ? String(p.compareAtPrice) : '',
     image: p.image ?? '',
     description: p.description ?? '',
+    variantGroup: p.variantGroup ?? '',
+    variantLabel: p.variantLabel ?? '',
     inStock: Boolean(p.inStock),
     featured: Boolean(p.featured),
   };
@@ -110,6 +116,8 @@ export function AdminDashboard({ initialProducts }: { initialProducts: AdminProd
           compareAtPrice: form.compareAtPrice ? Number(form.compareAtPrice) : null,
           image: form.image.trim(),
           description: form.description.trim(),
+          variantGroup: form.variantGroup.trim() || null,
+          variantLabel: form.variantLabel.trim() || null,
           inStock: form.inStock,
           featured: form.featured,
         }),
@@ -216,7 +224,14 @@ export function AdminDashboard({ initialProducts }: { initialProducts: AdminProd
                 <tr key={p.id}>
                   <td className="max-w-xs px-4 py-3">
                     <p className="truncate font-medium text-ink">{p.name}</p>
-                    {p.brand && <p className="text-xs text-slate-400">{p.brand}</p>}
+                    <div className="flex items-center gap-2">
+                      {p.brand && <p className="text-xs text-slate-400">{p.brand}</p>}
+                      {p.variantGroup && (
+                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-500">
+                          {p.variantLabel || 'variante'}
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-slate-600">{p.category || '—'}</td>
                   <td className="px-4 py-3 text-slate-600">{formatPrice(p.price)}</td>
@@ -371,6 +386,41 @@ export function AdminDashboard({ initialProducts }: { initialProducts: AdminProd
                 />
               </div>
 
+              <div className="rounded-lg border border-slate-200 p-4">
+                <p className="mb-3 text-sm font-semibold text-ink">
+                  ¿Es el mismo producto en otra presentación?
+                </p>
+                <p className="mb-3 text-xs text-slate-500">
+                  Si tienes el mismo producto en distintos sabores, tonos o tamaños (ej. una
+                  proteína en 3 sabores), ponles a todos el mismo "Grupo de variante" — en la
+                  tienda se mostrarán como uno solo con un selector para elegir la presentación.
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="mb-1.5 block text-xs font-semibold text-slate-600">
+                      Grupo de variante
+                    </label>
+                    <input
+                      type="text"
+                      value={form.variantGroup}
+                      onChange={(e) => setForm((f) => ({ ...f, variantGroup: e.target.value }))}
+                      placeholder="ej. proteina"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1.5 block text-xs font-semibold text-slate-600">
+                      Nombre de esta presentación
+                    </label>
+                    <input
+                      type="text"
+                      value={form.variantLabel}
+                      onChange={(e) => setForm((f) => ({ ...f, variantLabel: e.target.value }))}
+                      placeholder="ej. Chocolate"
+                    />
+                  </div>
+                </div>
+              </div>
+
               <div className="flex items-center gap-6">
                 <label className="flex items-center gap-2 text-sm text-ink">
                   <input
@@ -426,6 +476,8 @@ function mapDbProduct(row: any): AdminProduct {
     brand: row.brand ?? undefined,
     image: row.image ?? undefined,
     category: row.category ?? undefined,
+    variantGroup: row.variant_group ?? undefined,
+    variantLabel: row.variant_label ?? undefined,
     inStock: row.in_stock ? 1 : 0,
     featured: Boolean(row.featured),
     createdAt: row.created_at,

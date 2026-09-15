@@ -54,6 +54,8 @@ export async function POST(request: NextRequest) {
       image: body.image || null,
       images: body.image ? [body.image] : [],
       category: body.category || null,
+      variant_group: body.variantGroup || null,
+      variant_label: body.variantLabel || null,
       in_stock: body.inStock !== false,
       featured: Boolean(body.featured),
       price_with_iva: priceWithIVA,

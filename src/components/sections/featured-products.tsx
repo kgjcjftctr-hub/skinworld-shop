@@ -2,10 +2,10 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { ProductCard } from '@/components/product-card';
 import { Reveal } from '@/components/reveal';
-import { getFeaturedProducts } from '@/lib/products';
+import { getFeaturedProducts, dedupeVariants } from '@/lib/products';
 
 export async function FeaturedProducts() {
-  const featuredProducts = await getFeaturedProducts();
+  const featuredProducts = dedupeVariants(await getFeaturedProducts());
 
   return (
     <section className="bg-slate-50 py-20 sm:py-28">

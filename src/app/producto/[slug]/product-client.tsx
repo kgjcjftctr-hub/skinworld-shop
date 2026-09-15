@@ -11,9 +11,11 @@ import Link from 'next/link';
 export function ProductClient({
   product,
   relatedProducts,
+  variants = [],
 }: {
   product: any;
   relatedProducts: any[];
+  variants?: any[];
 }) {
   const [quantity, setQuantity] = useState(1);
   const addItem = useCart((state) => state.addItem);
@@ -97,6 +99,30 @@ export function ProductClient({
 
             {product.description && (
               <p className="mb-6 leading-relaxed text-slate-600">{product.description}</p>
+            )}
+
+            {(variants.length > 0 || product.variantLabel) && (
+              <div className="mb-6">
+                <span className="mb-2 block font-accent text-sm font-semibold text-ink">
+                  Presentación
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {product.variantLabel && (
+                    <span className="rounded-full border-2 border-ink bg-ink px-4 py-2 text-sm font-semibold text-white">
+                      {product.variantLabel}
+                    </span>
+                  )}
+                  {variants.map((variant: any) => (
+                    <Link
+                      key={variant.id}
+                      href={`/producto/${encodeURIComponent(variant.slug)}`}
+                      className="rounded-full border-2 border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:border-ink hover:text-ink"
+                    >
+                      {variant.variantLabel}
+                    </Link>
+                  ))}
+                </div>
+              </div>
             )}
 
             <div className="mb-6 border-t border-slate-100" />
