@@ -30,10 +30,14 @@ export async function POST(request: NextRequest) {
     try {
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 100 });
       const supabase = getSupabase();
+      const shippingDetails = session.collected_information?.shipping_details;
 
       await supabase.from('orders').insert({
         stripe_session_id: session.id,
         customer_email: session.customer_details?.email ?? null,
+        customer_phone: session.customer_details?.phone ?? null,
+        shipping_name: shippingDetails?.name ?? null,
+        shipping_address: shippingDetails?.address ?? null,
         amount_total: session.amount_total / 100,
         currency: session.currency,
         status: 'paid',

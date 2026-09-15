@@ -5,6 +5,19 @@ import { isAdminAuthenticated } from '@/lib/admin-auth';
 import { getSupabase } from '@/lib/supabase';
 import { formatPrice, formatDate } from '@/utils';
 
+function formatShippingAddress(order: any) {
+  const addr = order.shipping_address;
+  if (!addr) return null;
+  const line2 = addr.line2 ? `${addr.line2}, ` : '';
+  return [
+    order.shipping_name,
+    `${addr.line1 ?? ''}, ${line2}${addr.city ?? ''}, ${addr.state ?? ''} ${addr.postal_code ?? ''}`,
+    order.customer_phone,
+  ]
+    .filter(Boolean)
+    .join(' · ');
+}
+
 export default async function AdminOrdersPage() {
   if (!(await isAdminAuthenticated())) {
     redirect('/admin/login');
@@ -41,6 +54,7 @@ export default async function AdminOrdersPage() {
                 <th className="px-4 py-3">Fecha</th>
                 <th className="px-4 py-3">Cliente</th>
                 <th className="px-4 py-3">Productos</th>
+                <th className="px-4 py-3">Dirección de envío</th>
                 <th className="px-4 py-3">Total</th>
               </tr>
             </thead>
@@ -54,6 +68,9 @@ export default async function AdminOrdersPage() {
                       ? order.items.map((it: any) => `${it.quantity}× ${it.name}`).join(', ')
                       : '—'}
                   </td>
+                  <td className="px-4 py-3 max-w-xs text-slate-600">
+                    {formatShippingAddress(order) || '—'}
+                  </td>
                   <td className="px-4 py-3 font-semibold text-ink">
                     {formatPrice(order.amount_total)}
                   </td>
@@ -61,7 +78,7 @@ export default async function AdminOrdersPage() {
               ))}
               {(!orders || orders.length === 0) && (
                 <tr>
-                  <td colSpan={4} className="px-4 py-10 text-center text-slate-400">
+                  <td colSpan={5} className="px-4 py-10 text-center text-slate-400">
                     Todavía no hay pedidos.
                   </td>
                 </tr>

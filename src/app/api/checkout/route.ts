@@ -78,6 +78,8 @@ export async function POST(request: NextRequest) {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items,
+      shipping_address_collection: { allowed_countries: ['MX'] },
+      phone_number_collection: { enabled: true },
       success_url: `${origin}/pedido-confirmado?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/carrito`,
     });
