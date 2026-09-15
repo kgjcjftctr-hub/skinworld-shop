@@ -8,12 +8,10 @@ import { formatPrice, formatDate } from '@/utils';
 function formatShippingAddress(order: any) {
   const addr = order.shipping_address;
   if (!addr) return null;
-  const line2 = addr.line2 ? `${addr.line2}, ` : '';
-  return [
-    order.shipping_name,
-    `${addr.line1 ?? ''}, ${line2}${addr.city ?? ''}, ${addr.state ?? ''} ${addr.postal_code ?? ''}`,
-    order.customer_phone,
-  ]
+  const numeroInt = addr.numeroInterior ? ` Int. ${addr.numeroInterior}` : '';
+  const calle = `${addr.calle ?? ''} ${addr.numeroExterior ?? ''}${numeroInt}`.trim();
+  const resto = `${addr.colonia ?? ''}, ${addr.municipio ?? ''}, ${addr.estado ?? ''}, CP ${addr.codigoPostal ?? ''}`;
+  return [order.shipping_name, calle, resto, addr.referencias, order.customer_phone]
     .filter(Boolean)
     .join(' · ');
 }

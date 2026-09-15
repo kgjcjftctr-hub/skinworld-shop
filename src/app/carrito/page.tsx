@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useCart } from '@/store/cart';
+import { useShippingAddress, isShippingAddressComplete } from '@/store/shipping-address';
+import { ShippingAddressForm } from '@/components/checkout/shipping-address-form';
 import { formatPrice } from '@/utils';
 import { ShoppingBag, Trash2, ArrowLeft, ArrowRight, Minus, Plus } from 'lucide-react';
 
@@ -13,9 +15,16 @@ export default function CartPage() {
   const removeItem = useCart((state) => state.removeItem);
   const updateQuantity = useCart((state) => state.updateQuantity);
   const subtotal = useCart((state) => state.getTotalPrice());
+  const shippingAddress = useShippingAddress((state) => state.address);
   const [checkingOut, setCheckingOut] = useState(false);
+  const addressComplete = isShippingAddressComplete(shippingAddress);
 
   const handleCheckout = async () => {
+    if (!addressComplete) {
+      toast.error('Completa tu dirección de envío antes de pagar');
+      return;
+    }
+
     setCheckingOut(true);
     try {
       const res = await fetch('/api/checkout', {
@@ -23,6 +32,7 @@ export default function CartPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           items: items.map((item) => ({ id: item.id, cartQuantity: item.cartQuantity })),
+          shippingAddress,
         }),
       });
 
@@ -162,9 +172,16 @@ export default function CartPage() {
             </div>
           </div>
 
+          {/* Shipping address — shown above summary on mobile */}
+          <div className="lg:hidden">
+            <ShippingAddressForm />
+          </div>
+
           {/* Summary — sticky on desktop */}
           <div className="hidden lg:col-span-1 lg:block">
-            <div className="sticky top-28 rounded-2xl border border-slate-100 p-6">
+            <div className="sticky top-28 space-y-6">
+            <ShippingAddressForm />
+            <div className="rounded-2xl border border-slate-100 p-6">
               <h2 className="mb-6 font-display text-lg font-semibold text-ink">Resumen del Pedido</h2>
 
               <div className="mb-6 space-y-3 border-b border-slate-100 pb-6 text-sm">
@@ -193,15 +210,21 @@ export default function CartPage() {
 
               <button
                 onClick={handleCheckout}
-                disabled={checkingOut}
+                disabled={checkingOut || !addressComplete}
                 className="btn btn-primary mb-3 w-full disabled:opacity-50"
               >
                 <span>{checkingOut ? 'Redirigiendo...' : 'Proceder al Pago'}</span>
                 <ArrowRight className="ml-2 h-4 w-4" />
               </button>
+              {!addressComplete && (
+                <p className="mb-3 text-center text-xs text-slate-500">
+                  Completa tu dirección de envío para continuar
+                </p>
+              )}
               <Link href="/tienda" className="btn btn-secondary w-full">
                 Seguir comprando
               </Link>
+            </div>
             </div>
           </div>
         </div>
@@ -217,7 +240,7 @@ export default function CartPage() {
         </div>
         <button
           onClick={handleCheckout}
-          disabled={checkingOut}
+          disabled={checkingOut || !addressComplete}
           className="btn btn-primary w-full disabled:opacity-50"
         >
           <span>{checkingOut ? 'Redirigiendo...' : 'Proceder al Pago'}</span>

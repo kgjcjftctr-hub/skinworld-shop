@@ -5,12 +5,31 @@ import { getSupabase } from '@/lib/supabase';
 const FREE_SHIPPING_THRESHOLD = 500;
 const SHIPPING_COST = 100;
 
+const REQUIRED_ADDRESS_FIELDS = [
+  'nombre',
+  'telefono',
+  'codigoPostal',
+  'estado',
+  'municipio',
+  'colonia',
+  'calle',
+  'numeroExterior',
+];
+
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null);
   const cartItems = Array.isArray(body?.items) ? body.items : [];
+  const shippingAddress = body?.shippingAddress;
 
   if (cartItems.length === 0) {
     return NextResponse.json({ error: 'El carrito está vacío' }, { status: 400 });
+  }
+
+  const missingField = REQUIRED_ADDRESS_FIELDS.find(
+    (field) => !shippingAddress || !String(shippingAddress[field] ?? '').trim()
+  );
+  if (missingField) {
+    return NextResponse.json({ error: 'Falta completar la dirección de envío' }, { status: 400 });
   }
 
   const supabase = getSupabase();
@@ -78,8 +97,9 @@ export async function POST(request: NextRequest) {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items,
-      shipping_address_collection: { allowed_countries: ['MX'] },
-      phone_number_collection: { enabled: true },
+      metadata: {
+        shipping_address: JSON.stringify(shippingAddress).slice(0, 500),
+      },
       success_url: `${origin}/pedido-confirmado?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/carrito`,
     });
