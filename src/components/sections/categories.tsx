@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Droplet, ShieldCheck, Sparkles, Sun, Scissors, Heart } from 'lucide-react';
+import { Droplet, ShieldCheck, Sparkles, Sun, Scissors, Heart, Umbrella, Pill } from 'lucide-react';
 import { Reveal } from '@/components/reveal';
 import { getCategoryCounts } from '@/lib/products';
 
@@ -10,6 +10,8 @@ const categories = [
   { name: 'Manchas', slug: 'Manchas', bg: 'bg-slate-50', icon: Sun },
   { name: 'Cabello y Uñas', slug: 'Cabello y Uñas', bg: 'bg-primary-100', icon: Scissors },
   { name: 'Piel de Bebé', slug: 'Piel de Bebé', bg: 'bg-accent-100', icon: Heart },
+  { name: 'Protección Solar', slug: 'Protección Solar', bg: 'bg-gold-100', icon: Umbrella },
+  { name: 'Suplementos', slug: 'Suplementos', bg: 'bg-slate-100', icon: Pill },
 ];
 
 export async function CategoriesSection() {
@@ -34,7 +36,7 @@ export async function CategoriesSection() {
         </Reveal>
 
         {/* Mobile carousel / Desktop grid */}
-        <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-6">
+        <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:grid sm:grid-cols-4 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0">
           {categories.map((category, i) => {
             const Icon = category.icon;
             return (
