@@ -5,8 +5,8 @@ import { toast } from 'sonner';
 import { Mail, Phone, MapPin } from 'lucide-react';
 
 const contactItems = [
-  { icon: Phone, label: 'Teléfono', value: '+55 9104 7107', href: 'tel:+5591047107' },
-  { icon: Mail, label: 'Email', value: 'hola@skinworld.mx', href: 'mailto:hola@skinworld.mx' },
+  { icon: Phone, label: 'Teléfono', value: '+52 56 1288 4245', href: 'tel:+525612884245' },
+  { icon: Mail, label: 'Email', value: 'contacto@skinworld.shop', href: 'mailto:contacto@skinworld.shop' },
   { icon: MapPin, label: 'Ubicación', value: 'CDMX, México', href: undefined },
 ];
 

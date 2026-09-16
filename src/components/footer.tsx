@@ -124,14 +124,14 @@ export function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-center space-x-2.5">
                 <Mail className="h-4 w-4 text-primary-400" />
-                <a href="mailto:hola@skinworld.mx" className="text-slate-400 transition-colors hover:text-white">
-                  hola@skinworld.mx
+                <a href="mailto:contacto@skinworld.shop" className="text-slate-400 transition-colors hover:text-white">
+                  contacto@skinworld.shop
                 </a>
               </li>
               <li className="flex items-center space-x-2.5">
                 <Phone className="h-4 w-4 text-primary-400" />
-                <a href="tel:+5591047107" className="text-slate-400 transition-colors hover:text-white">
-                  55 9104 7107
+                <a href="tel:+525612884245" className="text-slate-400 transition-colors hover:text-white">
+                  +52 56 1288 4245
                 </a>
               </li>
               <li className="flex items-start space-x-2.5">
