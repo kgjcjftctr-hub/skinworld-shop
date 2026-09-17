@@ -14,7 +14,9 @@ export default function AboutPage() {
       <section className="py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
-            <div className="aspect-square rounded-[20px] bg-gradient-to-br from-primary-100 to-primary-50" />
+            <div className="flex aspect-square items-center justify-center rounded-[20px] bg-gradient-to-br from-primary-100 to-primary-50 p-16">
+              <img src="/images/logo-full.png" alt="Skinworld by Karina Alfaro" className="w-full max-w-xs object-contain" />
+            </div>
             <div>
               <h2 className="mb-6 font-display text-3xl font-bold text-ink sm:text-4xl">
                 Nuestra Historia

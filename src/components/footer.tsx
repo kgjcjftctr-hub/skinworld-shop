@@ -71,19 +71,9 @@ export function Footer() {
         <div className="mb-12 grid grid-cols-1 gap-10 md:grid-cols-4">
           {/* Brand */}
           <div>
-            <div className="mb-4 flex items-center space-x-3">
-              <div className="flex h-9 w-9 items-center justify-center">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="h-full w-full">
-                  <g id="leaf">
-                    <path d="M 50 30 Q 48 45 50 70" stroke="#d4a5af" strokeWidth="2" fill="none" strokeLinecap="round"/>
-                    <ellipse cx="35" cy="40" rx="12" ry="18" fill="#d4a5af" transform="rotate(-45 35 40)"/>
-                    <ellipse cx="65" cy="40" rx="12" ry="18" fill="#d4a5af" transform="rotate(45 65 40)"/>
-                    <ellipse cx="32" cy="55" rx="12" ry="18" fill="#d4a5af" transform="rotate(-35 32 55)"/>
-                    <ellipse cx="68" cy="55" rx="12" ry="18" fill="#d4a5af" transform="rotate(35 68 55)"/>
-                  </g>
-                </svg>
-              </div>
-              <span className="font-display text-lg font-semibold">Skin World</span>
+            <div className="mb-4 flex items-center space-x-2.5">
+              <img src="/images/logo-icon.png" alt="" className="h-10 w-10 object-contain brightness-0 invert" />
+              <span className="font-display text-lg font-semibold">Skinworld</span>
             </div>
             <p className="text-sm leading-relaxed text-slate-400">
               Productos dermatológicos profesionales respaldados por expertos en salud de la piel.

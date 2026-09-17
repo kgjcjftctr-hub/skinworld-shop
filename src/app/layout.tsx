@@ -25,7 +25,7 @@ const playfair = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Skin World | Dermatología Profesional',
+  title: 'Skinworld – by Karina Alfaro',
   description:
     'Productos dermatológicos de calidad respaldados por profesional en dermatología. Descubre soluciones para tu piel.',
   keywords: [
@@ -35,22 +35,26 @@ export const metadata: Metadata = {
     'cuidado dermatológico',
     'México',
   ],
-  authors: [{ name: 'Skin World', url: 'https://skinworld.mx' }],
-  creator: 'Skin World',
-  publisher: 'Skin World',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
+  authors: [{ name: 'Skinworld', url: 'https://skinworld.shop' }],
+  creator: 'Skinworld',
+  publisher: 'Skinworld',
   robots: 'index, follow',
   openGraph: {
     type: 'website',
     locale: 'es_MX',
-    url: 'https://skinworld.mx',
-    title: 'Skin World | Dermatología Profesional',
+    url: 'https://skinworld.shop',
+    title: 'Skinworld – by Karina Alfaro',
     description:
       'Productos dermatológicos de calidad respaldados por profesional en dermatología.',
-    siteName: 'Skin World',
+    siteName: 'Skinworld',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Skin World | Dermatología Profesional',
+    title: 'Skinworld – by Karina Alfaro',
     description:
       'Productos dermatológicos de calidad respaldados por profesional en dermatología.',
   },
@@ -67,7 +71,6 @@ export default function RootLayout({
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#d4a5af" />
-        <link rel="icon" href="/favicon.ico" />
       </head>
       <body className="flex flex-col min-h-screen" suppressHydrationWarning>
         <Header />
