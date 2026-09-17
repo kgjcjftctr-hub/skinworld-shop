@@ -58,15 +58,11 @@ export function ExpertiseSection() {
           <Reveal delay={120}>
             <div className="relative mx-auto w-full max-w-[380px]">
               <div className="absolute -inset-3 rounded-[28px] border border-gold-300/60" />
-              <div className="relative flex aspect-square w-full flex-col items-center justify-center gap-6 rounded-[20px] bg-gradient-to-br from-primary-100 via-primary-50 to-white p-10 text-center shadow-card">
-                <span className="font-display text-6xl leading-none text-gold-500">&ldquo;</span>
-                <p className="font-display text-xl italic leading-snug text-ink">
-                  Ciencia y precisión al servicio de tu piel
-                </p>
-                <span className="font-accent text-xs font-semibold uppercase tracking-[0.2em] text-primary-700">
-                  Dra. Karina Alfaro López
-                </span>
-              </div>
+              <img
+                src="/images/dra-karina-alfaro.jpg"
+                alt="Dra. Karina Alfaro López"
+                className="relative aspect-square w-full rounded-[20px] object-cover shadow-card"
+              />
             </div>
           </Reveal>
         </div>
