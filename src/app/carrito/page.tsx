@@ -201,12 +201,13 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <div className="mb-6 flex items-baseline justify-between">
+              <div className="mb-1 flex items-baseline justify-between">
                 <span className="font-accent font-semibold text-ink">Total</span>
                 <span className="font-display text-2xl font-semibold text-primary-700">
                   {formatPrice(total)}
                 </span>
               </div>
+              <p className="mb-6 text-right text-xs text-slate-400">Precios en pesos mexicanos (MXN)</p>
 
               <button
                 onClick={handleCheckout}

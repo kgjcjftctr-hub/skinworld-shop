@@ -32,7 +32,7 @@ export function Header() {
     <>
       <div className="bg-ink py-2 text-center">
         <p className="font-accent text-[11px] font-semibold uppercase tracking-[0.15em] text-white/90">
-          Envío gratis en compras mayores a $500 · 100% productos originales
+          Precios en pesos mexicanos (MXN) · Envío gratis en compras mayores a $500 · 100% productos originales
         </p>
       </div>
       <header

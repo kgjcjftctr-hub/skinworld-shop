@@ -94,7 +94,7 @@ export function ProductClient({
                   </span>
                 )}
               </div>
-              <p className="mt-1 text-sm text-slate-500">Precio final con IVA (16%)</p>
+              <p className="mt-1 text-xs text-slate-400">Precio en pesos mexicanos (MXN), incluye IVA</p>
             </div>
 
             {product.description && (
