@@ -138,7 +138,7 @@ export function Footer() {
         {/* Bottom Section */}
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
           <p className="text-sm text-slate-400">
-            &copy; {currentYear} Skin World. Todos los derechos reservados.
+            &copy; {currentYear} Skinworld. Todos los derechos reservados.
           </p>
 
           {/* Social Links */}

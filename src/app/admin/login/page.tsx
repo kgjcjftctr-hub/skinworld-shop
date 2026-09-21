@@ -48,7 +48,7 @@ export default function AdminLoginPage() {
             <Lock className="h-5 w-5" />
           </div>
           <h1 className="font-display text-xl font-semibold text-ink">Panel de administración</h1>
-          <p className="mt-1 text-sm text-slate-500">Skin World</p>
+          <p className="mt-1 text-sm text-slate-500">Skinworld</p>
         </div>
 
         <label className="mb-2 block text-sm font-semibold text-ink">Contraseña</label>

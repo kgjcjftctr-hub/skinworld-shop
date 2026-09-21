@@ -20,6 +20,11 @@ export function formatDate(date: string | Date): string {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    // Sin esto, una página prerenderizada en build time (en la zona horaria
+    // del servidor de build) y una renderizada por request (en la zona
+    // horaria de la función serverless) pueden mostrar días distintos para
+    // la misma fecha.
+    timeZone: 'America/Mexico_City',
   }).format(d);
 }
 

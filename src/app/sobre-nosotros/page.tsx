@@ -22,7 +22,7 @@ export default function AboutPage() {
                 Nuestra Historia
               </h2>
               <p className="text-justify leading-loose text-slate-600">
-                Skin World nació de una convicción simple: el cuidado de la piel merece el mismo
+                Skinworld nació de una convicción simple: el cuidado de la piel merece el mismo
                 rigor que cualquier otra decisión de salud. Fundada bajo la guía de la Dra. Karina
                 Alfaro López, cada producto de nuestro catálogo pasa por un criterio dermatológico
                 profesional antes de llegar a nuestros clientes. No vendemos tendencias — ofrecemos

@@ -149,7 +149,7 @@ export function dedupeVariants(products: Product[]): Product[] {
 }
 
 export async function getCategoryCounts() {
-  const products = await getAllProducts();
+  const products = dedupeVariants(await getAllProducts());
   return products.reduce<Record<string, number>>((acc, p) => {
     if (p.category) acc[p.category] = (acc[p.category] || 0) + 1;
     return acc;

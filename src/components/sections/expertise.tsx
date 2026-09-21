@@ -27,7 +27,7 @@ export function ExpertiseSection() {
               Especialista en Dermatología · 25 años de experiencia
             </p>
             <p className="mb-10 text-lg leading-relaxed text-slate-600">
-              Cada producto Skin World es cuidadosamente seleccionado bajo un riguroso criterio médico y científico, garantizando formulaciones seguras y efectivas para el cuidado profesional de tu piel.
+              Cada producto Skinworld es cuidadosamente seleccionado bajo un riguroso criterio médico y científico, garantizando formulaciones seguras y efectivas para el cuidado profesional de tu piel.
             </p>
 
             {/* Badges */}

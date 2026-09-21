@@ -1,6 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAllProducts } from '@/lib/products';
 
+// Quita acentos para que "avene" encuentre "Avène", "protección" encuentre
+// "proteccion", etc. — sin esto, buscar sin acentos (lo más común al
+// escribir en un teléfono) no encontraba nada.
+function normalize(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '');
+}
+
 export async function GET(request: NextRequest) {
   const query = request.nextUrl.searchParams.get('q');
 
@@ -9,36 +19,36 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const searchTerm = query.toLowerCase();
+    const searchTerm = normalize(query);
     const productsData = await getAllProducts();
 
     const products = productsData
       .filter(
         (p) =>
-          p.name.toLowerCase().includes(searchTerm) ||
-          p.description?.toLowerCase().includes(searchTerm) ||
-          p.brand?.toLowerCase().includes(searchTerm)
+          normalize(p.name).includes(searchTerm) ||
+          (p.description && normalize(p.description).includes(searchTerm)) ||
+          (p.brand && normalize(p.brand).includes(searchTerm))
       )
       .slice(0, 10)
       .map((p) => ({
         id: p.id,
         name: p.name,
         slug: p.slug,
-        price: p.price,
+        price: p.priceWithIVA,
         image: p.image,
         brand: p.brand,
       }));
 
     const brandsSet = new Set(
       productsData
-        .filter((p) => p.brand?.toLowerCase().includes(searchTerm))
+        .filter((p) => p.brand && normalize(p.brand).includes(searchTerm))
         .map((p) => p.brand)
         .filter(Boolean)
     );
 
     const categoriesSet = new Set(
       productsData
-        .filter((p) => p.category?.toLowerCase().includes(searchTerm))
+        .filter((p) => p.category && normalize(p.category).includes(searchTerm))
         .map((p) => p.category)
         .filter(Boolean)
     );
