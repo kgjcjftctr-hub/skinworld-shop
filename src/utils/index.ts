@@ -20,11 +20,12 @@ export function formatDate(date: string | Date): string {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-    // Sin esto, una página prerenderizada en build time (en la zona horaria
-    // del servidor de build) y una renderizada por request (en la zona
-    // horaria de la función serverless) pueden mostrar días distintos para
-    // la misma fecha.
-    timeZone: 'America/Mexico_City',
+    // Las fechas tipo '2026-09-05' se interpretan como medianoche UTC; sin
+    // fijar la zona horaria aquí, una página prerenderizada en build time y
+    // otra renderizada por request pueden convertir esa medianoche a un día
+    // distinto según el reloj del servidor. UTC muestra siempre la fecha tal
+    // como se escribió, sin importar dónde se renderice.
+    timeZone: 'UTC',
   }).format(d);
 }
 
