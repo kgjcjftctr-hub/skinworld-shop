@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import Link from 'next/link';
-import { Mail, Phone, MapPin, Facebook, Instagram, ArrowRight } from 'lucide-react';
+import { Mail, Phone, MapPin, Instagram, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 
 const shopLinks = [
@@ -144,16 +144,7 @@ export function Footer() {
           {/* Social Links */}
           <div className="flex items-center space-x-4">
             <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-slate-400 transition-colors hover:text-white"
-              aria-label="Facebook"
-            >
-              <Facebook className="h-5 w-5" />
-            </a>
-            <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/skinworld_ka/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-slate-400 transition-colors hover:text-white"
