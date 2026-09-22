@@ -7,6 +7,8 @@ import { TestimonialsSection } from '@/components/sections/testimonials';
 import { BlogPreview } from '@/components/sections/blog-preview';
 import { CTASection } from '@/components/sections/cta';
 
+export const revalidate = 3600;
+
 export default function Home() {
   return (
     <div className="min-h-screen">
