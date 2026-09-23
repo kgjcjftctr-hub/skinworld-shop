@@ -18,7 +18,7 @@ export default async function BlogPostPage({
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="h-[320px] bg-gradient-to-br from-primary-100 to-primary-50 sm:h-[400px]" />
+      <img src={post.image} alt="" className="h-[320px] w-full object-cover sm:h-[400px]" />
 
       <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 lg:px-8">
         <Link

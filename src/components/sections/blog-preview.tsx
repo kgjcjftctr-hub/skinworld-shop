@@ -34,9 +34,11 @@ export function BlogPreview() {
             <Reveal key={post.slug} delay={i * 80}>
               <Link href={`/blog/${post.slug}`} className="group block">
                 <article className="flex flex-col overflow-hidden rounded-2xl bg-white transition-shadow duration-300 hover:shadow-lg sm:flex-row sm:items-stretch">
-                  <div className="h-48 shrink-0 bg-gradient-to-br from-primary-100 to-primary-50 sm:h-auto sm:w-[200px]">
-                    <div className="h-full w-full rounded-2xl sm:rounded-l-2xl sm:rounded-r-none" />
-                  </div>
+                  <img
+                    src={post.image}
+                    alt=""
+                    className="h-48 w-full shrink-0 object-cover sm:h-auto sm:w-[200px]"
+                  />
                   <div className="flex flex-1 flex-col justify-center p-6">
                     <p className="mb-2 font-accent text-xs font-bold uppercase tracking-wider text-gold-600">
                       {post.category}

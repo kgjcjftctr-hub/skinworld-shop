@@ -19,15 +19,19 @@ export default function AboutPage() {
             </div>
             <div>
               <h2 className="mb-6 font-display text-3xl font-bold text-ink sm:text-4xl">
-                Nuestra Historia
+                ¿Quiénes Somos?
               </h2>
+              <p className="mb-5 text-justify leading-loose text-slate-600">
+                Somos una empresa experta en el cuidado de la piel y el bienestar general, que
+                cuenta con una gran variedad de productos dermatológicos y suplementos
+                alimenticios, respaldada por profesionales de la salud y comprometida con nuestros
+                clientes, quienes pueden tener la seguridad de que lo que encuentran en este sitio
+                es de la más alta calidad y con tecnología de punta, avalada por dermatólogos con
+                años de experiencia.
+              </p>
               <p className="text-justify leading-loose text-slate-600">
-                Skinworld nació de una convicción simple: el cuidado de la piel merece el mismo
-                rigor que cualquier otra decisión de salud. Fundada bajo la guía de la Dra. Karina
-                Alfaro López, cada producto de nuestro catálogo pasa por un criterio dermatológico
-                profesional antes de llegar a nuestros clientes. No vendemos tendencias — ofrecemos
-                soluciones respaldadas por ciencia, formulación seria y más de dos décadas de
-                experiencia clínica.
+                Esta empresa surgió de la necesidad de encontrar respuesta pronta y atención
+                personalizada para satisfacer las necesidades de nuestros clientes.
               </p>
             </div>
           </div>
@@ -51,8 +55,17 @@ export default function AboutPage() {
               <h2 className="mb-2 font-display text-3xl font-bold text-ink sm:text-4xl">
                 Dra. Karina Alfaro López
               </h2>
-              <p className="mb-8 font-accent font-semibold text-primary-700">
+              <p className="mb-6 font-accent font-semibold text-primary-700">
                 Especialista en Dermatología · 25 años de experiencia
+              </p>
+
+              <p className="mb-8 text-justify leading-loose text-slate-600">
+                La Dra. Karina Alfaro es dermatóloga. Realizó Medicina Interna en el Hospital ABC y
+                la especialidad de Dermatología en el Centro Médico Nacional 20 de Noviembre. Está
+                certificada ante el Consejo Mexicano de Dermatología y es miembro activo de la
+                Academia Mexicana de Dermatología, del Colegio Iberolatinoamericano de Dermatología
+                y de la Fundación para la Dermatología. Actualmente atiende a sus pacientes en
+                Grupo Médico Pediátrico, en la Ciudad de México.
               </p>
 
               <div className="space-y-8">
@@ -105,37 +118,17 @@ export default function AboutPage() {
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Award className="mt-0.5 h-4 w-4 shrink-0 text-primary-500" />
-                      <span>Sociedad Mexicana de Dermatoscopia</span>
+                      <span>Colegio Iberolatinoamericano de Dermatología</span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Award className="mt-0.5 h-4 w-4 shrink-0 text-primary-500" />
-                      <span>Colegio Iberoamericano de Dermatología</span>
+                      <span>Fundación para la Dermatología</span>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Nuestra Filosofía */}
-      <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-2xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="mb-8 font-display text-3xl font-bold text-ink sm:text-4xl">
-            Nuestra Filosofía
-          </h2>
-          <p className="mb-10 leading-loose text-slate-600">
-            Creemos que la confianza se construye con transparencia y evidencia, no con promesas.
-            Por eso cada producto que ofrecemos ha sido evaluado con el mismo estándar que
-            aplicaríamos en un consultorio: seguridad primero, resultados comprobables después.
-          </p>
-          <blockquote className="border-l-2 border-gold-400 pl-6 text-left font-display text-xl italic text-ink">
-            “Cada producto que seleccionamos ha pasado por nuestro riguroso criterio dermatológico.”
-            <footer className="mt-3 font-accent text-sm not-italic text-slate-500">
-              — Dra. Karina Alfaro López
-            </footer>
-          </blockquote>
         </div>
       </section>
 

@@ -19,7 +19,11 @@ export default function BlogPage() {
           {blogPosts.map((post) => (
             <Link key={post.slug} href={`/blog/${post.slug}`} className="group block">
               <article>
-                <div className="mb-5 aspect-[4/3] rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 transition-shadow group-hover:shadow-md" />
+                <img
+                  src={post.image}
+                  alt=""
+                  className="mb-5 aspect-[4/3] w-full rounded-xl object-cover transition-shadow group-hover:shadow-md"
+                />
                 <p className="mb-2 font-accent text-xs font-bold uppercase tracking-wider text-gold-600">
                   {post.category}
                 </p>
