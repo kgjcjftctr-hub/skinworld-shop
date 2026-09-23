@@ -35,8 +35,13 @@ export async function POST(request: NextRequest) {
     body.compareAtPrice !== '' && body.compareAtPrice != null ? Number(body.compareAtPrice) : null;
 
   const slug = (typeof body.slug === 'string' && body.slug.trim()) || slugify(name);
-  const priceWithIVA = Math.round(price * 1.16);
-  const compareAtPriceWithIVA = compareAtPrice ? Math.round(compareAtPrice * 1.16) : null;
+  // El admin captura el precio con IVA incluido (es el que ve el cliente en la
+  // tienda); `price` guarda la base sin IVA, como el resto del catálogo.
+  const priceWithIVA = Math.round(price);
+  const basePrice = Math.round(priceWithIVA / 1.16);
+  const compareAtPriceWithIVA = compareAtPrice != null ? Math.round(compareAtPrice) : null;
+  const baseCompareAtPrice =
+    compareAtPriceWithIVA != null ? Math.round(compareAtPriceWithIVA / 1.16) : null;
 
   const supabase = getSupabase();
   const { data, error } = await supabase
@@ -47,8 +52,8 @@ export async function POST(request: NextRequest) {
       slug,
       description: body.description ?? '',
       short_description: body.shortDescription || null,
-      price,
-      compare_at_price: compareAtPrice,
+      price: basePrice,
+      compare_at_price: baseCompareAtPrice,
       brand: body.brand || null,
       sku: body.sku || null,
       image: body.image || null,

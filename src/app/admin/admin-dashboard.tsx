@@ -48,8 +48,8 @@ function productToForm(p: AdminProduct): FormState {
     slug: p.slug,
     category: p.category ?? '',
     brand: p.brand ?? '',
-    price: String(p.price),
-    compareAtPrice: p.compareAtPrice != null ? String(p.compareAtPrice) : '',
+    price: String(p.priceWithIVA ?? p.price),
+    compareAtPrice: p.compareAtPriceWithIVA != null ? String(p.compareAtPriceWithIVA) : '',
     image: p.image ?? '',
     description: p.description ?? '',
     variantGroup: p.variantGroup ?? '',
@@ -234,7 +234,9 @@ export function AdminDashboard({ initialProducts }: { initialProducts: AdminProd
                     </div>
                   </td>
                   <td className="px-4 py-3 text-slate-600">{p.category || '—'}</td>
-                  <td className="px-4 py-3 text-slate-600">{formatPrice(p.price)}</td>
+                  <td className="px-4 py-3 text-slate-600">
+                    {formatPrice(p.priceWithIVA ?? p.price)}
+                  </td>
                   <td className="px-4 py-3">
                     <span
                       className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
@@ -319,7 +321,7 @@ export function AdminDashboard({ initialProducts }: { initialProducts: AdminProd
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="mb-1.5 block text-sm font-semibold text-ink">
-                    Precio (sin IVA) *
+                    Precio (con IVA incluido) *
                   </label>
                   <input
                     type="number"
