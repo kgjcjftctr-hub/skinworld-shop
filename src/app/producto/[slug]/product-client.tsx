@@ -18,8 +18,8 @@ export function ProductClient({
   variants?: any[];
 }) {
   const [quantity, setQuantity] = useState(1);
-  // Punto de la imagen sobre el que está el cursor, para que el acercamiento
-  // ocurra justo ahí y no siempre desde el centro.
+  // Punto de la imagen sobre el que está el cursor: define qué parte se ve
+  // dentro del recuadro de aumento que aparece al lado.
   const [zoom, setZoom] = useState({ activo: false, x: 50, y: 50 });
   const addItem = useCart((state) => state.addItem);
 
@@ -58,34 +58,46 @@ export function ProductClient({
 
         <div className="mb-20 grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Image */}
-          <div
-            onMouseMove={seguirCursor}
-            onMouseLeave={() => setZoom((z) => ({ ...z, activo: false }))}
-            className="relative aspect-square cursor-zoom-in overflow-hidden rounded-2xl bg-slate-100 shadow-sm"
-          >
-            {discount > 0 && (
-              <span className="absolute right-4 top-4 z-10 rounded-full bg-red-500 px-3 py-1 text-xs font-bold text-white">
-                -{discount}%
-              </span>
-            )}
-            {product.image ? (
-              <img
-                src={product.image}
-                alt={product.name}
-                className="h-full w-full object-cover transition-transform duration-200 ease-out"
+          <div className="relative">
+            <div
+              onMouseMove={seguirCursor}
+              onMouseLeave={() => setZoom((z) => ({ ...z, activo: false }))}
+              className="relative aspect-square overflow-hidden rounded-2xl bg-slate-100 shadow-sm lg:cursor-zoom-in"
+            >
+              {discount > 0 && (
+                <span className="absolute right-4 top-4 z-10 rounded-full bg-red-500 px-3 py-1 text-xs font-bold text-white">
+                  -{discount}%
+                </span>
+              )}
+              {product.image ? (
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="h-full w-full object-cover"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src =
+                      'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"%3E%3Crect fill="%23f1f3f5" width="400" height="400"/%3E%3C/svg%3E';
+                  }}
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-slate-400">
+                  Imagen no disponible
+                </div>
+              )}
+            </div>
+
+            {/* Recuadro con la ampliación. Sólo en pantallas grandes: en móvil
+                no hay cursor que seguir. */}
+            {zoom.activo && product.image && (
+              <div
+                aria-hidden
+                className="pointer-events-none absolute left-full top-0 z-20 ml-6 hidden aspect-square w-[380px] rounded-2xl border border-slate-200 bg-white bg-no-repeat shadow-xl lg:block"
                 style={{
-                  transformOrigin: `${zoom.x}% ${zoom.y}%`,
-                  transform: zoom.activo ? 'scale(2.2)' : 'scale(1)',
-                }}
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).src =
-                    'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"%3E%3Crect fill="%23f1f3f5" width="400" height="400"/%3E%3C/svg%3E';
+                  backgroundImage: `url(${product.image})`,
+                  backgroundSize: '240%',
+                  backgroundPosition: `${zoom.x}% ${zoom.y}%`,
                 }}
               />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center text-slate-400">
-                Imagen no disponible
-              </div>
             )}
           </div>
 
