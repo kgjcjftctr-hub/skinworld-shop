@@ -29,7 +29,7 @@ export default function PrivacyPage() {
               </p>
               <ul className="ml-5 list-disc space-y-2">
                 <li>Confirmar su identidad y/o la de su representante legal</li>
-                <li>Mercadotecnia o publicidad</li>
+                <li>Mercadotecnia o publicitaria</li>
                 <li>Prospección comercial</li>
               </ul>
               <p>
@@ -101,7 +101,7 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="mb-4 font-display text-xl font-semibold text-ink">
-              Revocación del consentimiento
+              Usted puede revocar su consentimiento para el uso de sus datos personales
             </h2>
             <div className="space-y-4">
               <p>
@@ -114,14 +114,28 @@ export default function PrivacyPage() {
                 servicio que nos solicitó, o la conclusión de su relación con nosotros.
               </p>
               <p>
-                Para revocar su consentimiento, así como para limitar el uso o divulgación de su
-                información personal, deberá presentar su solicitud al correo{' '}
+                Para revocar su consentimiento deberá presentar su solicitud al correo{' '}
                 <a href={`mailto:${CORREO}`} className="font-semibold text-primary-700 underline">
                   {CORREO}
                 </a>
-                .
+                , medio en el que también ponemos a su disposición el procedimiento y los requisitos
+                para la revocación.
               </p>
             </div>
+          </section>
+
+          <section>
+            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+              ¿Cómo puede limitar el uso o divulgación de su información personal?
+            </h2>
+            <p>
+              Con objeto de que usted pueda limitar el uso y divulgación de su información personal,
+              le ofrecemos el siguiente medio: correo electrónico{' '}
+              <a href={`mailto:${CORREO}`} className="font-semibold text-primary-700 underline">
+                {CORREO}
+              </a>
+              .
+            </p>
           </section>
 
           <section>
