@@ -68,6 +68,7 @@ export function AdminDashboard({ initialProducts }: { initialProducts: AdminProd
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [probandoCorreo, setProbandoCorreo] = useState(false);
+  const [correoPrueba, setCorreoPrueba] = useState('');
 
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -174,12 +175,16 @@ export function AdminDashboard({ initialProducts }: { initialProducts: AdminProd
   const probarCorreo = async () => {
     setProbandoCorreo(true);
     try {
-      const res = await fetch('/api/admin/probar-correo', { method: 'POST' });
+      const res = await fetch('/api/admin/probar-correo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ para: correoPrueba.trim() }),
+      });
       const data = await res.json();
       if (data.enviado) {
-        toast.success(`Correo de prueba enviado a ${data.destino}. Revisa tu bandeja.`);
+        toast.success(`Correo de prueba enviado a ${data.destino}. Revisa la bandeja.`);
       } else {
-        toast.error(data.motivo ?? 'No se pudo enviar el correo de prueba');
+        toast.error(data.motivo ?? data.error ?? 'No se pudo enviar el correo de prueba');
       }
     } catch {
       toast.error('Error de conexión. Intenta de nuevo.');
@@ -211,14 +216,23 @@ export function AdminDashboard({ initialProducts }: { initialProducts: AdminProd
               <Mail className="h-4 w-4" />
               Mensajes
             </Link>
-            <button
-              onClick={probarCorreo}
-              disabled={probandoCorreo}
-              className="inline-flex items-center gap-2 rounded-md border border-ink/20 px-4 py-2.5 font-accent text-sm font-semibold text-ink transition-colors hover:border-ink disabled:opacity-50"
-            >
-              <Send className="h-4 w-4" />
-              {probandoCorreo ? 'Enviando…' : 'Probar correo'}
-            </button>
+            <div className="flex items-center gap-2 rounded-md border border-ink/20 p-1 pl-3">
+              <input
+                type="email"
+                value={correoPrueba}
+                onChange={(e) => setCorreoPrueba(e.target.value)}
+                placeholder="Correo para la prueba (opcional)"
+                className="w-56 bg-transparent text-sm text-ink placeholder:text-slate-400 focus:outline-none"
+              />
+              <button
+                onClick={probarCorreo}
+                disabled={probandoCorreo}
+                className="inline-flex items-center gap-2 rounded bg-ink px-3 py-2 font-accent text-sm font-semibold text-white transition-colors hover:bg-ink/90 disabled:opacity-50"
+              >
+                <Send className="h-4 w-4" />
+                {probandoCorreo ? 'Enviando…' : 'Probar correo'}
+              </button>
+            </div>
             <button onClick={openCreate} className="btn btn-primary inline-flex items-center gap-2">
               <Plus className="h-4 w-4" />
               Nuevo producto
