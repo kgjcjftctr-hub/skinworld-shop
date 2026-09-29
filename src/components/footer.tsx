@@ -24,11 +24,29 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState('');
 
-  const handleSubscribe = (e: FormEvent) => {
+  const [enviando, setEnviando] = useState(false);
+
+  const handleSubscribe = async (e: FormEvent) => {
     e.preventDefault();
-    if (!email) return;
-    toast.success('¡Listo! Te avisaremos de nuevos lanzamientos.', { description: email });
-    setEmail('');
+    if (!email || enviando) return;
+    setEnviando(true);
+    try {
+      const res = await fetch('/api/boletin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) {
+        toast.error('No pudimos registrar tu correo. Intenta más tarde.');
+        return;
+      }
+      toast.success('¡Listo! Te avisaremos de nuevos lanzamientos.', { description: email });
+      setEmail('');
+    } catch {
+      toast.error('Error de conexión. Intenta más tarde.');
+    } finally {
+      setEnviando(false);
+    }
   };
 
   return (
@@ -56,9 +74,10 @@ export function Footer() {
               />
               <button
                 type="submit"
-                className="inline-flex shrink-0 items-center gap-2 rounded-md bg-gold-500 px-5 py-2.5 font-accent text-sm font-semibold text-ink transition-colors hover:bg-gold-400"
+                disabled={enviando}
+                className="inline-flex shrink-0 items-center gap-2 rounded-md bg-gold-500 px-5 py-2.5 font-accent text-sm font-semibold text-ink transition-colors hover:bg-gold-400 disabled:opacity-60"
               >
-                <span>Suscribirme</span>
+                <span>{enviando ? 'Enviando…' : 'Suscribirme'}</span>
                 <ArrowRight className="h-4 w-4" />
               </button>
             </form>

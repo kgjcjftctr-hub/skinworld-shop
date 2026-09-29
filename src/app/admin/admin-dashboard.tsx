@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { Pencil, Plus, Trash2, LogOut, X, Receipt } from 'lucide-react';
+import { Pencil, Plus, Trash2, LogOut, X, Receipt, Mail } from 'lucide-react';
 import { formatPrice } from '@/utils';
 import type { Product } from '@/types';
 
@@ -184,6 +184,13 @@ export function AdminDashboard({ initialProducts }: { initialProducts: AdminProd
             >
               <Receipt className="h-4 w-4" />
               Pedidos
+            </Link>
+            <Link
+              href="/admin/mensajes"
+              className="inline-flex items-center gap-2 rounded-md border border-ink/20 px-4 py-2.5 font-accent text-sm font-semibold text-ink transition-colors hover:border-ink"
+            >
+              <Mail className="h-4 w-4" />
+              Mensajes
             </Link>
             <button onClick={openCreate} className="btn btn-primary inline-flex items-center gap-2">
               <Plus className="h-4 w-4" />

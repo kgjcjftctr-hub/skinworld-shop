@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Reveal } from '@/components/reveal';
 
-const trustSignals = ['100% Original', 'Envío Gratis >$500', 'Soporte 24/7'];
+const trustSignals = ['100% Original', 'Envío Gratis en CDMX', 'Atención Lun-Vie 10-18h'];
 
 export function CTASection() {
   return (

@@ -18,32 +18,41 @@ export default function PrivacyPage() {
         <div className="space-y-10 leading-relaxed text-slate-600">
           <section>
             <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+              ¿Quién es responsable de sus datos?
+            </h2>
+            <p>
+              Skinworld, con domicilio en la Ciudad de México y correo de contacto{' '}
+              <a href={`mailto:${CORREO}`} className="font-semibold text-primary-700 underline">
+                {CORREO}
+              </a>
+              , es responsable del tratamiento de los datos personales que usted proporcione a través
+              de este sitio.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
               ¿Para qué fines utilizaremos sus datos personales?
             </h2>
             <div className="space-y-4">
               <p>
-                De manera adicional a las finalidades necesarias para prestarle el servicio,
-                utilizaremos su información personal para las siguientes finalidades secundarias, que
-                no son necesarias para el servicio solicitado, pero que nos permiten y facilitan
-                brindarle una mejor atención:
+                Utilizamos sus datos personales únicamente para las finalidades necesarias para
+                prestarle el servicio que nos solicita:
               </p>
               <ul className="ml-5 list-disc space-y-2">
-                <li>Confirmar su identidad y/o la de su representante legal</li>
-                <li>Mercadotecnia o publicitaria</li>
-                <li>Prospección comercial</li>
+                <li>Procesar su compra y cobrar el pedido</li>
+                <li>Enviarle los productos al domicilio que nos indique</li>
+                <li>Contactarle sobre su pedido o responder a las dudas que nos escriba</li>
               </ul>
               <p>
-                En caso de que no desee que sus datos personales se utilicen para estos fines
-                secundarios, puede indicarlo escribiendo a{' '}
+                Si usted se suscribe voluntariamente a nuestro boletín, utilizaremos su correo
+                electrónico para enviarle información sobre productos y novedades. Puede pedirnos que
+                lo demos de baja en cualquier momento escribiendo a{' '}
                 <a href={`mailto:${CORREO}`} className="font-semibold text-primary-700 underline">
                   {CORREO}
                 </a>
-                , señalando cuáles de las finalidades anteriores no consiente.
-              </p>
-              <p>
-                La negativa para el uso de sus datos personales para estas finalidades no podrá ser
-                un motivo para que le neguemos los servicios y productos que solicita o contrata con
-                nosotros.
+                . La negativa a recibir el boletín no es motivo para que le neguemos los servicios y
+                productos que solicita o contrata con nosotros.
               </p>
             </div>
           </section>
@@ -59,12 +68,49 @@ export default function PrivacyPage() {
               </p>
               <ul className="ml-5 list-disc space-y-2">
                 <li>Nombre</li>
-                <li>Género</li>
-                <li>Edad</li>
-                <li>Domicilio</li>
-                <li>Teléfono</li>
                 <li>Correo electrónico</li>
+                <li>Teléfono</li>
+                <li>Domicilio de entrega</li>
               </ul>
+              <p>
+                No solicitamos ni almacenamos datos sensibles, ni datos financieros: los datos de su
+                tarjeta se capturan directamente en la plataforma de pago y nunca pasan por nuestros
+                servidores.
+              </p>
+              <p>
+                Las reseñas que se publican en este sitio son anónimas: sólo guardamos la
+                calificación y el comentario, sin nombre ni ningún dato que permita identificarle.
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+              ¿Con quién compartimos sus datos?
+            </h2>
+            <div className="space-y-4">
+              <p>
+                Para poder operar la tienda utilizamos los servicios de los siguientes proveedores,
+                que tratan sus datos por nuestra cuenta y bajo sus propias políticas de privacidad:
+              </p>
+              <ul className="ml-5 list-disc space-y-2">
+                <li>
+                  <span className="font-semibold text-ink">Stripe</span> — procesa los pagos y recibe
+                  su nombre, correo electrónico y los datos de su método de pago.
+                </li>
+                <li>
+                  <span className="font-semibold text-ink">Supabase</span> — almacena los pedidos,
+                  incluyendo nombre, teléfono y domicilio de entrega.
+                </li>
+                <li>
+                  <span className="font-semibold text-ink">Vercel</span> — aloja el sitio y conserva
+                  registros técnicos de servidor.
+                </li>
+              </ul>
+              <p>
+                No vendemos, alquilamos ni cedemos sus datos personales a terceros con fines
+                publicitarios.
+              </p>
             </div>
           </section>
 
@@ -144,23 +190,21 @@ export default function PrivacyPage() {
             </h2>
             <div className="space-y-4">
               <p>
-                Le informamos que en nuestra página de internet utilizamos cookies, web beacons u
-                otras tecnologías, a través de las cuales es posible monitorear su comportamiento
-                como usuario de internet, así como brindarle un mejor servicio y experiencia al
-                navegar en nuestra página. Los datos personales que recabamos a través de estas
-                tecnologías los utilizaremos para promociones y seguimiento con nuestros clientes.
+                Este sitio <span className="font-semibold text-ink">no utiliza cookies publicitarias,
+                web beacons ni herramientas de analítica</span> que monitoreen su comportamiento de
+                navegación. No usamos Google Analytics, píxeles de redes sociales ni servicios
+                similares.
               </p>
-              <p>Los datos que obtenemos de estas tecnologías de rastreo son los siguientes:</p>
-              <ul className="ml-5 list-disc space-y-2">
-                <li>Identificadores, nombre de usuario y contraseñas de una sesión</li>
-                <li>Listas y hábitos de consumo en páginas de compras</li>
-              </ul>
               <p>
-                Para conocer la forma en que se pueden deshabilitar estas tecnologías, escriba a{' '}
-                <a href={`mailto:${CORREO}`} className="font-semibold text-primary-700 underline">
-                  {CORREO}
-                </a>
-                .
+                El único almacenamiento que utilizamos en su navegador es el de su carrito de
+                compras, que guarda los productos que va agregando para que no los pierda al cambiar
+                de página. Esa información permanece en su dispositivo y no se envía a nuestros
+                servidores hasta que usted decide finalizar la compra. Puede borrarla en cualquier
+                momento vaciando el carrito o limpiando los datos del sitio en su navegador.
+              </p>
+              <p>
+                La plataforma de pago puede utilizar sus propias cookies cuando usted es dirigido a
+                ella para completar la compra, conforme a su política de privacidad.
               </p>
             </div>
           </section>
@@ -174,8 +218,9 @@ export default function PrivacyPage() {
               derivadas de nuevos requerimientos legales; de nuestras propias necesidades por los
               productos o servicios que ofrecemos; de nuestras prácticas de privacidad; de cambios en
               nuestro modelo de negocio, o por otras causas. Nos comprometemos a mantenerlo informado
-              sobre los cambios que pueda sufrir el presente aviso de privacidad mediante el envío de
-              un correo electrónico a nuestra base de clientes.
+              sobre los cambios que pueda sufrir el presente aviso publicando la versión actualizada
+              en esta misma página, con su fecha de última actualización. Le sugerimos revisarla
+              periódicamente.
             </p>
           </section>
         </div>
