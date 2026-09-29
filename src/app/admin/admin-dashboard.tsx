@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { Pencil, Plus, Trash2, LogOut, X, Receipt, Mail } from 'lucide-react';
+import { Pencil, Plus, Trash2, LogOut, X, Receipt, Mail, Send } from 'lucide-react';
 import { formatPrice } from '@/utils';
 import type { Product } from '@/types';
 
@@ -67,6 +67,7 @@ export function AdminDashboard({ initialProducts }: { initialProducts: AdminProd
   const [form, setForm] = useState<FormState>(emptyForm);
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [probandoCorreo, setProbandoCorreo] = useState(false);
 
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -169,6 +170,24 @@ export function AdminDashboard({ initialProducts }: { initialProducts: AdminProd
     router.refresh();
   };
 
+  // Comprueba desde el panel que los avisos por correo ya están configurados.
+  const probarCorreo = async () => {
+    setProbandoCorreo(true);
+    try {
+      const res = await fetch('/api/admin/probar-correo', { method: 'POST' });
+      const data = await res.json();
+      if (data.enviado) {
+        toast.success(`Correo de prueba enviado a ${data.destino}. Revisa tu bandeja.`);
+      } else {
+        toast.error(data.motivo ?? 'No se pudo enviar el correo de prueba');
+      }
+    } catch {
+      toast.error('Error de conexión. Intenta de nuevo.');
+    } finally {
+      setProbandoCorreo(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -192,6 +211,14 @@ export function AdminDashboard({ initialProducts }: { initialProducts: AdminProd
               <Mail className="h-4 w-4" />
               Mensajes
             </Link>
+            <button
+              onClick={probarCorreo}
+              disabled={probandoCorreo}
+              className="inline-flex items-center gap-2 rounded-md border border-ink/20 px-4 py-2.5 font-accent text-sm font-semibold text-ink transition-colors hover:border-ink disabled:opacity-50"
+            >
+              <Send className="h-4 w-4" />
+              {probandoCorreo ? 'Enviando…' : 'Probar correo'}
+            </button>
             <button onClick={openCreate} className="btn btn-primary inline-flex items-center gap-2">
               <Plus className="h-4 w-4" />
               Nuevo producto
