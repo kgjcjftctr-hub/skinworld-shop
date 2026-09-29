@@ -18,7 +18,19 @@ export function ProductClient({
   variants?: any[];
 }) {
   const [quantity, setQuantity] = useState(1);
+  // Punto de la imagen sobre el que está el cursor, para que el acercamiento
+  // ocurra justo ahí y no siempre desde el centro.
+  const [zoom, setZoom] = useState({ activo: false, x: 50, y: 50 });
   const addItem = useCart((state) => state.addItem);
+
+  const seguirCursor = (e: React.MouseEvent<HTMLDivElement>) => {
+    const caja = e.currentTarget.getBoundingClientRect();
+    setZoom({
+      activo: true,
+      x: ((e.clientX - caja.left) / caja.width) * 100,
+      y: ((e.clientY - caja.top) / caja.height) * 100,
+    });
+  };
 
   const priceWithIVA = product.priceWithIVA ?? Math.round(product.price * 1.16);
   const compareAtPriceWithIVA = product.compareAtPrice
@@ -46,7 +58,11 @@ export function ProductClient({
 
         <div className="mb-20 grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Image */}
-          <div className="relative aspect-square cursor-zoom-in overflow-hidden rounded-2xl bg-slate-100 shadow-sm">
+          <div
+            onMouseMove={seguirCursor}
+            onMouseLeave={() => setZoom((z) => ({ ...z, activo: false }))}
+            className="relative aspect-square cursor-zoom-in overflow-hidden rounded-2xl bg-slate-100 shadow-sm"
+          >
             {discount > 0 && (
               <span className="absolute right-4 top-4 z-10 rounded-full bg-red-500 px-3 py-1 text-xs font-bold text-white">
                 -{discount}%
@@ -56,7 +72,11 @@ export function ProductClient({
               <img
                 src={product.image}
                 alt={product.name}
-                className="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
+                className="h-full w-full object-cover transition-transform duration-200 ease-out"
+                style={{
+                  transformOrigin: `${zoom.x}% ${zoom.y}%`,
+                  transform: zoom.activo ? 'scale(2.2)' : 'scale(1)',
+                }}
                 onError={(e) => {
                   (e.currentTarget as HTMLImageElement).src =
                     'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"%3E%3Crect fill="%23f1f3f5" width="400" height="400"/%3E%3C/svg%3E';
