@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Search, X } from 'lucide-react';
 import Link from 'next/link';
 import { formatPrice } from '@/utils';
@@ -9,13 +10,31 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<any>({ products: [], brands: [], categories: [] });
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     if (isOpen) {
       inputRef.current?.focus();
     }
   }, [isOpen]);
+
+  // Cerrar con Escape y bloquear el scroll de la página mientras está abierto.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', onKey);
+    const previo = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = previo;
+    };
+  }, [isOpen, onClose]);
 
   useEffect(() => {
     const timer = setTimeout(async () => {
@@ -37,11 +56,20 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     return () => clearTimeout(timer);
   }, [query]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 pt-20 animate-fade-in">
-      <div className="mx-4 w-full max-w-2xl rounded-xl bg-white shadow-xl">
+  // Se monta en <body> con un portal: el <header> usa backdrop-blur, lo que
+  // convierte al encabezado en el bloque contenedor de sus hijos position:fixed
+  // y dejaba el fondo oscuro recortado a la altura de la barra superior.
+  return createPortal(
+    <div
+      onClick={onClose}
+      className="animate-fade-in fixed inset-0 z-[100] flex items-start justify-center bg-ink/60 px-4 pt-24 backdrop-blur-sm sm:pt-28"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/5"
+      >
         <div className="relative">
           <Search className="absolute left-5 top-4 h-5 w-5 text-slate-400" />
           <input
@@ -54,6 +82,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
           />
           <button
             onClick={onClose}
+            aria-label="Cerrar búsqueda"
             className="absolute right-4 top-4 text-slate-400 hover:text-slate-600"
           >
             <X className="h-5 w-5" />
@@ -145,6 +174,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
