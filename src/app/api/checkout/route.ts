@@ -32,6 +32,18 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Falta completar la dirección de envío' }, { status: 400 });
   }
 
+  const origin = request.headers.get('origin') || `https://${request.headers.get('host')}`;
+
+  // Stripe sólo acepta URLs absolutas para las imágenes; varias fotos del
+  // catálogo se guardan como ruta del sitio (/images/...), así que las
+  // completamos con el dominio y descartamos cualquier otra cosa.
+  const imagenParaStripe = (image: string | null | undefined) => {
+    if (!image) return undefined;
+    if (/^https?:\/\//i.test(image)) return [image];
+    if (image.startsWith('/')) return [`${origin}${image}`];
+    return undefined;
+  };
+
   const supabase = getSupabase();
   const ids = cartItems.map((item: any) => item.id).filter(Boolean);
   const { data: products, error } = await supabase
@@ -65,7 +77,7 @@ export async function POST(request: NextRequest) {
         product_data: {
           name: product.name,
           description: product.description ? product.description.slice(0, 500) : undefined,
-          images: product.image ? [product.image] : undefined,
+          images: imagenParaStripe(product.image),
         },
       },
     });
@@ -88,8 +100,6 @@ export async function POST(request: NextRequest) {
       },
     });
   }
-
-  const origin = request.headers.get('origin') || `https://${request.headers.get('host')}`;
 
   try {
     const stripe = getStripe();
