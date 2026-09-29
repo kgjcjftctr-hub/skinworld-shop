@@ -3,9 +3,13 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-const trustSignals = ['165+ productos curados', '25 años de trayectoria clínica', 'Respaldo dermatológico certificado'];
+export function HeroSection({ productCount }: { productCount: number }) {
+  const trustSignals = [
+    `${productCount} productos curados`,
+    '25 años de trayectoria clínica',
+    'Respaldo dermatológico certificado',
+  ];
 
-export function HeroSection() {
   return (
     <section className="relative flex min-h-[72vh] items-center overflow-hidden bg-white">
       {/* Layered premium background: soft radial glow + fine grid texture */}

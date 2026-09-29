@@ -106,10 +106,21 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                       <Link key={product.id} href={`/producto/${encodeURIComponent(product.slug)}`}>
                         <div
                           onClick={onClose}
-                          className="cursor-pointer rounded-md p-2 hover:bg-slate-50"
+                          className="flex cursor-pointer items-center gap-3 rounded-md p-2 hover:bg-slate-50"
                         >
-                          <p className="font-display font-medium text-ink">{product.name}</p>
-                          <p className="text-sm text-slate-500">{formatPrice(product.price)}</p>
+                          {product.image && (
+                            <img
+                              src={product.image}
+                              alt=""
+                              className="h-12 w-12 shrink-0 rounded-md object-contain"
+                            />
+                          )}
+                          <div className="min-w-0">
+                            <p className="truncate font-display font-medium text-ink">
+                              {product.name}
+                            </p>
+                            <p className="text-sm text-slate-500">{formatPrice(product.price)}</p>
+                          </div>
                         </div>
                       </Link>
                     ))}

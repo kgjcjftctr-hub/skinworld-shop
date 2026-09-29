@@ -6,13 +6,16 @@ import { ExpertiseSection } from '@/components/sections/expertise';
 import { TestimonialsSection } from '@/components/sections/testimonials';
 import { BlogPreview } from '@/components/sections/blog-preview';
 import { CTASection } from '@/components/sections/cta';
+import { getAllProducts, dedupeVariants } from '@/lib/products';
 
 export const revalidate = 3600;
 
-export default function Home() {
+export default async function Home() {
+  const productCount = dedupeVariants(await getAllProducts()).length;
+
   return (
     <div className="min-h-screen">
-      <HeroSection />
+      <HeroSection productCount={productCount} />
       <FeaturedProducts />
       <CategoriesSection />
       <BrandsSection />

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAllProducts } from '@/lib/products';
+import { getAllProducts, dedupeVariants } from '@/lib/products';
 
 // Quita acentos para que "avene" encuentre "Avène", "protección" encuentre
 // "proteccion", etc. — sin esto, buscar sin acentos (lo más común al
@@ -22,14 +22,31 @@ export async function GET(request: NextRequest) {
     const searchTerm = normalize(query);
     const productsData = await getAllProducts();
 
-    const products = productsData
+    // Ordena por qué tan directa es la coincidencia: primero lo que empieza con
+    // lo escrito, luego el resto del nombre, después la marca y al final los que
+    // sólo coinciden en la descripción. Sin esto, buscar "solar" devolvía Agua
+    // Termal antes que los protectores solares, por orden alfabético.
+    const relevancia = (p: (typeof productsData)[number]) => {
+      const nombre = normalize(p.name);
+      if (nombre.startsWith(searchTerm)) return 0;
+      if (nombre.includes(searchTerm)) return 1;
+      if (p.brand && normalize(p.brand).includes(searchTerm)) return 2;
+      return 3;
+    };
+
+    const coincidencias = productsData
       .filter(
         (p) =>
           normalize(p.name).includes(searchTerm) ||
           (p.description && normalize(p.description).includes(searchTerm)) ||
           (p.brand && normalize(p.brand).includes(searchTerm))
       )
-      .slice(0, 10)
+      .sort((a, b) => relevancia(a) - relevancia(b) || a.name.localeCompare(b.name, 'es'));
+
+    // Los productos que sólo cambian de tono o tamaño comparten ficha en la
+    // tienda; en el buscador también deben aparecer una sola vez.
+    const products = dedupeVariants(coincidencias)
+      .slice(0, 8)
       .map((p) => ({
         id: p.id,
         name: p.name,
