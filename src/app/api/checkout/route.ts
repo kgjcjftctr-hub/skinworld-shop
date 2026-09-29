@@ -44,6 +44,8 @@ export async function POST(request: NextRequest) {
     return undefined;
   };
 
+  const campo = (valor: unknown) => String(valor ?? '').trim().slice(0, 500);
+
   const supabase = getSupabase();
   const ids = cartItems.map((item: any) => item.id).filter(Boolean);
   const { data: products, error } = await supabase
@@ -108,8 +110,20 @@ export async function POST(request: NextRequest) {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items,
+      // Cada dato va en su propia llave: Stripe corta cualquier valor de más
+      // de 500 caracteres, y una dirección larga completa rebasaba ese límite
+      // cuando se mandaba como un solo texto.
       metadata: {
-        shipping_address: JSON.stringify(shippingAddress).slice(0, 500),
+        envio_nombre: campo(shippingAddress.nombre),
+        envio_telefono: campo(shippingAddress.telefono),
+        envio_cp: campo(shippingAddress.codigoPostal),
+        envio_estado: campo(shippingAddress.estado),
+        envio_municipio: campo(shippingAddress.municipio),
+        envio_colonia: campo(shippingAddress.colonia),
+        envio_calle: campo(shippingAddress.calle),
+        envio_numero_exterior: campo(shippingAddress.numeroExterior),
+        envio_numero_interior: campo(shippingAddress.numeroInterior),
+        envio_referencias: campo(shippingAddress.referencias),
       },
       success_url: `${origin}/pedido-confirmado?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/carrito`,

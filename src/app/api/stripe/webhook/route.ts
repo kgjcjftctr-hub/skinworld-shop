@@ -31,13 +31,29 @@ export async function POST(request: NextRequest) {
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 100 });
       const supabase = getSupabase();
 
+      const metadata = session.metadata ?? {};
       let shippingAddress: any = null;
-      try {
-        shippingAddress = session.metadata?.shipping_address
-          ? JSON.parse(session.metadata.shipping_address)
-          : null;
-      } catch {
-        shippingAddress = null;
+
+      if (metadata.envio_calle) {
+        shippingAddress = {
+          nombre: metadata.envio_nombre ?? '',
+          telefono: metadata.envio_telefono ?? '',
+          codigoPostal: metadata.envio_cp ?? '',
+          estado: metadata.envio_estado ?? '',
+          municipio: metadata.envio_municipio ?? '',
+          colonia: metadata.envio_colonia ?? '',
+          calle: metadata.envio_calle,
+          numeroExterior: metadata.envio_numero_exterior ?? '',
+          numeroInterior: metadata.envio_numero_interior ?? '',
+          referencias: metadata.envio_referencias ?? '',
+        };
+      } else if (metadata.shipping_address) {
+        // Formato anterior: la dirección iba como un solo texto JSON.
+        try {
+          shippingAddress = JSON.parse(metadata.shipping_address);
+        } catch {
+          shippingAddress = null;
+        }
       }
 
       await supabase.from('orders').insert({
