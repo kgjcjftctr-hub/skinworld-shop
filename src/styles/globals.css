@@ -98,7 +98,7 @@ p {
 
 /* Links */
 a {
-  @apply text-primary-700 hover:text-primary-900;
+  @apply text-sw-pink-deep hover:text-sw-ink;
   @apply transition-colors;
 }
 

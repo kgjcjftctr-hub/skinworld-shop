@@ -4,11 +4,26 @@ import Link from 'next/link';
 import { ImagenProducto } from '@/components/imagen-producto';
 import { ShoppingBag } from 'lucide-react';
 import { toast } from 'sonner';
-import { formatPrice } from '@/utils';
+import { formatPrice, cn } from '@/utils';
 import { useCart } from '@/store/cart';
 import type { Product } from '@/types';
 
-export function ProductCard({ product }: { product: Product & Record<string, any> }) {
+/**
+ * Tarjeta única de producto. El enlace cubre toda la tarjeta con un
+ * pseudo-elemento, y el botón "Agregar" queda encima y fuera de ese enlace:
+ * así no hay un botón dentro de un enlace, que el teclado y los lectores de
+ * pantalla no pueden separar.
+ *
+ * La foto siempre se ve completa (object-contain) sobre blanco, porque los
+ * empaques llegan con fondo blanco y proporciones distintas.
+ */
+export function ProductCard({
+  product,
+  prioritaria = false,
+}: {
+  product: Product & Record<string, any>;
+  prioritaria?: boolean;
+}) {
   const addItem = useCart((state) => state.addItem);
 
   const priceWithIVA = product.priceWithIVA ?? Math.round(product.price * 1.16);
@@ -26,67 +41,73 @@ export function ProductCard({ product }: { product: Product & Record<string, any
     toast.success('Agregado al carrito', { description: product.name });
   };
 
+  const enlace = `/producto/${encodeURIComponent(product.slug)}`;
+
   return (
-    <Link href={`/producto/${encodeURIComponent(product.slug)}`} className="group block h-full">
-      <div className="flex h-full flex-col rounded-2xl p-2.5 transition-shadow duration-300 hover:shadow-card">
-        {/* Image */}
-        <div className="relative aspect-square overflow-hidden rounded-xl bg-slate-100">
-          {product.brand && (
-            <span className="absolute left-3 top-3 z-10 rounded-full bg-white/95 px-3 py-1 font-accent text-[11px] font-semibold uppercase tracking-wide text-primary-800 shadow-sm">
-              {product.brand}
-            </span>
-          )}
-          {discount > 0 && (
-            <span className="absolute right-3 top-3 z-10 rounded-full bg-gold-600 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
-              -{discount}%
-            </span>
-          )}
-          <ImagenProducto
-            src={product.image}
-            alt={product.name}
-            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
-          />
-        </div>
+    <article className="group relative flex h-full flex-col">
+      <div className="relative aspect-square overflow-hidden rounded-sw border border-sw-border bg-sw-white">
+        {discount > 0 && (
+          <span className="absolute left-2.5 top-2.5 z-10 rounded-full bg-sw-pink-deep px-2.5 py-1 text-[0.6875rem] font-bold tabular-nums text-white">
+            -{discount}%
+          </span>
+        )}
+        <ImagenProducto
+          src={product.image}
+          alt=""
+          prioritaria={prioritaria}
+          className="h-full w-full object-contain p-[8%] transition-transform duration-sw-slow ease-sw [@media(hover:hover)]:group-hover:scale-[1.04]"
+        />
+      </div>
 
-        {/* Content */}
-        <div className="flex flex-1 flex-col px-1 pt-4">
-          {product.category && (
-            <p className="mb-1 font-accent text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-              {product.category}
-            </p>
-          )}
-          <h3 className="mb-2 line-clamp-2 font-display text-lg font-semibold text-ink transition-colors group-hover:text-primary-700">
+      <div className="flex flex-1 flex-col pt-3 sm:pt-4">
+        {product.brand && (
+          <p className="mb-1 truncate text-[0.6875rem] font-semibold tracking-wide text-sw-muted sm:text-sw-xs">
+            {product.brand}
+          </p>
+        )}
+        <h3 className="line-clamp-2 min-h-[2.5em] font-display text-[0.9375rem] font-semibold leading-[1.25] text-sw-ink sm:text-[1.0625rem]">
+          <Link
+            href={enlace}
+            className="rounded-sw-sm text-sw-ink after:absolute after:inset-0 after:z-0 after:content-[''] hover:text-sw-pink-deep group-hover:text-sw-pink-deep"
+          >
             {product.name}
-          </h3>
-          {product.shortDescription && (
-            <p className="mb-3 line-clamp-1 text-sm text-slate-500">
-              {product.shortDescription}
-            </p>
-          )}
+          </Link>
+        </h3>
+        {product.category && (
+          <p className="mt-1 hidden text-sw-xs text-sw-muted sm:block">{product.category}</p>
+        )}
 
-          <div className="mt-auto pt-2">
-            <div className="mb-1 flex items-baseline gap-2">
-              <span className="font-display text-2xl font-semibold text-ink">
+        <div className="mt-auto flex flex-col gap-2.5 pt-3 sm:flex-row sm:items-end sm:justify-between sm:gap-3">
+          <div className="min-w-0">
+            <p className="flex flex-wrap items-baseline gap-x-2">
+              <span className="text-[1.0625rem] font-semibold tabular-nums text-sw-ink sm:text-lg">
                 {formatPrice(priceWithIVA)}
               </span>
               {compareAtPriceWithIVA && (
-                <span className="text-sm text-slate-400 line-through">
+                <span className="text-sw-xs tabular-nums text-sw-muted line-through">
+                  <span className="sr-only">Antes </span>
                   {formatPrice(compareAtPriceWithIVA)}
                 </span>
               )}
-            </div>
-            <p className="mb-3 text-xs text-slate-400">Con IVA</p>
-
-            <button
-              onClick={handleAddToCart}
-              className="flex w-full items-center justify-center gap-2 rounded-md bg-ink py-2.5 font-accent text-sm font-semibold text-white transition-all duration-200 hover:bg-primary-800 hover:shadow-card"
-            >
-              <ShoppingBag className="h-4 w-4" />
-              <span>Agregar</span>
-            </button>
+            </p>
+            <p className="text-[0.6875rem] text-sw-muted sm:text-sw-xs">IVA incluido</p>
           </div>
+
+          <button
+            type="button"
+            onClick={handleAddToCart}
+            aria-label={`Agregar ${product.name} al carrito`}
+            className={cn(
+              'relative z-10 inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full px-4',
+              'bg-sw-pink-pale text-sw-small font-semibold text-sw-pink-deep',
+              'transition-colors duration-sw-fast ease-sw hover:bg-sw-pink-deep hover:text-white'
+            )}
+          >
+            <ShoppingBag className="h-4 w-4" aria-hidden />
+            <span>Agregar</span>
+          </button>
         </div>
       </div>
-    </Link>
+    </article>
   );
 }

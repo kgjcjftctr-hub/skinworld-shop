@@ -22,11 +22,14 @@ export function ImagenProducto({
   const [fallo, setFallo] = useState(false);
 
   if (!src || fallo) {
+    // Si la imagen era decorativa (alt vacío, el nombre ya está al lado),
+    // el aviso también lo es; si no, se anuncia con el nombre del producto.
     return (
       <div
-        role="img"
-        aria-label={`Imagen no disponible de ${alt}`}
-        className="flex h-full w-full items-center justify-center bg-slate-100 px-3 text-center text-xs text-slate-400"
+        role={alt ? 'img' : undefined}
+        aria-label={alt ? `Imagen no disponible de ${alt}` : undefined}
+        aria-hidden={alt ? undefined : true}
+        className="flex h-full w-full items-center justify-center bg-sw-surface px-3 text-center text-sw-xs text-sw-muted"
       >
         Imagen no disponible
       </div>
