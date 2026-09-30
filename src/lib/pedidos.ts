@@ -54,7 +54,20 @@ export interface Pedido {
   shipping_address: DireccionDeEnvio | null;
   amount_total: number;
   items: ArticuloDelPedido[] | null;
+  /** Número de guía de la paquetería, cuando la tienda lo capturó. */
+  tracking?: string | null;
+  tracking_url?: string | null;
+  packed_at?: string | null;
+  shipped_at?: string | null;
+  delivered_at?: string | null;
 }
+
+/** Columna donde se guarda el momento en que el pedido llegó a cada etapa. */
+export const MOMENTO_DE_ETAPA: Partial<Record<Etapa, string>> = {
+  packed: 'packed_at',
+  shipped: 'shipped_at',
+  delivered: 'delivered_at',
+};
 
 export function direccionEnUnaLinea(pedido: Pedido): string {
   const d = pedido.shipping_address;
@@ -99,6 +112,16 @@ function bloqueDeEnvio(pedido: Pedido) {
 }
 
 const referencia = (pedido: Pedido) => pedido.id.slice(0, 8).toUpperCase();
+
+/** Número de guía, cuando la tienda lo capturó al marcar el envío. */
+function bloqueDeGuia(pedido: Pedido) {
+  if (!pedido.tracking) return '';
+  const numero = `<strong style="color:#1c1c22;">${escaparHtml(pedido.tracking)}</strong>`;
+  const enlace = pedido.tracking_url
+    ? `<br><a href="${escaparHtml(pedido.tracking_url)}" style="color:#b08ba5;">Seguir el envío</a>`
+    : '';
+  return `<p style="margin:16px 0 0;">Número de guía: ${numero}${enlace}</p>`;
+}
 
 /** Aviso a la tienda de que entró un pedido. */
 export function correoPedidoNuevo(pedido: Pedido) {
@@ -167,6 +190,7 @@ export function correoEtapa(pedido: Pedido, etapa: Etapa) {
       aviso.titulo,
       `<p style="margin:0;">${escaparHtml(aviso.texto)}</p>
        <p style="margin:16px 0 0;">Pedido <strong>${referencia(pedido)}</strong></p>
+       ${bloqueDeGuia(pedido)}
        ${tablaDeProductos(pedido)}
        ${bloqueDeEnvio(pedido)}`
     ),

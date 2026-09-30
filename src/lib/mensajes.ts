@@ -1,14 +1,11 @@
 import 'server-only';
-import { createHash } from 'crypto';
 import { getSupabase } from '@/lib/supabase';
 
-// Los mensajes se guardan como archivos JSON en un bucket privado de Supabase
-// Storage en lugar de una tabla, porque la llave de servicio permite escribir
-// objetos pero no crear tablas. Si más adelante se crea una tabla, basta con
-// migrar estas dos funciones.
-const BUCKET = 'mensajes';
-
+// Los mensajes viven en la tabla `messages`. Antes se guardaban como objetos
+// sueltos en Supabase Storage, porque la llave de servicio podía crear buckets
+// pero no tablas; `scripts/migrar-mensajes.mjs` pasa los que quedaran allí.
 export type Mensaje = {
+  id?: string;
   tipo: 'contacto' | 'boletin';
   nombre?: string;
   email: string;
@@ -17,54 +14,77 @@ export type Mensaje = {
   fecha: string;
 };
 
-function rutaDe(mensaje: Mensaje) {
-  // El boletín se guarda bajo una ruta derivada del correo, de modo que
-  // suscribirse dos veces sobrescribe el mismo archivo en lugar de llenar la
-  // bandeja de repetidos. Los mensajes de contacto sí son distintos entre sí.
-  if (mensaje.tipo === 'boletin') {
-    const huella = createHash('sha256').update(mensaje.email.toLowerCase()).digest('hex').slice(0, 16);
-    return `boletin/${huella}.json`;
-  }
-  const id = `${mensaje.fecha.replace(/[:.]/g, '-')}-${Math.random().toString(36).slice(2, 8)}`;
-  return `contacto/${id}.json`;
+interface Fila {
+  id: string;
+  kind: string;
+  name: string | null;
+  email: string;
+  subject: string | null;
+  body: string | null;
+  created_at: string;
 }
 
-export async function guardarMensaje(datos: Omit<Mensaje, 'fecha'>) {
-  const mensaje: Mensaje = { ...datos, fecha: new Date().toISOString() };
-  const { error } = await getSupabase()
-    .storage.from(BUCKET)
-    .upload(rutaDe(mensaje), JSON.stringify(mensaje, null, 2), {
-      contentType: 'application/json',
-      upsert: true,
-    });
-  if (error) throw new Error(error.message);
-  return mensaje;
+function aMensaje(fila: Fila): Mensaje {
+  return {
+    id: fila.id,
+    tipo: fila.kind === 'boletin' ? 'boletin' : 'contacto',
+    nombre: fila.name ?? undefined,
+    email: fila.email,
+    asunto: fila.subject ?? undefined,
+    mensaje: fila.body ?? undefined,
+    fecha: fila.created_at,
+  };
+}
+
+export async function guardarMensaje(datos: Omit<Mensaje, 'fecha' | 'id'>): Promise<Mensaje> {
+  const supabase = getSupabase();
+
+  // Suscribirse dos veces al boletín no debe crear dos renglones; el índice
+  // único lo impide de todos modos, pero así no se reporta como error.
+  if (datos.tipo === 'boletin') {
+    const { data: yaEsta } = await supabase
+      .from('messages')
+      .select('*')
+      .eq('kind', 'boletin')
+      .ilike('email', datos.email)
+      .maybeSingle();
+    if (yaEsta) return aMensaje(yaEsta as Fila);
+  }
+
+  const { data, error } = await supabase
+    .from('messages')
+    .insert({
+      kind: datos.tipo,
+      name: datos.nombre ?? null,
+      email: datos.email,
+      subject: datos.asunto ?? null,
+      body: datos.mensaje ?? null,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    // 23505 es el índice único del boletín: alguien se suscribió dos veces a la
+    // vez. No es un fallo para quien lo hizo.
+    if (error.code === '23505' && datos.tipo === 'boletin') {
+      return { ...datos, fecha: new Date().toISOString() };
+    }
+    throw new Error(error.message);
+  }
+
+  return aMensaje(data as Fila);
 }
 
 export async function listarMensajes(tipo: Mensaje['tipo'], limite = 100): Promise<Mensaje[]> {
-  const supabase = getSupabase();
-  const { data, error } = await supabase.storage
-    .from(BUCKET)
-    .list(tipo, { limit: limite, sortBy: { column: 'name', order: 'desc' } });
+  const { data, error } = await getSupabase()
+    .from('messages')
+    .select('*')
+    .eq('kind', tipo)
+    .order('created_at', { ascending: false })
+    .limit(limite);
+
   if (error || !data) return [];
-
-  const archivos = await Promise.all(
-    data
-      .filter((f) => f.name.endsWith('.json'))
-      .map(async (f) => {
-        const { data: blob } = await supabase.storage.from(BUCKET).download(`${tipo}/${f.name}`);
-        if (!blob) return null;
-        try {
-          return JSON.parse(await blob.text()) as Mensaje;
-        } catch {
-          return null;
-        }
-      })
-  );
-
-  return archivos
-    .filter((m): m is Mensaje => m !== null)
-    .sort((a, b) => b.fecha.localeCompare(a.fecha));
+  return (data as Fila[]).map(aMensaje);
 }
 
 // Aviso por correo. Sólo se envía si hay una llave de Resend configurada; si no,
@@ -75,17 +95,23 @@ export async function avisarPorCorreo(mensaje: Mensaje) {
   const remitente = process.env.CONTACT_FROM_EMAIL ?? 'Skinworld <onboarding@resend.dev>';
   if (!apiKey) return { enviado: false, motivo: 'sin RESEND_API_KEY' };
 
+  const escapar = (texto: unknown) =>
+    String(texto ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
   const esBoletin = mensaje.tipo === 'boletin';
   const asunto = esBoletin
     ? `Nueva suscripción al boletín: ${mensaje.email}`
     : `Nuevo mensaje de ${mensaje.nombre ?? mensaje.email}: ${mensaje.asunto ?? ''}`.trim();
 
   const cuerpo = esBoletin
-    ? `<p>Alguien se suscribió al boletín desde el sitio.</p><p><strong>Correo:</strong> ${mensaje.email}</p>`
-    : `<p><strong>Nombre:</strong> ${mensaje.nombre ?? '—'}</p>
-       <p><strong>Correo:</strong> ${mensaje.email}</p>
-       <p><strong>Asunto:</strong> ${mensaje.asunto ?? '—'}</p>
-       <p><strong>Mensaje:</strong></p><p>${(mensaje.mensaje ?? '').replace(/\n/g, '<br>')}</p>`;
+    ? `<p>Alguien se suscribió al boletín desde el sitio.</p><p><strong>Correo:</strong> ${escapar(mensaje.email)}</p>`
+    : `<p><strong>Nombre:</strong> ${escapar(mensaje.nombre ?? '—')}</p>
+       <p><strong>Correo:</strong> ${escapar(mensaje.email)}</p>
+       <p><strong>Asunto:</strong> ${escapar(mensaje.asunto ?? '—')}</p>
+       <p><strong>Mensaje:</strong></p><p>${escapar(mensaje.mensaje ?? '').replace(/\n/g, '<br>')}</p>`;
 
   try {
     const res = await fetch('https://api.resend.com/emails', {

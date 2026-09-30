@@ -129,21 +129,21 @@
       <h1>SkinWorld Task Center</h1>
       <p class="intro">Panel maestro de pendientes de la tienda: lo que está roto, lo que se puede mejorar y lo que falta confirmar. Cada tarea conserva su identificador y su historial, así que se actualiza en lugar de duplicarse.</p>
       <p class="sello">
-        <span>Última inspección <b>2026-09-30 a las 11:30</b></span>
-        <span>Por <b>Claude Code fix pass over the pending tasks</b></span>
+        <span>Última inspección <b>2026-09-30 a las 14:20</b></span>
+        <span>Por <b>Claude Code after the database migration</b></span>
         <span>Fuente <b>SKINWORLD_TASKS.json</b></span>
       </p>
 
       <div class="avance">
-        <div class="barra"><i style="width:48%"></i></div>
-        <p>11 de 23 tareas terminadas · 48% del registro histórico</p>
+        <div class="barra"><i style="width:57%"></i></div>
+        <p>13 de 23 tareas terminadas · 57% del registro histórico</p>
       </div>
 
       <div class="cifras">
         <div class="cifra p0"><b>3</b><span>abiertas que bloquean la venta</span></div>
         <div class="cifra p1"><b>3</b><span>abiertas importantes</span></div>
         <div class="cifra duda"><b>6</b><span>requieren verificación</span></div>
-        <div class="cifra listo"><b>11</b><span>terminadas y verificadas</span></div>
+        <div class="cifra listo"><b>13</b><span>terminadas y verificadas</span></div>
       </div>
     </header>
 
@@ -162,7 +162,7 @@
       <div class="grupo" data-eje="estado">
         <b>Estado</b>
         <button data-valor="todo" aria-pressed="true">Todas (23)</button>
-        <button data-valor="pending" aria-pressed="false">Pendiente (6)</button><button data-valor="in_progress" aria-pressed="false">En progreso (0)</button><button data-valor="requires_verification" aria-pressed="false">Requiere verificación (6)</button><button data-valor="completed" aria-pressed="false">Terminada (11)</button>
+        <button data-valor="pending" aria-pressed="false">Pendiente (4)</button><button data-valor="in_progress" aria-pressed="false">En progreso (0)</button><button data-valor="requires_verification" aria-pressed="false">Requiere verificación (6)</button><button data-valor="completed" aria-pressed="false">Terminada (13)</button>
       </div>
       <div class="grupo" data-eje="prioridad">
         <b>Prioridad</b>
@@ -324,27 +324,6 @@
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P2" data-categoria="Operations">
-        <div class="tarea-cab">
-          <code>SW-017</code>
-          <div class="etiquetas">
-            <span class="pill prio P2" title="Deseable">P2</span>
-            <span class="pill est pending">Pendiente</span>
-          </div>
-        </div>
-        <h3>Record tracking numbers and stage timestamps for orders</h3>
-        <p class="clasif">Operations · Problema detectado</p>
-        <p class="detalle">The orders table exposes only id, stripe_session_id, customer_email, customer_phone, shipping_name, shipping_address, amount_total, currency, status, items and created_at. There is nowhere to store a carrier tracking number, so the shipped notification cannot tell the customer how to follow the parcel, and there is no per-stage timestamp, so neither the panel nor the history shows when an order was packed or shipped. Adding these needs a schema change, which the service key used by the app cannot perform.</p>
-        <details>
-          <summary>Origen, criterio de cierre e historial</summary>
-          <div class="ficha">
-            <p><strong>Dónde está</strong><br>src/app/api/admin/pedidos/[id]/route.ts<br>src/lib/pedidos.ts<br>Supabase orders table</p>
-            <p><strong>Terminada cuando</strong><br>The orders table has columns for a tracking reference and stage timestamps, the admin panel captures the tracking number when marking an order shipped, and the shipped email includes it.</p>
-            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Blocked on a database change the application cannot make: the service key can read and write rows but not alter tables. The SQL is written and ready at supabase/migraciones/001-guia-y-mensajes.sql — it adds tracking, tracking_url and the packed/shipped/delivered timestamps. Once it is run in the Supabase SQL editor, the admin panel and the shipped email can be wired to it.</li></ul>
-          </div>
-        </details>
-      </article>
       <article class="tarea" data-estado="requires_verification" data-prioridad="P2" data-categoria="Content and legal">
         <div class="tarea-cab">
           <code>SW-018</code>
@@ -405,27 +384,6 @@
             <p><strong>Terminada cuando</strong><br>Affected boundaries use explicit TypeScript types and input schemas; valid checkout, webhook, product, and admin flows continue passing type-check and integration tests.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
             <ul><li><span>2026-09-30</span> Improvement derived from source audit; build currently passes.</li><li><span>2026-09-30</span> Partly done: the Stripe webhook and the checkout route no longer use `any`. The webhook types the event and session as Stripe types, parses the shipping address through a new DireccionDeEnvio type, and guards the nullable amount and line-item fields; the checkout route validates cart items against an explicit shape and types its line items with Stripe.Checkout.SessionCreateParams.LineItem. Type-check and production build pass. Still open for the remaining `any` in the product detail client and the admin screens.</li></ul>
-          </div>
-        </details>
-      </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P3" data-categoria="Reliability">
-        <div class="tarea-cab">
-          <code>SW-019</code>
-          <div class="etiquetas">
-            <span class="pill prio P3" title="Cuando se pueda">P3</span>
-            <span class="pill est pending">Pendiente</span>
-          </div>
-        </div>
-        <h3>Move contact and newsletter messages out of object storage</h3>
-        <p class="clasif">Reliability · Mejora sugerida</p>
-        <p class="detalle">Contact messages and newsletter sign-ups are written as individual JSON objects in a private Supabase Storage bucket rather than a table, because the service key can create buckets but not tables. Reading the inbox downloads every object one by one, so the admin screen gets slower with each message and cannot search, sort or paginate.</p>
-        <details>
-          <summary>Origen, criterio de cierre e historial</summary>
-          <div class="ficha">
-            <p><strong>Dónde está</strong><br>src/lib/mensajes.ts<br>src/app/admin/mensajes/page.tsx</p>
-            <p><strong>Terminada cuando</strong><br>Messages live in a table with an index on the date, the admin screen reads them in one query, and the existing stored objects have been migrated.</p>
-            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Blocked on the same database change: the messages table, its date index and the unique index per newsletter email are written at supabase/migraciones/001-guia-y-mensajes.sql. Meanwhile duplicate newsletter sign-ups no longer pile up, because the stored object is now keyed by a hash of the email, which removes the worst symptom while the table is pending.</li></ul>
           </div>
         </details>
       </article>
@@ -641,6 +599,27 @@
       </article>
       <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Operations">
         <div class="tarea-cab">
+          <code>SW-017</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Record tracking numbers and stage timestamps for orders</h3>
+        <p class="clasif">Operations · Problema detectado</p>
+        <p class="detalle">The orders table exposes only id, stripe_session_id, customer_email, customer_phone, shipping_name, shipping_address, amount_total, currency, status, items and created_at. There is nowhere to store a carrier tracking number, so the shipped notification cannot tell the customer how to follow the parcel, and there is no per-stage timestamp, so neither the panel nor the history shows when an order was packed or shipped. Adding these needs a schema change, which the service key used by the app cannot perform.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/api/admin/pedidos/[id]/route.ts<br>src/lib/pedidos.ts<br>Supabase orders table</p>
+            <p><strong>Terminada cuando</strong><br>The orders table has columns for a tracking reference and stage timestamps, the admin panel captures the tracking number when marking an order shipped, and the shipped email includes it.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Blocked on a database change the application cannot make: the service key can read and write rows but not alter tables. The SQL is written and ready at supabase/migraciones/001-guia-y-mensajes.sql — it adds tracking, tracking_url and the packed/shipped/delivered timestamps. Once it is run in the Supabase SQL editor, the admin panel and the shipped email can be wired to it.</li><li><span>2026-09-30</span> Fixed once the owner ran the migration. The orders table now has tracking, tracking_url and the packed/shipped/delivered timestamps. Marking an order shipped opens a field for the carrier number; the panel shows it, linking to the carrier when the number matches a recognisable FedEx, UPS or DHL format, and the shipped email carries it with a &quot;Seguir el envío&quot; link. Verified: the write persisted and was reverted, the rendered email contains the number and link, and the capture field was exercised in the panel.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Operations">
+        <div class="tarea-cab">
           <code>SW-023</code>
           <div class="etiquetas">
             <span class="pill prio P2" title="Deseable">P2</span>
@@ -659,12 +638,33 @@
             <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Fixed in commit f126fb8. The admin home now shows a pending-orders notice and a count on the Pedidos button, both rendered from a live query; confirmed by rendering the panel with the real order data.</li></ul>
           </div>
         </details>
+      </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P3" data-categoria="Reliability">
+        <div class="tarea-cab">
+          <code>SW-019</code>
+          <div class="etiquetas">
+            <span class="pill prio P3" title="Cuando se pueda">P3</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Move contact and newsletter messages out of object storage</h3>
+        <p class="clasif">Reliability · Mejora sugerida</p>
+        <p class="detalle">Contact messages and newsletter sign-ups are written as individual JSON objects in a private Supabase Storage bucket rather than a table, because the service key can create buckets but not tables. Reading the inbox downloads every object one by one, so the admin screen gets slower with each message and cannot search, sort or paginate.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/lib/mensajes.ts<br>src/app/admin/mensajes/page.tsx</p>
+            <p><strong>Terminada cuando</strong><br>Messages live in a table with an index on the date, the admin screen reads them in one query, and the existing stored objects have been migrated.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Blocked on the same database change: the messages table, its date index and the unique index per newsletter email are written at supabase/migraciones/001-guia-y-mensajes.sql. Meanwhile duplicate newsletter sign-ups no longer pile up, because the stored object is now keyed by a hash of the email, which removes the worst symptom while the table is pending.</li><li><span>2026-09-30</span> Fixed once the owner ran the migration. Contact messages and newsletter sign-ups now live in the messages table, indexed by kind and date, and the admin screen reads them in one query instead of downloading every object. scripts/migrar-mensajes.mjs moves anything left in the old bucket and was run: zero objects remained. Verified: a contact message landed as a row, and the same address subscribed twice in different letter case produced a single row, because the unique index is case-insensitive.</li></ul>
+          </div>
+        </details>
       </article></div>
     <p class="vacio" id="vacio" hidden>Ninguna tarea coincide con estos filtros.</p>
 
     <h2>Cambios recientes</h2>
     <section class="aviso">
-      <ul><li><span>2026-09-30</span> — Fix pass over the pending tasks. Seven closed with verification evidence: retryable webhook with an alert (SW-001), rate limiting and review moderation (SW-003), admin login hardening (SW-004), canonical checkout URLs (SW-005), no customer email on the payment-status endpoint (SW-006), robots/sitemap and per-page metadata (SW-007), and the cart address form mounted once (SW-016). SW-011 and SW-012 advanced but stay open for the parts that need a measurement or further typing. SW-017 and SW-019 are blocked on one SQL migration now written at supabase/migraciones/001-guia-y-mensajes.sql. SW-008 and SW-014 remain with the owner.</li><li><span>2026-09-30</span> — Re-inspection after the order-tracking, email and postal-code work. Four defects confirmed fixed and verified in production (SW-020 webhook host, SW-021 checkout images, SW-022 address truncation, SW-023 admin visibility). Six new items registered (SW-014 live payments, SW-015 customer email, SW-016 duplicated address form, SW-017 tracking data, SW-018 catalog decisions, SW-019 message storage). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 and SW-013 updated with evidence. A unique constraint on orders.stripe_session_id was probed and confirmed to exist, so no duplicate-order task was opened.</li><li><span>2026-09-30</span> — Initial full source audit: 13 stable tasks registered; type-check and production build passed; no pre-existing task register was found.</li></ul>
+      <ul><li><span>2026-09-30</span> — The owner ran supabase/migraciones/001-guia-y-mensajes.sql, which unblocked the last two code tasks. SW-017 closed: orders carry a tracking number and stage timestamps, captured when marking an order shipped and included in the customer email. SW-019 closed: messages moved from object storage to a table with its own indexes. Four tasks remain open and none of them can be closed from code: SW-011 needs a performance measurement, SW-012 needs the remaining typing, SW-008 needs the legal entity details and a reviewer, and SW-014 needs the Stripe account activated.</li><li><span>2026-09-30</span> — Fix pass over the pending tasks. Seven closed with verification evidence: retryable webhook with an alert (SW-001), rate limiting and review moderation (SW-003), admin login hardening (SW-004), canonical checkout URLs (SW-005), no customer email on the payment-status endpoint (SW-006), robots/sitemap and per-page metadata (SW-007), and the cart address form mounted once (SW-016). SW-011 and SW-012 advanced but stay open for the parts that need a measurement or further typing. SW-017 and SW-019 are blocked on one SQL migration now written at supabase/migraciones/001-guia-y-mensajes.sql. SW-008 and SW-014 remain with the owner.</li><li><span>2026-09-30</span> — Re-inspection after the order-tracking, email and postal-code work. Four defects confirmed fixed and verified in production (SW-020 webhook host, SW-021 checkout images, SW-022 address truncation, SW-023 admin visibility). Six new items registered (SW-014 live payments, SW-015 customer email, SW-016 duplicated address form, SW-017 tracking data, SW-018 catalog decisions, SW-019 message storage). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 and SW-013 updated with evidence. A unique constraint on orders.stripe_session_id was probed and confirmed to exist, so no duplicate-order task was opened.</li><li><span>2026-09-30</span> — Initial full source audit: 13 stable tasks registered; type-check and production build passed; no pre-existing task register was found.</li></ul>
     </section>
 
     <h2>Cómo se mantiene</h2>

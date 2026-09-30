@@ -18,6 +18,8 @@ interface Pedido {
   shipping_address: Record<string, string> | null;
   amount_total: number;
   items: { name: string; quantity: number; amount_total: number }[] | null;
+  tracking: string | null;
+  tracking_url: string | null;
 }
 
 const ETAPAS: Record<Etapa, { etiqueta: string; siguiente: Etapa | null; accion: string | null; color: string }> = {
@@ -82,6 +84,9 @@ export function PedidosClient({ pedidos }: { pedidos: Pedido[] }) {
   const router = useRouter();
   const [filtro, setFiltro] = useState<'todos' | Etapa>('paid');
   const [guardando, setGuardando] = useState<string | null>(null);
+  // Pedido cuyo número de guía se está capturando antes de marcar el envío.
+  const [capturandoGuia, setCapturandoGuia] = useState<string | null>(null);
+  const [guia, setGuia] = useState('');
 
   const conteos = useMemo(() => {
     const c: Record<string, number> = { todos: pedidos.length };
@@ -91,13 +96,16 @@ export function PedidosClient({ pedidos }: { pedidos: Pedido[] }) {
 
   const visibles = filtro === 'todos' ? pedidos : pedidos.filter((p) => etapaDe(p) === filtro);
 
-  const cambiarEtapa = async (pedido: Pedido, etapa: Etapa) => {
+  const cambiarEtapa = async (pedido: Pedido, etapa: Etapa, numeroDeGuia?: string) => {
     setGuardando(pedido.id);
     try {
       const res = await fetch(`/api/admin/pedidos/${pedido.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ estado: etapa }),
+        body: JSON.stringify({
+          estado: etapa,
+          ...(numeroDeGuia !== undefined ? { guia: numeroDeGuia } : {}),
+        }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -109,6 +117,8 @@ export function PedidosClient({ pedidos }: { pedidos: Pedido[] }) {
           ? `Pedido marcado como ${ETAPAS[etapa].etiqueta.toLowerCase()}. Se avisó al cliente por correo.`
           : `Pedido marcado como ${ETAPAS[etapa].etiqueta.toLowerCase()}.`
       );
+      setCapturandoGuia(null);
+      setGuia('');
       router.refresh();
     } catch {
       toast.error('Error de conexión. Intenta de nuevo.');
@@ -181,6 +191,24 @@ export function PedidosClient({ pedidos }: { pedidos: Pedido[] }) {
                 </li>
               </ul>
 
+              {pedido.tracking && (
+                <p className="mb-4 text-sm text-slate-600">
+                  <span className="font-semibold text-ink">Guía: </span>
+                  {pedido.tracking_url ? (
+                    <a
+                      href={pedido.tracking_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-primary-700 underline"
+                    >
+                      {pedido.tracking}
+                    </a>
+                  ) : (
+                    pedido.tracking
+                  )}
+                </p>
+              )}
+
               <p className="mb-4 text-sm text-slate-600">
                 <span className="font-semibold text-ink">Entregar en: </span>
                 {direccion(pedido)}
@@ -189,10 +217,43 @@ export function PedidosClient({ pedidos }: { pedidos: Pedido[] }) {
                   : ''}
               </p>
 
+              {capturandoGuia === pedido.id ? (
+                <div className="flex flex-wrap items-center gap-2">
+                  <input
+                    type="text"
+                    value={guia}
+                    onChange={(e) => setGuia(e.target.value)}
+                    placeholder="Número de guía (opcional)"
+                    autoFocus
+                    className="w-56 rounded-lg border border-slate-200 px-3 py-2 text-sm text-ink placeholder:text-slate-400 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
+                  />
+                  <button
+                    onClick={() => cambiarEtapa(pedido, 'shipped', guia)}
+                    disabled={ocupado}
+                    className="inline-flex items-center gap-2 rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-ink/90 disabled:opacity-50"
+                  >
+                    {ocupado ? <Loader2 className="h-4 w-4 animate-spin" /> : <Truck className="h-4 w-4" />}
+                    Confirmar envío
+                  </button>
+                  <button
+                    onClick={() => {
+                      setCapturandoGuia(null);
+                      setGuia('');
+                    }}
+                    className="rounded-lg px-3 py-2 text-sm font-semibold text-slate-500 transition-colors hover:bg-slate-50"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              ) : (
               <div className="flex flex-wrap items-center gap-2">
                 {siguiente && accion && (
                   <button
-                    onClick={() => cambiarEtapa(pedido, siguiente)}
+                    onClick={() =>
+                      siguiente === 'shipped'
+                        ? (setCapturandoGuia(pedido.id), setGuia(pedido.tracking ?? ''))
+                        : cambiarEtapa(pedido, siguiente)
+                    }
                     disabled={ocupado}
                     className="inline-flex items-center gap-2 rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-ink/90 disabled:opacity-50"
                   >
@@ -218,6 +279,7 @@ export function PedidosClient({ pedidos }: { pedidos: Pedido[] }) {
                   </button>
                 )}
               </div>
+              )}
             </div>
           );
         })}

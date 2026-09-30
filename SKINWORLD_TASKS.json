@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "SkinWorld Task Center",
-  "lastInspectedAt": "2026-09-30T11:30:00-06:00",
-  "lastInspectedBy": "Claude Code fix pass over the pending tasks",
+  "lastInspectedAt": "2026-09-30T14:20:00-06:00",
+  "lastInspectedBy": "Claude Code after the database migration",
   "sourceOfTruth": "This file is the durable source of truth. Do not replace it with a new list; update tasks by stable id and retain completed items and history. Every task carries detectedIn, the lastInspectedAt value of the inspection that first registered it, which is what marks a finding as new. The rendered page is published as a Claude artifact at artifactUrl; always republish to that same url instead of creating a second Task Center.",
   "statusDefinitions": {
     "pending": "Open work that has been detected or accepted.",
@@ -487,7 +487,7 @@
       "kind": "detected_problem",
       "category": "Operations",
       "priority": "P2",
-      "status": "pending",
+      "status": "completed",
       "origin": [
         "src/app/api/admin/pedidos/[id]/route.ts",
         "src/lib/pedidos.ts",
@@ -505,6 +505,10 @@
         {
           "date": "2026-09-30",
           "note": "Blocked on a database change the application cannot make: the service key can read and write rows but not alter tables. The SQL is written and ready at supabase/migraciones/001-guia-y-mensajes.sql — it adds tracking, tracking_url and the packed/shipped/delivered timestamps. Once it is run in the Supabase SQL editor, the admin panel and the shipped email can be wired to it."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed once the owner ran the migration. The orders table now has tracking, tracking_url and the packed/shipped/delivered timestamps. Marking an order shipped opens a field for the carrier number; the panel shows it, linking to the carrier when the number matches a recognisable FedEx, UPS or DHL format, and the shipped email carries it with a \"Seguir el envío\" link. Verified: the write persisted and was reverted, the rendered email contains the number and link, and the capture field was exercised in the panel."
         }
       ],
       "detectedIn": "2026-09-30T10:40:00-06:00"
@@ -538,7 +542,7 @@
       "kind": "improvement_suggestion",
       "category": "Reliability",
       "priority": "P3",
-      "status": "pending",
+      "status": "completed",
       "origin": [
         "src/lib/mensajes.ts",
         "src/app/admin/mensajes/page.tsx"
@@ -555,6 +559,10 @@
         {
           "date": "2026-09-30",
           "note": "Blocked on the same database change: the messages table, its date index and the unique index per newsletter email are written at supabase/migraciones/001-guia-y-mensajes.sql. Meanwhile duplicate newsletter sign-ups no longer pile up, because the stored object is now keyed by a hash of the email, which removes the worst symptom while the table is pending."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed once the owner ran the migration. Contact messages and newsletter sign-ups now live in the messages table, indexed by kind and date, and the admin screen reads them in one query instead of downloading every object. scripts/migrar-mensajes.mjs moves anything left in the old bucket and was run: zero objects remained. Verified: a contact message landed as a row, and the same address subscribed twice in different letter case produced a single row, because the unique index is case-insensitive."
         }
       ],
       "detectedIn": "2026-09-30T10:40:00-06:00"
@@ -668,6 +676,10 @@
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-09-30",
+      "summary": "The owner ran supabase/migraciones/001-guia-y-mensajes.sql, which unblocked the last two code tasks. SW-017 closed: orders carry a tracking number and stage timestamps, captured when marking an order shipped and included in the customer email. SW-019 closed: messages moved from object storage to a table with its own indexes. Four tasks remain open and none of them can be closed from code: SW-011 needs a performance measurement, SW-012 needs the remaining typing, SW-008 needs the legal entity details and a reviewer, and SW-014 needs the Stripe account activated."
+    },
     {
       "date": "2026-09-30",
       "summary": "Fix pass over the pending tasks. Seven closed with verification evidence: retryable webhook with an alert (SW-001), rate limiting and review moderation (SW-003), admin login hardening (SW-004), canonical checkout URLs (SW-005), no customer email on the payment-status endpoint (SW-006), robots/sitemap and per-page metadata (SW-007), and the cart address form mounted once (SW-016). SW-011 and SW-012 advanced but stay open for the parts that need a measurement or further typing. SW-017 and SW-019 are blocked on one SQL migration now written at supabase/migraciones/001-guia-y-mensajes.sql. SW-008 and SW-014 remain with the owner."
