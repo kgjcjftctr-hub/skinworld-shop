@@ -107,14 +107,15 @@ input,
 textarea,
 select {
   @apply w-full px-4 py-2.5 rounded-md;
-  @apply border border-slate-200 bg-white;
-  @apply focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent;
+  @apply border border-sw-border bg-white text-sw-ink;
+  @apply focus:outline-none focus:ring-2 focus:ring-sw-pink-deep/30 focus:border-sw-pink-deep;
   @apply transition-all;
 }
 
+/* Los textos de ejemplo se leen (4.8:1) sin confundirse con lo ya escrito. */
 input::placeholder,
 textarea::placeholder {
-  @apply text-slate-400;
+  @apply text-sw-muted/80;
 }
 
 /* Piezas compartidas de Skinworld V1 */
