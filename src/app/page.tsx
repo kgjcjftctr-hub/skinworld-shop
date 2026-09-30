@@ -6,19 +6,20 @@ import { ExpertiseSection } from '@/components/sections/expertise';
 import { TestimonialsSection } from '@/components/sections/testimonials';
 import { BlogPreview } from '@/components/sections/blog-preview';
 import { CTASection } from '@/components/sections/cta';
-import { getAllProducts, dedupeVariants } from '@/lib/products';
+import { getAllProducts, getBrandSummary, dedupeVariants } from '@/lib/products';
 
 export const revalidate = 3600;
 
 export default async function Home() {
-  const productCount = dedupeVariants(await getAllProducts()).length;
+  const [productos, marcas] = await Promise.all([getAllProducts(), getBrandSummary()]);
+  const productCount = dedupeVariants(productos).length;
 
   return (
     <div className="min-h-screen">
       <HeroSection productCount={productCount} />
       <FeaturedProducts />
       <CategoriesSection />
-      <BrandsSection />
+      <BrandsSection marcas={marcas} />
       <ExpertiseSection />
       <TestimonialsSection />
       <BlogPreview />

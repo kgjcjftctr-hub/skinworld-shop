@@ -155,3 +155,34 @@ export async function getCategoryCounts() {
     return acc;
   }, {});
 }
+
+export interface ResumenDeMarca {
+  nombre: string;
+  productos: number;
+  /** Foto de uno de sus productos, para reconocer la marca de un vistazo. */
+  imagen: string | null;
+}
+
+/**
+ * Marcas que la tienda realmente tiene, con cuántos productos hay de cada una.
+ * Se calcula del catálogo para que la página principal no se quede con una
+ * lista escrita a mano que envejece cada vez que entra un laboratorio nuevo.
+ */
+export async function getBrandSummary(): Promise<ResumenDeMarca[]> {
+  const productos = dedupeVariants(await getAllProducts());
+  const marcas = new Map<string, ResumenDeMarca>();
+
+  for (const producto of productos) {
+    const nombre = producto.brand?.trim();
+    if (!nombre) continue;
+
+    const marca = marcas.get(nombre) ?? { nombre, productos: 0, imagen: null };
+    marca.productos += 1;
+    if (!marca.imagen && producto.image) marca.imagen = producto.image;
+    marcas.set(nombre, marca);
+  }
+
+  return [...marcas.values()].sort(
+    (a, b) => b.productos - a.productos || a.nombre.localeCompare(b.nombre, 'es')
+  );
+}

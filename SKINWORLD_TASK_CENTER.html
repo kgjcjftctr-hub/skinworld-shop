@@ -129,14 +129,14 @@
       <h1>SkinWorld Task Center</h1>
       <p class="intro">Panel maestro de pendientes de la tienda: lo que está roto, lo que se puede mejorar y lo que falta confirmar. Cada tarea conserva su identificador y su historial, así que se actualiza en lugar de duplicarse.</p>
       <p class="sello">
-        <span>Última inspección <b>2026-09-30 a las 14:20</b></span>
-        <span>Por <b>Claude Code after the database migration</b></span>
+        <span>Última inspección <b>2026-09-30 a las 15:10</b></span>
+        <span>Por <b>Claude Code rebuilding the brands section</b></span>
         <span>Fuente <b>SKINWORLD_TASKS.json</b></span>
       </p>
 
       <div class="avance">
-        <div class="barra"><i style="width:57%"></i></div>
-        <p>13 de 23 tareas terminadas · 57% del registro histórico</p>
+        <div class="barra"><i style="width:54%"></i></div>
+        <p>13 de 24 tareas terminadas · 54% del registro histórico</p>
       </div>
 
       <div class="cifras">
@@ -155,14 +155,14 @@
     </section>
 
     <h2>Nuevos pendientes detectados</h2>
-    <section class="aviso"><p>La última inspección no encontró pendientes nuevos.</p></section>
+    <ul class="chips"><li><code>SW-024</code>Assign a brand to the products that have none</li></ul>
 
     <h2>Tareas</h2>
     <div class="filtros">
       <div class="grupo" data-eje="estado">
         <b>Estado</b>
-        <button data-valor="todo" aria-pressed="true">Todas (23)</button>
-        <button data-valor="pending" aria-pressed="false">Pendiente (4)</button><button data-valor="in_progress" aria-pressed="false">En progreso (0)</button><button data-valor="requires_verification" aria-pressed="false">Requiere verificación (6)</button><button data-valor="completed" aria-pressed="false">Terminada (13)</button>
+        <button data-valor="todo" aria-pressed="true">Todas (24)</button>
+        <button data-valor="pending" aria-pressed="false">Pendiente (5)</button><button data-valor="in_progress" aria-pressed="false">En progreso (0)</button><button data-valor="requires_verification" aria-pressed="false">Requiere verificación (6)</button><button data-valor="completed" aria-pressed="false">Terminada (13)</button>
       </div>
       <div class="grupo" data-eje="prioridad">
         <b>Prioridad</b>
@@ -278,7 +278,7 @@
             <p><strong>Dónde está</strong><br>src/app/page.tsx<br>src/components/sections/featured-products.tsx<br>src/app/tienda/page.tsx<br>src/app/producto/[slug]/page.tsx<br>src/app/carrito/page.tsx</p>
             <p><strong>Terminada cuando</strong><br>After the next approved catalog change, homepage featured cards, catalog, product detail, cart, and hosted checkout all display the intended price and stock state after the documented cache window or an approved revalidation process.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Existing operational risk retained as a verification task; no present mismatch asserted.</li><li><span>2026-09-30</span> Partial live evidence gathered: /api/codigo-postal returns correct data on production for CDMX, Michoacán, Oaxaca and Sonora, and a checkout session is created successfully from the live site. Full buyer-path verification after catalog changes is still outstanding.</li></ul>
+            <ul><li><span>2026-09-30</span> Existing operational risk retained as a verification task; no present mismatch asserted.</li><li><span>2026-09-30</span> Partial live evidence gathered: /api/codigo-postal returns correct data on production for CDMX, Michoacán, Oaxaca and Sonora, and a checkout session is created successfully from the live site. Full buyer-path verification after catalog changes is still outstanding.</li><li><span>2026-09-30</span> The home page brand section is no longer a hand-written list: it is built from the catalog, so adding a laboratory in the panel now updates the front page by itself. Verified locally at desktop and phone widths, and each brand links to the shop already filtered — the SESDERMA link returns exactly the 31 products the home page promises.</li></ul>
           </div>
         </details>
       </article>
@@ -342,6 +342,27 @@
             <p><strong>Terminada cuando</strong><br>The owner confirms the Flavo C version and the two prices, the products are published with correct IVA-inclusive pricing and images, and they appear on the storefront.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
             <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="pending" data-prioridad="P2" data-categoria="Ecommerce">
+        <div class="tarea-cab">
+          <code>SW-024</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est pending">Pendiente</span>
+          </div>
+        </div>
+        <h3>Assign a brand to the products that have none</h3>
+        <p class="clasif">Ecommerce · Problema detectado</p>
+        <p class="detalle">Counted on 2026-09-30: 46 of the 164 products the shop lists have an empty brand field — mostly prescription dermatology items such as Desowen, Nutracort, Presteme, Retacnyl and Bactroban. A customer filtering by brand never sees them, and they cannot appear in the brands section of the home page, which now builds itself from that same field. Roughly a quarter of the catalog is invisible to that whole way of browsing.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>Supabase products table<br>src/app/tienda/shop-client.tsx<br>src/components/sections/brands.tsx</p>
+            <p><strong>Terminada cuando</strong><br>Every product either carries its laboratory in the brand field or is deliberately classified as having none, the shop brand filter accounts for all 164 products, and the home page brand list reflects the corrected data.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Found while rebuilding the brands section from the catalog: the section could only show 14 laboratories because the rest of the products carry no brand at all.</li></ul>
           </div>
         </details>
       </article>
@@ -664,7 +685,7 @@
 
     <h2>Cambios recientes</h2>
     <section class="aviso">
-      <ul><li><span>2026-09-30</span> — The owner ran supabase/migraciones/001-guia-y-mensajes.sql, which unblocked the last two code tasks. SW-017 closed: orders carry a tracking number and stage timestamps, captured when marking an order shipped and included in the customer email. SW-019 closed: messages moved from object storage to a table with its own indexes. Four tasks remain open and none of them can be closed from code: SW-011 needs a performance measurement, SW-012 needs the remaining typing, SW-008 needs the legal entity details and a reviewer, and SW-014 needs the Stripe account activated.</li><li><span>2026-09-30</span> — Fix pass over the pending tasks. Seven closed with verification evidence: retryable webhook with an alert (SW-001), rate limiting and review moderation (SW-003), admin login hardening (SW-004), canonical checkout URLs (SW-005), no customer email on the payment-status endpoint (SW-006), robots/sitemap and per-page metadata (SW-007), and the cart address form mounted once (SW-016). SW-011 and SW-012 advanced but stay open for the parts that need a measurement or further typing. SW-017 and SW-019 are blocked on one SQL migration now written at supabase/migraciones/001-guia-y-mensajes.sql. SW-008 and SW-014 remain with the owner.</li><li><span>2026-09-30</span> — Re-inspection after the order-tracking, email and postal-code work. Four defects confirmed fixed and verified in production (SW-020 webhook host, SW-021 checkout images, SW-022 address truncation, SW-023 admin visibility). Six new items registered (SW-014 live payments, SW-015 customer email, SW-016 duplicated address form, SW-017 tracking data, SW-018 catalog decisions, SW-019 message storage). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 and SW-013 updated with evidence. A unique constraint on orders.stripe_session_id was probed and confirmed to exist, so no duplicate-order task was opened.</li><li><span>2026-09-30</span> — Initial full source audit: 13 stable tasks registered; type-check and production build passed; no pre-existing task register was found.</li></ul>
+      <ul><li><span>2026-09-30</span> — The home page brand section was showing 2 laboratories out of 14 and hid the two largest, SESDERMA and Heliocare, behind a hand-written list; it now builds itself from the catalog, shows the four deepest with a real product photo and the rest as an index, and every name links to the shop already filtered. One new finding registered, SW-024: 46 of the 164 products carry no brand at all, so they never appear under any brand filter.</li><li><span>2026-09-30</span> — The owner ran supabase/migraciones/001-guia-y-mensajes.sql, which unblocked the last two code tasks. SW-017 closed: orders carry a tracking number and stage timestamps, captured when marking an order shipped and included in the customer email. SW-019 closed: messages moved from object storage to a table with its own indexes. Four tasks remain open and none of them can be closed from code: SW-011 needs a performance measurement, SW-012 needs the remaining typing, SW-008 needs the legal entity details and a reviewer, and SW-014 needs the Stripe account activated.</li><li><span>2026-09-30</span> — Fix pass over the pending tasks. Seven closed with verification evidence: retryable webhook with an alert (SW-001), rate limiting and review moderation (SW-003), admin login hardening (SW-004), canonical checkout URLs (SW-005), no customer email on the payment-status endpoint (SW-006), robots/sitemap and per-page metadata (SW-007), and the cart address form mounted once (SW-016). SW-011 and SW-012 advanced but stay open for the parts that need a measurement or further typing. SW-017 and SW-019 are blocked on one SQL migration now written at supabase/migraciones/001-guia-y-mensajes.sql. SW-008 and SW-014 remain with the owner.</li><li><span>2026-09-30</span> — Re-inspection after the order-tracking, email and postal-code work. Four defects confirmed fixed and verified in production (SW-020 webhook host, SW-021 checkout images, SW-022 address truncation, SW-023 admin visibility). Six new items registered (SW-014 live payments, SW-015 customer email, SW-016 duplicated address form, SW-017 tracking data, SW-018 catalog decisions, SW-019 message storage). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 and SW-013 updated with evidence. A unique constraint on orders.stripe_session_id was probed and confirmed to exist, so no duplicate-order task was opened.</li><li><span>2026-09-30</span> — Initial full source audit: 13 stable tasks registered; type-check and production build passed; no pre-existing task register was found.</li></ul>
     </section>
 
     <h2>Cómo se mantiene</h2>

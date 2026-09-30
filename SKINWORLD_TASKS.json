@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "SkinWorld Task Center",
-  "lastInspectedAt": "2026-09-30T14:20:00-06:00",
-  "lastInspectedBy": "Claude Code after the database migration",
+  "lastInspectedAt": "2026-09-30T15:10:00-06:00",
+  "lastInspectedBy": "Claude Code rebuilding the brands section",
   "sourceOfTruth": "This file is the durable source of truth. Do not replace it with a new list; update tasks by stable id and retain completed items and history. Every task carries detectedIn, the lastInspectedAt value of the inspection that first registered it, which is what marks a finding as new. The rendered page is published as a Claude artifact at artifactUrl; always republish to that same url instead of creating a second Task Center.",
   "statusDefinitions": {
     "pending": "Open work that has been detected or accepted.",
@@ -397,6 +397,10 @@
         {
           "date": "2026-09-30",
           "note": "Partial live evidence gathered: /api/codigo-postal returns correct data on production for CDMX, Michoacán, Oaxaca and Sonora, and a checkout session is created successfully from the live site. Full buyer-path verification after catalog changes is still outstanding."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "The home page brand section is no longer a hand-written list: it is built from the catalog, so adding a laboratory in the panel now updates the front page by itself. Verified locally at desktop and phone widths, and each brand links to the shop already filtered — the SESDERMA link returns exactly the 31 products the home page promises."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -673,9 +677,37 @@
         }
       ],
       "detectedIn": "2026-09-30T10:40:00-06:00"
+    },
+    {
+      "id": "SW-024",
+      "title": "Assign a brand to the products that have none",
+      "kind": "detected_problem",
+      "category": "Ecommerce",
+      "priority": "P2",
+      "status": "pending",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "detectedIn": "2026-09-30T15:10:00-06:00",
+      "origin": [
+        "Supabase products table",
+        "src/app/tienda/shop-client.tsx",
+        "src/components/sections/brands.tsx"
+      ],
+      "details": "Counted on 2026-09-30: 46 of the 164 products the shop lists have an empty brand field — mostly prescription dermatology items such as Desowen, Nutracort, Presteme, Retacnyl and Bactroban. A customer filtering by brand never sees them, and they cannot appear in the brands section of the home page, which now builds itself from that same field. Roughly a quarter of the catalog is invisible to that whole way of browsing.",
+      "doneWhen": "Every product either carries its laboratory in the brand field or is deliberately classified as having none, the shop brand filter accounts for all 164 products, and the home page brand list reflects the corrected data.",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Found while rebuilding the brands section from the catalog: the section could only show 14 laboratories because the rest of the products carry no brand at all."
+        }
+      ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-09-30",
+      "summary": "The home page brand section was showing 2 laboratories out of 14 and hid the two largest, SESDERMA and Heliocare, behind a hand-written list; it now builds itself from the catalog, shows the four deepest with a real product photo and the rest as an index, and every name links to the shop already filtered. One new finding registered, SW-024: 46 of the 164 products carry no brand at all, so they never appear under any brand filter."
+    },
     {
       "date": "2026-09-30",
       "summary": "The owner ran supabase/migraciones/001-guia-y-mensajes.sql, which unblocked the last two code tasks. SW-017 closed: orders carry a tracking number and stage timestamps, captured when marking an order shipped and included in the customer email. SW-019 closed: messages moved from object storage to a table with its own indexes. Four tasks remain open and none of them can be closed from code: SW-011 needs a performance measurement, SW-012 needs the remaining typing, SW-008 needs the legal entity details and a reviewer, and SW-014 needs the Stripe account activated."

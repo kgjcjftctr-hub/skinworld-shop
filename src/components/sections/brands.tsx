@@ -1,33 +1,24 @@
-'use client';
-
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
 import { Reveal } from '@/components/reveal';
+import { ImagenProducto } from '@/components/imagen-producto';
+import type { ResumenDeMarca } from '@/lib/products';
 
-const brands = [
-  {
-    name: 'ISDIN',
-    tagline: 'Fotoprotección y dermocosmética avalada por dermatólogos',
-    images: [
-      'https://skinworld.mx/wp-content/uploads/2020/08/ISDIN-Fotoprotector-Isdin-Fusion-Water-50-50Ml-01.jpg',
-      'https://skinworld.mx/wp-content/uploads/2020/08/ISDIN-Fotoprotector-Isdin-Fusion-Water-Color-50-50-Ml-01.jpg',
-      'https://skinworld.mx/wp-content/uploads/2020/08/ISDIN-Fotoprotector-Isdin-Pediatrics-Lotion-Spray-50-200Ml-01.jpg',
-      'https://skinworld.mx/wp-content/uploads/2020/08/ISDIN-Fotoultra-Age-Repair-Fusion-Water-50-50-Ml-01.jpg',
-    ],
-  },
-  {
-    name: 'La Roche-Posay',
-    tagline: 'Cuidado dermatológico para piel sensible, respaldado por laboratorios',
-    images: [
-      'https://skinworld.mx/wp-content/uploads/2020/08/Lipikar-Lait-Urea-5-400Ml.png.jpg',
-      'https://skinworld.mx/wp-content/uploads/2020/08/Anthelios-Mineral-One-Fps50-Tono-1-30Ml.jpg',
-      'https://skinworld.mx/wp-content/uploads/2020/08/Anthelios-Mineral-One-Fps50-Tono-2-30Ml.jpg',
-      'https://skinworld.mx/wp-content/uploads/2020/08/Cicaplast-Baume-B5-40Ml.jpg',
-    ],
-  },
-];
+const enlaceDeMarca = (nombre: string) => `/tienda?marca=${encodeURIComponent(nombre)}`;
 
-export function BrandsSection() {
+const plural = (n: number) => (n === 1 ? '1 producto' : `${n} productos`);
+
+/**
+ * Laboratorios que la tienda tiene. Los cuatro con más catálogo se muestran con
+ * la foto de uno de sus productos, porque el empaque es como el cliente los
+ * reconoce; el resto va como índice, para que quien busca una marca concreta la
+ * encuentre sin tener que entrar a la tienda a ver si está.
+ */
+export function BrandsSection({ marcas }: { marcas: ResumenDeMarca[] }) {
+  if (marcas.length === 0) return null;
+
+  const destacadas = marcas.slice(0, 4);
+  const resto = marcas.slice(4);
+
   return (
     <section className="bg-slate-50 py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -39,52 +30,57 @@ export function BrandsSection() {
             </span>
           </div>
           <h2 className="mb-5 font-display text-4xl font-bold text-ink sm:text-5xl">
-            Las marcas en las que confiamos
+            Los laboratorios que trabajamos
           </h2>
           <p className="text-slate-600">
-            Trabajamos con laboratorios dermocosméticos reconocidos mundialmente por su
-            respaldo científico y calidad.
+            {marcas.length} laboratorios dermocosméticos, elegidos por su respaldo clínico. Si tu
+            dermatóloga te recetó una marca, búscala aquí.
           </p>
         </Reveal>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          {brands.map((brand, i) => (
-            <Reveal key={brand.name} delay={i * 100}>
-              <div className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-                <div className="mb-6 grid grid-cols-4 gap-3">
-                  {brand.images.map((src) => (
-                    <div
-                      key={src}
-                      className="aspect-square overflow-hidden rounded-xl bg-slate-100"
-                    >
-                      <img
-                        src={src}
-                        alt={brand.name}
-                        loading="lazy"
-                        decoding="async"
-                        className="h-full w-full object-cover"
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).style.display = 'none';
-                        }}
-                      />
-                    </div>
-                  ))}
+        <div className="mb-12 grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4 lg:gap-x-8">
+          {destacadas.map((marca, i) => (
+            <Reveal key={marca.nombre} delay={i * 80}>
+              <Link href={enlaceDeMarca(marca.nombre)} className="group block">
+                <div className="mb-5 aspect-[3/4] overflow-hidden rounded-sm bg-white">
+                  <ImagenProducto
+                    src={marca.imagen}
+                    alt={marca.nombre}
+                    className="h-full w-full object-contain p-6 transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
                 </div>
-                <h3 className="mb-2 font-display text-2xl font-semibold text-ink">
-                  {brand.name}
+                {/* Dos líneas fijas: los nombres largos no desalinean el número
+                    de productos respecto a las marcas de al lado. */}
+                <h3 className="line-clamp-2 min-h-[2.4em] font-display text-xl font-semibold leading-tight text-ink group-hover:text-primary-700">
+                  {marca.nombre}
                 </h3>
-                <p className="mb-6 flex-1 text-sm text-slate-600">{brand.tagline}</p>
-                <Link
-                  href="/tienda"
-                  className="inline-flex items-center gap-2 font-accent text-sm font-semibold text-primary-700 transition-colors hover:text-primary-800"
-                >
-                  <span>Ver productos</span>
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
+                <p className="mt-1 text-sm tabular-nums text-slate-500">{plural(marca.productos)}</p>
+              </Link>
             </Reveal>
           ))}
         </div>
+
+        {resto.length > 0 && (
+          <Reveal>
+            <div className="border-t border-slate-200 pt-8">
+              <ul className="flex flex-wrap gap-x-8 gap-y-3">
+                {resto.map((marca) => (
+                  <li key={marca.nombre}>
+                    <Link
+                      href={enlaceDeMarca(marca.nombre)}
+                      className="group inline-flex items-baseline gap-2 text-slate-700 transition-colors hover:text-primary-700"
+                    >
+                      <span className="font-display text-lg">{marca.nombre}</span>
+                      <span className="text-xs tabular-nums text-slate-400 group-hover:text-primary-600">
+                        {marca.productos}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
+        )}
       </div>
     </section>
   );
