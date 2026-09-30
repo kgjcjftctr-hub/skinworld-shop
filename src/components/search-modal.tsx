@@ -110,6 +110,8 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                         >
                           {product.image && (
                             <img
+                              loading="lazy"
+                              decoding="async"
                               src={product.image}
                               alt=""
                               className="h-12 w-12 shrink-0 rounded-md object-contain"

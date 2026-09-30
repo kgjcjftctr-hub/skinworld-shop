@@ -23,6 +23,7 @@ const companyLinks = [
 export function Footer() {
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState('');
+  const [trampa, setTrampa] = useState('');
 
   const [enviando, setEnviando] = useState(false);
 
@@ -34,7 +35,7 @@ export function Footer() {
       const res = await fetch('/api/boletin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, website: trampa }),
       });
       if (!res.ok) {
         toast.error('No pudimos registrar tu correo. Intenta más tarde.');
@@ -64,6 +65,17 @@ export function Footer() {
               </p>
             </div>
             <form onSubmit={handleSubscribe} className="flex w-full max-w-md gap-3">
+              {/* Campo trampa para robots: no se ve ni se puede enfocar. */}
+              <input
+                type="text"
+                name="website"
+                value={trampa}
+                onChange={(e) => setTrampa(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="absolute left-[-9999px] h-0 w-0 opacity-0"
+              />
               <input
                 type="email"
                 required

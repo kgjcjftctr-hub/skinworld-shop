@@ -1,6 +1,13 @@
 import { getAllProducts, dedupeVariants } from '@/lib/products';
 import { ShopClient } from './shop-client';
 
+export const metadata = {
+  title: 'Tienda',
+  description:
+    'Catálogo completo de Skinworld: protectores solares, sérums, antimanchas y cuidado dermatológico seleccionado por la Dra. Karina Alfaro.',
+  alternates: { canonical: '/tienda' },
+};
+
 export default async function ShopPage({
   searchParams,
 }: {

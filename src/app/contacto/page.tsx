@@ -11,7 +11,7 @@ const contactItems = [
 ];
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '', website: '' });
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -40,7 +40,7 @@ export default function ContactPage() {
       toast.success('Mensaje enviado', {
         description: 'Nos pondremos en contacto contigo pronto.',
       });
-      setFormData({ name: '', email: '', subject: '', message: '' });
+      setFormData({ name: '', email: '', subject: '', message: '', website: '' });
     } catch {
       toast.error('Error de conexión. Intenta más tarde.');
     } finally {
@@ -89,6 +89,17 @@ export default function ContactPage() {
           {/* Form */}
           <div className="lg:col-span-3">
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Campo trampa para robots: no se ve ni se puede enfocar. */}
+              <input
+                type="text"
+                name="website"
+                value={formData.website}
+                onChange={handleChange}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="absolute left-[-9999px] h-0 w-0 opacity-0"
+              />
               <div>
                 <label className="mb-2 block text-sm font-semibold text-ink">Nombre</label>
                 <input

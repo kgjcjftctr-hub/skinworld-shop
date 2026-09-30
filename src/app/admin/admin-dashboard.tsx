@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { Pencil, Plus, Trash2, LogOut, X, Receipt, Mail, Send, Package } from 'lucide-react';
+import { Pencil, Plus, Trash2, LogOut, X, Receipt, Mail, Send, Package, Star } from 'lucide-react';
 import { formatPrice } from '@/utils';
 import type { Product } from '@/types';
 
@@ -230,6 +230,13 @@ export function AdminDashboard({
                   {pedidosPendientes}
                 </span>
               )}
+            </Link>
+            <Link
+              href="/admin/resenas"
+              className="inline-flex items-center gap-2 rounded-md border border-ink/20 px-4 py-2.5 font-accent text-sm font-semibold text-ink transition-colors hover:border-ink"
+            >
+              <Star className="h-4 w-4" />
+              Reseñas
             </Link>
             <Link
               href="/admin/mensajes"

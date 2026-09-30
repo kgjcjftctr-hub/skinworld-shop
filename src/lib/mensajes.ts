@@ -1,4 +1,5 @@
 import 'server-only';
+import { createHash } from 'crypto';
 import { getSupabase } from '@/lib/supabase';
 
 // Los mensajes se guardan como archivos JSON en un bucket privado de Supabase
@@ -16,17 +17,25 @@ export type Mensaje = {
   fecha: string;
 };
 
-function rutaDe(tipo: Mensaje['tipo'], fecha: string) {
-  const id = `${fecha.replace(/[:.]/g, '-')}-${Math.random().toString(36).slice(2, 8)}`;
-  return `${tipo}/${id}.json`;
+function rutaDe(mensaje: Mensaje) {
+  // El boletín se guarda bajo una ruta derivada del correo, de modo que
+  // suscribirse dos veces sobrescribe el mismo archivo en lugar de llenar la
+  // bandeja de repetidos. Los mensajes de contacto sí son distintos entre sí.
+  if (mensaje.tipo === 'boletin') {
+    const huella = createHash('sha256').update(mensaje.email.toLowerCase()).digest('hex').slice(0, 16);
+    return `boletin/${huella}.json`;
+  }
+  const id = `${mensaje.fecha.replace(/[:.]/g, '-')}-${Math.random().toString(36).slice(2, 8)}`;
+  return `contacto/${id}.json`;
 }
 
 export async function guardarMensaje(datos: Omit<Mensaje, 'fecha'>) {
   const mensaje: Mensaje = { ...datos, fecha: new Date().toISOString() };
   const { error } = await getSupabase()
     .storage.from(BUCKET)
-    .upload(rutaDe(mensaje.tipo, mensaje.fecha), JSON.stringify(mensaje, null, 2), {
+    .upload(rutaDe(mensaje), JSON.stringify(mensaje, null, 2), {
       contentType: 'application/json',
+      upsert: true,
     });
   if (error) throw new Error(error.message);
   return mensaje;

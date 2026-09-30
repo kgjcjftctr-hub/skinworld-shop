@@ -1,6 +1,42 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getProductBySlug, getRelatedProducts, getProductVariants } from '@/lib/products';
 import { ProductClient } from './product-client';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
+  const product = await getProductBySlug(slug);
+
+  if (!product) {
+    return { title: 'Producto no encontrado', robots: { index: false } };
+  }
+
+  const titulo = product.brand ? `${product.name} · ${product.brand}` : product.name;
+  const descripcion = (product.description ?? '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 300) ||
+    `${product.name} en Skinworld, seleccionado bajo criterio dermatológico.`;
+  const ruta = `/producto/${encodeURIComponent(product.slug)}`;
+
+  return {
+    title: titulo,
+    description: descripcion,
+    alternates: { canonical: ruta },
+    openGraph: {
+      type: 'website',
+      url: ruta,
+      title: titulo,
+      description: descripcion,
+      images: product.image ? [product.image] : undefined,
+    },
+  };
+}
 
 export default async function ProductPage({
   params,

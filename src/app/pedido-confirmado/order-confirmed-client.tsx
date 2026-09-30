@@ -10,7 +10,6 @@ import { formatPrice } from '@/utils';
 type SessionInfo = {
   status: string;
   amountTotal: number | null;
-  email: string | null;
 };
 
 export function OrderConfirmedClient() {
@@ -58,13 +57,8 @@ export function OrderConfirmedClient() {
 
         {!loading && info?.status === 'paid' && (
           <p className="mb-8 text-slate-500">
-            {info.amountTotal != null && (
-              <>
-                Cobramos {formatPrice(info.amountTotal)}
-                {info.email && <> a {info.email}</>}. Te contactaremos pronto para coordinar el
-                envío.
-              </>
-            )}
+            {info.amountTotal != null && <>Cobramos {formatPrice(info.amountTotal)}. </>}
+            Te enviamos la confirmación por correo y te avisamos en cuanto salga tu pedido.
           </p>
         )}
 

@@ -1,9 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { avisarPorCorreo, guardarMensaje } from '@/lib/mensajes';
+import { ipDe, limitar, respuestaDeLimite } from '@/lib/limite';
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, subject, message } = await request.json();
+    const { name, email, subject, message, website } = await request.json();
+
+    // Trampa para robots: es un campo escondido que una persona nunca llena.
+    // Se responde como si todo hubiera salido bien para no darles pistas.
+    if (typeof website === 'string' && website.length > 0) {
+      return NextResponse.json({ message: 'Tu mensaje ha sido enviado correctamente' });
+    }
+
+    const limite = limitar(`contacto:${ipDe(request)}`, 3, 10 * 60_000);
+    if (!limite.permitido) {
+      return respuestaDeLimite(
+        limite.esperaSegundos,
+        'Ya recibimos varios mensajes tuyos. Espera unos minutos antes de enviar otro.'
+      );
+    }
 
     if (!name || !email || !subject || !message) {
       return NextResponse.json({ error: 'Todos los campos son requeridos' }, { status: 400 });

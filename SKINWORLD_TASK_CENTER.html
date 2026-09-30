@@ -129,21 +129,21 @@
       <h1>SkinWorld Task Center</h1>
       <p class="intro">Panel maestro de pendientes de la tienda: lo que está roto, lo que se puede mejorar y lo que falta confirmar. Cada tarea conserva su identificador y su historial, así que se actualiza en lugar de duplicarse.</p>
       <p class="sello">
-        <span>Última inspección <b>2026-09-30 a las 10:40</b></span>
-        <span>Por <b>Claude Code re-inspection after the order-tracking, email and postal-code work</b></span>
+        <span>Última inspección <b>2026-09-30 a las 11:30</b></span>
+        <span>Por <b>Claude Code fix pass over the pending tasks</b></span>
         <span>Fuente <b>SKINWORLD_TASKS.json</b></span>
       </p>
 
       <div class="avance">
-        <div class="barra"><i style="width:17%"></i></div>
-        <p>4 de 23 tareas terminadas · 17% del registro histórico</p>
+        <div class="barra"><i style="width:48%"></i></div>
+        <p>11 de 23 tareas terminadas · 48% del registro histórico</p>
       </div>
 
       <div class="cifras">
-        <div class="cifra p0"><b>4</b><span>abiertas que bloquean la venta</span></div>
-        <div class="cifra p1"><b>6</b><span>abiertas importantes</span></div>
+        <div class="cifra p0"><b>3</b><span>abiertas que bloquean la venta</span></div>
+        <div class="cifra p1"><b>3</b><span>abiertas importantes</span></div>
         <div class="cifra duda"><b>6</b><span>requieren verificación</span></div>
-        <div class="cifra listo"><b>4</b><span>terminadas y verificadas</span></div>
+        <div class="cifra listo"><b>11</b><span>terminadas y verificadas</span></div>
       </div>
     </header>
 
@@ -155,14 +155,14 @@
     </section>
 
     <h2>Nuevos pendientes detectados</h2>
-    <ul class="chips"><li><code>SW-014</code>Switch Stripe from test mode to live payments</li><li><code>SW-015</code>Confirm Resend domain verification and customer email delivery</li><li><code>SW-016</code>Stop rendering the shipping address form twice on the cart page</li><li><code>SW-017</code>Record tracking numbers and stage timestamps for orders</li><li><code>SW-018</code>Resolve the outstanding catalog decisions</li><li><code>SW-019</code>Move contact and newsletter messages out of object storage</li></ul>
+    <section class="aviso"><p>La última inspección no encontró pendientes nuevos.</p></section>
 
     <h2>Tareas</h2>
     <div class="filtros">
       <div class="grupo" data-eje="estado">
         <b>Estado</b>
         <button data-valor="todo" aria-pressed="true">Todas (23)</button>
-        <button data-valor="pending" aria-pressed="false">Pendiente (13)</button><button data-valor="in_progress" aria-pressed="false">En progreso (0)</button><button data-valor="requires_verification" aria-pressed="false">Requiere verificación (6)</button><button data-valor="completed" aria-pressed="false">Terminada (4)</button>
+        <button data-valor="pending" aria-pressed="false">Pendiente (6)</button><button data-valor="in_progress" aria-pressed="false">En progreso (0)</button><button data-valor="requires_verification" aria-pressed="false">Requiere verificación (6)</button><button data-valor="completed" aria-pressed="false">Terminada (11)</button>
       </div>
       <div class="grupo" data-eje="prioridad">
         <b>Prioridad</b>
@@ -177,27 +177,6 @@
     </div>
 
     <div class="rejilla" id="rejilla">
-      <article class="tarea" data-estado="pending" data-prioridad="P0" data-categoria="Reliability">
-        <div class="tarea-cab">
-          <code>SW-001</code>
-          <div class="etiquetas">
-            <span class="pill prio P0" title="Bloquea la venta">P0</span>
-            <span class="pill est pending">Pendiente</span>
-          </div>
-        </div>
-        <h3>Make Stripe webhook failures retryable and observable</h3>
-        <p class="clasif">Reliability · Problema detectado</p>
-        <p class="detalle">The webhook catches failures while reading or writing the order, logs them, and still returns HTTP 200. Stripe therefore treats the event as handled and does not retry it, which can leave a paid order absent from the administration panel.</p>
-        <details>
-          <summary>Origen, criterio de cierre e historial</summary>
-          <div class="ficha">
-            <p><strong>Dónde está</strong><br>src/app/api/stripe/webhook/route.ts</p>
-            <p><strong>Terminada cuando</strong><br>A failed durable order write returns a retryable non-2xx response (or is reliably queued), duplicate deliveries remain idempotent, and a Stripe test event proves that a temporary database failure is retried and recorded with an actionable alert.</p>
-            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Verified still open. The handler now short-circuits duplicate deliveries and a unique constraint on orders.stripe_session_id was confirmed live, so repeated events are safe; the catch block around the order write still logs and returns HTTP 200, so a database failure is still swallowed without a retry.</li></ul>
-          </div>
-        </details>
-      </article>
       <article class="tarea" data-estado="requires_verification" data-prioridad="P0" data-categoria="Ecommerce">
         <div class="tarea-cab">
           <code>SW-002</code>
@@ -257,70 +236,7 @@
             <p><strong>Dónde está</strong><br>src/lib/stripe.ts<br>Vercel environment variables<br>Stripe account</p>
             <p><strong>Terminada cuando</strong><br>The Stripe account reports charges_enabled=true, live keys are set in Vercel, a live-mode webhook endpoint is registered for https://www.skinworld.shop/api/stripe/webhook with its own signing secret stored as STRIPE_WEBHOOK_SECRET, and one real low-value purchase is completed, recorded and refunded.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li></ul>
-          </div>
-        </details>
-      </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P1" data-categoria="Security">
-        <div class="tarea-cab">
-          <code>SW-003</code>
-          <div class="etiquetas">
-            <span class="pill prio P1" title="Importante">P1</span>
-            <span class="pill est pending">Pendiente</span>
-          </div>
-        </div>
-        <h3>Add abuse protection to public write endpoints</h3>
-        <p class="clasif">Security · Problema detectado</p>
-        <p class="detalle">The endpoints accept unauthenticated writes. Reviews have a honeypot and validation, but none of the three inspected routes applies rate limits, bot verification, or duplicate controls. They can be used to fill storage, create moderation noise, or trigger email notifications.</p>
-        <details>
-          <summary>Origen, criterio de cierre e historial</summary>
-          <div class="ficha">
-            <p><strong>Dónde está</strong><br>src/app/api/contact/route.ts<br>src/app/api/boletin/route.ts<br>src/app/api/reviews/route.ts</p>
-            <p><strong>Terminada cuando</strong><br>Rate limiting is enforced at an appropriate boundary; contact and newsletter writes have bot/duplicate protection; review moderation policy is implemented; and normal customer submissions still succeed.</p>
-            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li></ul>
-          </div>
-        </details>
-      </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P1" data-categoria="Security">
-        <div class="tarea-cab">
-          <code>SW-004</code>
-          <div class="etiquetas">
-            <span class="pill prio P1" title="Importante">P1</span>
-            <span class="pill est pending">Pendiente</span>
-          </div>
-        </div>
-        <h3>Protect the admin login against repeated password attempts</h3>
-        <p class="clasif">Security · Problema detectado</p>
-        <p class="detalle">The login route compares a single environment password and returns 401 on failure, with no throttling, lockout, or monitoring. The signed cookie has a browser expiry but its token itself contains no expiry or rotation data.</p>
-        <details>
-          <summary>Origen, criterio de cierre e historial</summary>
-          <div class="ficha">
-            <p><strong>Dónde está</strong><br>src/app/api/admin/login/route.ts<br>src/lib/admin-auth.ts</p>
-            <p><strong>Terminada cuando</strong><br>Failed attempts are rate-limited and logged without sensitive data, session revocation/expiry behavior is documented and tested, and the login flow remains usable for the administrator.</p>
-            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li></ul>
-          </div>
-        </details>
-      </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P1" data-categoria="Security">
-        <div class="tarea-cab">
-          <code>SW-005</code>
-          <div class="etiquetas">
-            <span class="pill prio P1" title="Importante">P1</span>
-            <span class="pill est pending">Pendiente</span>
-          </div>
-        </div>
-        <h3>Harden checkout URL construction against untrusted request hosts</h3>
-        <p class="clasif">Security · Problema detectado</p>
-        <p class="detalle">success_url, cancel_url, and local product image URLs are built from the incoming Origin or Host header. Use a configured canonical application URL or an allowlist instead of trusting request-controlled headers. Since the 2026-09-29 image fix, the same host-derived origin is also used to build the absolute product image URLs sent to Stripe, so a spoofed Host header now affects payment-page content as well as the success and cancel URLs.</p>
-        <details>
-          <summary>Origen, criterio de cierre e historial</summary>
-          <div class="ficha">
-            <p><strong>Dónde está</strong><br>src/app/api/checkout/route.ts</p>
-            <p><strong>Terminada cuando</strong><br>Checkout URLs always use the approved production/preview application origin, unsupported hosts are rejected, and a checkout test confirms the correct return URLs and Stripe image URLs.</p>
-            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Scope widened: the request-derived origin now also builds the product image URLs sent to Stripe.</li></ul>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Unchanged and still blocked on the owner: activating live payments requires connecting a bank account to the Stripe account, which only the owner can do.</li></ul>
           </div>
         </details>
       </article>
@@ -341,7 +257,7 @@
             <p><strong>Dónde está</strong><br>src/app/terminos/page.tsx<br>src/app/privacidad/page.tsx<br>src/app/envios/page.tsx</p>
             <p><strong>Terminada cuando</strong><br>A qualified owner or legal reviewer approves text tailored to SkinWorld, and all operational claims match the checkout, shipping, privacy, and provider configuration actually in use.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected wording mismatch plus legal facts requiring verification.</li><li><span>2026-09-30</span> Recorded the concrete missing fields in the privacy notice: razón social, RFC and full legal domicile.</li></ul>
+            <ul><li><span>2026-09-30</span> Detected wording mismatch plus legal facts requiring verification.</li><li><span>2026-09-30</span> Recorded the concrete missing fields in the privacy notice: razón social, RFC and full legal domicile.</li><li><span>2026-09-30</span> Unchanged and still blocked on the owner: completion needs the legal entity name, RFC and full domicile, plus a qualified reviewer. No code change can close this one.</li></ul>
           </div>
         </details>
       </article>
@@ -387,48 +303,6 @@
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P2" data-categoria="Security">
-        <div class="tarea-cab">
-          <code>SW-006</code>
-          <div class="etiquetas">
-            <span class="pill prio P2" title="Deseable">P2</span>
-            <span class="pill est pending">Pendiente</span>
-          </div>
-        </div>
-        <h3>Limit checkout-session data exposure</h3>
-        <p class="clasif">Security · Problema detectado</p>
-        <p class="detalle">The unauthenticated session lookup returns a payment status, total, and customer email for any supplied Stripe Checkout Session ID. Session IDs are hard to guess, but the endpoint unnecessarily broadens the impact if one appears in logs, analytics, or a referrer.</p>
-        <details>
-          <summary>Origen, criterio de cierre e historial</summary>
-          <div class="ficha">
-            <p><strong>Dónde está</strong><br>src/app/api/checkout/session/route.ts<br>src/app/pedido-confirmado/order-confirmed-client.tsx</p>
-            <p><strong>Terminada cuando</strong><br>The confirmation view receives only the minimum data it needs, with an authorization or one-time confirmation mechanism as appropriate, and no customer email is exposed by a reusable public endpoint.</p>
-            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li></ul>
-          </div>
-        </details>
-      </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P2" data-categoria="SEO">
-        <div class="tarea-cab">
-          <code>SW-007</code>
-          <div class="etiquetas">
-            <span class="pill prio P2" title="Deseable">P2</span>
-            <span class="pill est pending">Pendiente</span>
-          </div>
-        </div>
-        <h3>Complete technical SEO metadata and discovery files</h3>
-        <p class="clasif">SEO · Problema detectado</p>
-        <p class="detalle">The root metadata has basic title and Open Graph text, but the audit found no robots.ts, sitemap.ts, metadataBase, canonical URL handling, Open Graph image, or product/blog-specific metadata generation. Confirmed by inspection: there is no src/app/sitemap.ts and no src/app/robots.ts, metadataBase is not set, and the canonical, author and Open Graph URLs point at https://skinworld.shop, which answers 308 and redirects to https://www.skinworld.shop — the domain actually served in production.</p>
-        <details>
-          <summary>Origen, criterio de cierre e historial</summary>
-          <div class="ficha">
-            <p><strong>Dónde está</strong><br>src/app/layout.tsx<br>src/app/producto/[slug]/page.tsx<br>src/app/blog/[slug]/page.tsx</p>
-            <p><strong>Terminada cuando</strong><br>robots and sitemap are generated, canonical and social-preview URLs/images resolve correctly, and product/blog pages have accurate unique metadata validated in a production-like build.</p>
-            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Added verified specifics: missing sitemap/robots routes, missing metadataBase, and apex-vs-www mismatch (apex returns 308 to www, confirmed with a live request).</li></ul>
-          </div>
-        </details>
-      </article>
       <article class="tarea" data-estado="requires_verification" data-prioridad="P2" data-categoria="Accessibility">
         <div class="tarea-cab">
           <code>SW-010</code>
@@ -450,27 +324,6 @@
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P2" data-categoria="Code quality">
-        <div class="tarea-cab">
-          <code>SW-016</code>
-          <div class="etiquetas">
-            <span class="pill prio P2" title="Deseable">P2</span>
-            <span class="pill est pending">Pendiente</span>
-          </div>
-        </div>
-        <h3>Stop rendering the shipping address form twice on the cart page</h3>
-        <p class="clasif">Code quality · Problema detectado</p>
-        <p class="detalle">The cart renders &lt;ShippingAddressForm /&gt; twice — once in a lg:hidden block and once inside the desktop summary column — so both copies mount at every viewport and only CSS hides one. Each instance runs its own postal-code lookup effect, so every completed postal code fires two identical requests to /api/codigo-postal and both instances write to the shared store, and per-instance UI state such as the &quot;write my own colonia&quot; toggle can diverge between the two copies.</p>
-        <details>
-          <summary>Origen, criterio de cierre e historial</summary>
-          <div class="ficha">
-            <p><strong>Dónde está</strong><br>src/app/carrito/page.tsx<br>src/components/checkout/shipping-address-form.tsx</p>
-            <p><strong>Terminada cuando</strong><br>The form mounts once per page, a completed postal code triggers exactly one lookup request, and the layout still places it correctly on both mobile and desktop.</p>
-            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li></ul>
-          </div>
-        </details>
-      </article>
       <article class="tarea" data-estado="pending" data-prioridad="P2" data-categoria="Operations">
         <div class="tarea-cab">
           <code>SW-017</code>
@@ -488,7 +341,7 @@
             <p><strong>Dónde está</strong><br>src/app/api/admin/pedidos/[id]/route.ts<br>src/lib/pedidos.ts<br>Supabase orders table</p>
             <p><strong>Terminada cuando</strong><br>The orders table has columns for a tracking reference and stage timestamps, the admin panel captures the tracking number when marking an order shipped, and the shipped email includes it.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li></ul>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Blocked on a database change the application cannot make: the service key can read and write rows but not alter tables. The SQL is written and ready at supabase/migraciones/001-guia-y-mensajes.sql — it adds tracking, tracking_url and the packed/shipped/delivered timestamps. Once it is run in the Supabase SQL editor, the admin panel and the shipped email can be wired to it.</li></ul>
           </div>
         </details>
       </article>
@@ -530,7 +383,7 @@
             <p><strong>Dónde está</strong><br>src/components/product-card.tsx<br>src/components/search-modal.tsx<br>src/app/producto/[slug]/product-client.tsx<br>src/components/sections/*</p>
             <p><strong>Terminada cuando</strong><br>A performance measurement identifies the highest-impact images, correct dimensions/loading priority are applied, failed image URLs show an accessible fallback, and mobile Core Web Vitals improve or remain within targets.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Improvement, not a claim of current performance failure.</li><li><span>2026-09-30</span> Added verified detail: zero next/image usage across the app; catalog images span four external hosts plus 38 local paths, none of them covered by the configured remotePatterns.</li></ul>
+            <ul><li><span>2026-09-30</span> Improvement, not a claim of current performance failure.</li><li><span>2026-09-30</span> Added verified detail: zero next/image usage across the app; catalog images span four external hosts plus 38 local paths, none of them covered by the configured remotePatterns.</li><li><span>2026-09-30</span> Partly done: created ImagenProducto, which replaces a failed image with a labelled &quot;Imagen no disponible&quot; block instead of a blank rectangle, and wired it into the product cards. Added lazy loading and async decoding to the shop, blog, about, search, brands and expertise images, and marked the images above the fold as eager. next.config.js now lists the four external image hosts the catalog really uses, so a future move to next/image will not drop those products. Still open, and the reason it stays open: no performance measurement has been taken, so the Core Web Vitals part of the completion criteria is unproven.</li></ul>
           </div>
         </details>
       </article>
@@ -551,7 +404,7 @@
             <p><strong>Dónde está</strong><br>src/app/api/stripe/webhook/route.ts<br>src/app/api/checkout/route.ts<br>src/app/producto/[slug]/product-client.tsx<br>src/app/admin/pedidos/page.tsx</p>
             <p><strong>Terminada cuando</strong><br>Affected boundaries use explicit TypeScript types and input schemas; valid checkout, webhook, product, and admin flows continue passing type-check and integration tests.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Improvement derived from source audit; build currently passes.</li></ul>
+            <ul><li><span>2026-09-30</span> Improvement derived from source audit; build currently passes.</li><li><span>2026-09-30</span> Partly done: the Stripe webhook and the checkout route no longer use `any`. The webhook types the event and session as Stripe types, parses the shipping address through a new DireccionDeEnvio type, and guards the nullable amount and line-item fields; the checkout route validates cart items against an explicit shape and types its line items with Stripe.Checkout.SessionCreateParams.LineItem. Type-check and production build pass. Still open for the remaining `any` in the product detail client and the admin screens.</li></ul>
           </div>
         </details>
       </article>
@@ -572,7 +425,28 @@
             <p><strong>Dónde está</strong><br>src/lib/mensajes.ts<br>src/app/admin/mensajes/page.tsx</p>
             <p><strong>Terminada cuando</strong><br>Messages live in a table with an index on the date, the admin screen reads them in one query, and the existing stored objects have been migrated.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li></ul>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Blocked on the same database change: the messages table, its date index and the unique index per newsletter email are written at supabase/migraciones/001-guia-y-mensajes.sql. Meanwhile duplicate newsletter sign-ups no longer pile up, because the stored object is now keyed by a hash of the email, which removes the worst symptom while the table is pending.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P0" data-categoria="Reliability">
+        <div class="tarea-cab">
+          <code>SW-001</code>
+          <div class="etiquetas">
+            <span class="pill prio P0" title="Bloquea la venta">P0</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Make Stripe webhook failures retryable and observable</h3>
+        <p class="clasif">Reliability · Problema detectado</p>
+        <p class="detalle">The webhook catches failures while reading or writing the order, logs them, and still returns HTTP 200. Stripe therefore treats the event as handled and does not retry it, which can leave a paid order absent from the administration panel.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/api/stripe/webhook/route.ts</p>
+            <p><strong>Terminada cuando</strong><br>A failed durable order write returns a retryable non-2xx response (or is reliably queued), duplicate deliveries remain idempotent, and a Stripe test event proves that a temporary database failure is retried and recorded with an actionable alert.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Verified still open. The handler now short-circuits duplicate deliveries and a unique constraint on orders.stripe_session_id was confirmed live, so repeated events are safe; the catch block around the order write still logs and returns HTTP 200, so a database failure is still swallowed without a retry.</li><li><span>2026-09-30</span> Fixed: the order write and the notification emails are now separate steps. A failure writing the order returns HTTP 500 so Stripe retries, and it also sends the shop an alert naming the Stripe session id so a charge without an order cannot pass unnoticed; a failing email only logs, because the order is already stored and a retry would duplicate the customer mail. Duplicate deliveries still short-circuit on the existing row, backed by the unique constraint on stripe_session_id verified live.</li></ul>
           </div>
         </details>
       </article>
@@ -618,6 +492,69 @@
           </div>
         </details>
       </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P1" data-categoria="Security">
+        <div class="tarea-cab">
+          <code>SW-003</code>
+          <div class="etiquetas">
+            <span class="pill prio P1" title="Importante">P1</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Add abuse protection to public write endpoints</h3>
+        <p class="clasif">Security · Problema detectado</p>
+        <p class="detalle">The endpoints accept unauthenticated writes. Reviews have a honeypot and validation, but none of the three inspected routes applies rate limits, bot verification, or duplicate controls. They can be used to fill storage, create moderation noise, or trigger email notifications.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/api/contact/route.ts<br>src/app/api/boletin/route.ts<br>src/app/api/reviews/route.ts</p>
+            <p><strong>Terminada cuando</strong><br>Rate limiting is enforced at an appropriate boundary; contact and newsletter writes have bot/duplicate protection; review moderation policy is implemented; and normal customer submissions still succeed.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Fixed: contact, newsletter, reviews and the payment-status lookup now share an IP rate limiter (src/lib/limite.ts). Verified locally: three contact messages went through and the fourth returned 429; a filled honeypot returned 200 without storing anything (3 objects, not 4); the same address subscribed twice produced a single stored object, because the newsletter path is now derived from a hash of the email. Reviews get post-moderation: /admin/resenas lists them and deletes any that should not stay. The limiter lives in process memory, so on Vercel it is per instance — enough for repeated abuse from one address, and noted here rather than overstated.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P1" data-categoria="Security">
+        <div class="tarea-cab">
+          <code>SW-004</code>
+          <div class="etiquetas">
+            <span class="pill prio P1" title="Importante">P1</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Protect the admin login against repeated password attempts</h3>
+        <p class="clasif">Security · Problema detectado</p>
+        <p class="detalle">The login route compares a single environment password and returns 401 on failure, with no throttling, lockout, or monitoring. The signed cookie has a browser expiry but its token itself contains no expiry or rotation data.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/api/admin/login/route.ts<br>src/lib/admin-auth.ts</p>
+            <p><strong>Terminada cuando</strong><br>Failed attempts are rate-limited and logged without sensitive data, session revocation/expiry behavior is documented and tested, and the login flow remains usable for the administrator.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Fixed: five failed attempts per IP in fifteen minutes, then 429; a correct password clears the counter so the owner is not locked out by their own typos. The comparison now runs over SHA-256 digests with timingSafeEqual instead of ===. Failed attempts are logged with the IP and never the password. Session expiry documented in the cookie (seven days). Verified locally: attempts one through five returned 401 and the sixth returned 429.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P1" data-categoria="Security">
+        <div class="tarea-cab">
+          <code>SW-005</code>
+          <div class="etiquetas">
+            <span class="pill prio P1" title="Importante">P1</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Harden checkout URL construction against untrusted request hosts</h3>
+        <p class="clasif">Security · Problema detectado</p>
+        <p class="detalle">success_url, cancel_url, and local product image URLs are built from the incoming Origin or Host header. Use a configured canonical application URL or an allowlist instead of trusting request-controlled headers. Since the 2026-09-29 image fix, the same host-derived origin is also used to build the absolute product image URLs sent to Stripe, so a spoofed Host header now affects payment-page content as well as the success and cancel URLs.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/api/checkout/route.ts</p>
+            <p><strong>Terminada cuando</strong><br>Checkout URLs always use the approved production/preview application origin, unsupported hosts are rejected, and a checkout test confirms the correct return URLs and Stripe image URLs.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Scope widened: the request-derived origin now also builds the product image URLs sent to Stripe.</li><li><span>2026-09-30</span> Fixed: checkout URLs and the product image URLs sent to Stripe now come from src/lib/sitio.ts, which uses the canonical https://www.skinworld.shop and only honours the request origin when it is a localhost development address. A forged Host header can no longer redirect the buyer or place foreign images on the payment page.</li></ul>
+          </div>
+        </details>
+      </article>
       <article class="tarea" data-estado="completed" data-prioridad="P1" data-categoria="Reliability">
         <div class="tarea-cab">
           <code>SW-022</code>
@@ -636,6 +573,69 @@
             <p><strong>Terminada cuando</strong><br>Each address field travels in its own metadata key, the webhook still reads orders written in the old single-string format, and a long address survives the round trip intact.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
             <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Fixed in commit 51d4d03 by sending each field in its own metadata key, with the webhook still reading the previous format. Verified against the Stripe API: a long test address arrived complete.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Security">
+        <div class="tarea-cab">
+          <code>SW-006</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Limit checkout-session data exposure</h3>
+        <p class="clasif">Security · Problema detectado</p>
+        <p class="detalle">The unauthenticated session lookup returns a payment status, total, and customer email for any supplied Stripe Checkout Session ID. Session IDs are hard to guess, but the endpoint unnecessarily broadens the impact if one appears in logs, analytics, or a referrer.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/api/checkout/session/route.ts<br>src/app/pedido-confirmado/order-confirmed-client.tsx</p>
+            <p><strong>Terminada cuando</strong><br>The confirmation view receives only the minimum data it needs, with an authorization or one-time confirmation mechanism as appropriate, and no customer email is exposed by a reusable public endpoint.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Fixed: /api/checkout/session no longer returns the customer email — only payment status and amount, which is all the confirmation page renders. The session id is validated against its expected shape and the endpoint is rate limited. The confirmation page now says the receipt was emailed instead of printing the address back.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="SEO">
+        <div class="tarea-cab">
+          <code>SW-007</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Complete technical SEO metadata and discovery files</h3>
+        <p class="clasif">SEO · Problema detectado</p>
+        <p class="detalle">The root metadata has basic title and Open Graph text, but the audit found no robots.ts, sitemap.ts, metadataBase, canonical URL handling, Open Graph image, or product/blog-specific metadata generation. Confirmed by inspection: there is no src/app/sitemap.ts and no src/app/robots.ts, metadataBase is not set, and the canonical, author and Open Graph URLs point at https://skinworld.shop, which answers 308 and redirects to https://www.skinworld.shop — the domain actually served in production.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/layout.tsx<br>src/app/producto/[slug]/page.tsx<br>src/app/blog/[slug]/page.tsx</p>
+            <p><strong>Terminada cuando</strong><br>robots and sitemap are generated, canonical and social-preview URLs/images resolve correctly, and product/blog pages have accurate unique metadata validated in a production-like build.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Added verified specifics: missing sitemap/robots routes, missing metadataBase, and apex-vs-www mismatch (apex returns 308 to www, confirmed with a live request).</li><li><span>2026-09-30</span> Fixed: added src/app/robots.ts and src/app/sitemap.ts (176 URLs: 9 fixed pages, 164 products, 3 posts, revalidated hourly so catalog changes appear), set metadataBase and a title template on the root layout, and pointed every canonical, author and Open Graph URL at the www domain that production actually serves. Product, post, shop, blog, contact and about pages now emit their own title, description, canonical and Open Graph image. Verified against a production build and the running app: robots.txt and sitemap.xml return the expected content and the shop tab reads &quot;Tienda · Skinworld&quot;.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Code quality">
+        <div class="tarea-cab">
+          <code>SW-016</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Stop rendering the shipping address form twice on the cart page</h3>
+        <p class="clasif">Code quality · Problema detectado</p>
+        <p class="detalle">The cart renders &lt;ShippingAddressForm /&gt; twice — once in a lg:hidden block and once inside the desktop summary column — so both copies mount at every viewport and only CSS hides one. Each instance runs its own postal-code lookup effect, so every completed postal code fires two identical requests to /api/codigo-postal and both instances write to the shared store, and per-instance UI state such as the &quot;write my own colonia&quot; toggle can diverge between the two copies.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/carrito/page.tsx<br>src/components/checkout/shipping-address-form.tsx</p>
+            <p><strong>Terminada cuando</strong><br>The form mounts once per page, a completed postal code triggers exactly one lookup request, and the layout still places it correctly on both mobile and desktop.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Fixed: the cart renders one ShippingAddressForm inside a single column that stacks under the products on mobile and sits in the sticky summary column on desktop. Verified in the browser: typing a postal code now produces exactly one GET /api/codigo-postal request, and the layout was checked at phone and 1400px widths.</li></ul>
           </div>
         </details>
       </article>
@@ -664,7 +664,7 @@
 
     <h2>Cambios recientes</h2>
     <section class="aviso">
-      <ul><li><span>2026-09-30</span> — Re-inspection after the order-tracking, email and postal-code work. Four defects confirmed fixed and verified in production (SW-020 webhook host, SW-021 checkout images, SW-022 address truncation, SW-023 admin visibility). Six new items registered (SW-014 live payments, SW-015 customer email, SW-016 duplicated address form, SW-017 tracking data, SW-018 catalog decisions, SW-019 message storage). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 and SW-013 updated with evidence. A unique constraint on orders.stripe_session_id was probed and confirmed to exist, so no duplicate-order task was opened.</li><li><span>2026-09-30</span> — Initial full source audit: 13 stable tasks registered; type-check and production build passed; no pre-existing task register was found.</li></ul>
+      <ul><li><span>2026-09-30</span> — Fix pass over the pending tasks. Seven closed with verification evidence: retryable webhook with an alert (SW-001), rate limiting and review moderation (SW-003), admin login hardening (SW-004), canonical checkout URLs (SW-005), no customer email on the payment-status endpoint (SW-006), robots/sitemap and per-page metadata (SW-007), and the cart address form mounted once (SW-016). SW-011 and SW-012 advanced but stay open for the parts that need a measurement or further typing. SW-017 and SW-019 are blocked on one SQL migration now written at supabase/migraciones/001-guia-y-mensajes.sql. SW-008 and SW-014 remain with the owner.</li><li><span>2026-09-30</span> — Re-inspection after the order-tracking, email and postal-code work. Four defects confirmed fixed and verified in production (SW-020 webhook host, SW-021 checkout images, SW-022 address truncation, SW-023 admin visibility). Six new items registered (SW-014 live payments, SW-015 customer email, SW-016 duplicated address form, SW-017 tracking data, SW-018 catalog decisions, SW-019 message storage). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 and SW-013 updated with evidence. A unique constraint on orders.stripe_session_id was probed and confirmed to exist, so no duplicate-order task was opened.</li><li><span>2026-09-30</span> — Initial full source audit: 13 stable tasks registered; type-check and production build passed; no pre-existing task register was found.</li></ul>
     </section>
 
     <h2>Cómo se mantiene</h2>

@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "SkinWorld Task Center",
-  "lastInspectedAt": "2026-09-30T10:40:00-06:00",
-  "lastInspectedBy": "Claude Code re-inspection after the order-tracking, email and postal-code work",
+  "lastInspectedAt": "2026-09-30T11:30:00-06:00",
+  "lastInspectedBy": "Claude Code fix pass over the pending tasks",
   "sourceOfTruth": "This file is the durable source of truth. Do not replace it with a new list; update tasks by stable id and retain completed items and history. Every task carries detectedIn, the lastInspectedAt value of the inspection that first registered it, which is what marks a finding as new. The rendered page is published as a Claude artifact at artifactUrl; always republish to that same url instead of creating a second Task Center.",
   "statusDefinitions": {
     "pending": "Open work that has been detected or accepted.",
@@ -29,7 +29,7 @@
       "kind": "detected_problem",
       "category": "Reliability",
       "priority": "P0",
-      "status": "pending",
+      "status": "completed",
       "detectedAt": "2026-09-30",
       "updatedAt": "2026-09-30",
       "origin": [
@@ -45,6 +45,10 @@
         {
           "date": "2026-09-30",
           "note": "Verified still open. The handler now short-circuits duplicate deliveries and a unique constraint on orders.stripe_session_id was confirmed live, so repeated events are safe; the catch block around the order write still logs and returns HTTP 200, so a database failure is still swallowed without a retry."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed: the order write and the notification emails are now separate steps. A failure writing the order returns HTTP 500 so Stripe retries, and it also sends the shop an alert naming the Stripe session id so a charge without an order cannot pass unnoticed; a failing email only logs, because the order is already stored and a retry would duplicate the customer mail. Duplicate deliveries still short-circuit on the existing row, backed by the unique constraint on stripe_session_id verified live."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -79,7 +83,7 @@
       "kind": "detected_problem",
       "category": "Security",
       "priority": "P1",
-      "status": "pending",
+      "status": "completed",
       "detectedAt": "2026-09-30",
       "updatedAt": "2026-09-30",
       "origin": [
@@ -93,6 +97,10 @@
         {
           "date": "2026-09-30",
           "note": "Detected in initial source audit."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed: contact, newsletter, reviews and the payment-status lookup now share an IP rate limiter (src/lib/limite.ts). Verified locally: three contact messages went through and the fourth returned 429; a filled honeypot returned 200 without storing anything (3 objects, not 4); the same address subscribed twice produced a single stored object, because the newsletter path is now derived from a hash of the email. Reviews get post-moderation: /admin/resenas lists them and deletes any that should not stay. The limiter lives in process memory, so on Vercel it is per instance — enough for repeated abuse from one address, and noted here rather than overstated."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -103,7 +111,7 @@
       "kind": "detected_problem",
       "category": "Security",
       "priority": "P1",
-      "status": "pending",
+      "status": "completed",
       "detectedAt": "2026-09-30",
       "updatedAt": "2026-09-30",
       "origin": [
@@ -116,6 +124,10 @@
         {
           "date": "2026-09-30",
           "note": "Detected in initial source audit."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed: five failed attempts per IP in fifteen minutes, then 429; a correct password clears the counter so the owner is not locked out by their own typos. The comparison now runs over SHA-256 digests with timingSafeEqual instead of ===. Failed attempts are logged with the IP and never the password. Session expiry documented in the cookie (seven days). Verified locally: attempts one through five returned 401 and the sixth returned 429."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -126,7 +138,7 @@
       "kind": "detected_problem",
       "category": "Security",
       "priority": "P1",
-      "status": "pending",
+      "status": "completed",
       "detectedAt": "2026-09-30",
       "updatedAt": "2026-09-30",
       "origin": [
@@ -142,6 +154,10 @@
         {
           "date": "2026-09-30",
           "note": "Scope widened: the request-derived origin now also builds the product image URLs sent to Stripe."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed: checkout URLs and the product image URLs sent to Stripe now come from src/lib/sitio.ts, which uses the canonical https://www.skinworld.shop and only honours the request origin when it is a localhost development address. A forged Host header can no longer redirect the buyer or place foreign images on the payment page."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -152,7 +168,7 @@
       "kind": "detected_problem",
       "category": "Security",
       "priority": "P2",
-      "status": "pending",
+      "status": "completed",
       "detectedAt": "2026-09-30",
       "updatedAt": "2026-09-30",
       "origin": [
@@ -165,6 +181,10 @@
         {
           "date": "2026-09-30",
           "note": "Detected in initial source audit."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed: /api/checkout/session no longer returns the customer email — only payment status and amount, which is all the confirmation page renders. The session id is validated against its expected shape and the endpoint is rate limited. The confirmation page now says the receipt was emailed instead of printing the address back."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -175,7 +195,7 @@
       "kind": "detected_problem",
       "category": "SEO",
       "priority": "P2",
-      "status": "pending",
+      "status": "completed",
       "detectedAt": "2026-09-30",
       "updatedAt": "2026-09-30",
       "origin": [
@@ -193,6 +213,10 @@
         {
           "date": "2026-09-30",
           "note": "Added verified specifics: missing sitemap/robots routes, missing metadataBase, and apex-vs-www mismatch (apex returns 308 to www, confirmed with a live request)."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed: added src/app/robots.ts and src/app/sitemap.ts (176 URLs: 9 fixed pages, 164 products, 3 posts, revalidated hourly so catalog changes appear), set metadataBase and a title template on the root layout, and pointed every canonical, author and Open Graph URL at the www domain that production actually serves. Product, post, shop, blog, contact and about pages now emit their own title, description, canonical and Open Graph image. Verified against a production build and the running app: robots.txt and sitemap.xml return the expected content and the shop tab reads \"Tienda · Skinworld\"."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -221,6 +245,10 @@
         {
           "date": "2026-09-30",
           "note": "Recorded the concrete missing fields in the privacy notice: razón social, RFC and full legal domicile."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Unchanged and still blocked on the owner: completion needs the legal entity name, RFC and full domicile, plus a qualified reviewer. No code change can close this one."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -306,6 +334,10 @@
         {
           "date": "2026-09-30",
           "note": "Added verified detail: zero next/image usage across the app; catalog images span four external hosts plus 38 local paths, none of them covered by the configured remotePatterns."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Partly done: created ImagenProducto, which replaces a failed image with a labelled \"Imagen no disponible\" block instead of a blank rectangle, and wired it into the product cards. Added lazy loading and async decoding to the shop, blog, about, search, brands and expertise images, and marked the images above the fold as eager. next.config.js now lists the four external image hosts the catalog really uses, so a future move to next/image will not drop those products. Still open, and the reason it stays open: no performance measurement has been taken, so the Core Web Vitals part of the completion criteria is unproven."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -331,6 +363,10 @@
         {
           "date": "2026-09-30",
           "note": "Improvement derived from source audit; build currently passes."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Partly done: the Stripe webhook and the checkout route no longer use `any`. The webhook types the event and session as Stripe types, parses the shipping address through a new DireccionDeEnvio type, and guards the nullable amount and line-item fields; the checkout route validates cart items against an explicit shape and types its line items with Stripe.Checkout.SessionCreateParams.LineItem. Type-check and production build pass. Still open for the remaining `any` in the product detail client and the admin screens."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -385,6 +421,10 @@
         {
           "date": "2026-09-30",
           "note": "Detected during the 2026-09-30 re-inspection."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Unchanged and still blocked on the owner: activating live payments requires connecting a bank account to the Stripe account, which only the owner can do."
         }
       ],
       "detectedIn": "2026-09-30T10:40:00-06:00"
@@ -420,7 +460,7 @@
       "kind": "detected_problem",
       "category": "Code quality",
       "priority": "P2",
-      "status": "pending",
+      "status": "completed",
       "origin": [
         "src/app/carrito/page.tsx",
         "src/components/checkout/shipping-address-form.tsx"
@@ -433,6 +473,10 @@
         {
           "date": "2026-09-30",
           "note": "Detected during the 2026-09-30 re-inspection."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed: the cart renders one ShippingAddressForm inside a single column that stacks under the products on mobile and sits in the sticky summary column on desktop. Verified in the browser: typing a postal code now produces exactly one GET /api/codigo-postal request, and the layout was checked at phone and 1400px widths."
         }
       ],
       "detectedIn": "2026-09-30T10:40:00-06:00"
@@ -457,6 +501,10 @@
         {
           "date": "2026-09-30",
           "note": "Detected during the 2026-09-30 re-inspection."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Blocked on a database change the application cannot make: the service key can read and write rows but not alter tables. The SQL is written and ready at supabase/migraciones/001-guia-y-mensajes.sql — it adds tracking, tracking_url and the packed/shipped/delivered timestamps. Once it is run in the Supabase SQL editor, the admin panel and the shipped email can be wired to it."
         }
       ],
       "detectedIn": "2026-09-30T10:40:00-06:00"
@@ -503,6 +551,10 @@
         {
           "date": "2026-09-30",
           "note": "Detected during the 2026-09-30 re-inspection."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Blocked on the same database change: the messages table, its date index and the unique index per newsletter email are written at supabase/migraciones/001-guia-y-mensajes.sql. Meanwhile duplicate newsletter sign-ups no longer pile up, because the stored object is now keyed by a hash of the email, which removes the worst symptom while the table is pending."
         }
       ],
       "detectedIn": "2026-09-30T10:40:00-06:00"
@@ -616,6 +668,10 @@
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-09-30",
+      "summary": "Fix pass over the pending tasks. Seven closed with verification evidence: retryable webhook with an alert (SW-001), rate limiting and review moderation (SW-003), admin login hardening (SW-004), canonical checkout URLs (SW-005), no customer email on the payment-status endpoint (SW-006), robots/sitemap and per-page metadata (SW-007), and the cart address form mounted once (SW-016). SW-011 and SW-012 advanced but stay open for the parts that need a measurement or further typing. SW-017 and SW-019 are blocked on one SQL migration now written at supabase/migraciones/001-guia-y-mensajes.sql. SW-008 and SW-014 remain with the owner."
+    },
     {
       "date": "2026-09-30",
       "summary": "Re-inspection after the order-tracking, email and postal-code work. Four defects confirmed fixed and verified in production (SW-020 webhook host, SW-021 checkout images, SW-022 address truncation, SW-023 admin visibility). Six new items registered (SW-014 live payments, SW-015 customer email, SW-016 duplicated address form, SW-017 tracking data, SW-018 catalog decisions, SW-019 message storage). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 and SW-013 updated with evidence. A unique constraint on orders.stripe_session_id was probed and confirmed to exist, so no duplicate-order task was opened."

@@ -11,6 +11,8 @@ const PEDIDO_DE_MUESTRA: Pedido = {
   customer_phone: '55 1234 5678',
   shipping_name: 'Nombre del cliente',
   shipping_address: {
+    nombre: 'Nombre del cliente',
+    telefono: '55 1234 5678',
     calle: 'Paseo de las Palmas',
     numeroExterior: '100',
     numeroInterior: '',

@@ -1,5 +1,12 @@
 import { Award, MapPin, Phone, Clock } from 'lucide-react';
 
+export const metadata = {
+  title: 'Sobre Nosotros',
+  description:
+    'Skinworld nace de 25 años de práctica dermatológica de la Dra. Karina Alfaro López. Conoce su trayectoria y el criterio con el que se elige cada producto.',
+  alternates: { canonical: '/sobre-nosotros' },
+};
+
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
@@ -50,6 +57,8 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
             <img
+              loading="lazy"
+              decoding="async"
               src="/images/dra-karina-alfaro.jpg"
               alt="Dra. Karina Alfaro López"
               className="aspect-square w-full rounded-[20px] object-cover lg:order-1"

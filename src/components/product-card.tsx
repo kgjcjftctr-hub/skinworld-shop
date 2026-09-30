@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { ImagenProducto } from '@/components/imagen-producto';
 import { ShoppingBag } from 'lucide-react';
 import { toast } from 'sonner';
 import { formatPrice } from '@/utils';
@@ -40,22 +41,11 @@ export function ProductCard({ product }: { product: Product & Record<string, any
               -{discount}%
             </span>
           )}
-          {product.image ? (
-            <img
-              src={product.image}
-              alt={product.name}
-              loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
-              onError={(e) => {
-                (e.currentTarget as HTMLImageElement).src =
-                  'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"%3E%3Crect fill="%23f1f3f5" width="400" height="400"/%3E%3C/svg%3E';
-              }}
-            />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center text-sm text-slate-400">
-              Imagen no disponible
-            </div>
-          )}
+          <ImagenProducto
+            src={product.image}
+            alt={product.name}
+            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+          />
         </div>
 
         {/* Content */}

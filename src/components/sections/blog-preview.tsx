@@ -35,6 +35,8 @@ export function BlogPreview() {
               <Link href={`/blog/${post.slug}`} className="group block">
                 <article className="flex flex-col overflow-hidden rounded-2xl bg-white transition-shadow duration-300 hover:shadow-lg sm:flex-row sm:items-stretch">
                   <img
+                    loading="lazy"
+                    decoding="async"
                     src={post.image}
                     alt=""
                     className="h-48 w-full shrink-0 object-cover sm:h-auto sm:w-[200px]"

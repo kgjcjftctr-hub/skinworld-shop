@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { ipDe, limitar, respuestaDeLimite } from '@/lib/limite';
 
 function getSupabase() {
   return createClient(
@@ -41,6 +42,14 @@ export async function POST(request: NextRequest) {
     // Honeypot: bots fill hidden fields humans never see.
     if (typeof website === 'string' && website.length > 0) {
       return NextResponse.json({ ok: true }, { status: 200 });
+    }
+
+    const limite = limitar(`resena:${ipDe(request)}`, 3, 60 * 60_000);
+    if (!limite.permitido) {
+      return respuestaDeLimite(
+        limite.esperaSegundos,
+        'Ya dejaste varias reseñas. Vuelve a intentarlo más tarde.'
+      );
     }
 
     const ratingNum = Number(rating);

@@ -2,6 +2,13 @@ import Link from 'next/link';
 import { blogPosts } from '@/lib/blog-data';
 import { formatDate } from '@/utils';
 
+export const metadata = {
+  title: 'Blog',
+  description:
+    'Artículos de dermatología escritos por la Dra. Karina Alfaro López: fotoprotección, lunares, colágeno y cuidado de la piel.',
+  alternates: { canonical: '/blog' },
+};
+
 export default function BlogPage() {
   return (
     <div className="min-h-screen bg-white">
@@ -20,6 +27,8 @@ export default function BlogPage() {
             <Link key={post.slug} href={`/blog/${post.slug}`} className="group block">
               <article>
                 <img
+                  loading="lazy"
+                  decoding="async"
                   src={post.image}
                   alt=""
                   className="mb-5 aspect-[4/3] w-full rounded-xl object-cover transition-shadow group-hover:shadow-md"

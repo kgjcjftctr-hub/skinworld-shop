@@ -172,16 +172,14 @@ export default function CartPage() {
             </div>
           </div>
 
-          {/* Shipping address — shown above summary on mobile */}
-          <div className="lg:hidden">
+          {/* Dirección y resumen. El formulario se monta una sola vez: en móvil
+              queda debajo de los productos y en escritorio, dentro de la columna
+              fija junto al resumen. Montarlo dos veces y esconder uno con CSS
+              hacía que cada código postal se consultara por duplicado. */}
+          <div className="lg:col-span-1">
+            <div className="space-y-6 lg:sticky lg:top-28">
             <ShippingAddressForm />
-          </div>
-
-          {/* Summary — sticky on desktop */}
-          <div className="hidden lg:col-span-1 lg:block">
-            <div className="sticky top-28 space-y-6">
-            <ShippingAddressForm />
-            <div className="rounded-2xl border border-slate-100 p-6">
+            <div className="hidden rounded-2xl border border-slate-100 p-6 lg:block">
               <h2 className="mb-6 font-display text-lg font-semibold text-ink">Resumen del Pedido</h2>
 
               <div className="mb-6 space-y-3 border-b border-slate-100 pb-6 text-sm">

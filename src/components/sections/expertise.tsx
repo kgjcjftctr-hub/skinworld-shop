@@ -59,6 +59,8 @@ export function ExpertiseSection() {
             <div className="relative mx-auto w-full max-w-[380px]">
               <div className="absolute -inset-3 rounded-[28px] border border-gold-300/60" />
               <img
+                loading="lazy"
+                decoding="async"
                 src="/images/dra-karina-alfaro.jpg"
                 alt="Dra. Karina Alfaro López"
                 className="relative aspect-square w-full rounded-[20px] object-cover shadow-card"

@@ -1,6 +1,13 @@
+import type Stripe from 'stripe';
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
 import { getSupabase } from '@/lib/supabase';
+import { origenSeguro } from '@/lib/sitio';
+
+interface ArticuloDelCarrito {
+  id: string;
+  cartQuantity?: number;
+}
 
 const FREE_SHIPPING_THRESHOLD = 500;
 const SHIPPING_COST = 100;
@@ -18,7 +25,11 @@ const REQUIRED_ADDRESS_FIELDS = [
 
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null);
-  const cartItems = Array.isArray(body?.items) ? body.items : [];
+  const cartItems: ArticuloDelCarrito[] = Array.isArray(body?.items)
+    ? body.items.filter((item: unknown): item is ArticuloDelCarrito =>
+        typeof item === 'object' && item !== null && typeof (item as ArticuloDelCarrito).id === 'string'
+      )
+    : [];
   const shippingAddress = body?.shippingAddress;
 
   if (cartItems.length === 0) {
@@ -32,7 +43,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Falta completar la dirección de envío' }, { status: 400 });
   }
 
-  const origin = request.headers.get('origin') || `https://${request.headers.get('host')}`;
+  const origin = origenSeguro(request);
 
   // Stripe sólo acepta URLs absolutas para las imágenes; varias fotos del
   // catálogo se guardan como ruta del sitio (/images/...), así que las
@@ -47,7 +58,7 @@ export async function POST(request: NextRequest) {
   const campo = (valor: unknown) => String(valor ?? '').trim().slice(0, 500);
 
   const supabase = getSupabase();
-  const ids = cartItems.map((item: any) => item.id).filter(Boolean);
+  const ids = cartItems.map((item) => item.id).filter(Boolean);
   const { data: products, error } = await supabase
     .from('products')
     .select('id, name, description, image, price_with_iva, in_stock')
@@ -61,7 +72,7 @@ export async function POST(request: NextRequest) {
   // Los precios y disponibilidad SIEMPRE se toman de la base de datos,
   // nunca de lo que mande el cliente, para evitar manipulación de precios.
   let subtotal = 0;
-  const line_items: any[] = [];
+  const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
 
   for (const item of cartItems) {
     const product = products.find((p) => p.id === item.id);

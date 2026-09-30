@@ -4,6 +4,7 @@ import { Toaster } from 'sonner';
 import '@/styles/globals.css';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
+import { URL_SITIO } from '@/lib/sitio';
 
 // Fuentes auto-alojadas (next/font/local): no dependen de descargar
 // Google Fonts en build time, a diferencia de next/font/google, por lo
@@ -25,7 +26,15 @@ const playfair = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Skinworld – by Karina Alfaro',
+  // Base para resolver enlaces canónicos e imágenes sociales relativas. Apunta
+  // al dominio con `www`, que es el que sirve producción: el dominio sin `www`
+  // responde 308 y redirige.
+  metadataBase: new URL(URL_SITIO),
+  alternates: { canonical: '/' },
+  title: {
+    default: 'Skinworld – by Karina Alfaro',
+    template: '%s · Skinworld',
+  },
   description:
     'Productos dermatológicos de calidad respaldados por profesional en dermatología. Descubre soluciones para tu piel.',
   keywords: [
@@ -39,14 +48,14 @@ export const metadata: Metadata = {
     icon: '/favicon.ico',
     apple: '/apple-touch-icon.png',
   },
-  authors: [{ name: 'Skinworld', url: 'https://skinworld.shop' }],
+  authors: [{ name: 'Skinworld', url: URL_SITIO }],
   creator: 'Skinworld',
   publisher: 'Skinworld',
   robots: 'index, follow',
   openGraph: {
     type: 'website',
     locale: 'es_MX',
-    url: 'https://skinworld.shop',
+    url: URL_SITIO,
     title: 'Skinworld – by Karina Alfaro',
     description:
       'Productos dermatológicos de calidad respaldados por profesional en dermatología.',

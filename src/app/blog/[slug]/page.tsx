@@ -1,8 +1,39 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { getBlogPost } from '@/lib/blog-data';
 import { formatDate } from '@/utils';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getBlogPost(decodeURIComponent(slug));
+
+  if (!post) {
+    return { title: 'Artículo no encontrado', robots: { index: false } };
+  }
+
+  const ruta = `/blog/${encodeURIComponent(post.slug)}`;
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    alternates: { canonical: ruta },
+    openGraph: {
+      type: 'article',
+      url: ruta,
+      title: post.title,
+      description: post.excerpt,
+      publishedTime: post.date,
+      authors: [post.author],
+      images: post.image ? [post.image] : undefined,
+    },
+  };
+}
 
 export default async function BlogPostPage({
   params,
@@ -18,7 +49,12 @@ export default async function BlogPostPage({
 
   return (
     <div className="min-h-screen bg-white">
-      <img src={post.image} alt="" className="h-[320px] w-full object-cover sm:h-[400px]" />
+      <img
+        src={post.image}
+        alt=""
+        decoding="async"
+        className="h-[320px] w-full object-cover sm:h-[400px]"
+      />
 
       <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 lg:px-8">
         <Link

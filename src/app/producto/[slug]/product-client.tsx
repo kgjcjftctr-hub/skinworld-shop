@@ -71,6 +71,7 @@ export function ProductClient({
               )}
               {product.image ? (
                 <img
+                  decoding="async"
                   src={product.image}
                   alt={product.name}
                   className="h-full w-full object-cover"

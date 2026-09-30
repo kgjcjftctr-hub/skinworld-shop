@@ -25,6 +25,25 @@ export function etiquetaDeEtapa(valor: unknown): string {
   return esEtapa(valor) ? ETAPAS[valor].etiqueta : String(valor ?? '—');
 }
 
+export interface DireccionDeEnvio {
+  nombre: string;
+  telefono: string;
+  codigoPostal: string;
+  estado: string;
+  municipio: string;
+  colonia: string;
+  calle: string;
+  numeroExterior: string;
+  numeroInterior: string;
+  referencias: string;
+}
+
+export interface ArticuloDelPedido {
+  name: string;
+  quantity: number;
+  amount_total: number;
+}
+
 export interface Pedido {
   id: string;
   created_at: string;
@@ -32,9 +51,9 @@ export interface Pedido {
   customer_email: string | null;
   customer_phone: string | null;
   shipping_name: string | null;
-  shipping_address: Record<string, string> | null;
+  shipping_address: DireccionDeEnvio | null;
   amount_total: number;
-  items: { name: string; quantity: number; amount_total: number }[] | null;
+  items: ArticuloDelPedido[] | null;
 }
 
 export function direccionEnUnaLinea(pedido: Pedido): string {
@@ -166,4 +185,26 @@ export async function avisarEtapaAlCliente(pedido: Pedido, etapa: Etapa) {
   const correo = correoEtapa(pedido, etapa);
   if (!correo) return { enviado: false, motivo: 'esta etapa no manda correo' };
   return enviarCorreo(correo);
+}
+
+/**
+ * Aviso a la tienda cuando un pago se cobró pero el pedido no se pudo guardar.
+ * Stripe reintenta el webhook, pero si los reintentos también fallan este
+ * correo es lo único que delata la venta perdida, así que incluye el
+ * identificador de la sesión para poder rescatarla a mano desde Stripe.
+ */
+export async function avisarPedidoNoGuardado(sesion: string, causa: unknown) {
+  return enviarCorreo({
+    para: CORREO_TIENDA,
+    asunto: `Revisar: un pago no se pudo registrar (${sesion.slice(-8)})`,
+    html: plantilla(
+      'Un pago entró pero el pedido no se guardó',
+      `<p style="margin:0;">Stripe confirmó un cobro y la tienda no pudo guardar el pedido. Stripe va a reintentar el aviso durante las próximas horas; si el problema era pasajero, el pedido aparecerá solo en el panel.</p>
+       <p style="margin:16px 0 0;">Si no aparece, la venta existe en Stripe y hay que capturarla a mano.</p>
+       <p style="margin:16px 0 0;"><strong>Sesión de pago:</strong> ${escaparHtml(sesion)}</p>
+       <p style="margin:8px 0 0;"><strong>Motivo técnico:</strong> ${escaparHtml(
+         causa instanceof Error ? causa.message : String(causa)
+       )}</p>`
+    ),
+  });
 }
