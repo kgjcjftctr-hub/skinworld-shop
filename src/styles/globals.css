@@ -2,18 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ==========================================================================
+   Skinworld V1 — fuente única de los tokens visuales.
+   Los colores van como canales RGB para que Tailwind pueda aplicar opacidad
+   (bg-sw-ink/60). Contrastes medidos sobre --sw-warm-white:
+   ink 16.3:1 · text 13.8:1 · muted 6.3:1 · pink-deep 5.8:1.
+   --sw-pink es el rosa exacto de la mariposa (#E9A9B9): se usa como relleno
+   y acento, nunca para texto sobre fondo claro (1.8:1).
+   ========================================================================== */
+:root {
+  --sw-pink: 233 169 185;        /* #E9A9B9 mariposa */
+  --sw-pink-soft: 244 211 220;   /* #F4D3DC */
+  --sw-pink-pale: 250 238 241;   /* #FAEEF1 */
+  --sw-pink-deep: 154 71 96;     /* #9A4760 texto, enlaces y botón principal */
+  --sw-ink: 31 26 28;            /* #1F1A1C */
+  --sw-charcoal: 42 35 37;       /* #2A2325 pie de página */
+  --sw-warm-white: 252 248 247;  /* #FCF8F7 superficie principal */
+  --sw-white: 255 255 255;       /* fotos de producto con fondo blanco */
+  --sw-surface: 245 237 236;     /* #F5EDEC secciones alternas */
+  --sw-border: 230 218 218;      /* #E6DADA */
+  --sw-text: 47 39 41;           /* #2F2729 */
+  --sw-muted: 100 90 93;         /* #645A5D texto secundario */
+  --sw-cream: 246 238 234;       /* #F6EEEA texto sobre carbón */
+  --sw-cream-muted: 191 178 176; /* #BFB2B0 secundario sobre carbón */
+
+  --sw-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --sw-header-h: 4.5rem;
+}
+
 * {
   @apply border-slate-200;
 }
 
 html {
   @apply scroll-smooth;
-  @apply text-base text-ink;
+  @apply text-base text-sw-ink;
 }
 
 body {
-  @apply bg-white;
+  @apply bg-sw-warm-white;
   @apply font-sans antialiased;
+}
+
+::selection {
+  @apply bg-sw-pink-soft text-sw-ink;
 }
 
 /* Tipografía editorial */
@@ -85,11 +117,51 @@ textarea::placeholder {
   @apply text-slate-400;
 }
 
-/* Fade-in on scroll (paired with the Reveal component) */
+/* Piezas compartidas de Skinworld V1 */
+@layer components {
+  .sw-container {
+    @apply mx-auto w-full max-w-sw px-sw-gutter;
+  }
+
+  .sw-section {
+    @apply py-sw-section;
+  }
+
+  /* Etiqueta breve sobre un bloque: en minúsculas, no en mayúsculas espaciadas. */
+  .sw-label {
+    @apply font-sans text-sw-small font-semibold text-sw-pink-deep;
+  }
+
+  .sw-btn {
+    @apply inline-flex min-h-[2.875rem] items-center justify-center gap-2 rounded-full px-6;
+    @apply font-sans text-sw-small font-semibold;
+    @apply transition-colors duration-sw-fast ease-sw;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .sw-btn-primary {
+    @apply bg-sw-pink-deep text-white hover:bg-sw-ink;
+  }
+
+  .sw-btn-secondary {
+    @apply border border-sw-ink/25 bg-transparent text-sw-ink hover:border-sw-ink hover:bg-sw-ink hover:text-sw-warm-white;
+  }
+
+  .sw-btn-quiet {
+    @apply bg-sw-pink-pale text-sw-pink-deep hover:bg-sw-pink-soft;
+  }
+
+  .sw-link {
+    @apply font-semibold text-sw-ink underline decoration-sw-pink decoration-2 underline-offset-[6px];
+    @apply transition-colors duration-sw-fast hover:text-sw-pink-deep hover:decoration-sw-pink-deep;
+  }
+}
+
+/* Aparición al entrar en pantalla (componente Reveal) */
 .reveal {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(16px);
+  transition: opacity 450ms var(--sw-ease), transform 450ms var(--sw-ease);
 }
 
 .reveal.is-visible {
@@ -99,6 +171,10 @@ textarea::placeholder {
 
 /* Selectores reducidos */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   * {
     @apply !transition-none !animate-none;
   }
@@ -111,7 +187,7 @@ textarea::placeholder {
 
 /* Accesibilidad - Focus visible */
 *:focus-visible {
-  @apply outline-2 outline-offset-2 outline-primary-500;
+  @apply outline outline-2 outline-offset-2 outline-sw-pink-deep;
 }
 
 /* Print styles */
