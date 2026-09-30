@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap">
+  <title>SkinWorld Task Center</title>
+  <style>
+    /* Tablero de trabajo: resumen arriba, filtros fijos, rejilla de tarjetas.
+       Paleta tomada del rosa y el oro de la tienda, sobre papel cálido. */
+    :root{
+      --papel:#f7f3f2; --tarjeta:#ffffff; --tinta:#241b1e; --tinta-suave:#6c5c60;
+      --linea:#e7dcdc; --rosa:#bc7f8f; --oro:#b08d3c;
+      --alto:#a33a3a; --medio:#a06a12; --bajo:#2b6ca3; --listo:#2c7350; --duda:#6f4a9c;
+      --sombra:0 1px 2px rgba(36,27,30,.05), 0 8px 24px rgba(36,27,30,.05);
+      --display:'Playfair Display',Georgia,'Times New Roman',serif;
+      --texto:'Inter',ui-sans-serif,system-ui,-apple-system,sans-serif;
+    }
+    @media (prefers-color-scheme: dark){
+      :root:not([data-theme="light"]){
+        --papel:#171214; --tarjeta:#201a1c; --tinta:#f3ebec; --tinta-suave:#a99ba0;
+        --linea:#342a2d; --rosa:#e0adb8; --oro:#d9b45e;
+        --alto:#f0928f; --medio:#e2b45f; --bajo:#8dc0ea; --listo:#79d0a4; --duda:#c4a4ec;
+        --sombra:0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.28);
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"]{
+      --papel:#171214; --tarjeta:#201a1c; --tinta:#f3ebec; --tinta-suave:#a99ba0;
+      --linea:#342a2d; --rosa:#e0adb8; --oro:#d9b45e;
+      --alto:#f0928f; --medio:#e2b45f; --bajo:#8dc0ea; --listo:#79d0a4; --duda:#c4a4ec;
+      --sombra:0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.28);
+      color-scheme: dark;
+    }
+
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--papel);color:var(--tinta);
+      font:15px/1.6 var(--texto);-webkit-font-smoothing:antialiased}
+    .hoja{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:32px 72px}
+    h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+    h1{font-size:clamp(2rem,6vw,3rem);line-height:1.08;letter-spacing:-.015em}
+    h2{font-size:1.35rem;margin:44px 0 14px}
+    a{color:inherit}
+    code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+
+    .intro{max-width:64ch;color:var(--tinta-suave);margin:14px 0 0}
+    .sello{margin:20px 0 0;font-size:.82rem;color:var(--tinta-suave);
+      display:flex;flex-wrap:wrap;gap:6px 14px}
+    .sello b{font-weight:600;color:var(--tinta)}
+
+    .avance{margin-top:26px}
+    .barra{height:9px;border-radius:99px;background:var(--linea);overflow:hidden}
+    .barra i{display:block;height:100%;background:linear-gradient(90deg,var(--rosa),var(--oro))}
+    .avance p{margin:9px 0 0;font-size:.85rem;color:var(--tinta-suave);
+      font-variant-numeric:tabular-nums}
+
+    .cifras{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+      gap:12px;margin-top:22px}
+    .cifra{background:var(--tarjeta);border:1px solid var(--linea);border-radius:12px;
+      padding:14px 16px;box-shadow:var(--sombra)}
+    .cifra b{display:block;font-size:1.9rem;line-height:1.1;font-variant-numeric:tabular-nums}
+    .cifra span{font-size:.82rem;color:var(--tinta-suave)}
+    .cifra.p0 b{color:var(--alto)} .cifra.p1 b{color:var(--medio)}
+    .cifra.duda b{color:var(--duda)} .cifra.listo b{color:var(--listo)}
+
+    .aviso{background:var(--tarjeta);border:1px solid var(--linea);
+      border-left:3px solid var(--oro);border-radius:10px;padding:16px 18px;
+      box-shadow:var(--sombra)}
+    .aviso p{margin:0 0 10px} .aviso p:last-child{margin-bottom:0}
+    .aviso ul{margin:0;padding-left:20px} .aviso li{margin-bottom:7px}
+    .aviso li span{color:var(--tinta-suave)}
+
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+    .chips li{background:var(--tarjeta);border:1px solid var(--linea);border-radius:99px;
+      padding:6px 12px;font-size:.83rem;box-shadow:var(--sombra)}
+    .chips code{color:var(--rosa);font-weight:700;margin-right:6px}
+
+    .filtros{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;
+      background:var(--papel);padding-block:12px;border-bottom:1px solid var(--linea);
+      margin-bottom:18px}
+    .grupo{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:8px}
+    .grupo:last-child{margin-bottom:0}
+    .grupo > b{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;
+      color:var(--tinta-suave);min-width:74px}
+    .grupo button{font:inherit;font-size:.83rem;cursor:pointer;color:var(--tinta);
+      background:var(--tarjeta);border:1px solid var(--linea);border-radius:99px;
+      padding:5px 12px;transition:background .15s,border-color .15s}
+    .grupo button:hover{border-color:var(--rosa)}
+    .grupo button[aria-pressed="true"]{background:var(--tinta);color:var(--papel);
+      border-color:var(--tinta)}
+    .grupo button:focus-visible{outline:2px solid var(--rosa);outline-offset:2px}
+
+    .rejilla{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+    .tarea{background:var(--tarjeta);border:1px solid var(--linea);border-radius:14px;
+      padding:18px;box-shadow:var(--sombra);min-width:0}
+    .tarea[data-prioridad="P0"]{border-left:3px solid var(--alto)}
+    .tarea[data-estado="completed"]{opacity:.82}
+    .tarea-cab{display:flex;justify-content:space-between;align-items:center;gap:8px}
+    .tarea-cab code{color:var(--rosa);font-weight:700;font-size:.86rem}
+    .etiquetas{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+    .pill{font-size:.71rem;font-weight:700;border-radius:99px;padding:3px 8px;
+      border:1px solid currentColor;white-space:nowrap}
+    .prio.P0{color:var(--alto)} .prio.P1{color:var(--medio)}
+    .prio.P2{color:var(--bajo)} .prio.P3{color:var(--tinta-suave)}
+    .est.pending{color:var(--medio)} .est.in_progress{color:var(--bajo)}
+    .est.completed{color:var(--listo)} .est.requires_verification{color:var(--duda)}
+    .tarea h3{font-size:1.08rem;line-height:1.3;margin:12px 0 4px}
+    .clasif{margin:0;font-size:.82rem;color:var(--tinta-suave)}
+    .detalle{margin:11px 0 0;color:var(--tinta-suave)}
+    details{margin-top:13px;border-top:1px solid var(--linea);padding-top:11px}
+    summary{cursor:pointer;font-weight:600;font-size:.87rem}
+    summary:focus-visible{outline:2px solid var(--rosa);outline-offset:2px}
+    .ficha{font-size:.86rem;color:var(--tinta-suave);overflow-wrap:anywhere}
+    .ficha p{margin:11px 0} .ficha strong{color:var(--tinta)}
+    .ficha ul{margin:11px 0 0;padding-left:18px}
+    .ficha li{margin-bottom:6px} .ficha li span{color:var(--rosa);font-weight:600}
+    .vacio{color:var(--tinta-suave);text-align:center;padding:34px 0}
+
+    @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+    @media (max-width:560px){
+      .grupo > b{min-width:100%}
+      .hoja{padding-block:24px 56px}
+    }
+  </style>
+</head>
+<body>
+  <main class="hoja">
+    <header>
+      <h1>SkinWorld Task Center</h1>
+      <p class="intro">Panel maestro de pendientes de la tienda: lo que está roto, lo que se puede mejorar y lo que falta confirmar. Cada tarea conserva su identificador y su historial, así que se actualiza en lugar de duplicarse.</p>
+      <p class="sello">
+        <span>Última inspección <b>2026-09-30 a las 10:40</b></span>
+        <span>Por <b>Claude Code re-inspection after the order-tracking, email and postal-code work</b></span>
+        <span>Fuente <b>SKINWORLD_TASKS.json</b></span>
+      </p>
+
+      <div class="avance">
+        <div class="barra"><i style="width:17%"></i></div>
+        <p>4 de 23 tareas terminadas · 17% del registro histórico</p>
+      </div>
+
+      <div class="cifras">
+        <div class="cifra p0"><b>4</b><span>abiertas que bloquean la venta</span></div>
+        <div class="cifra p1"><b>6</b><span>abiertas importantes</span></div>
+        <div class="cifra duda"><b>6</b><span>requieren verificación</span></div>
+        <div class="cifra listo"><b>4</b><span>terminadas y verificadas</span></div>
+      </div>
+    </header>
+
+    <h2>Cómo leerlo</h2>
+    <section class="aviso">
+      <p><strong>Problema detectado.</strong> Confirmado leyendo el código o consultando la configuración real. No es una sospecha.</p>
+      <p><strong>Mejora sugerida.</strong> Algo que se puede hacer mejor, pero hoy no está fallando.</p>
+      <p><strong>Requiere confirmación.</strong> Depende de una prueba en vivo o de una decisión del negocio, no de escribir código.</p>
+    </section>
+
+    <h2>Nuevos pendientes detectados</h2>
+    <ul class="chips"><li><code>SW-014</code>Switch Stripe from test mode to live payments</li><li><code>SW-015</code>Confirm Resend domain verification and customer email delivery</li><li><code>SW-016</code>Stop rendering the shipping address form twice on the cart page</li><li><code>SW-017</code>Record tracking numbers and stage timestamps for orders</li><li><code>SW-018</code>Resolve the outstanding catalog decisions</li><li><code>SW-019</code>Move contact and newsletter messages out of object storage</li></ul>
+
+    <h2>Tareas</h2>
+    <div class="filtros">
+      <div class="grupo" data-eje="estado">
+        <b>Estado</b>
+        <button data-valor="todo" aria-pressed="true">Todas (23)</button>
+        <button data-valor="pending" aria-pressed="false">Pendiente (13)</button><button data-valor="in_progress" aria-pressed="false">En progreso (0)</button><button data-valor="requires_verification" aria-pressed="false">Requiere verificación (6)</button><button data-valor="completed" aria-pressed="false">Terminada (4)</button>
+      </div>
+      <div class="grupo" data-eje="prioridad">
+        <b>Prioridad</b>
+        <button data-valor="todo" aria-pressed="true">Todas</button>
+        <button data-valor="P0" aria-pressed="false" title="Bloquea la venta">P0 · Bloquea la venta</button><button data-valor="P1" aria-pressed="false" title="Importante">P1 · Importante</button><button data-valor="P2" aria-pressed="false" title="Deseable">P2 · Deseable</button><button data-valor="P3" aria-pressed="false" title="Cuando se pueda">P3 · Cuando se pueda</button>
+      </div>
+      <div class="grupo" data-eje="categoria">
+        <b>Área</b>
+        <button data-valor="todo" aria-pressed="true">Todas</button>
+        <button data-valor="Accessibility" aria-pressed="false">Accessibility</button><button data-valor="Code quality" aria-pressed="false">Code quality</button><button data-valor="Content and legal" aria-pressed="false">Content and legal</button><button data-valor="Ecommerce" aria-pressed="false">Ecommerce</button><button data-valor="Operations" aria-pressed="false">Operations</button><button data-valor="Performance" aria-pressed="false">Performance</button><button data-valor="Reliability" aria-pressed="false">Reliability</button><button data-valor="SEO" aria-pressed="false">SEO</button><button data-valor="Security" aria-pressed="false">Security</button>
+      </div>
+    </div>
+
+    <div class="rejilla" id="rejilla">
+      <article class="tarea" data-estado="pending" data-prioridad="P0" data-categoria="Reliability">
+        <div class="tarea-cab">
+          <code>SW-001</code>
+          <div class="etiquetas">
+            <span class="pill prio P0" title="Bloquea la venta">P0</span>
+            <span class="pill est pending">Pendiente</span>
+          </div>
+        </div>
+        <h3>Make Stripe webhook failures retryable and observable</h3>
+        <p class="clasif">Reliability · Problema detectado</p>
+        <p class="detalle">The webhook catches failures while reading or writing the order, logs them, and still returns HTTP 200. Stripe therefore treats the event as handled and does not retry it, which can leave a paid order absent from the administration panel.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/api/stripe/webhook/route.ts</p>
+            <p><strong>Terminada cuando</strong><br>A failed durable order write returns a retryable non-2xx response (or is reliably queued), duplicate deliveries remain idempotent, and a Stripe test event proves that a temporary database failure is retried and recorded with an actionable alert.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Verified still open. The handler now short-circuits duplicate deliveries and a unique constraint on orders.stripe_session_id was confirmed live, so repeated events are safe; the catch block around the order write still logs and returns HTTP 200, so a database failure is still swallowed without a retry.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P0" data-categoria="Ecommerce">
+        <div class="tarea-cab">
+          <code>SW-002</code>
+          <div class="etiquetas">
+            <span class="pill prio P0" title="Bloquea la venta">P0</span>
+            <span class="pill est requires_verification">Requiere verificación</span>
+          </div>
+        </div>
+        <h3>Decide and enforce inventory reservation and depletion</h3>
+        <p class="clasif">Ecommerce · Requiere confirmación</p>
+        <p class="detalle">Checkout checks only the current in_stock flag. The inspected payment and webhook flow does not reserve inventory or decrement quantities. This is correct only if inventory is intentionally managed as a simple available/unavailable flag.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/api/checkout/route.ts<br>src/app/api/stripe/webhook/route.ts<br>Supabase products/orders</p>
+            <p><strong>Terminada cuando</strong><br>The owner confirms the inventory model. If quantities are required, payment completion atomically updates stock, overselling is prevented under concurrent checkout, and the admin shows the resulting stock state.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Needs business-rule confirmation; not asserted as a defect.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P0" data-categoria="Operations">
+        <div class="tarea-cab">
+          <code>SW-009</code>
+          <div class="etiquetas">
+            <span class="pill prio P0" title="Bloquea la venta">P0</span>
+            <span class="pill est requires_verification">Requiere verificación</span>
+          </div>
+        </div>
+        <h3>Verify live payment, webhook, email, and order-fulfillment configuration</h3>
+        <p class="clasif">Operations · Requiere confirmación</p>
+        <p class="detalle">Live configuration must be confirmed against the real accounts rather than assumed. As of 2026-09-30 the Stripe webhook endpoint, the order write and the store notification email are verified working in production; what remains unconfirmed is the switch to live Stripe keys (tracked separately in SW-014) and customer-facing email delivery (tracked separately in SW-015).</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>.env.local (names not values)<br>src/lib/stripe.ts<br>src/lib/correo.ts<br>src/app/api/stripe/webhook/route.ts<br>src/app/api/admin/probar-correo/route.ts</p>
+            <p><strong>Terminada cuando</strong><br>A controlled production or staging purchase proves payment, order persistence, staff notification, customer confirmation, status-update emails, and cancellation behavior; deployment logs show the webhook arriving; and secrets remain server-only.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Marked requires verification; no credentials or live external state were inspected.</li><li><span>2026-09-30</span> Partially verified in production: a real test purchase produced a stored order and the store notification email arrived. Remaining unknowns split into SW-014 (live payments) and SW-015 (customer email).</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="pending" data-prioridad="P0" data-categoria="Operations">
+        <div class="tarea-cab">
+          <code>SW-014</code>
+          <div class="etiquetas">
+            <span class="pill prio P0" title="Bloquea la venta">P0</span>
+            <span class="pill est pending">Pendiente</span>
+          </div>
+        </div>
+        <h3>Switch Stripe from test mode to live payments</h3>
+        <p class="clasif">Operations · Problema detectado</p>
+        <p class="detalle">Queried live on 2026-09-30: the configured Stripe key is a test key and the account reports charges_enabled=false and payouts_enabled=false. Real customers therefore cannot pay — the storefront takes orders only with Stripe test cards. Activating the account requires the owner to connect a bank account, after which the live secret and publishable keys must replace the test ones.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/lib/stripe.ts<br>Vercel environment variables<br>Stripe account</p>
+            <p><strong>Terminada cuando</strong><br>The Stripe account reports charges_enabled=true, live keys are set in Vercel, a live-mode webhook endpoint is registered for https://www.skinworld.shop/api/stripe/webhook with its own signing secret stored as STRIPE_WEBHOOK_SECRET, and one real low-value purchase is completed, recorded and refunded.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="pending" data-prioridad="P1" data-categoria="Security">
+        <div class="tarea-cab">
+          <code>SW-003</code>
+          <div class="etiquetas">
+            <span class="pill prio P1" title="Importante">P1</span>
+            <span class="pill est pending">Pendiente</span>
+          </div>
+        </div>
+        <h3>Add abuse protection to public write endpoints</h3>
+        <p class="clasif">Security · Problema detectado</p>
+        <p class="detalle">The endpoints accept unauthenticated writes. Reviews have a honeypot and validation, but none of the three inspected routes applies rate limits, bot verification, or duplicate controls. They can be used to fill storage, create moderation noise, or trigger email notifications.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/api/contact/route.ts<br>src/app/api/boletin/route.ts<br>src/app/api/reviews/route.ts</p>
+            <p><strong>Terminada cuando</strong><br>Rate limiting is enforced at an appropriate boundary; contact and newsletter writes have bot/duplicate protection; review moderation policy is implemented; and normal customer submissions still succeed.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="pending" data-prioridad="P1" data-categoria="Security">
+        <div class="tarea-cab">
+          <code>SW-004</code>
+          <div class="etiquetas">
+            <span class="pill prio P1" title="Importante">P1</span>
+            <span class="pill est pending">Pendiente</span>
+          </div>
+        </div>
+        <h3>Protect the admin login against repeated password attempts</h3>
+        <p class="clasif">Security · Problema detectado</p>
+        <p class="detalle">The login route compares a single environment password and returns 401 on failure, with no throttling, lockout, or monitoring. The signed cookie has a browser expiry but its token itself contains no expiry or rotation data.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/api/admin/login/route.ts<br>src/lib/admin-auth.ts</p>
+            <p><strong>Terminada cuando</strong><br>Failed attempts are rate-limited and logged without sensitive data, session revocation/expiry behavior is documented and tested, and the login flow remains usable for the administrator.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="pending" data-prioridad="P1" data-categoria="Security">
+        <div class="tarea-cab">
+          <code>SW-005</code>
+          <div class="etiquetas">
+            <span class="pill prio P1" title="Importante">P1</span>
+            <span class="pill est pending">Pendiente</span>
+          </div>
+        </div>
+        <h3>Harden checkout URL construction against untrusted request hosts</h3>
+        <p class="clasif">Security · Problema detectado</p>
+        <p class="detalle">success_url, cancel_url, and local product image URLs are built from the incoming Origin or Host header. Use a configured canonical application URL or an allowlist instead of trusting request-controlled headers. Since the 2026-09-29 image fix, the same host-derived origin is also used to build the absolute product image URLs sent to Stripe, so a spoofed Host header now affects payment-page content as well as the success and cancel URLs.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/api/checkout/route.ts</p>
+            <p><strong>Terminada cuando</strong><br>Checkout URLs always use the approved production/preview application origin, unsupported hosts are rejected, and a checkout test confirms the correct return URLs and Stripe image URLs.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Scope widened: the request-derived origin now also builds the product image URLs sent to Stripe.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="pending" data-prioridad="P1" data-categoria="Content and legal">
+        <div class="tarea-cab">
+          <code>SW-008</code>
+          <div class="etiquetas">
+            <span class="pill prio P1" title="Importante">P1</span>
+            <span class="pill est pending">Pendiente</span>
+          </div>
+        </div>
+        <h3>Review legal copy for business accuracy and medical relevance</h3>
+        <p class="clasif">Content and legal · Problema detectado</p>
+        <p class="detalle">The terms describe a service about physical state and nutrition, which does not match a dermatology ecommerce site. Legal pages also need owner/legal review to confirm the responsible entity, address, providers, returns, delivery commitments, and effective dates. Specific gap confirmed in the privacy notice: the responsible party is given only as &quot;Skinworld, con domicilio en la Ciudad de México&quot;, without the legal entity name (razón social), RFC or full address that the LFPDPPP requires.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/terminos/page.tsx<br>src/app/privacidad/page.tsx<br>src/app/envios/page.tsx</p>
+            <p><strong>Terminada cuando</strong><br>A qualified owner or legal reviewer approves text tailored to SkinWorld, and all operational claims match the checkout, shipping, privacy, and provider configuration actually in use.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected wording mismatch plus legal facts requiring verification.</li><li><span>2026-09-30</span> Recorded the concrete missing fields in the privacy notice: razón social, RFC and full legal domicile.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P1" data-categoria="Ecommerce">
+        <div class="tarea-cab">
+          <code>SW-013</code>
+          <div class="etiquetas">
+            <span class="pill prio P1" title="Importante">P1</span>
+            <span class="pill est requires_verification">Requiere verificación</span>
+          </div>
+        </div>
+        <h3>Verify all buyer-visible paths after catalog changes</h3>
+        <p class="clasif">Ecommerce · Requiere confirmación</p>
+        <p class="detalle">The homepage is ISR-cached for one hour while catalog and product views use current server data. This has previously produced stale featured prices after a catalog update. The current source is configured with revalidate = 3600, but freshness must be checked whenever prices or featured products change.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/page.tsx<br>src/components/sections/featured-products.tsx<br>src/app/tienda/page.tsx<br>src/app/producto/[slug]/page.tsx<br>src/app/carrito/page.tsx</p>
+            <p><strong>Terminada cuando</strong><br>After the next approved catalog change, homepage featured cards, catalog, product detail, cart, and hosted checkout all display the intended price and stock state after the documented cache window or an approved revalidation process.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Existing operational risk retained as a verification task; no present mismatch asserted.</li><li><span>2026-09-30</span> Partial live evidence gathered: /api/codigo-postal returns correct data on production for CDMX, Michoacán, Oaxaca and Sonora, and a checkout session is created successfully from the live site. Full buyer-path verification after catalog changes is still outstanding.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P1" data-categoria="Operations">
+        <div class="tarea-cab">
+          <code>SW-015</code>
+          <div class="etiquetas">
+            <span class="pill prio P1" title="Importante">P1</span>
+            <span class="pill est requires_verification">Requiere verificación</span>
+          </div>
+        </div>
+        <h3>Confirm Resend domain verification and customer email delivery</h3>
+        <p class="clasif">Operations · Requiere confirmación</p>
+        <p class="detalle">RESEND_API_KEY and CONTACT_NOTIFY_EMAIL are set in Vercel and a store notification was received on 2026-09-29, so sending works — but it landed in spam because it was sent from the shared onboarding@resend.dev sender. The three Resend DNS records were confirmed present in public DNS on 2026-09-30 (TXT resend._domainkey plus CNAMEs rsend and send, both to forge.rmta.net), and the Hostinger MX and SPF records were confirmed unchanged. What is not confirmed is whether Resend marked the domain Verified and whether CONTACT_FROM_EMAIL was set; until both are true, Resend refuses mail to anyone other than the account owner, so order confirmations and packed/shipped notices never reach customers.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/lib/correo.ts<br>src/lib/pedidos.ts<br>Vercel environment variables<br>Hostinger DNS zone</p>
+            <p><strong>Terminada cuando</strong><br>Resend shows skinworld.shop as Verified, CONTACT_FROM_EMAIL is set in Vercel, and a test sent from the admin panel to an outside address arrives in the inbox rather than spam.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="pending" data-prioridad="P2" data-categoria="Security">
+        <div class="tarea-cab">
+          <code>SW-006</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est pending">Pendiente</span>
+          </div>
+        </div>
+        <h3>Limit checkout-session data exposure</h3>
+        <p class="clasif">Security · Problema detectado</p>
+        <p class="detalle">The unauthenticated session lookup returns a payment status, total, and customer email for any supplied Stripe Checkout Session ID. Session IDs are hard to guess, but the endpoint unnecessarily broadens the impact if one appears in logs, analytics, or a referrer.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/api/checkout/session/route.ts<br>src/app/pedido-confirmado/order-confirmed-client.tsx</p>
+            <p><strong>Terminada cuando</strong><br>The confirmation view receives only the minimum data it needs, with an authorization or one-time confirmation mechanism as appropriate, and no customer email is exposed by a reusable public endpoint.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="pending" data-prioridad="P2" data-categoria="SEO">
+        <div class="tarea-cab">
+          <code>SW-007</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est pending">Pendiente</span>
+          </div>
+        </div>
+        <h3>Complete technical SEO metadata and discovery files</h3>
+        <p class="clasif">SEO · Problema detectado</p>
+        <p class="detalle">The root metadata has basic title and Open Graph text, but the audit found no robots.ts, sitemap.ts, metadataBase, canonical URL handling, Open Graph image, or product/blog-specific metadata generation. Confirmed by inspection: there is no src/app/sitemap.ts and no src/app/robots.ts, metadataBase is not set, and the canonical, author and Open Graph URLs point at https://skinworld.shop, which answers 308 and redirects to https://www.skinworld.shop — the domain actually served in production.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/layout.tsx<br>src/app/producto/[slug]/page.tsx<br>src/app/blog/[slug]/page.tsx</p>
+            <p><strong>Terminada cuando</strong><br>robots and sitemap are generated, canonical and social-preview URLs/images resolve correctly, and product/blog pages have accurate unique metadata validated in a production-like build.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Added verified specifics: missing sitemap/robots routes, missing metadataBase, and apex-vs-www mismatch (apex returns 308 to www, confirmed with a live request).</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P2" data-categoria="Accessibility">
+        <div class="tarea-cab">
+          <code>SW-010</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est requires_verification">Requiere verificación</span>
+          </div>
+        </div>
+        <h3>Verify responsive and keyboard/screen-reader journeys</h3>
+        <p class="clasif">Accessibility · Requiere confirmación</p>
+        <p class="detalle">The code contains labels for several controls, but the audit did not run an assistive-technology or device matrix. Modal focus handling, mobile menu behavior, filter controls, error announcements, contrast, and full checkout keyboard use need browser verification.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/components/header.tsx<br>src/components/search-modal.tsx<br>src/components/filters.tsx<br>src/components/checkout/shipping-address-form.tsx<br>src/app/carrito/page.tsx</p>
+            <p><strong>Terminada cuando</strong><br>The main buyer routes work at mobile and desktop breakpoints using keyboard only; focus is trapped/restored correctly in dialogs; form errors are announced; and an accessibility scan plus manual checks has no unresolved critical issue.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Browser/device testing was outside this source-only audit.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="pending" data-prioridad="P2" data-categoria="Code quality">
+        <div class="tarea-cab">
+          <code>SW-016</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est pending">Pendiente</span>
+          </div>
+        </div>
+        <h3>Stop rendering the shipping address form twice on the cart page</h3>
+        <p class="clasif">Code quality · Problema detectado</p>
+        <p class="detalle">The cart renders &lt;ShippingAddressForm /&gt; twice — once in a lg:hidden block and once inside the desktop summary column — so both copies mount at every viewport and only CSS hides one. Each instance runs its own postal-code lookup effect, so every completed postal code fires two identical requests to /api/codigo-postal and both instances write to the shared store, and per-instance UI state such as the &quot;write my own colonia&quot; toggle can diverge between the two copies.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/carrito/page.tsx<br>src/components/checkout/shipping-address-form.tsx</p>
+            <p><strong>Terminada cuando</strong><br>The form mounts once per page, a completed postal code triggers exactly one lookup request, and the layout still places it correctly on both mobile and desktop.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="pending" data-prioridad="P2" data-categoria="Operations">
+        <div class="tarea-cab">
+          <code>SW-017</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est pending">Pendiente</span>
+          </div>
+        </div>
+        <h3>Record tracking numbers and stage timestamps for orders</h3>
+        <p class="clasif">Operations · Problema detectado</p>
+        <p class="detalle">The orders table exposes only id, stripe_session_id, customer_email, customer_phone, shipping_name, shipping_address, amount_total, currency, status, items and created_at. There is nowhere to store a carrier tracking number, so the shipped notification cannot tell the customer how to follow the parcel, and there is no per-stage timestamp, so neither the panel nor the history shows when an order was packed or shipped. Adding these needs a schema change, which the service key used by the app cannot perform.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/api/admin/pedidos/[id]/route.ts<br>src/lib/pedidos.ts<br>Supabase orders table</p>
+            <p><strong>Terminada cuando</strong><br>The orders table has columns for a tracking reference and stage timestamps, the admin panel captures the tracking number when marking an order shipped, and the shipped email includes it.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P2" data-categoria="Content and legal">
+        <div class="tarea-cab">
+          <code>SW-018</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est requires_verification">Requiere verificación</span>
+          </div>
+        </div>
+        <h3>Resolve the outstanding catalog decisions</h3>
+        <p class="clasif">Content and legal · Requiere confirmación</p>
+        <p class="detalle">Three catalog items were researched but left unresolved because they need a business decision or a price the owner holds: which Flavo C version to list (Ultraglican, Melatonin, Forte, Intense, or the Día+Noche ampoule pack — only the generic &quot;Flavo C Sérum 30 Ml&quot; exists today), and the selling prices for the ISDIN Pediatrics stick and the Daeha capsules, for which no reliable Mexican price was found.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>Supabase products table<br>src/app/admin/admin-dashboard.tsx</p>
+            <p><strong>Terminada cuando</strong><br>The owner confirms the Flavo C version and the two prices, the products are published with correct IVA-inclusive pricing and images, and they appear on the storefront.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="pending" data-prioridad="P3" data-categoria="Performance">
+        <div class="tarea-cab">
+          <code>SW-011</code>
+          <div class="etiquetas">
+            <span class="pill prio P3" title="Cuando se pueda">P3</span>
+            <span class="pill est pending">Pendiente</span>
+          </div>
+        </div>
+        <h3>Optimize image delivery and prevent failed product-image fallbacks</h3>
+        <p class="clasif">Performance · Mejora sugerida</p>
+        <p class="detalle">The storefront uses native img elements across product and editorial views. This works, but bypasses Next image sizing/optimization controls. The product-page fallback should also be tested with remote and local URLs. Confirmed by inspection: next/image is not imported anywhere — every image is a plain &lt;img&gt; — so the images.remotePatterns entry in next.config.js is currently inert, and it only lists skinworld.mx while the catalog also serves images from frenchpharmacy.com, www.isdin.com and a lovelyskin.com CDN host plus 38 site-relative paths.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/components/product-card.tsx<br>src/components/search-modal.tsx<br>src/app/producto/[slug]/product-client.tsx<br>src/components/sections/*</p>
+            <p><strong>Terminada cuando</strong><br>A performance measurement identifies the highest-impact images, correct dimensions/loading priority are applied, failed image URLs show an accessible fallback, and mobile Core Web Vitals improve or remain within targets.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Improvement, not a claim of current performance failure.</li><li><span>2026-09-30</span> Added verified detail: zero next/image usage across the app; catalog images span four external hosts plus 38 local paths, none of them covered by the configured remotePatterns.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="pending" data-prioridad="P3" data-categoria="Code quality">
+        <div class="tarea-cab">
+          <code>SW-012</code>
+          <div class="etiquetas">
+            <span class="pill prio P3" title="Cuando se pueda">P3</span>
+            <span class="pill est pending">Pendiente</span>
+          </div>
+        </div>
+        <h3>Replace broad any types in payment and product paths</h3>
+        <p class="clasif">Code quality · Mejora sugerida</p>
+        <p class="detalle">The production build passes, but several payment, product, and order values are typed as any. Stronger domain types and runtime schemas will reduce silent integration regressions.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/api/stripe/webhook/route.ts<br>src/app/api/checkout/route.ts<br>src/app/producto/[slug]/product-client.tsx<br>src/app/admin/pedidos/page.tsx</p>
+            <p><strong>Terminada cuando</strong><br>Affected boundaries use explicit TypeScript types and input schemas; valid checkout, webhook, product, and admin flows continue passing type-check and integration tests.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Improvement derived from source audit; build currently passes.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="pending" data-prioridad="P3" data-categoria="Reliability">
+        <div class="tarea-cab">
+          <code>SW-019</code>
+          <div class="etiquetas">
+            <span class="pill prio P3" title="Cuando se pueda">P3</span>
+            <span class="pill est pending">Pendiente</span>
+          </div>
+        </div>
+        <h3>Move contact and newsletter messages out of object storage</h3>
+        <p class="clasif">Reliability · Mejora sugerida</p>
+        <p class="detalle">Contact messages and newsletter sign-ups are written as individual JSON objects in a private Supabase Storage bucket rather than a table, because the service key can create buckets but not tables. Reading the inbox downloads every object one by one, so the admin screen gets slower with each message and cannot search, sort or paginate.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/lib/mensajes.ts<br>src/app/admin/mensajes/page.tsx</p>
+            <p><strong>Terminada cuando</strong><br>Messages live in a table with an index on the date, the admin screen reads them in one query, and the existing stored objects have been migrated.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P0" data-categoria="Reliability">
+        <div class="tarea-cab">
+          <code>SW-020</code>
+          <div class="etiquetas">
+            <span class="pill prio P0" title="Bloquea la venta">P0</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Point the Stripe webhook at the domain actually served</h3>
+        <p class="clasif">Reliability · Problema detectado</p>
+        <p class="detalle">The Stripe webhook endpoint was registered against https://skinworld.shop, but that apex domain answers 308 and redirects to https://www.skinworld.shop. Stripe does not follow redirects, so every checkout.session.completed delivery failed and no paid order was ever written to the database.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>Stripe webhook endpoint configuration<br>src/app/api/stripe/webhook/route.ts</p>
+            <p><strong>Terminada cuando</strong><br>The registered endpoint points at the served domain and a real paid order is recorded automatically.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Fixed by repointing the endpoint to https://www.skinworld.shop/api/stripe/webhook and resending the pending event; the order appeared in the database immediately and a later real test purchase was recorded automatically. Verified against the Stripe API on 2026-09-30: endpoint enabled on the www host.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P0" data-categoria="Ecommerce">
+        <div class="tarea-cab">
+          <code>SW-021</code>
+          <div class="etiquetas">
+            <span class="pill prio P0" title="Bloquea la venta">P0</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Accept checkout for products whose image is a site-relative path</h3>
+        <p class="clasif">Ecommerce · Problema detectado</p>
+        <p class="detalle">Stripe rejects a checkout session whose line items carry a non-absolute image URL. 38 of the 201 catalog products store their image as a site path such as /images/productos/..., so a cart containing any one of them failed the whole payment with &quot;Error al iniciar el pago&quot;.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/api/checkout/route.ts</p>
+            <p><strong>Terminada cuando</strong><br>A cart containing a product with a site-relative image reaches the Stripe payment page.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Fixed in commit 7768a24 by resolving site-relative paths against the request origin before sending them to Stripe. Verified on production: a cart with such a product returns a Stripe checkout URL.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P1" data-categoria="Reliability">
+        <div class="tarea-cab">
+          <code>SW-022</code>
+          <div class="etiquetas">
+            <span class="pill prio P1" title="Importante">P1</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Stop truncating the shipping address sent to Stripe</h3>
+        <p class="clasif">Reliability · Problema detectado</p>
+        <p class="detalle">The whole shipping address travelled to Stripe as a single JSON string in one metadata key, and Stripe truncates any metadata value over 500 characters. A long but ordinary Mexican address measures around 494 characters, so a slightly longer one would have been cut, failed to parse in the webhook and been stored as an order with no delivery address.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/api/checkout/route.ts<br>src/app/api/stripe/webhook/route.ts</p>
+            <p><strong>Terminada cuando</strong><br>Each address field travels in its own metadata key, the webhook still reads orders written in the old single-string format, and a long address survives the round trip intact.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Fixed in commit 51d4d03 by sending each field in its own metadata key, with the webhook still reading the previous format. Verified against the Stripe API: a long test address arrived complete.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Operations">
+        <div class="tarea-cab">
+          <code>SW-023</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Surface arriving orders on the admin home</h3>
+        <p class="clasif">Operations · Mejora sugerida</p>
+        <p class="detalle">The owner reported a paid order that &quot;did not appear&quot;. The order was stored correctly and did show under the Pedidos screen, but /admin itself gave no sign that anything had arrived, so noticing a sale depended on remembering to open that screen.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/admin/page.tsx<br>src/app/admin/admin-dashboard.tsx</p>
+            <p><strong>Terminada cuando</strong><br>The admin home shows how many orders still need attention and links straight to them, and the count drops as orders are marked shipped.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Fixed in commit f126fb8. The admin home now shows a pending-orders notice and a count on the Pedidos button, both rendered from a live query; confirmed by rendering the panel with the real order data.</li></ul>
+          </div>
+        </details>
+      </article></div>
+    <p class="vacio" id="vacio" hidden>Ninguna tarea coincide con estos filtros.</p>
+
+    <h2>Cambios recientes</h2>
+    <section class="aviso">
+      <ul><li><span>2026-09-30</span> — Re-inspection after the order-tracking, email and postal-code work. Four defects confirmed fixed and verified in production (SW-020 webhook host, SW-021 checkout images, SW-022 address truncation, SW-023 admin visibility). Six new items registered (SW-014 live payments, SW-015 customer email, SW-016 duplicated address form, SW-017 tracking data, SW-018 catalog decisions, SW-019 message storage). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 and SW-013 updated with evidence. A unique constraint on orders.stripe_session_id was probed and confirmed to exist, so no duplicate-order task was opened.</li><li><span>2026-09-30</span> — Initial full source audit: 13 stable tasks registered; type-check and production build passed; no pre-existing task register was found.</li></ul>
+    </section>
+
+    <h2>Cómo se mantiene</h2>
+    <section class="aviso">
+      <p><code>SKINWORLD_TASKS.json</code> es la fuente de verdad y vive en el repositorio. Esta página se genera con <code>node scripts/generate-task-center.mjs</code>.</p>
+      <p>En cada sesión de trabajo: leer primero el JSON, inspeccionar el estado real, actualizar las tareas existentes por su identificador —nunca duplicarlas ni borrar las terminadas— y añadir solo hallazgos respaldados por evidencia. Las reglas completas están en <code>CLAUDE.md</code>.</p>
+    </section>
+  </main>
+  <script>
+    const filtros = { estado: 'todo', prioridad: 'todo', categoria: 'todo' };
+    const tarjetas = [...document.querySelectorAll('.tarea')];
+    const vacio = document.querySelector('#vacio');
+
+    function aplicar() {
+      let visibles = 0;
+      for (const t of tarjetas) {
+        const pasa =
+          (filtros.estado === 'todo' || t.dataset.estado === filtros.estado) &&
+          (filtros.prioridad === 'todo' || t.dataset.prioridad === filtros.prioridad) &&
+          (filtros.categoria === 'todo' || t.dataset.categoria === filtros.categoria);
+        t.hidden = !pasa;
+        if (pasa) visibles++;
+      }
+      vacio.hidden = visibles > 0;
+    }
+
+    for (const grupo of document.querySelectorAll('.grupo[data-eje]')) {
+      const eje = grupo.dataset.eje;
+      grupo.addEventListener('click', (e) => {
+        const boton = e.target.closest('button[data-valor]');
+        if (!boton) return;
+        filtros[eje] = boton.dataset.valor;
+        for (const otro of grupo.querySelectorAll('button[data-valor]')) {
+          otro.setAttribute('aria-pressed', String(otro === boton));
+        }
+        aplicar();
+      });
+    }
+    aplicar();
+  </script>
+</body>
+</html>

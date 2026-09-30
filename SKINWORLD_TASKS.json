@@ -1,0 +1,629 @@
+{
+  "schemaVersion": 2,
+  "project": "SkinWorld",
+  "title": "SkinWorld Task Center",
+  "lastInspectedAt": "2026-09-30T10:40:00-06:00",
+  "lastInspectedBy": "Claude Code re-inspection after the order-tracking, email and postal-code work",
+  "sourceOfTruth": "This file is the durable source of truth. Do not replace it with a new list; update tasks by stable id and retain completed items and history. Every task carries detectedIn, the lastInspectedAt value of the inspection that first registered it, which is what marks a finding as new. The rendered page is published as a Claude artifact at artifactUrl; always republish to that same url instead of creating a second Task Center.",
+  "statusDefinitions": {
+    "pending": "Open work that has been detected or accepted.",
+    "in_progress": "Work has started but the completion criteria have not all been verified.",
+    "completed": "The completion criteria were verified. Keep the task and its history.",
+    "requires_verification": "A material production, operational, or owner confirmation is needed before classifying it as a defect or complete."
+  },
+  "categories": [
+    "Ecommerce",
+    "Security",
+    "Reliability",
+    "SEO",
+    "Accessibility",
+    "Performance",
+    "Content and legal",
+    "Operations",
+    "Code quality"
+  ],
+  "tasks": [
+    {
+      "id": "SW-001",
+      "title": "Make Stripe webhook failures retryable and observable",
+      "kind": "detected_problem",
+      "category": "Reliability",
+      "priority": "P0",
+      "status": "pending",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "origin": [
+        "src/app/api/stripe/webhook/route.ts"
+      ],
+      "details": "The webhook catches failures while reading or writing the order, logs them, and still returns HTTP 200. Stripe therefore treats the event as handled and does not retry it, which can leave a paid order absent from the administration panel.",
+      "doneWhen": "A failed durable order write returns a retryable non-2xx response (or is reliably queued), duplicate deliveries remain idempotent, and a Stripe test event proves that a temporary database failure is retried and recorded with an actionable alert.",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected in initial source audit."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Verified still open. The handler now short-circuits duplicate deliveries and a unique constraint on orders.stripe_session_id was confirmed live, so repeated events are safe; the catch block around the order write still logs and returns HTTP 200, so a database failure is still swallowed without a retry."
+        }
+      ],
+      "detectedIn": "2026-09-30T00:00:00-06:00"
+    },
+    {
+      "id": "SW-002",
+      "title": "Decide and enforce inventory reservation and depletion",
+      "kind": "requires_confirmation",
+      "category": "Ecommerce",
+      "priority": "P0",
+      "status": "requires_verification",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "origin": [
+        "src/app/api/checkout/route.ts",
+        "src/app/api/stripe/webhook/route.ts",
+        "Supabase products/orders"
+      ],
+      "details": "Checkout checks only the current in_stock flag. The inspected payment and webhook flow does not reserve inventory or decrement quantities. This is correct only if inventory is intentionally managed as a simple available/unavailable flag.",
+      "doneWhen": "The owner confirms the inventory model. If quantities are required, payment completion atomically updates stock, overselling is prevented under concurrent checkout, and the admin shows the resulting stock state.",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Needs business-rule confirmation; not asserted as a defect."
+        }
+      ],
+      "detectedIn": "2026-09-30T00:00:00-06:00"
+    },
+    {
+      "id": "SW-003",
+      "title": "Add abuse protection to public write endpoints",
+      "kind": "detected_problem",
+      "category": "Security",
+      "priority": "P1",
+      "status": "pending",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "origin": [
+        "src/app/api/contact/route.ts",
+        "src/app/api/boletin/route.ts",
+        "src/app/api/reviews/route.ts"
+      ],
+      "details": "The endpoints accept unauthenticated writes. Reviews have a honeypot and validation, but none of the three inspected routes applies rate limits, bot verification, or duplicate controls. They can be used to fill storage, create moderation noise, or trigger email notifications.",
+      "doneWhen": "Rate limiting is enforced at an appropriate boundary; contact and newsletter writes have bot/duplicate protection; review moderation policy is implemented; and normal customer submissions still succeed.",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected in initial source audit."
+        }
+      ],
+      "detectedIn": "2026-09-30T00:00:00-06:00"
+    },
+    {
+      "id": "SW-004",
+      "title": "Protect the admin login against repeated password attempts",
+      "kind": "detected_problem",
+      "category": "Security",
+      "priority": "P1",
+      "status": "pending",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "origin": [
+        "src/app/api/admin/login/route.ts",
+        "src/lib/admin-auth.ts"
+      ],
+      "details": "The login route compares a single environment password and returns 401 on failure, with no throttling, lockout, or monitoring. The signed cookie has a browser expiry but its token itself contains no expiry or rotation data.",
+      "doneWhen": "Failed attempts are rate-limited and logged without sensitive data, session revocation/expiry behavior is documented and tested, and the login flow remains usable for the administrator.",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected in initial source audit."
+        }
+      ],
+      "detectedIn": "2026-09-30T00:00:00-06:00"
+    },
+    {
+      "id": "SW-005",
+      "title": "Harden checkout URL construction against untrusted request hosts",
+      "kind": "detected_problem",
+      "category": "Security",
+      "priority": "P1",
+      "status": "pending",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "origin": [
+        "src/app/api/checkout/route.ts"
+      ],
+      "details": "success_url, cancel_url, and local product image URLs are built from the incoming Origin or Host header. Use a configured canonical application URL or an allowlist instead of trusting request-controlled headers. Since the 2026-09-29 image fix, the same host-derived origin is also used to build the absolute product image URLs sent to Stripe, so a spoofed Host header now affects payment-page content as well as the success and cancel URLs.",
+      "doneWhen": "Checkout URLs always use the approved production/preview application origin, unsupported hosts are rejected, and a checkout test confirms the correct return URLs and Stripe image URLs.",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected in initial source audit."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Scope widened: the request-derived origin now also builds the product image URLs sent to Stripe."
+        }
+      ],
+      "detectedIn": "2026-09-30T00:00:00-06:00"
+    },
+    {
+      "id": "SW-006",
+      "title": "Limit checkout-session data exposure",
+      "kind": "detected_problem",
+      "category": "Security",
+      "priority": "P2",
+      "status": "pending",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "origin": [
+        "src/app/api/checkout/session/route.ts",
+        "src/app/pedido-confirmado/order-confirmed-client.tsx"
+      ],
+      "details": "The unauthenticated session lookup returns a payment status, total, and customer email for any supplied Stripe Checkout Session ID. Session IDs are hard to guess, but the endpoint unnecessarily broadens the impact if one appears in logs, analytics, or a referrer.",
+      "doneWhen": "The confirmation view receives only the minimum data it needs, with an authorization or one-time confirmation mechanism as appropriate, and no customer email is exposed by a reusable public endpoint.",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected in initial source audit."
+        }
+      ],
+      "detectedIn": "2026-09-30T00:00:00-06:00"
+    },
+    {
+      "id": "SW-007",
+      "title": "Complete technical SEO metadata and discovery files",
+      "kind": "detected_problem",
+      "category": "SEO",
+      "priority": "P2",
+      "status": "pending",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "origin": [
+        "src/app/layout.tsx",
+        "src/app/producto/[slug]/page.tsx",
+        "src/app/blog/[slug]/page.tsx"
+      ],
+      "details": "The root metadata has basic title and Open Graph text, but the audit found no robots.ts, sitemap.ts, metadataBase, canonical URL handling, Open Graph image, or product/blog-specific metadata generation. Confirmed by inspection: there is no src/app/sitemap.ts and no src/app/robots.ts, metadataBase is not set, and the canonical, author and Open Graph URLs point at https://skinworld.shop, which answers 308 and redirects to https://www.skinworld.shop — the domain actually served in production.",
+      "doneWhen": "robots and sitemap are generated, canonical and social-preview URLs/images resolve correctly, and product/blog pages have accurate unique metadata validated in a production-like build.",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected in initial source audit."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Added verified specifics: missing sitemap/robots routes, missing metadataBase, and apex-vs-www mismatch (apex returns 308 to www, confirmed with a live request)."
+        }
+      ],
+      "detectedIn": "2026-09-30T00:00:00-06:00"
+    },
+    {
+      "id": "SW-008",
+      "title": "Review legal copy for business accuracy and medical relevance",
+      "kind": "detected_problem",
+      "category": "Content and legal",
+      "priority": "P1",
+      "status": "pending",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "origin": [
+        "src/app/terminos/page.tsx",
+        "src/app/privacidad/page.tsx",
+        "src/app/envios/page.tsx"
+      ],
+      "details": "The terms describe a service about physical state and nutrition, which does not match a dermatology ecommerce site. Legal pages also need owner/legal review to confirm the responsible entity, address, providers, returns, delivery commitments, and effective dates. Specific gap confirmed in the privacy notice: the responsible party is given only as \"Skinworld, con domicilio en la Ciudad de México\", without the legal entity name (razón social), RFC or full address that the LFPDPPP requires.",
+      "doneWhen": "A qualified owner or legal reviewer approves text tailored to SkinWorld, and all operational claims match the checkout, shipping, privacy, and provider configuration actually in use.",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected wording mismatch plus legal facts requiring verification."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Recorded the concrete missing fields in the privacy notice: razón social, RFC and full legal domicile."
+        }
+      ],
+      "detectedIn": "2026-09-30T00:00:00-06:00"
+    },
+    {
+      "id": "SW-009",
+      "title": "Verify live payment, webhook, email, and order-fulfillment configuration",
+      "kind": "requires_confirmation",
+      "category": "Operations",
+      "priority": "P0",
+      "status": "requires_verification",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "origin": [
+        ".env.local (names not values)",
+        "src/lib/stripe.ts",
+        "src/lib/correo.ts",
+        "src/app/api/stripe/webhook/route.ts",
+        "src/app/api/admin/probar-correo/route.ts"
+      ],
+      "details": "Live configuration must be confirmed against the real accounts rather than assumed. As of 2026-09-30 the Stripe webhook endpoint, the order write and the store notification email are verified working in production; what remains unconfirmed is the switch to live Stripe keys (tracked separately in SW-014) and customer-facing email delivery (tracked separately in SW-015).",
+      "doneWhen": "A controlled production or staging purchase proves payment, order persistence, staff notification, customer confirmation, status-update emails, and cancellation behavior; deployment logs show the webhook arriving; and secrets remain server-only.",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Marked requires verification; no credentials or live external state were inspected."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Partially verified in production: a real test purchase produced a stored order and the store notification email arrived. Remaining unknowns split into SW-014 (live payments) and SW-015 (customer email)."
+        }
+      ],
+      "detectedIn": "2026-09-30T00:00:00-06:00"
+    },
+    {
+      "id": "SW-010",
+      "title": "Verify responsive and keyboard/screen-reader journeys",
+      "kind": "requires_confirmation",
+      "category": "Accessibility",
+      "priority": "P2",
+      "status": "requires_verification",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "origin": [
+        "src/components/header.tsx",
+        "src/components/search-modal.tsx",
+        "src/components/filters.tsx",
+        "src/components/checkout/shipping-address-form.tsx",
+        "src/app/carrito/page.tsx"
+      ],
+      "details": "The code contains labels for several controls, but the audit did not run an assistive-technology or device matrix. Modal focus handling, mobile menu behavior, filter controls, error announcements, contrast, and full checkout keyboard use need browser verification.",
+      "doneWhen": "The main buyer routes work at mobile and desktop breakpoints using keyboard only; focus is trapped/restored correctly in dialogs; form errors are announced; and an accessibility scan plus manual checks has no unresolved critical issue.",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Browser/device testing was outside this source-only audit."
+        }
+      ],
+      "detectedIn": "2026-09-30T00:00:00-06:00"
+    },
+    {
+      "id": "SW-011",
+      "title": "Optimize image delivery and prevent failed product-image fallbacks",
+      "kind": "improvement_suggestion",
+      "category": "Performance",
+      "priority": "P3",
+      "status": "pending",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "origin": [
+        "src/components/product-card.tsx",
+        "src/components/search-modal.tsx",
+        "src/app/producto/[slug]/product-client.tsx",
+        "src/components/sections/*"
+      ],
+      "details": "The storefront uses native img elements across product and editorial views. This works, but bypasses Next image sizing/optimization controls. The product-page fallback should also be tested with remote and local URLs. Confirmed by inspection: next/image is not imported anywhere — every image is a plain <img> — so the images.remotePatterns entry in next.config.js is currently inert, and it only lists skinworld.mx while the catalog also serves images from frenchpharmacy.com, www.isdin.com and a lovelyskin.com CDN host plus 38 site-relative paths.",
+      "doneWhen": "A performance measurement identifies the highest-impact images, correct dimensions/loading priority are applied, failed image URLs show an accessible fallback, and mobile Core Web Vitals improve or remain within targets.",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Improvement, not a claim of current performance failure."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Added verified detail: zero next/image usage across the app; catalog images span four external hosts plus 38 local paths, none of them covered by the configured remotePatterns."
+        }
+      ],
+      "detectedIn": "2026-09-30T00:00:00-06:00"
+    },
+    {
+      "id": "SW-012",
+      "title": "Replace broad any types in payment and product paths",
+      "kind": "improvement_suggestion",
+      "category": "Code quality",
+      "priority": "P3",
+      "status": "pending",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "origin": [
+        "src/app/api/stripe/webhook/route.ts",
+        "src/app/api/checkout/route.ts",
+        "src/app/producto/[slug]/product-client.tsx",
+        "src/app/admin/pedidos/page.tsx"
+      ],
+      "details": "The production build passes, but several payment, product, and order values are typed as any. Stronger domain types and runtime schemas will reduce silent integration regressions.",
+      "doneWhen": "Affected boundaries use explicit TypeScript types and input schemas; valid checkout, webhook, product, and admin flows continue passing type-check and integration tests.",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Improvement derived from source audit; build currently passes."
+        }
+      ],
+      "detectedIn": "2026-09-30T00:00:00-06:00"
+    },
+    {
+      "id": "SW-013",
+      "title": "Verify all buyer-visible paths after catalog changes",
+      "kind": "requires_confirmation",
+      "category": "Ecommerce",
+      "priority": "P1",
+      "status": "requires_verification",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "origin": [
+        "src/app/page.tsx",
+        "src/components/sections/featured-products.tsx",
+        "src/app/tienda/page.tsx",
+        "src/app/producto/[slug]/page.tsx",
+        "src/app/carrito/page.tsx"
+      ],
+      "details": "The homepage is ISR-cached for one hour while catalog and product views use current server data. This has previously produced stale featured prices after a catalog update. The current source is configured with revalidate = 3600, but freshness must be checked whenever prices or featured products change.",
+      "doneWhen": "After the next approved catalog change, homepage featured cards, catalog, product detail, cart, and hosted checkout all display the intended price and stock state after the documented cache window or an approved revalidation process.",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Existing operational risk retained as a verification task; no present mismatch asserted."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Partial live evidence gathered: /api/codigo-postal returns correct data on production for CDMX, Michoacán, Oaxaca and Sonora, and a checkout session is created successfully from the live site. Full buyer-path verification after catalog changes is still outstanding."
+        }
+      ],
+      "detectedIn": "2026-09-30T00:00:00-06:00"
+    },
+    {
+      "id": "SW-014",
+      "title": "Switch Stripe from test mode to live payments",
+      "kind": "detected_problem",
+      "category": "Operations",
+      "priority": "P0",
+      "status": "pending",
+      "origin": [
+        "src/lib/stripe.ts",
+        "Vercel environment variables",
+        "Stripe account"
+      ],
+      "details": "Queried live on 2026-09-30: the configured Stripe key is a test key and the account reports charges_enabled=false and payouts_enabled=false. Real customers therefore cannot pay — the storefront takes orders only with Stripe test cards. Activating the account requires the owner to connect a bank account, after which the live secret and publishable keys must replace the test ones.",
+      "doneWhen": "The Stripe account reports charges_enabled=true, live keys are set in Vercel, a live-mode webhook endpoint is registered for https://www.skinworld.shop/api/stripe/webhook with its own signing secret stored as STRIPE_WEBHOOK_SECRET, and one real low-value purchase is completed, recorded and refunded.",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected during the 2026-09-30 re-inspection."
+        }
+      ],
+      "detectedIn": "2026-09-30T10:40:00-06:00"
+    },
+    {
+      "id": "SW-015",
+      "title": "Confirm Resend domain verification and customer email delivery",
+      "kind": "requires_confirmation",
+      "category": "Operations",
+      "priority": "P1",
+      "status": "requires_verification",
+      "origin": [
+        "src/lib/correo.ts",
+        "src/lib/pedidos.ts",
+        "Vercel environment variables",
+        "Hostinger DNS zone"
+      ],
+      "details": "RESEND_API_KEY and CONTACT_NOTIFY_EMAIL are set in Vercel and a store notification was received on 2026-09-29, so sending works — but it landed in spam because it was sent from the shared onboarding@resend.dev sender. The three Resend DNS records were confirmed present in public DNS on 2026-09-30 (TXT resend._domainkey plus CNAMEs rsend and send, both to forge.rmta.net), and the Hostinger MX and SPF records were confirmed unchanged. What is not confirmed is whether Resend marked the domain Verified and whether CONTACT_FROM_EMAIL was set; until both are true, Resend refuses mail to anyone other than the account owner, so order confirmations and packed/shipped notices never reach customers.",
+      "doneWhen": "Resend shows skinworld.shop as Verified, CONTACT_FROM_EMAIL is set in Vercel, and a test sent from the admin panel to an outside address arrives in the inbox rather than spam.",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected during the 2026-09-30 re-inspection."
+        }
+      ],
+      "detectedIn": "2026-09-30T10:40:00-06:00"
+    },
+    {
+      "id": "SW-016",
+      "title": "Stop rendering the shipping address form twice on the cart page",
+      "kind": "detected_problem",
+      "category": "Code quality",
+      "priority": "P2",
+      "status": "pending",
+      "origin": [
+        "src/app/carrito/page.tsx",
+        "src/components/checkout/shipping-address-form.tsx"
+      ],
+      "details": "The cart renders <ShippingAddressForm /> twice — once in a lg:hidden block and once inside the desktop summary column — so both copies mount at every viewport and only CSS hides one. Each instance runs its own postal-code lookup effect, so every completed postal code fires two identical requests to /api/codigo-postal and both instances write to the shared store, and per-instance UI state such as the \"write my own colonia\" toggle can diverge between the two copies.",
+      "doneWhen": "The form mounts once per page, a completed postal code triggers exactly one lookup request, and the layout still places it correctly on both mobile and desktop.",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected during the 2026-09-30 re-inspection."
+        }
+      ],
+      "detectedIn": "2026-09-30T10:40:00-06:00"
+    },
+    {
+      "id": "SW-017",
+      "title": "Record tracking numbers and stage timestamps for orders",
+      "kind": "detected_problem",
+      "category": "Operations",
+      "priority": "P2",
+      "status": "pending",
+      "origin": [
+        "src/app/api/admin/pedidos/[id]/route.ts",
+        "src/lib/pedidos.ts",
+        "Supabase orders table"
+      ],
+      "details": "The orders table exposes only id, stripe_session_id, customer_email, customer_phone, shipping_name, shipping_address, amount_total, currency, status, items and created_at. There is nowhere to store a carrier tracking number, so the shipped notification cannot tell the customer how to follow the parcel, and there is no per-stage timestamp, so neither the panel nor the history shows when an order was packed or shipped. Adding these needs a schema change, which the service key used by the app cannot perform.",
+      "doneWhen": "The orders table has columns for a tracking reference and stage timestamps, the admin panel captures the tracking number when marking an order shipped, and the shipped email includes it.",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected during the 2026-09-30 re-inspection."
+        }
+      ],
+      "detectedIn": "2026-09-30T10:40:00-06:00"
+    },
+    {
+      "id": "SW-018",
+      "title": "Resolve the outstanding catalog decisions",
+      "kind": "requires_confirmation",
+      "category": "Content and legal",
+      "priority": "P2",
+      "status": "requires_verification",
+      "origin": [
+        "Supabase products table",
+        "src/app/admin/admin-dashboard.tsx"
+      ],
+      "details": "Three catalog items were researched but left unresolved because they need a business decision or a price the owner holds: which Flavo C version to list (Ultraglican, Melatonin, Forte, Intense, or the Día+Noche ampoule pack — only the generic \"Flavo C Sérum 30 Ml\" exists today), and the selling prices for the ISDIN Pediatrics stick and the Daeha capsules, for which no reliable Mexican price was found.",
+      "doneWhen": "The owner confirms the Flavo C version and the two prices, the products are published with correct IVA-inclusive pricing and images, and they appear on the storefront.",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected during the 2026-09-30 re-inspection."
+        }
+      ],
+      "detectedIn": "2026-09-30T10:40:00-06:00"
+    },
+    {
+      "id": "SW-019",
+      "title": "Move contact and newsletter messages out of object storage",
+      "kind": "improvement_suggestion",
+      "category": "Reliability",
+      "priority": "P3",
+      "status": "pending",
+      "origin": [
+        "src/lib/mensajes.ts",
+        "src/app/admin/mensajes/page.tsx"
+      ],
+      "details": "Contact messages and newsletter sign-ups are written as individual JSON objects in a private Supabase Storage bucket rather than a table, because the service key can create buckets but not tables. Reading the inbox downloads every object one by one, so the admin screen gets slower with each message and cannot search, sort or paginate.",
+      "doneWhen": "Messages live in a table with an index on the date, the admin screen reads them in one query, and the existing stored objects have been migrated.",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected during the 2026-09-30 re-inspection."
+        }
+      ],
+      "detectedIn": "2026-09-30T10:40:00-06:00"
+    },
+    {
+      "id": "SW-020",
+      "title": "Point the Stripe webhook at the domain actually served",
+      "kind": "detected_problem",
+      "category": "Reliability",
+      "priority": "P0",
+      "status": "completed",
+      "origin": [
+        "Stripe webhook endpoint configuration",
+        "src/app/api/stripe/webhook/route.ts"
+      ],
+      "details": "The Stripe webhook endpoint was registered against https://skinworld.shop, but that apex domain answers 308 and redirects to https://www.skinworld.shop. Stripe does not follow redirects, so every checkout.session.completed delivery failed and no paid order was ever written to the database.",
+      "doneWhen": "The registered endpoint points at the served domain and a real paid order is recorded automatically.",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected during the 2026-09-30 re-inspection."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed by repointing the endpoint to https://www.skinworld.shop/api/stripe/webhook and resending the pending event; the order appeared in the database immediately and a later real test purchase was recorded automatically. Verified against the Stripe API on 2026-09-30: endpoint enabled on the www host."
+        }
+      ],
+      "detectedIn": "2026-09-30T10:40:00-06:00"
+    },
+    {
+      "id": "SW-021",
+      "title": "Accept checkout for products whose image is a site-relative path",
+      "kind": "detected_problem",
+      "category": "Ecommerce",
+      "priority": "P0",
+      "status": "completed",
+      "origin": [
+        "src/app/api/checkout/route.ts"
+      ],
+      "details": "Stripe rejects a checkout session whose line items carry a non-absolute image URL. 38 of the 201 catalog products store their image as a site path such as /images/productos/..., so a cart containing any one of them failed the whole payment with \"Error al iniciar el pago\".",
+      "doneWhen": "A cart containing a product with a site-relative image reaches the Stripe payment page.",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected during the 2026-09-30 re-inspection."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed in commit 7768a24 by resolving site-relative paths against the request origin before sending them to Stripe. Verified on production: a cart with such a product returns a Stripe checkout URL."
+        }
+      ],
+      "detectedIn": "2026-09-30T10:40:00-06:00"
+    },
+    {
+      "id": "SW-022",
+      "title": "Stop truncating the shipping address sent to Stripe",
+      "kind": "detected_problem",
+      "category": "Reliability",
+      "priority": "P1",
+      "status": "completed",
+      "origin": [
+        "src/app/api/checkout/route.ts",
+        "src/app/api/stripe/webhook/route.ts"
+      ],
+      "details": "The whole shipping address travelled to Stripe as a single JSON string in one metadata key, and Stripe truncates any metadata value over 500 characters. A long but ordinary Mexican address measures around 494 characters, so a slightly longer one would have been cut, failed to parse in the webhook and been stored as an order with no delivery address.",
+      "doneWhen": "Each address field travels in its own metadata key, the webhook still reads orders written in the old single-string format, and a long address survives the round trip intact.",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected during the 2026-09-30 re-inspection."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed in commit 51d4d03 by sending each field in its own metadata key, with the webhook still reading the previous format. Verified against the Stripe API: a long test address arrived complete."
+        }
+      ],
+      "detectedIn": "2026-09-30T10:40:00-06:00"
+    },
+    {
+      "id": "SW-023",
+      "title": "Surface arriving orders on the admin home",
+      "kind": "improvement_suggestion",
+      "category": "Operations",
+      "priority": "P2",
+      "status": "completed",
+      "origin": [
+        "src/app/admin/page.tsx",
+        "src/app/admin/admin-dashboard.tsx"
+      ],
+      "details": "The owner reported a paid order that \"did not appear\". The order was stored correctly and did show under the Pedidos screen, but /admin itself gave no sign that anything had arrived, so noticing a sale depended on remembering to open that screen.",
+      "doneWhen": "The admin home shows how many orders still need attention and links straight to them, and the count drops as orders are marked shipped.",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected during the 2026-09-30 re-inspection."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed in commit f126fb8. The admin home now shows a pending-orders notice and a count on the Pedidos button, both rendered from a live query; confirmed by rendering the panel with the real order data."
+        }
+      ],
+      "detectedIn": "2026-09-30T10:40:00-06:00"
+    }
+  ],
+  "recentChanges": [
+    {
+      "date": "2026-09-30",
+      "summary": "Re-inspection after the order-tracking, email and postal-code work. Four defects confirmed fixed and verified in production (SW-020 webhook host, SW-021 checkout images, SW-022 address truncation, SW-023 admin visibility). Six new items registered (SW-014 live payments, SW-015 customer email, SW-016 duplicated address form, SW-017 tracking data, SW-018 catalog decisions, SW-019 message storage). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 and SW-013 updated with evidence. A unique constraint on orders.stripe_session_id was probed and confirmed to exist, so no duplicate-order task was opened."
+    },
+    {
+      "date": "2026-09-30",
+      "summary": "Initial full source audit: 13 stable tasks registered; type-check and production build passed; no pre-existing task register was found."
+    }
+  ],
+  "artifactUrl": "https://claude.ai/artifact/Qwf9iMDiXHALkTyGQa79Qx"
+}
