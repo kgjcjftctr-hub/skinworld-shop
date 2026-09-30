@@ -22,19 +22,28 @@ function AccordionGroup({
   defaultOpen?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  const id = `filtro-${title.toLowerCase().replace(/\s+/g, '-')}`;
 
   return (
-    <div className="border-b border-slate-100 py-5 first:pt-0 last:border-b-0">
+    <div className="border-b border-sw-border py-4 first:pt-0 last:border-b-0">
       <button
+        type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex w-full items-center justify-between font-display text-base font-semibold text-ink"
+        aria-expanded={isOpen}
+        aria-controls={id}
+        className="flex min-h-[2.75rem] w-full items-center justify-between font-display text-lg font-semibold text-sw-ink"
       >
         {title}
         <ChevronDown
-          className={cn('h-4 w-4 text-slate-400 transition-transform', isOpen && 'rotate-180')}
+          aria-hidden
+          className={cn('h-4 w-4 text-sw-muted transition-transform duration-sw', isOpen && 'rotate-180')}
         />
       </button>
-      {isOpen && <div className="mt-4">{children}</div>}
+      {isOpen && (
+        <div id={id} className="mt-2">
+          {children}
+        </div>
+      )}
     </div>
   );
 }
@@ -72,46 +81,46 @@ export function Filters({
 
   return (
     <div>
-      <AccordionGroup title="Por Problema" defaultOpen>
-        <ul className="space-y-3">
+      <AccordionGroup title="Por necesidad" defaultOpen>
+        <ul className="space-y-1">
           {categoryOptions.map((item) => (
             <li key={item.name}>
-              <label className="group flex cursor-pointer items-center justify-between">
-                <span className="flex items-center space-x-3">
+              <label className="group flex min-h-[2.5rem] cursor-pointer items-center justify-between gap-3">
+                <span className="flex items-center gap-3">
                   <input
                     type="checkbox"
                     checked={selectedCategories.includes(item.name)}
                     onChange={() => toggleValue('categoria', item.name, selectedCategories)}
-                    className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                    className="!h-[1.125rem] !w-[1.125rem] shrink-0 cursor-pointer !rounded-sw-sm !border-sw-ink/40 !p-0 accent-[rgb(var(--sw-pink-deep))]"
                   />
-                  <span className="text-sm text-slate-700 transition-colors group-hover:text-primary-700">
+                  <span className="text-sw-small text-sw-text transition-colors group-hover:text-sw-pink-deep">
                     {item.name}
                   </span>
                 </span>
-                <span className="text-xs text-slate-400">{item.count}</span>
+                <span className="text-sw-xs tabular-nums text-sw-muted">{item.count}</span>
               </label>
             </li>
           ))}
         </ul>
       </AccordionGroup>
 
-      <AccordionGroup title="Por Marca">
-        <ul className="space-y-3">
+      <AccordionGroup title="Por laboratorio" defaultOpen={selectedBrands.length > 0}>
+        <ul className="space-y-1">
           {brandOptions.map((item) => (
             <li key={item.name}>
-              <label className="group flex cursor-pointer items-center justify-between">
-                <span className="flex items-center space-x-3">
+              <label className="group flex min-h-[2.5rem] cursor-pointer items-center justify-between gap-3">
+                <span className="flex items-center gap-3">
                   <input
                     type="checkbox"
                     checked={selectedBrands.includes(item.name)}
                     onChange={() => toggleValue('marca', item.name, selectedBrands)}
-                    className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                    className="!h-[1.125rem] !w-[1.125rem] shrink-0 cursor-pointer !rounded-sw-sm !border-sw-ink/40 !p-0 accent-[rgb(var(--sw-pink-deep))]"
                   />
-                  <span className="text-sm text-slate-700 transition-colors group-hover:text-primary-700">
+                  <span className="text-sw-small text-sw-text transition-colors group-hover:text-sw-pink-deep">
                     {item.name}
                   </span>
                 </span>
-                <span className="text-xs text-slate-400">{item.count}</span>
+                <span className="text-sw-xs tabular-nums text-sw-muted">{item.count}</span>
               </label>
             </li>
           ))}
@@ -119,11 +128,8 @@ export function Filters({
       </AccordionGroup>
 
       {hasFilters && (
-        <button
-          onClick={handleClearFilters}
-          className="mt-6 w-full rounded-md border border-ink/20 py-2.5 font-accent text-sm font-semibold text-ink transition-colors hover:border-ink"
-        >
-          Limpiar Filtros
+        <button type="button" onClick={handleClearFilters} className="sw-btn sw-btn-secondary mt-6 h-11 w-full">
+          Quitar filtros
         </button>
       )}
     </div>

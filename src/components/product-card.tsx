@@ -119,11 +119,14 @@ export function ProductCard({
       </div>
 
       <div className="flex flex-1 flex-col pt-3 sm:pt-4">
-        {product.brand && (
-          <p className="mb-1 truncate text-[0.6875rem] font-semibold tracking-wide text-sw-muted sm:text-sw-xs">
-            {product.brand}
-          </p>
-        )}
+        {/* El renglón de la marca siempre ocupa su lugar, aunque el producto no
+            tenga marca, para que los nombres queden alineados en la cuadrícula. */}
+        <p
+          aria-hidden={product.brand ? undefined : true}
+          className="mb-1 truncate text-[0.6875rem] font-semibold tracking-wide text-sw-muted sm:text-sw-xs"
+        >
+          {product.brand || '\u00a0'}
+        </p>
         <h3 className="line-clamp-2 min-h-[2.5em] font-display text-[0.9375rem] font-semibold leading-[1.25] text-sw-ink sm:text-[1.0625rem]">
           <Link
             href={enlace}

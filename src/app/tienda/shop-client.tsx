@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
 import { SlidersHorizontal, X } from 'lucide-react';
 import { Filters } from '@/components/filters';
 import { ProductCard } from '@/components/product-card';
@@ -58,81 +59,143 @@ export function ShopClient({
   }, [products, selectedCategories, selectedBrands]);
 
   const filterProps = { selectedCategories, selectedBrands, categoryOptions, brandOptions };
+  const filtrosActivos = [...selectedCategories, ...selectedBrands];
 
   return (
-    <div className="min-h-screen bg-white py-12">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-10 flex items-end justify-between">
+    <div className="pb-sw-section pt-10 sm:pt-14">
+      <div className="sw-container">
+        <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 border-b border-sw-border pb-6 sm:pb-8">
           <div>
-            <h1 className="mb-3 font-display text-4xl font-bold text-ink">Tienda</h1>
-            <p className="text-slate-600">
+            <p className="sw-label">Catálogo</p>
+            <h1 className="mt-2 font-display text-sw-h1 font-semibold text-sw-ink">Tienda</h1>
+            <p className="mt-3 text-sw-body text-sw-muted" aria-live="polite">
               {filteredProducts.length} producto{filteredProducts.length !== 1 && 's'} disponible
               {filteredProducts.length !== 1 && 's'}
+              {filtrosActivos.length > 0 && (
+                <>
+                  {' '}en <span className="font-semibold text-sw-ink">{filtrosActivos.join(', ')}</span>
+                  {'. '}
+                  <Link href="/tienda" className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
+                    Quitar filtros
+                  </Link>
+                </>
+              )}
             </p>
           </div>
 
-          {/* Mobile filter trigger */}
           <button
+            type="button"
             onClick={() => setIsDrawerOpen(true)}
-            className="inline-flex shrink-0 items-center gap-2 rounded-md border border-ink/20 px-4 py-2.5 font-accent text-sm font-semibold text-ink lg:hidden"
+            aria-haspopup="dialog"
+            aria-expanded={isDrawerOpen}
+            className="sw-btn sw-btn-secondary h-11 lg:hidden"
           >
-            <SlidersHorizontal className="h-4 w-4" />
-            Ver Filtros
+            <SlidersHorizontal className="h-4 w-4" aria-hidden />
+            Filtrar
+            {filtrosActivos.length > 0 && (
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-sw-pink-deep px-1.5 text-[0.6875rem] font-bold tabular-nums text-white">
+                {filtrosActivos.length}
+              </span>
+            )}
           </button>
         </div>
 
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-4">
-          {/* Desktop Sidebar */}
-          <aside className="hidden lg:col-span-1 lg:block">
-            <div className="sticky top-28">
+        <div className="mt-8 grid grid-cols-1 gap-10 lg:mt-10 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[16.5rem_minmax(0,1fr)]">
+          <aside aria-label="Filtros" className="hidden lg:block">
+            <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pb-6 pr-2">
               <Filters {...filterProps} />
             </div>
           </aside>
 
-          {/* Main Content */}
-          <main className="lg:col-span-3">
+          <section aria-label="Productos">
             {filteredProducts.length === 0 ? (
-              <div className="py-12 text-center">
-                <p className="text-lg text-slate-600">No hay productos con estos filtros</p>
+              <div className="rounded-sw-lg border border-dashed border-sw-border px-6 py-16 text-center">
+                <p className="font-display text-2xl text-sw-ink">No hay productos con estos filtros</p>
+                <Link href="/tienda" className="sw-link mt-4 inline-block">
+                  Ver todo el catálogo
+                </Link>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-                {filteredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+              <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-12">
+                {filteredProducts.map((product, i) => (
+                  <ProductCard key={product.id} product={product} prioritaria={i < 4} />
                 ))}
               </div>
             )}
-          </main>
+          </section>
         </div>
       </div>
 
-      {/* Mobile Filter Drawer */}
-      {isDrawerOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <div
-            className="absolute inset-0 bg-black/40 animate-fade-in"
-            onClick={() => setIsDrawerOpen(false)}
-          />
-          <div className="absolute right-0 top-0 flex h-full w-full max-w-sm flex-col bg-white p-6 shadow-xl animate-slide-in-right">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="font-display text-lg font-semibold text-ink">Filtrar</h2>
-              <button onClick={() => setIsDrawerOpen(false)} aria-label="Cerrar">
-                <X className="h-5 w-5 text-slate-500" />
-              </button>
-            </div>
-            <div className="flex-1 overflow-y-auto">
-              <Filters {...filterProps} />
-            </div>
-            <button
-              onClick={() => setIsDrawerOpen(false)}
-              className="btn btn-primary mt-6 w-full"
-            >
-              Ver {filteredProducts.length} producto{filteredProducts.length !== 1 && 's'}
-            </button>
-          </div>
+      {isDrawerOpen && <CajonDeFiltros onClose={() => setIsDrawerOpen(false)} total={filteredProducts.length}>
+        <Filters {...filterProps} />
+      </CajonDeFiltros>}
+    </div>
+  );
+}
+
+/**
+ * Panel de filtros del celular: diálogo que se cierra con Escape, con el
+ * fondo o con el botón, bloquea el scroll de la página mientras está abierto
+ * y devuelve el foco al botón que lo abrió.
+ */
+function CajonDeFiltros({
+  onClose,
+  total,
+  children,
+}: {
+  onClose: () => void;
+  total: number;
+  children: React.ReactNode;
+}) {
+  const panel = useRef<HTMLDivElement>(null);
+  // La función de cierre cambia en cada render del padre; se guarda en una
+  // referencia para que el efecto corra una sola vez al abrir el panel.
+  const cerrar = useRef(onClose);
+  cerrar.current = onClose;
+
+  useEffect(() => {
+    const previo = document.activeElement as HTMLElement | null;
+    panel.current?.querySelector<HTMLElement>('button')?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') cerrar.current();
+    };
+    document.addEventListener('keydown', onKey);
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = overflow;
+      previo?.focus();
+    };
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-[60] lg:hidden" role="dialog" aria-modal="true" aria-labelledby="filtros-titulo">
+      <div className="absolute inset-0 bg-sw-ink/40 animate-fade-in" onClick={onClose} aria-hidden />
+      <div
+        ref={panel}
+        className="absolute inset-y-0 right-0 flex w-full max-w-sm flex-col bg-sw-warm-white shadow-sw-md animate-slide-in-right"
+      >
+        <div className="flex items-center justify-between border-b border-sw-border px-5 py-4">
+          <h2 id="filtros-titulo" className="font-display text-xl font-semibold text-sw-ink">
+            Filtrar
+          </h2>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Cerrar filtros"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full text-sw-ink hover:bg-sw-pink-pale"
+          >
+            <X className="h-5 w-5" />
+          </button>
         </div>
-      )}
+        <div className="flex-1 overflow-y-auto px-5 py-5">{children}</div>
+        <div className="border-t border-sw-border p-5">
+          <button type="button" onClick={onClose} className="sw-btn sw-btn-primary h-12 w-full">
+            Ver {total} producto{total !== 1 && 's'}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
