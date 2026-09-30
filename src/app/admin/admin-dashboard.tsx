@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { Pencil, Plus, Trash2, LogOut, X, Receipt, Mail, Send } from 'lucide-react';
+import { Pencil, Plus, Trash2, LogOut, X, Receipt, Mail, Send, Package } from 'lucide-react';
 import { formatPrice } from '@/utils';
 import type { Product } from '@/types';
 
@@ -59,7 +59,13 @@ function productToForm(p: AdminProduct): FormState {
   };
 }
 
-export function AdminDashboard({ initialProducts }: { initialProducts: AdminProduct[] }) {
+export function AdminDashboard({
+  initialProducts,
+  pedidosPendientes = 0,
+}: {
+  initialProducts: AdminProduct[];
+  pedidosPendientes?: number;
+}) {
   const router = useRouter();
   const [products, setProducts] = useState(initialProducts);
   const [search, setSearch] = useState('');
@@ -200,6 +206,17 @@ export function AdminDashboard({ initialProducts }: { initialProducts: AdminProd
           <div>
             <h1 className="font-display text-3xl font-bold text-ink">Panel de administración</h1>
             <p className="text-slate-500">{products.length} productos en tu tienda</p>
+            {pedidosPendientes > 0 && (
+              <Link
+                href="/admin/pedidos"
+                className="mt-2 inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1.5 text-sm font-semibold text-amber-900 ring-1 ring-amber-200 transition-colors hover:bg-amber-100"
+              >
+                <Package className="h-4 w-4" />
+                {pedidosPendientes === 1
+                  ? '1 pedido pendiente por atender'
+                  : `${pedidosPendientes} pedidos pendientes por atender`}
+              </Link>
+            )}
           </div>
           <div className="flex items-center gap-3">
             <Link
@@ -208,6 +225,11 @@ export function AdminDashboard({ initialProducts }: { initialProducts: AdminProd
             >
               <Receipt className="h-4 w-4" />
               Pedidos
+              {pedidosPendientes > 0 && (
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary-600 px-1.5 text-[11px] font-bold text-white">
+                  {pedidosPendientes}
+                </span>
+              )}
             </Link>
             <Link
               href="/admin/mensajes"
