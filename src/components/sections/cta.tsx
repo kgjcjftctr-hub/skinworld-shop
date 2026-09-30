@@ -1,39 +1,39 @@
-'use client';
-
 import Link from 'next/link';
-import { Reveal } from '@/components/reveal';
+import { ArrowRight } from 'lucide-react';
+import { Mariposa } from '@/components/ui/mariposa';
 
-const trustSignals = ['100% Original', 'Envío Gratis en CDMX', 'Atención Lun-Vie 10-18h'];
+// Mismas promesas que ya mostraba el sitio; no se agrega ninguna.
+const trustSignals = ['100% original', 'Envío gratis en CDMX', 'Atención lunes a viernes, 10 a 18 h'];
 
 export function CTASection() {
   return (
-    <section className="relative overflow-hidden bg-ink py-20 sm:py-28">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,theme(colors.primary.900),transparent)] opacity-60" />
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Reveal className="text-center">
-          <span className="mb-6 inline-block h-px w-10 bg-gold-500" />
-          <h2 className="mb-5 font-display text-4xl font-bold text-white sm:text-5xl">
-            Comienza tu transformación hoy
-          </h2>
-          <p className="mb-10 text-lg text-white/70">
-            Productos dermatológicos respaldados por criterio médico profesional.
-          </p>
-
-          <Link
-            href="/tienda"
-            className="inline-flex items-center justify-center gap-2 rounded-md bg-gold-500 px-10 py-4 font-accent text-sm font-semibold text-ink shadow-gold transition-all duration-300 hover:-translate-y-0.5 hover:bg-gold-400 hover:shadow-gold"
-          >
-            <span>Explorar Tienda</span>
-          </Link>
-
-          <div className="mx-auto mt-14 flex max-w-xl flex-col items-center justify-center gap-3 text-sm text-white/60 sm:flex-row sm:gap-0 sm:divide-x sm:divide-white/15">
-            {trustSignals.map((signal) => (
-              <span key={signal} className="font-accent font-semibold sm:px-6">
-                {signal}
-              </span>
-            ))}
-          </div>
-        </Reveal>
+    <section aria-labelledby="cierre-titulo" className="relative overflow-hidden bg-sw-pink">
+      <Mariposa className="pointer-events-none absolute -bottom-[18%] -right-[6%] w-[min(38rem,70vw)] text-sw-pink-soft/60" />
+      <div className="sw-container relative py-sw-section">
+        <h2
+          id="cierre-titulo"
+          className="max-w-[14ch] font-display text-sw-h1 font-semibold text-sw-ink"
+        >
+          Comienza tu transformación hoy
+        </h2>
+        <p className="mt-5 max-w-sw-prose text-sw-lead text-sw-ink/80">
+          Productos dermatológicos respaldados por criterio médico profesional.
+        </p>
+        <Link
+          href="/tienda"
+          className="sw-btn mt-8 h-12 bg-sw-ink px-7 text-[0.9375rem] text-sw-warm-white hover:bg-sw-pink-deep"
+        >
+          Explorar la tienda
+          <ArrowRight className="h-4 w-4" aria-hidden />
+        </Link>
+        <ul className="mt-12 flex flex-col gap-2 text-sw-small font-semibold text-sw-ink sm:flex-row sm:flex-wrap sm:gap-x-8">
+          {trustSignals.map((signal) => (
+            <li key={signal} className="flex items-center gap-2">
+              <Mariposa className="h-2.5 w-auto text-sw-ink/70" />
+              {signal}
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

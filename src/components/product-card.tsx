@@ -20,9 +20,12 @@ import type { Product } from '@/types';
 export function ProductCard({
   product,
   prioritaria = false,
+  variante = 'estandar',
 }: {
   product: Product & Record<string, any>;
   prioritaria?: boolean;
+  /** 'destacada' ocupa una columna completa con foto grande y descripción. */
+  variante?: 'estandar' | 'destacada';
 }) {
   const addItem = useCart((state) => state.addItem);
 
@@ -42,6 +45,62 @@ export function ProductCard({
   };
 
   const enlace = `/producto/${encodeURIComponent(product.slug)}`;
+
+  if (variante === 'destacada') {
+    return (
+      <article className="group relative grid gap-5 sm:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] sm:items-center sm:gap-8">
+        <div className="relative aspect-square overflow-hidden rounded-sw border border-sw-border bg-sw-white">
+          {discount > 0 && (
+            <span className="absolute left-3 top-3 z-10 rounded-full bg-sw-pink-deep px-3 py-1 text-sw-xs font-bold tabular-nums text-white">
+              -{discount}%
+            </span>
+          )}
+          <ImagenProducto
+            src={product.image}
+            alt=""
+            prioritaria={prioritaria}
+            className="h-full w-full object-contain p-[9%] transition-transform duration-sw-slow ease-sw [@media(hover:hover)]:group-hover:scale-[1.03]"
+          />
+        </div>
+        <div>
+          {product.brand && (
+            <p className="text-sw-xs font-semibold tracking-wide text-sw-muted">{product.brand}</p>
+          )}
+          <h3 className="mt-2 font-display text-sw-h3 font-semibold text-sw-ink">
+            <Link
+              href={enlace}
+              className="rounded-sw-sm text-sw-ink after:absolute after:inset-0 after:z-0 after:content-[''] hover:text-sw-pink-deep group-hover:text-sw-pink-deep"
+            >
+              {product.name}
+            </Link>
+          </h3>
+          {product.category && <p className="mt-1 text-sw-small text-sw-muted">{product.category}</p>}
+          {product.description && (
+            <p className="mt-4 line-clamp-3 text-sw-body text-sw-text">{product.description}</p>
+          )}
+          <p className="mt-5 flex flex-wrap items-baseline gap-x-2">
+            <span className="text-xl font-semibold tabular-nums text-sw-ink">{formatPrice(priceWithIVA)}</span>
+            {compareAtPriceWithIVA && (
+              <span className="text-sw-small tabular-nums text-sw-muted line-through">
+                <span className="sr-only">Antes </span>
+                {formatPrice(compareAtPriceWithIVA)}
+              </span>
+            )}
+            <span className="text-sw-xs text-sw-muted">IVA incluido</span>
+          </p>
+          <button
+            type="button"
+            onClick={handleAddToCart}
+            aria-label={`Agregar ${product.name} al carrito`}
+            className="sw-btn sw-btn-primary relative z-10 mt-5 h-12"
+          >
+            <ShoppingBag className="h-4 w-4" aria-hidden />
+            Agregar al carrito
+          </button>
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article className="group relative flex h-full flex-col">

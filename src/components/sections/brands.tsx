@@ -1,87 +1,137 @@
 import Link from 'next/link';
-import { Reveal } from '@/components/reveal';
+import { ArrowUpRight } from 'lucide-react';
 import { ImagenProducto } from '@/components/imagen-producto';
-import type { ResumenDeMarca } from '@/lib/products';
+import type { MarcaDelEscaparate } from '@/lib/escaparate';
+import { cn } from '@/utils';
 
 const enlaceDeMarca = (nombre: string) => `/tienda?marca=${encodeURIComponent(nombre)}`;
-
-const plural = (n: number) => (n === 1 ? '1 producto' : `${n} productos`);
+const productos = (n: number) => `${n} ${n === 1 ? 'producto' : 'productos'}`;
+// Evita que "LA ROCHE-POSAY" se parta en el guion: un word joiner (U+2060)
+// después del guion quita ese punto de corte sin cambiar lo que se ve.
+const sinCorteEnGuion = (nombre: string) => nombre.replace(/-/g, '-\u2060');
 
 /**
- * Laboratorios que la tienda tiene. Los cuatro con más catálogo se muestran con
- * la foto de uno de sus productos, porque el empaque es como el cliente los
- * reconoce; el resto va como índice, para que quien busca una marca concreta la
- * encuentre sin tener que entrar a la tienda a ver si está.
+ * Los laboratorios de la tienda, calculados del catálogo. Es el momento de
+ * contraste de la página: fondo carbón, el nombre de cada laboratorio a gran
+ * escala y una foto real de uno de sus productos. No se usan logotipos ni
+ * campañas de las marcas, porque no hay material autorizado para eso.
  */
-export function BrandsSection({ marcas }: { marcas: ResumenDeMarca[] }) {
+export function BrandsSection({ marcas }: { marcas: MarcaDelEscaparate[] }) {
   if (marcas.length === 0) return null;
 
-  const destacadas = marcas.slice(0, 4);
+  const principales = marcas.slice(0, 4);
   const resto = marcas.slice(4);
 
   return (
-    <section className="bg-slate-50 py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Reveal className="mb-14 max-w-2xl">
-          <div className="mb-5 flex items-center gap-3">
-            <span className="h-px w-10 bg-gold-500" />
-            <span className="font-accent text-xs font-semibold uppercase tracking-[0.2em] text-primary-700">
-              Marcas
-            </span>
-          </div>
-          <h2 className="mb-5 font-display text-4xl font-bold text-ink sm:text-5xl">
+    <section aria-labelledby="marcas-titulo" className="sw-section bg-sw-charcoal text-sw-cream">
+      <div className="sw-container">
+        <div className="max-w-2xl">
+          <p className="font-sans text-sw-small font-semibold text-sw-pink">Laboratorios</p>
+          <h2 id="marcas-titulo" className="mt-3 font-display text-sw-h2 font-semibold text-sw-cream">
             Los laboratorios que trabajamos
           </h2>
-          <p className="text-slate-600">
-            {marcas.length} laboratorios dermocosméticos, elegidos por su respaldo clínico. Si tu
-            dermatóloga te recetó una marca, búscala aquí.
+          <p className="mt-4 text-sw-body text-sw-cream-muted">
+            {marcas.length} laboratorios dermatológicos en la tienda. Cada uno lleva a su catálogo
+            completo.
           </p>
-        </Reveal>
-
-        <div className="mb-12 grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4 lg:gap-x-8">
-          {destacadas.map((marca, i) => (
-            <Reveal key={marca.nombre} delay={i * 80}>
-              <Link href={enlaceDeMarca(marca.nombre)} className="group block">
-                <div className="mb-5 aspect-[3/4] overflow-hidden rounded-sm bg-white">
-                  <ImagenProducto
-                    src={marca.imagen}
-                    alt={marca.nombre}
-                    className="h-full w-full object-contain p-6 transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
-                </div>
-                {/* Dos líneas fijas: los nombres largos no desalinean el número
-                    de productos respecto a las marcas de al lado. */}
-                <h3 className="line-clamp-2 min-h-[2.4em] font-display text-xl font-semibold leading-tight text-ink group-hover:text-primary-700">
-                  {marca.nombre}
-                </h3>
-                <p className="mt-1 text-sm tabular-nums text-slate-500">{plural(marca.productos)}</p>
-              </Link>
-            </Reveal>
-          ))}
         </div>
 
+        <ul className="mt-12 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:grid-rows-2">
+          {principales.map((marca, i) => (
+            <li
+              key={marca.nombre}
+              className={cn(
+                i === 0 && 'col-span-2 lg:row-span-2',
+                i === 3 && 'col-span-2'
+              )}
+            >
+              <BloqueDeMarca marca={marca} grande={i === 0} ancho={i === 3} />
+            </li>
+          ))}
+        </ul>
+
         {resto.length > 0 && (
-          <Reveal>
-            <div className="border-t border-slate-200 pt-8">
-              <ul className="flex flex-wrap gap-x-8 gap-y-3">
-                {resto.map((marca) => (
-                  <li key={marca.nombre}>
-                    <Link
-                      href={enlaceDeMarca(marca.nombre)}
-                      className="group inline-flex items-baseline gap-2 text-slate-700 transition-colors hover:text-primary-700"
-                    >
-                      <span className="font-display text-lg">{marca.nombre}</span>
-                      <span className="text-xs tabular-nums text-slate-400 group-hover:text-primary-600">
-                        {marca.productos}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
+          <div className="mt-12 border-t border-sw-cream/15 pt-8">
+            <h3 className="text-sw-small font-semibold text-sw-cream-muted">Más laboratorios</h3>
+            <ul className="mt-5 grid grid-cols-1 gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
+              {resto.map((marca) => (
+                <li key={marca.nombre} className="border-b border-sw-cream/10">
+                  <Link
+                    href={enlaceDeMarca(marca.nombre)}
+                    className="group flex min-h-[3.25rem] items-baseline justify-between gap-4 py-3 text-sw-cream"
+                  >
+                    <span className="font-display text-xl transition-colors duration-sw-fast group-hover:text-sw-pink">
+                      {sinCorteEnGuion(marca.nombre)}
+                    </span>
+                    <span className="text-sw-small tabular-nums text-sw-cream-muted">
+                      {productos(marca.productos)}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
     </section>
+  );
+}
+
+function BloqueDeMarca({
+  marca,
+  grande,
+  ancho,
+}: {
+  marca: MarcaDelEscaparate;
+  grande: boolean;
+  ancho: boolean;
+}) {
+  return (
+    <Link
+      href={enlaceDeMarca(marca.nombre)}
+      className={cn(
+        'group relative flex h-full overflow-hidden rounded-sw bg-sw-white text-sw-ink',
+        ancho ? 'flex-row' : 'flex-col'
+      )}
+    >
+      <span
+        className={cn(
+          'relative block overflow-hidden bg-sw-white',
+          grande ? 'aspect-[4/3] sm:aspect-square lg:aspect-auto lg:flex-1' : 'aspect-square',
+          ancho && 'aspect-auto min-h-[10rem] w-1/2 sm:min-h-[12rem]'
+        )}
+      >
+        <ImagenProducto
+          src={marca.muestra?.image}
+          alt=""
+          className={cn(
+            'absolute inset-0 h-full w-full object-contain transition-transform duration-sw-slow ease-sw [@media(hover:hover)]:group-hover:scale-[1.04]',
+            grande ? 'p-[12%]' : 'p-[14%]'
+          )}
+        />
+      </span>
+      <span
+        className={cn(
+          'flex flex-col justify-end border-t border-sw-border p-4 sm:p-5',
+          ancho && 'w-1/2 border-l border-t-0'
+        )}
+      >
+        <span
+          className={cn(
+            'font-display font-semibold leading-[1.05] tracking-tight transition-colors duration-sw-fast group-hover:text-sw-pink-deep',
+            grande ? 'text-[clamp(2rem,1.2rem+3.4vw,4.25rem)]' : 'text-[clamp(1.125rem,0.95rem+0.8vw,1.625rem)]'
+          )}
+        >
+          {sinCorteEnGuion(marca.nombre)}
+        </span>
+        <span className="mt-4 flex items-center justify-between gap-3 text-sw-small text-sw-muted">
+          <span className="tabular-nums">{productos(marca.productos)}</span>
+          <ArrowUpRight
+            aria-hidden
+            className="h-5 w-5 text-sw-pink-deep transition-transform duration-sw ease-sw group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+          />
+        </span>
+      </span>
+    </Link>
   );
 }

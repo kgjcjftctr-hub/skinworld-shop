@@ -1,79 +1,162 @@
-'use client';
-
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { Mariposa } from '@/components/ui/mariposa';
+import type { Product } from '@/types';
 
-export function HeroSection({ productCount }: { productCount: number }) {
-  const trustSignals = [
-    `${productCount} productos curados`,
+type ProductoDePortada = Product & Record<string, any>;
+
+/**
+ * Espacio preparado para una fotografía o video propios de Skinworld. Mientras
+ * sea null, la portada se arma con productos reales del catálogo sobre el rosa
+ * de la marca. Para usar una foto: súbela a /public/images/ y pon aquí
+ * { src: '/images/portada.jpg', alt: 'Descripción de la foto' }.
+ */
+const FOTOGRAFIA_DE_PORTADA: { src: string; alt: string } | null = null;
+
+const retraso = (ms: number) => ({ animationDelay: `${ms}ms` });
+
+export function HeroSection({
+  productCount,
+  portada,
+}: {
+  productCount: number;
+  portada: ProductoDePortada[];
+}) {
+  const senales = [
+    `${productCount} productos seleccionados`,
     '25 años de trayectoria clínica',
     'Respaldo dermatológico certificado',
   ];
 
   return (
-    <section className="relative flex min-h-[72vh] items-center overflow-hidden bg-white">
-      {/* Layered premium background: soft radial glow + fine grid texture */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,theme(colors.primary.100),transparent)]" />
-      <div
-        className="absolute inset-0 opacity-[0.35]"
-        style={{
-          backgroundImage:
-            'linear-gradient(to right, rgba(26,26,26,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(26,26,26,0.03) 1px, transparent 1px)',
-          backgroundSize: '64px 64px',
-        }}
-      />
-      <svg
-        className="pointer-events-none absolute -right-24 -top-24 h-[460px] w-[460px] text-primary-900 opacity-[0.05]"
-        viewBox="0 0 200 200"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          fill="currentColor"
-          d="M45.4,-58.5C58.2,-49.6,67.2,-34.5,70.9,-18.1C74.6,-1.7,73,16,65.4,30.8C57.8,45.6,44.3,57.5,29.1,63.9C13.9,70.3,-3,71.2,-19.2,67.1C-35.3,63,-50.7,53.9,-60.5,40.4C-70.4,26.9,-74.7,9,-71.9,-7.4C-69.1,-23.8,-59.2,-38.7,-46.1,-47.8C-33,-56.9,-16.5,-60.2,0.7,-61.1C17.9,-62,35.8,-60.5,45.4,-58.5Z"
-          transform="translate(100 100)"
-        />
-      </svg>
-
-      <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <div className="max-w-2xl">
-          <div className="mb-7 flex items-center gap-3">
-            <span className="h-px w-10 bg-gold-500" />
-            <span className="font-accent text-xs font-semibold uppercase tracking-[0.2em] text-primary-700">
-              Dermatología Profesional
-            </span>
-          </div>
-          <h1 className="mb-6 font-display text-5xl font-bold leading-[1.08] tracking-tight text-ink sm:text-6xl lg:text-7xl">
-            Cuidado dermatológico <span className="italic text-primary-700">sin compromisos</span>
+    <section className="overflow-hidden">
+      <div className="sw-container grid items-center gap-10 pb-sw-section pt-10 sm:pt-14 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-16 lg:pt-16">
+        <div>
+          <p className="sw-label animate-sw-rise" style={retraso(0)}>
+            Dermatología profesional
+          </p>
+          <h1
+            className="mt-4 font-display text-[clamp(2.75rem,2.2rem+2.7vw,4.875rem)] font-semibold leading-[1.02] tracking-[-0.025em] text-sw-ink animate-sw-rise"
+            style={retraso(60)}
+          >
+            Cuidado dermatológico sin compromisos
           </h1>
-          <p className="mb-10 max-w-lg text-lg leading-relaxed text-slate-600">
-            Productos seleccionados con criterio médico por la Dra. Karina Alfaro López, para una piel tratada con ciencia y precisión.
+          <p
+            className="mt-6 max-w-[34rem] text-sw-lead text-sw-muted animate-sw-rise"
+            style={retraso(120)}
+          >
+            Productos seleccionados con criterio médico por la Dra. Karina Alfaro López, para una
+            piel tratada con ciencia y precisión.
           </p>
 
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            <Link
-              href="/tienda"
-              className="group inline-flex items-center justify-center gap-2 rounded-md bg-ink px-8 py-4 font-accent text-sm font-semibold text-white shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-800 hover:shadow-card-hover"
-            >
-              <span>Explorar Productos</span>
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          <div
+            className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6 animate-sw-rise"
+            style={retraso(180)}
+          >
+            <Link href="/tienda" className="sw-btn sw-btn-primary h-12 px-7 text-[0.9375rem]">
+              Explorar productos
+              <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
-            <Link
-              href="/sobre-nosotros"
-              className="inline-flex items-center justify-center gap-2 px-2 py-2 font-accent text-sm font-semibold text-ink underline decoration-slate-300 decoration-1 underline-offset-8 transition-colors hover:decoration-gold-500"
-            >
-              <span>Conocer a la Dra. Karina</span>
+            <Link href="/sobre-nosotros" className="sw-link self-center py-2 text-[0.9375rem]">
+              Conocer a la Dra. Karina
             </Link>
           </div>
 
-          <div className="mt-16 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-slate-200 pt-8">
-            {trustSignals.map((signal) => (
-              <span key={signal} className="font-accent text-xs font-semibold uppercase tracking-wider text-slate-500">
-                {signal}
-              </span>
+          <ul
+            className="mt-10 grid gap-2 border-t border-sw-border pt-6 text-sw-small text-sw-muted sm:mt-12 sm:flex sm:flex-wrap sm:gap-x-8 animate-sw-rise"
+            style={retraso(240)}
+          >
+            {senales.map((senal) => (
+              <li key={senal} className="flex items-center gap-2">
+                <Mariposa className="h-2.5 w-auto shrink-0 text-sw-pink" />
+                {senal}
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
+
+        <Composicion portada={portada} />
       </div>
     </section>
+  );
+}
+
+/**
+ * Lado visual de la portada: un campo del rosa de la marca con la mariposa
+ * y tres productos reales, cada uno con su nombre y enlace a su ficha.
+ */
+function Composicion({ portada }: { portada: ProductoDePortada[] }) {
+  if (FOTOGRAFIA_DE_PORTADA) {
+    return (
+      <div className="relative aspect-[4/5] overflow-hidden rounded-sw-lg bg-sw-pink-soft lg:aspect-[5/6]">
+        <img
+          src={FOTOGRAFIA_DE_PORTADA.src}
+          alt={FOTOGRAFIA_DE_PORTADA.alt}
+          className="h-full w-full object-cover"
+          loading="eager"
+        />
+      </div>
+    );
+  }
+
+  const [principal, ...secundarios] = portada;
+
+  return (
+    <div className="relative overflow-hidden rounded-sw-lg bg-sw-pink-soft px-5 pb-5 pt-6 sm:px-8 sm:pb-8 sm:pt-10 lg:aspect-[5/6] lg:p-10">
+      <Mariposa className="pointer-events-none absolute -right-[12%] -top-[10%] w-[70%] text-sw-pink/45" />
+
+      {principal && (
+        <div className="relative grid grid-cols-[1.35fr_1fr] gap-3 sm:gap-5 lg:absolute lg:inset-10 lg:grid-cols-[1.4fr_1fr] lg:grid-rows-2">
+          <ProductoEnPortada producto={principal} retardo={200} className="row-span-2" grande />
+          {secundarios.slice(0, 2).map((producto, i) => (
+            <ProductoEnPortada key={producto.id} producto={producto} retardo={280 + i * 80} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ProductoEnPortada({
+  producto,
+  retardo,
+  className = '',
+  grande = false,
+}: {
+  producto: ProductoDePortada;
+  retardo: number;
+  className?: string;
+  grande?: boolean;
+}) {
+  return (
+    <Link
+      href={`/producto/${encodeURIComponent(producto.slug)}`}
+      className={`group flex flex-col overflow-hidden rounded-sw bg-sw-white text-sw-ink shadow-sw-sm animate-sw-rise ${className}`}
+      style={retraso(retardo)}
+    >
+      <span className="relative flex min-h-0 flex-1 items-center justify-center p-[10%]">
+        <img
+          src={producto.image}
+          alt=""
+          loading="eager"
+          decoding="async"
+          className={`w-full object-contain transition-transform duration-sw-slow ease-sw [@media(hover:hover)]:group-hover:scale-[1.04] ${
+            grande ? 'aspect-[3/4] lg:h-full lg:aspect-auto' : 'aspect-square lg:h-full lg:aspect-auto'
+          }`}
+        />
+      </span>
+      <span className="border-t border-sw-border px-3 py-2.5 sm:px-4 sm:py-3">
+        <span className="block truncate text-[0.6875rem] font-semibold tracking-wide text-sw-muted">
+          {producto.brand}
+        </span>
+        <span
+          className={`mt-0.5 line-clamp-2 font-display font-semibold leading-tight group-hover:text-sw-pink-deep ${
+            grande ? 'text-sw-small sm:text-base' : 'text-sw-xs sm:text-sw-small'
+          }`}
+        >
+          {producto.name}
+        </span>
+      </span>
+    </Link>
   );
 }

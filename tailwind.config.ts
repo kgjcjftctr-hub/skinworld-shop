@@ -147,6 +147,8 @@ const config: Config = {
         'fade-in-up': 'fadeInUp 0.4s ease-out',
         'slide-up': 'slideUp 0.3s ease-out',
         'slide-in-right': 'slideInRight 0.3s ease-out',
+        // Entrada única de la portada; se desactiva con prefers-reduced-motion.
+        'sw-rise': 'swRise 450ms cubic-bezier(0.22, 0.61, 0.36, 1) both',
       },
       keyframes: {
         fadeIn: {
@@ -160,6 +162,10 @@ const config: Config = {
         slideUp: {
           '0%': { opacity: '0', transform: 'translateY(16px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        swRise: {
+          '0%': { opacity: '0', transform: 'translateY(14px)' },
+          '100%': { opacity: '1', transform: 'none' },
         },
         slideInRight: {
           '0%': { transform: 'translateX(100%)' },
