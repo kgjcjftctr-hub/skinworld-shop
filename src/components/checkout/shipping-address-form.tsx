@@ -52,10 +52,10 @@ type Busqueda = 'inactiva' | 'buscando' | 'encontrado' | 'sin-resultado';
 const OTRA_COLONIA = '__otra__';
 
 const inputClass =
-  'w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm text-ink placeholder:text-slate-400 focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400';
+  'w-full rounded-sw border border-sw-border bg-sw-white px-3 py-2.5 text-sw-small text-sw-ink placeholder:text-sw-muted/80 focus:border-sw-pink-deep focus:outline-none focus:ring-2 focus:ring-sw-pink-deep/25';
 const inputAutoClass =
-  'w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700';
-const labelClass = 'mb-1.5 block text-xs font-semibold text-slate-600';
+  'w-full rounded-sw border border-sw-border bg-sw-surface px-3 py-2.5 text-sw-small text-sw-text';
+const labelClass = 'mb-1.5 block text-sw-xs font-semibold text-sw-text';
 
 export function ShippingAddressForm() {
   const address = useShippingAddress((state) => state.address);
@@ -155,17 +155,18 @@ export function ShippingAddressForm() {
   const ejemploColonia = datos?.colonias[0] ? `Ej. ${datos.colonias[0]}` : 'Ej. Del Valle Centro';
 
   return (
-    <div className="rounded-2xl border border-slate-100 p-6">
+    <div className="rounded-sw-lg border border-sw-border p-6">
       <div className="mb-4 flex items-center gap-2">
-        <MapPin className="h-4 w-4 text-primary-700" />
-        <h2 className="font-display text-lg font-semibold text-ink">Dirección de envío</h2>
+        <MapPin className="h-4 w-4 text-sw-pink-deep" aria-hidden />
+        <h2 className="font-display text-lg font-semibold text-sw-ink">Dirección de envío</h2>
       </div>
 
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className={labelClass}>Nombre de quien recibe</label>
+            <label htmlFor="envio-nombre" className={labelClass}>Nombre de quien recibe</label>
             <input
+              id="envio-nombre"
               type="text"
               autoComplete="name"
               value={address.nombre}
@@ -175,8 +176,9 @@ export function ShippingAddressForm() {
             />
           </div>
           <div>
-            <label className={labelClass}>Teléfono</label>
+            <label htmlFor="envio-telefono" className={labelClass}>Teléfono</label>
             <input
+              id="envio-telefono"
               type="tel"
               autoComplete="tel"
               value={address.telefono}
@@ -188,9 +190,10 @@ export function ShippingAddressForm() {
         </div>
 
         <div>
-          <label className={labelClass}>Código Postal</label>
+          <label htmlFor="envio-cp" className={labelClass}>Código Postal</label>
           <div className="relative">
             <input
+              id="envio-cp"
               type="text"
               inputMode="numeric"
               maxLength={5}
@@ -201,18 +204,18 @@ export function ShippingAddressForm() {
               className={`${inputClass} pr-9`}
             />
             {busqueda === 'buscando' && (
-              <Loader2 className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-slate-400" />
+              <Loader2 className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-sw-muted" aria-hidden />
             )}
             {busqueda === 'encontrado' && (
               <Check className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-600" />
             )}
           </div>
           {busqueda === 'sin-resultado' ? (
-            <p className="mt-1.5 text-xs text-amber-700">
+            <p role="status" className="mt-1.5 text-sw-xs text-amber-700">
               No encontramos ese código postal. Puedes llenar los datos a mano.
             </p>
           ) : (
-            <p className="mt-1.5 text-xs text-slate-400">
+            <p role="status" className="mt-1.5 text-sw-xs text-sw-muted">
               Con tu código postal llenamos estado, alcaldía o municipio y colonia.
             </p>
           )}
@@ -220,11 +223,11 @@ export function ShippingAddressForm() {
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className={labelClass}>Estado</label>
+            <label htmlFor="envio-estado" className={labelClass}>Estado</label>
             {zonaBloqueada ? (
-              <input type="text" value={address.estado} readOnly className={inputAutoClass} />
+              <input id="envio-estado" type="text" value={address.estado} readOnly className={inputAutoClass} />
             ) : (
-              <select value={address.estado} onChange={handleChange('estado')} className={inputClass}>
+              <select id="envio-estado" value={address.estado} onChange={handleChange('estado')} className={inputClass}>
                 <option value="">Selecciona</option>
                 {ESTADOS_MEXICO.map((estado) => (
                   <option key={estado} value={estado}>
@@ -235,11 +238,12 @@ export function ShippingAddressForm() {
             )}
           </div>
           <div>
-            <label className={labelClass}>Alcaldía o Municipio</label>
+            <label htmlFor="envio-municipio" className={labelClass}>Alcaldía o Municipio</label>
             {zonaBloqueada ? (
-              <input type="text" value={address.municipio} readOnly className={inputAutoClass} />
+              <input id="envio-municipio" type="text" value={address.municipio} readOnly className={inputAutoClass} />
             ) : (
               <input
+                id="envio-municipio"
                 type="text"
                 autoComplete="address-level2"
                 value={address.municipio}
@@ -255,16 +259,17 @@ export function ShippingAddressForm() {
           <button
             type="button"
             onClick={() => setEditandoZona(true)}
-            className="text-xs font-semibold text-primary-700 underline"
+            className="text-sw-xs font-semibold text-sw-pink-deep underline underline-offset-4"
           >
             Corregir estado o municipio
           </button>
         )}
 
         <div>
-          <label className={labelClass}>Colonia</label>
+          <label htmlFor="envio-colonia" className={labelClass}>Colonia</label>
           {datos && datos.colonias.length > 1 && !coloniaLibre ? (
             <select
+              id="envio-colonia"
               value={address.colonia}
               onChange={(e) => {
                 if (e.target.value === OTRA_COLONIA) {
@@ -286,6 +291,7 @@ export function ShippingAddressForm() {
             </select>
           ) : (
             <input
+              id="envio-colonia"
               type="text"
               autoComplete="address-level3"
               value={address.colonia}
@@ -298,7 +304,7 @@ export function ShippingAddressForm() {
             <button
               type="button"
               onClick={() => setColoniaLibre(false)}
-              className="mt-1.5 text-xs font-semibold text-primary-700 underline"
+              className="mt-1.5 text-sw-xs font-semibold text-sw-pink-deep underline underline-offset-4"
             >
               Ver las colonias de este código postal
             </button>
@@ -306,8 +312,9 @@ export function ShippingAddressForm() {
         </div>
 
         <div>
-          <label className={labelClass}>Calle</label>
+          <label htmlFor="envio-calle" className={labelClass}>Calle</label>
           <input
+            id="envio-calle"
             type="text"
             autoComplete="address-line1"
             value={address.calle}
@@ -319,8 +326,9 @@ export function ShippingAddressForm() {
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className={labelClass}>Número exterior</label>
+            <label htmlFor="envio-numero-exterior" className={labelClass}>Número exterior</label>
             <input
+              id="envio-numero-exterior"
               type="text"
               value={address.numeroExterior}
               onChange={handleChange('numeroExterior')}
@@ -329,8 +337,9 @@ export function ShippingAddressForm() {
             />
           </div>
           <div>
-            <label className={labelClass}>Número interior (opcional)</label>
+            <label htmlFor="envio-numero-interior" className={labelClass}>Número interior (opcional)</label>
             <input
+              id="envio-numero-interior"
               type="text"
               autoComplete="address-line2"
               value={address.numeroInterior}
@@ -342,8 +351,9 @@ export function ShippingAddressForm() {
         </div>
 
         <div>
-          <label className={labelClass}>Referencias (opcional)</label>
+          <label htmlFor="envio-referencias" className={labelClass}>Referencias (opcional)</label>
           <input
+            id="envio-referencias"
             type="text"
             value={address.referencias}
             onChange={handleChange('referencias')}

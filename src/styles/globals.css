@@ -170,6 +170,98 @@ textarea::placeholder {
   transform: translateY(0);
 }
 
+/* Mariposa ambiental: dos mitades del vector giran en perspectiva y proyectan
+   una sombra suave. No usa WebGL ni descarga recursos adicionales. */
+.sw-mariposa-3d {
+  --sw-flap-duration: 2.8s;
+  --sw-float-duration: 7.5s;
+  position: relative;
+  aspect-ratio: 512 / 407;
+  color: rgb(var(--sw-pink));
+  perspective: 720px;
+  transform-style: preserve-3d;
+  animation: sw-mariposa-flota var(--sw-float-duration) ease-in-out infinite;
+  will-change: transform;
+}
+
+.sw-mariposa-3d--vivo {
+  --sw-flap-duration: 1.9s;
+  --sw-float-duration: 5.8s;
+}
+
+.sw-mariposa-3d__ala {
+  position: absolute;
+  inset-block: 0;
+  width: 50.15%;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  will-change: transform;
+}
+
+.sw-mariposa-3d__ala--izquierda {
+  left: 0;
+  transform-origin: 100% 52%;
+  animation: sw-mariposa-ala-izquierda var(--sw-flap-duration) ease-in-out infinite alternate;
+}
+
+.sw-mariposa-3d__ala--derecha {
+  right: 0;
+  transform-origin: 0 52%;
+  animation: sw-mariposa-ala-derecha var(--sw-flap-duration) ease-in-out infinite alternate;
+}
+
+.sw-mariposa-3d__vector {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 199.4%;
+  max-width: none;
+  filter: drop-shadow(0 0.08em 0.06em rgb(var(--sw-ink) / 0.08));
+}
+
+.sw-mariposa-3d__vector--izquierda {
+  left: 0;
+}
+
+.sw-mariposa-3d__vector--derecha {
+  right: 0;
+}
+
+.sw-mariposa-3d__sombra {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: -8%;
+  height: 14%;
+  border-radius: 999px;
+  background: rgb(var(--sw-ink) / 0.16);
+  filter: blur(12px);
+  animation: sw-mariposa-sombra var(--sw-float-duration) ease-in-out infinite;
+}
+
+@keyframes sw-mariposa-ala-izquierda {
+  0%, 12% { transform: rotateY(6deg) rotateZ(-0.6deg); }
+  55% { transform: rotateY(58deg) rotateZ(1deg); }
+  100% { transform: rotateY(18deg) rotateZ(0deg); }
+}
+
+@keyframes sw-mariposa-ala-derecha {
+  0%, 12% { transform: rotateY(-6deg) rotateZ(0.6deg); }
+  55% { transform: rotateY(-58deg) rotateZ(-1deg); }
+  100% { transform: rotateY(-18deg) rotateZ(0deg); }
+}
+
+@keyframes sw-mariposa-flota {
+  0%, 100% { transform: translate3d(0, 0, 0) rotateX(3deg) rotateZ(-1.5deg); }
+  50% { transform: translate3d(0, -4%, 18px) rotateX(-2deg) rotateZ(1.5deg); }
+}
+
+@keyframes sw-mariposa-sombra {
+  0%, 100% { opacity: 0.42; transform: scaleX(0.88); }
+  50% { opacity: 0.22; transform: scaleX(0.68); }
+}
+
 /* Selectores reducidos */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -183,6 +275,13 @@ textarea::placeholder {
   .reveal {
     opacity: 1;
     transform: none;
+  }
+
+  .sw-mariposa-3d,
+  .sw-mariposa-3d__ala,
+  .sw-mariposa-3d__sombra {
+    animation: none !important;
+    transform: none !important;
   }
 }
 

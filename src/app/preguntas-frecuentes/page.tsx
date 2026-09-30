@@ -38,12 +38,12 @@ const faqs = [
 
 export default function FAQPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
-        <h1 className="mb-3 font-display text-4xl font-bold text-ink">Preguntas Frecuentes</h1>
-        <p className="mb-12 text-slate-500">
+    <div className="min-h-[60vh]">
+      <div className="mx-auto max-w-3xl px-sw-gutter pb-sw-section pt-12 sm:pt-16">
+        <h1 className="mb-4 font-display text-sw-h1 font-semibold text-sw-ink">Preguntas Frecuentes</h1>
+        <p className="mb-12 text-sw-lead text-sw-muted">
           Si tu duda no está aquí,{' '}
-          <Link href="/contacto" className="font-semibold text-primary-700 underline">
+          <Link href="/contacto" className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
             escríbenos
           </Link>
           .
@@ -51,18 +51,18 @@ export default function FAQPage() {
 
         <div className="space-y-4">
           {faqs.map((faq) => (
-            <details key={faq.q} className="group rounded-xl border border-slate-200">
-              <summary className="cursor-pointer p-6 font-display font-semibold text-ink hover:bg-slate-50">
+            <details key={faq.q} className="group rounded-sw-lg border border-sw-border bg-sw-white">
+              <summary className="flex min-h-[3.5rem] cursor-pointer items-center p-6 font-display text-lg font-semibold text-sw-ink hover:text-sw-pink-deep">
                 {faq.q}
               </summary>
-              <div className="px-6 pb-6 leading-relaxed text-slate-600">{faq.a}</div>
+              <div className="px-6 pb-6 text-sw-body leading-relaxed text-sw-text">{faq.a}</div>
             </details>
           ))}
         </div>
 
-        <p className="mt-10 text-sm text-slate-500">
+        <p className="mt-10 text-sw-small text-sw-muted">
           Las condiciones completas están en nuestra{' '}
-          <Link href="/envios" className="font-semibold text-primary-700 underline">
+          <Link href="/envios" className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
             Política de Envíos y Devoluciones
           </Link>
           .

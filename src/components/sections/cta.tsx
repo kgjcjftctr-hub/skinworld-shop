@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { Mariposa } from '@/components/ui/mariposa';
+import { Mariposa, Mariposa3D } from '@/components/ui/mariposa';
 
 // Mismas promesas que ya mostraba el sitio; no se agrega ninguna.
 const trustSignals = ['100% original', 'Envío gratis en CDMX', 'Atención lunes a viernes, 10 a 18 h'];
@@ -8,7 +8,7 @@ const trustSignals = ['100% original', 'Envío gratis en CDMX', 'Atención lunes
 export function CTASection() {
   return (
     <section aria-labelledby="cierre-titulo" className="relative overflow-hidden bg-sw-pink">
-      <Mariposa className="pointer-events-none absolute -bottom-[18%] -right-[6%] w-[min(38rem,70vw)] text-sw-pink-soft/60" />
+      <Mariposa3D className="pointer-events-none absolute -bottom-[20%] -right-[7%] w-[min(38rem,72vw)] text-sw-pink-soft/65" />
       <div className="sw-container relative py-sw-section">
         <h2
           id="cierre-titulo"

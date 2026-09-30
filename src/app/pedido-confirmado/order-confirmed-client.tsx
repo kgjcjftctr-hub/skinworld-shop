@@ -37,17 +37,17 @@ export function OrderConfirmedClient() {
   }, [sessionId, clearCart]);
 
   return (
-    <div className="flex min-h-[70vh] items-center justify-center bg-white px-4">
+    <div className="flex min-h-[70vh] items-center justify-center bg-sw-warm-white px-sw-gutter">
       <div className="mx-auto max-w-md text-center">
         {loading ? (
-          <Loader2 className="mx-auto mb-6 h-14 w-14 animate-spin text-primary-500" strokeWidth={1.5} />
+          <Loader2 className="mx-auto mb-6 h-14 w-14 animate-spin text-sw-pink-deep" strokeWidth={1.5} />
         ) : info?.status === 'paid' ? (
           <CheckCircle2 className="mx-auto mb-6 h-16 w-16 text-green-500" strokeWidth={1.5} />
         ) : (
           <XCircle className="mx-auto mb-6 h-16 w-16 text-red-400" strokeWidth={1.5} />
         )}
 
-        <h1 className="mb-3 font-display text-2xl font-semibold text-ink">
+        <h1 className="mb-3 font-display text-sw-h2 font-semibold text-sw-ink">
           {loading
             ? 'Verificando tu pago...'
             : info?.status === 'paid'
@@ -56,19 +56,19 @@ export function OrderConfirmedClient() {
         </h1>
 
         {!loading && info?.status === 'paid' && (
-          <p className="mb-8 text-slate-500">
+          <p className="mb-8 text-sw-muted">
             {info.amountTotal != null && <>Cobramos {formatPrice(info.amountTotal)}. </>}
             Te enviamos la confirmación por correo y te avisamos en cuanto salga tu pedido.
           </p>
         )}
 
         {!loading && info?.status !== 'paid' && (
-          <p className="mb-8 text-slate-500">
+          <p className="mb-8 text-sw-muted">
             Si crees que esto es un error, contáctanos o intenta de nuevo.
           </p>
         )}
 
-        <Link href="/tienda" className="btn btn-primary">
+        <Link href="/tienda" className="sw-btn sw-btn-primary h-12 px-7">
           Seguir comprando
         </Link>
       </div>

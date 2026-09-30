@@ -25,3 +25,31 @@ export function Mariposa({
     </svg>
   );
 }
+
+/**
+ * Versión ambiental de la mariposa con profundidad CSS. Cada mitad del vector
+ * gira sobre el eje del cuerpo, como dos alas, y el conjunto flota sobre su
+ * sombra. Sigue siendo decorativa y se inmoviliza con prefers-reduced-motion.
+ */
+export function Mariposa3D({
+  className = '',
+  ritmo = 'sereno',
+}: {
+  className?: string;
+  ritmo?: 'sereno' | 'vivo';
+}) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`sw-mariposa-3d sw-mariposa-3d--${ritmo} block ${className}`}
+    >
+      <span className="sw-mariposa-3d__sombra" />
+      <span className="sw-mariposa-3d__ala sw-mariposa-3d__ala--izquierda">
+        <Mariposa className="sw-mariposa-3d__vector sw-mariposa-3d__vector--izquierda" />
+      </span>
+      <span className="sw-mariposa-3d__ala sw-mariposa-3d__ala--derecha">
+        <Mariposa className="sw-mariposa-3d__vector sw-mariposa-3d__vector--derecha" />
+      </span>
+    </span>
+  );
+}

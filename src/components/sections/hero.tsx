@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { Mariposa } from '@/components/ui/mariposa';
+import { Mariposa, Mariposa3D } from '@/components/ui/mariposa';
 import type { Product } from '@/types';
 
 type ProductoDePortada = Product & Record<string, any>;
@@ -29,7 +29,7 @@ export function HeroSection({
   ];
 
   return (
-    <section className="overflow-hidden">
+    <section className="relative overflow-hidden">
       <div className="sw-container grid items-center gap-10 pb-sw-section pt-10 sm:pt-14 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-16 lg:pt-16">
         <div>
           <p className="sw-label animate-sw-rise" style={retraso(0)}>
@@ -103,7 +103,7 @@ function Composicion({ portada }: { portada: ProductoDePortada[] }) {
 
   return (
     <div className="relative overflow-hidden rounded-sw-lg bg-sw-pink-soft px-5 pb-5 pt-6 sm:px-8 sm:pb-8 sm:pt-10 lg:aspect-[5/6] lg:p-10">
-      <Mariposa className="pointer-events-none absolute -right-[12%] -top-[10%] w-[70%] text-sw-pink/45" />
+      <Mariposa3D className="pointer-events-none absolute -right-[12%] -top-[10%] w-[70%] text-sw-pink/55" />
 
       {principal && (
         <div className="relative grid grid-cols-[1.35fr_1fr] gap-3 sm:gap-5 lg:absolute lg:inset-10 lg:grid-cols-[1.4fr_1fr] lg:grid-rows-2">

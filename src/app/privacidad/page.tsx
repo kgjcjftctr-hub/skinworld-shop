@@ -8,21 +8,21 @@ const CORREO = 'contacto@skinworld.shop';
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
-        <h1 className="mb-3 font-display text-4xl font-bold text-ink">Aviso de Privacidad</h1>
-        <p className="mb-12 text-sm text-slate-400">
+    <div className="min-h-[60vh]">
+      <div className="mx-auto max-w-3xl px-sw-gutter pb-sw-section pt-12 sm:pt-16">
+        <h1 className="mb-4 font-display text-sw-h1 font-semibold text-sw-ink">Aviso de Privacidad</h1>
+        <p className="mb-12 text-sw-small text-sw-muted">
           Última actualización: 28 de septiembre de 2026
         </p>
 
-        <div className="space-y-10 leading-relaxed text-slate-600">
+        <div className="space-y-12 text-sw-body leading-relaxed text-sw-text">
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
               ¿Quién es responsable de sus datos?
             </h2>
             <p>
               Skinworld, con domicilio en la Ciudad de México y correo de contacto{' '}
-              <a href={`mailto:${CORREO}`} className="font-semibold text-primary-700 underline">
+              <a href={`mailto:${CORREO}`} className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
                 {CORREO}
               </a>
               , es responsable del tratamiento de los datos personales que usted proporcione a través
@@ -31,7 +31,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
               ¿Para qué fines utilizaremos sus datos personales?
             </h2>
             <div className="space-y-4">
@@ -48,7 +48,7 @@ export default function PrivacyPage() {
                 Si usted se suscribe voluntariamente a nuestro boletín, utilizaremos su correo
                 electrónico para enviarle información sobre productos y novedades. Puede pedirnos que
                 lo demos de baja en cualquier momento escribiendo a{' '}
-                <a href={`mailto:${CORREO}`} className="font-semibold text-primary-700 underline">
+                <a href={`mailto:${CORREO}`} className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
                   {CORREO}
                 </a>
                 . La negativa a recibir el boletín no es motivo para que le neguemos los servicios y
@@ -58,7 +58,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
               ¿Qué datos personales utilizaremos?
             </h2>
             <div className="space-y-4">
@@ -85,7 +85,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
               ¿Con quién compartimos sus datos?
             </h2>
             <div className="space-y-4">
@@ -95,15 +95,15 @@ export default function PrivacyPage() {
               </p>
               <ul className="ml-5 list-disc space-y-2">
                 <li>
-                  <span className="font-semibold text-ink">Stripe</span> — procesa los pagos y recibe
+                  <span className="font-semibold text-sw-ink">Stripe</span> — procesa los pagos y recibe
                   su nombre, correo electrónico y los datos de su método de pago.
                 </li>
                 <li>
-                  <span className="font-semibold text-ink">Supabase</span> — almacena los pedidos,
+                  <span className="font-semibold text-sw-ink">Supabase</span> — almacena los pedidos,
                   incluyendo nombre, teléfono y domicilio de entrega.
                 </li>
                 <li>
-                  <span className="font-semibold text-ink">Vercel</span> — aloja el sitio y conserva
+                  <span className="font-semibold text-sw-ink">Vercel</span> — aloja el sitio y conserva
                   registros técnicos de servidor.
                 </li>
               </ul>
@@ -115,7 +115,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
               ¿Cómo puede acceder, rectificar o cancelar sus datos personales, u oponerse a su uso?
             </h2>
             <div className="space-y-4">
@@ -132,7 +132,7 @@ export default function PrivacyPage() {
               <p>
                 Para el ejercicio de cualquiera de los derechos ARCO, deberá presentar la solicitud
                 respectiva al correo{' '}
-                <a href={`mailto:${CORREO}`} className="font-semibold text-primary-700 underline">
+                <a href={`mailto:${CORREO}`} className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
                   {CORREO}
                 </a>
                 . En ese mismo medio ponemos a su disposición el procedimiento y los requisitos para
@@ -146,7 +146,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
               Usted puede revocar su consentimiento para el uso de sus datos personales
             </h2>
             <div className="space-y-4">
@@ -161,7 +161,7 @@ export default function PrivacyPage() {
               </p>
               <p>
                 Para revocar su consentimiento deberá presentar su solicitud al correo{' '}
-                <a href={`mailto:${CORREO}`} className="font-semibold text-primary-700 underline">
+                <a href={`mailto:${CORREO}`} className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
                   {CORREO}
                 </a>
                 , medio en el que también ponemos a su disposición el procedimiento y los requisitos
@@ -171,13 +171,13 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
               ¿Cómo puede limitar el uso o divulgación de su información personal?
             </h2>
             <p>
               Con objeto de que usted pueda limitar el uso y divulgación de su información personal,
               le ofrecemos el siguiente medio: correo electrónico{' '}
-              <a href={`mailto:${CORREO}`} className="font-semibold text-primary-700 underline">
+              <a href={`mailto:${CORREO}`} className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
                 {CORREO}
               </a>
               .
@@ -185,12 +185,12 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
               El uso de tecnologías de rastreo en nuestro portal de internet
             </h2>
             <div className="space-y-4">
               <p>
-                Este sitio <span className="font-semibold text-ink">no utiliza cookies publicitarias,
+                Este sitio <span className="font-semibold text-sw-ink">no utiliza cookies publicitarias,
                 web beacons ni herramientas de analítica</span> que monitoreen su comportamiento de
                 navegación. No usamos Google Analytics, píxeles de redes sociales ni servicios
                 similares.
@@ -210,7 +210,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
               ¿Cómo puede conocer los cambios en este aviso de privacidad?
             </h2>
             <p>
