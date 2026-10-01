@@ -75,6 +75,33 @@ Acné. La descripción sale de fuentes dermatológicas (al final) y de lo que ve
    `public/necesidades/personas/<slug>/` y registra la persona en
    `src/data/personas-necesidades.json`. Desde ese momento la categoría ya muestra a la persona.
 
+### Método sin video (el que se usó para Acné)
+
+ChatGPT ya no hace video (Sora se cerró), así que el giro se arma con fotos:
+
+1. En un solo chat de ChatGPT, con «Crear una imagen», pedir la foto inicial (¾ hacia la izquierda,
+   con el problema) y después, una por mensaje, la misma persona en otros ángulos: «keep EVERYTHING
+   identical… only change: she is now turned N degrees…». Con 8 fotos alcanza (de ¾ izquierdo a
+   ¾ derecho, pasando por el frente); la piel mejora en las fotos del medio. Pelo recogido y ropa
+   lisa ayudan a que todas se parezcan. ChatGPT gira menos de lo que se le pide: conviene revisar
+   los ángulos y pedir intermedios si quedan huecos grandes.
+2. Descargar las fotos como `g1.png … g8.png` en una carpeta.
+3. Puntos de la cara y recorte de la persona con Vision de macOS (no se instala nada):
+
+   ```bash
+   swiftc -O scripts/personas/puntos.swift -o .next/puntos
+   for f in carpeta/g*.png; do .next/puntos "$f" "${f%.png}.json" "${f%.png}-mascara.png"; done
+   ```
+
+4. Morphing entre fotos (orden del giro y ángulo aproximado de cada una):
+
+   ```bash
+   python3 scripts/personas/morph.py carpeta g1,g2,g3,g4,g8,g7,g5,g6 -43,-30,-29,0,18,28,30,52 carpeta/cuadros
+   ```
+
+   Alinea las fotos, genera 48 cuadros con fondo transparente y el torso desvanecido abajo.
+5. `node --experimental-websocket scripts/preparar-persona.mjs <slug> carpeta/cuadros`
+
 ### Prompt base de movimiento (en inglés, funciona mejor en los generadores)
 
 > Studio portrait video, 3:4 vertical, fixed camera. The same person slowly rotates on a turntable

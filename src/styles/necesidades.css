@@ -188,6 +188,7 @@
 /* Con persona, la escultura pasa a ser fondo: más tenue y en paralaje. */
 .necesidades__mundo[data-persona-activa] .necesidades__escultura { opacity: 0.5; }
 .necesidades__mundo[data-persona-activa] .necesidades__gigante { opacity: 0.32; }
+.necesidades__mundo[data-persona-activa] .necesidades__perla { display: none; }
 .necesidades__aviso-muestra {
   position: absolute; z-index: 8; left: 50%; top: 44px; transform: translateX(-50%);
   margin: 0; padding: 6px 12px; border-radius: 999px; white-space: nowrap;

@@ -51,17 +51,16 @@ const datos = manifiesto as unknown as {
   muestra: Persona;
 };
 
-/** Persona de una categoría. Con ?muestra=personas se usa la secuencia de
- *  prueba en todas, para revisar la coreografía antes de tener los assets. */
-export function personaDe(categoria: string): Persona | null {
-  if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('muestra') === 'personas') {
-    return datos.muestra;
-  }
-  return datos.personas[SLUGS[categoria] ?? ''] ?? null;
-}
-
 export const enModoMuestra = () =>
   typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('muestra') === 'personas';
+
+/** Persona de una categoría. Con ?muestra=personas, las categorías que aún no
+ *  tienen persona usan la secuencia de prueba, para revisar la coreografía. */
+export function personaDe(categoria: string): Persona | null {
+  const propia = datos.personas[SLUGS[categoria] ?? ''] ?? null;
+  if (propia) return propia;
+  return enModoMuestra() ? datos.muestra : null;
+}
 
 /** Orden de carga de lo general a lo fino: primero y último, luego cada 8, 4, 2, 1. */
 function ordenDeCarga(n: number) {

@@ -1,7 +1,28 @@
 {
   "nota": "Manifiesto de las secuencias de personas de la sección de necesidades. Lo escribe scripts/preparar-persona.mjs; ver docs/personas-necesidades.md. Mientras una categoría tenga null, esa categoría muestra la escultura actual.",
   "personas": {
-    "acne": null,
+    "acne": {
+      "modo": "unica",
+      "fondo": "transparente",
+      "mejora": [
+        0.35,
+        0.68
+      ],
+      "escritorio": {
+        "cuadros": 48,
+        "ancho": 825,
+        "alto": 1100,
+        "ruta": "/necesidades/personas/acne/escritorio",
+        "formato": "webp"
+      },
+      "movil": {
+        "cuadros": 32,
+        "ancho": 570,
+        "alto": 760,
+        "ruta": "/necesidades/personas/acne/movil",
+        "formato": "webp"
+      }
+    },
     "dermatitis": null,
     "antiedad": null,
     "manchas": null,
@@ -13,8 +34,23 @@
   "muestra": {
     "modo": "unica",
     "fondo": "transparente",
-    "mejora": [0.35, 0.68],
-    "escritorio": { "cuadros": 48, "ancho": 825, "alto": 1100, "ruta": "/necesidades/muestra/escritorio", "formato": "webp" },
-    "movil": { "cuadros": 32, "ancho": 570, "alto": 760, "ruta": "/necesidades/muestra/movil", "formato": "webp" }
+    "mejora": [
+      0.35,
+      0.68
+    ],
+    "escritorio": {
+      "cuadros": 48,
+      "ancho": 825,
+      "alto": 1100,
+      "ruta": "/necesidades/muestra/escritorio",
+      "formato": "webp"
+    },
+    "movil": {
+      "cuadros": 32,
+      "ancho": 570,
+      "alto": 760,
+      "ruta": "/necesidades/muestra/movil",
+      "formato": "webp"
+    }
   }
 }
