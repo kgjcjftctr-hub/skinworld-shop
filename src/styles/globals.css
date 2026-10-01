@@ -97,9 +97,16 @@ p {
 }
 
 /* Links */
-a {
-  @apply text-sw-pink-deep hover:text-sw-ink;
+/* :where() deja esta regla con especificidad cero: así los botones y enlaces
+   que fijan su propio color (text-white, text-sw-ink...) no lo pierden al
+   pasar el cursor, que era lo que dejaba el texto negro sobre negro. */
+:where(a) {
+  @apply text-sw-pink-deep;
   @apply transition-colors;
+}
+
+:where(a):hover {
+  @apply text-sw-ink;
 }
 
 /* Forms */
@@ -141,11 +148,11 @@ textarea::placeholder {
   }
 
   .sw-btn-primary {
-    @apply bg-sw-pink-deep text-white hover:bg-sw-ink;
+    @apply bg-sw-pink-deep text-white hover:bg-[#7B3349] hover:text-white;
   }
 
   .sw-btn-secondary {
-    @apply border border-sw-ink/25 bg-transparent text-sw-ink hover:border-sw-ink hover:bg-sw-ink hover:text-sw-warm-white;
+    @apply border border-sw-ink/25 bg-transparent text-sw-ink hover:border-sw-pink-deep hover:bg-sw-pink-pale hover:text-sw-pink-deep;
   }
 
   .sw-btn-quiet {
