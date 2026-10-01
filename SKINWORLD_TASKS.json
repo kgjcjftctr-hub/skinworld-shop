@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "SkinWorld Task Center",
-  "lastInspectedAt": "2026-10-01T16:30:00-06:00",
+  "lastInspectedAt": "2026-10-01T15:09:00-06:00",
   "lastInspectedBy": "Claude Code building the persona system for the needs section",
   "sourceOfTruth": "This file is the durable source of truth. Do not replace it with a new list; update tasks by stable id and retain completed items and history. Every task carries detectedIn, the lastInspectedAt value of the inspection that first registered it, which is what marks a finding as new. The rendered page is published as a Claude artifact at artifactUrl; always republish to that same url instead of creating a second Task Center.",
   "statusDefinitions": {
@@ -1005,19 +1005,23 @@
       "status": "requires_verification",
       "detectedAt": "2026-10-01",
       "updatedAt": "2026-10-01",
-      "detectedIn": "2026-10-01T16:30:00-06:00",
+      "detectedIn": "2026-10-01T14:42:00-06:00",
       "origin": [
         "docs/personas-necesidades.md",
         "src/data/personas-necesidades.json",
         "scripts/preparar-persona.mjs",
         "src/components/sections/necesidades-personas.ts"
       ],
-      "details": "The needs section can now show one person per category who enters from the left, turns on the vertical axis, improves during the turn and exits right, all driven by scroll. The project has no photographs of people other than Dra. Karina, so no persona is shown yet: each category keeps its sculpture until its sequence exists. The asset specification, per-persona briefs and generation prompts are in docs/personas-necesidades.md, and scripts/preparar-persona.mjs turns a video or frame folder into optimised desktop and phone sequences and registers it. AI-generated skin-improvement imagery next to products may read as a result claim, so an \"illustrative image\" notice should be considered.",
-      "doneWhen": "All eight sequences meet the specification (same identity, moderate condition, improvement finished before the end of the turn, natural texture), are registered in the manifest, and the owner approves them visually on desktop and phone before publishing.",
+      "details": "The needs section shows one person per category, driven by scroll. The scene stays fixed on desktop, tablet and phone, and only the person moves: they enter from the left, turn on the vertical axis, improve during the turn and exit right, and the next person enters only after the previous one has left. The project has no photographs of people other than Dra. Karina, so no persona is shown yet and each category keeps its sculpture until its sequence exists. docs/personas-necesidades.md describes each condition as it really looks, based on dermatology sources and on what each category sells, with acne lesions only in Acné. It also holds eight different people, the asset specification and the generation prompts. scripts/preparar-persona.mjs turns a video or frame folder into optimised desktop and phone sequences and registers it. AI-generated skin-improvement imagery next to products may read as a result claim, so an \"illustrative image\" notice should be considered.",
+      "doneWhen": "All eight sequences show a single person turning (never two heads), each a different person, with the condition shown as it really looks and an improvement that finishes before the end of the turn. All are registered in the manifest, and the owner approves them visually on desktop and phone before publishing.",
       "history": [
         {
           "date": "2026-10-01",
           "note": "System built on branch personas-necesidades and verified with a test sequence (?muestra=personas): scroll forward and back, eight transitions, links and index, phone layout, reduced motion, about 60 fps with 4x CPU throttling, and at most three sequences in memory. Waiting for the persona assets and the owner visual approval; nothing is published."
+        },
+        {
+          "date": "2026-10-01",
+          "note": "The owner liked the movement and asked for: a fixed page where only the person moves, conditions researched and shown only where they make sense, one head that turns, and a different person per problem. Done on the branch: fixed scene on phones as well, one person at a time, and research-based briefs for eight different people. Verified on 390x844, 375x667, 820x1180, 1280x720 and 1440x900 with no overlap or overflow, plus reduced motion and landscape phone as stacked blocks, about 60 fps on a phone with 4x CPU throttling, and at most four sequences in memory. Images still have to be generated with an AI tool; Claude cannot create photographs itself. Waiting for the owner to choose how to generate them."
         }
       ]
     },
@@ -1030,7 +1034,7 @@
       "status": "in_progress",
       "detectedAt": "2026-10-01",
       "updatedAt": "2026-10-01",
-      "detectedIn": "2026-10-01T16:30:00-06:00",
+      "detectedIn": "2026-10-01T14:42:00-06:00",
       "origin": [
         "src/components/sections/necesidades-timeline.ts",
         "src/styles/necesidades.css"
