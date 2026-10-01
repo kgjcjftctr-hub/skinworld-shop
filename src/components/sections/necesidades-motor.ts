@@ -31,8 +31,8 @@ function avisoDeMuestra(escenario: HTMLElement) {
 }
 
 /**
- * Personas fuera de la escena fija (celular, o cualquier tamaño con
- * movimiento reducido): cada bloque dibuja su persona mientras cruza la
+ * Personas fuera de la escena fija (pantallas muy bajas, o cualquier tamaño
+ * con movimiento reducido): cada bloque dibuja su persona mientras cruza la
  * pantalla, o un solo cuadro fijo si se pidió reducir el movimiento.
  */
 function iniciarPersonasApiladas(raiz: HTMLElement, reducido: boolean) {
@@ -56,7 +56,7 @@ function iniciarPersonasApiladas(raiz: HTMLElement, reducido: boolean) {
       // Las variables van en el mundo completo: la escultura también las usa
       // para moverse en paralaje detrás de la persona.
       const mundo = paneles[i];
-      mundo.style.setProperty('--ne-p-x', `${e.x.toFixed(2)}vw`);
+      mundo.style.setProperty('--ne-p-x', e.x.toFixed(4));
       mundo.style.setProperty('--ne-p-escala', e.escala.toFixed(4));
       mundo.style.setProperty('--ne-p-plano', `${e.plano.toFixed(2)}deg`);
       mundo.style.setProperty('--ne-p-opacidad', e.opacidad.toFixed(4));
@@ -96,19 +96,23 @@ function iniciarPersonasApiladas(raiz: HTMLElement, reducido: boolean) {
   };
 }
 
-/** Mejora progresiva: sin JS, en móvil y con movimiento reducido son ocho escenas normales. */
+/** Mejora progresiva: sin JS, en pantallas muy bajas y con movimiento reducido son ocho escenas normales. */
 export function iniciarNecesidades(raiz: HTMLElement) {
-  const escritorio = window.matchMedia('(min-width: 1024px) and (min-height: 620px) and (prefers-reduced-motion: no-preference)');
+  // La escena fija necesita altura: 620 px en computadora, 560 px en celular y tableta.
+  const fija = window.matchMedia(
+    '(min-width: 1024px) and (min-height: 620px) and (prefers-reduced-motion: no-preference), ' +
+    '(max-width: 1023px) and (min-height: 560px) and (prefers-reduced-motion: no-preference)'
+  );
   const cursor = window.matchMedia('(hover: hover) and (pointer: fine)');
   let detener: (() => void) | undefined;
 
-  function iniciarEscritorio() {
+  function iniciarEscena() {
     const escenario = raiz.querySelector<HTMLElement>('[data-necesidades-escena]')!;
     const paneles = Array.from(raiz.querySelectorAll<HTMLElement>('[data-necesidad]'));
     const enlaces = Array.from(raiz.querySelectorAll<HTMLAnchorElement>('[data-necesidad-enlace]'));
     let cuadro = 0, visible = true, inicio = 0, rango = 1, actual = -2, pendienteMedir = true;
     raiz.dataset.inmersiva = 'true';
-    const personas = crearPersonas(paneles, 'escritorio');
+    const personas = crearPersonas(paneles, window.innerWidth < 768 ? 'movil' : 'escritorio');
     const quitarAviso = personas.some(Boolean) ? avisoDeMuestra(escenario) : () => {};
 
     function medir() {
@@ -133,8 +137,6 @@ export function iniciarNecesidades(raiz: HTMLElement) {
       paneles.forEach((panel, i) => {
         const estado = estadoNecesidad(p, i);
         panel.style.setProperty('--ne-opacidad', estado.opacidad.toFixed(4));
-        panel.style.setProperty('--ne-y', `${estado.y.toFixed(2)}px`);
-        panel.style.setProperty('--ne-escala', estado.escala.toFixed(4));
         panel.style.setProperty('--ne-texto', estado.texto.toFixed(4));
         panel.style.visibility = estado.opacidad > 0.001 ? 'visible' : 'hidden';
         if (nueva !== actual) {
@@ -148,7 +150,7 @@ export function iniciarNecesidades(raiz: HTMLElement) {
           if (distancia < 1.3) persona.cargar();
           else if (distancia > 1.9 && persona.cargando) persona.liberar();
           const e = estadoPersona(p, i);
-          panel.style.setProperty('--ne-p-x', `${e.x.toFixed(2)}vw`);
+          panel.style.setProperty('--ne-p-x', e.x.toFixed(4));
           panel.style.setProperty('--ne-p-escala', e.escala.toFixed(4));
           panel.style.setProperty('--ne-p-plano', `${e.plano.toFixed(2)}deg`);
           panel.style.setProperty('--ne-p-opacidad', e.opacidad.toFixed(4));
@@ -227,9 +229,9 @@ export function iniciarNecesidades(raiz: HTMLElement) {
   const reducido = window.matchMedia('(prefers-reduced-motion: reduce)');
   function cambiar() {
     detener?.();
-    detener = escritorio.matches ? iniciarEscritorio() : iniciarPersonasApiladas(raiz, reducido.matches);
+    detener = fija.matches ? iniciarEscena() : iniciarPersonasApiladas(raiz, reducido.matches);
   }
   cambiar();
-  escritorio.addEventListener('change', cambiar);
-  return () => { escritorio.removeEventListener('change', cambiar); detener?.(); };
+  fija.addEventListener('change', cambiar);
+  return () => { fija.removeEventListener('change', cambiar); detener?.(); };
 }

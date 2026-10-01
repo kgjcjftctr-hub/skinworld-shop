@@ -1,8 +1,10 @@
 # Personas de la sección «Encuentra soluciones por problema»
 
-La sección ya tiene el sistema listo: cada categoría muestra a una persona que entra por la
-izquierda, gira sobre su eje, mejora durante el giro, sigue girando y sale por la derecha. Todo lo
-controla el scroll (avanza al bajar, retrocede al subir).
+La sección ya tiene el sistema listo. La página se queda fija (en computadora, tableta y celular) y
+lo único que se mueve es la persona: entra por la izquierda, gira sobre su eje, mejora durante el
+giro, sigue girando y sale por la derecha; cuando ya salió, entra la de la siguiente categoría.
+Nunca hay dos personas ni dos versiones de la misma persona en pantalla. Todo lo controla el scroll
+(avanza al bajar, retrocede al subir).
 
 **Lo único que falta son los assets.** Mientras una categoría no tenga su secuencia, se sigue viendo
 la escultura actual: nada se rompe ni aparece vacío.
@@ -20,7 +22,7 @@ Un **video de 4 a 6 segundos** (o una carpeta con sus cuadros en orden) de **una
 |---|---|
 | Movimiento | Giro lento sobre su eje vertical, de **¾ izquierdo (≈ −60°)** a **¾ derecho (≈ +60°)**. Cámara fija, sin zoom. |
 | Mejora | Ocurre **entre el 35 % y el 68 % del video** y termina **antes** de que acabe el giro. Después sigue girando ya mejorada. |
-| Encuadre | Plano medio corto (cabeza y hombros), persona centrada, con aire arriba. Para Cabello y Uñas puede entrar una mano. |
+| Encuadre | Plano medio corto (cabeza y hombros), persona centrada, con aire arriba. Para Cabello y Uñas, hasta media espalda para que se vea el largo del cabello. |
 | Formato | Vertical **3:4**, mínimo **1080 × 1440**. MP4 (H.264), MOV o WebM; o PNG/JPG numerados. |
 | Fondo | **Liso** del color de la categoría (tabla abajo) o **transparente** (PNG con alfa). |
 | Luz | Editorial suave, principal desde arriba a la izquierda, sin sombras duras. Igual en todo el video. |
@@ -32,24 +34,27 @@ Un **video de 4 a 6 segundos** (o una carpeta con sus cuadros en orden) de **una
   expresión normales, cabello ligeramente opaco. Nada severo ni impactante.
 - La mejora tampoco es mágica: se conservan **poros, textura, líneas de expresión, pequeñas
   imperfecciones y rasgos**. Nada de piel de plástico ni filtros de belleza.
-- Nunca dos versiones de la misma persona en pantalla: es una sola persona transformándose.
+- Una sola cabeza: nunca dos versiones de la misma persona lado a lado. Es una sola persona que gira
+  y cambia durante el giro.
 
 ---
 
 ## Las 8 personas
 
-| Slug | Categoría | Persona y estado inicial | Estado final | Fondo |
-|---|---|---|---|---|
-| `acne` | Acné | Persona joven (18–24) con acné leve a moderado: algunos granitos, pequeñas imperfecciones, enrojecimiento localizado en mejillas y mentón. | Piel más uniforme y calmada; quedan poros y alguna marca muy leve. | `#f6e9eb` |
-| `dermatitis` | Dermatitis | Otra persona, piel sensible: irritación leve, zonas ligeramente rojizas y algo de resequedad en mejillas. | Piel calmada e hidratada, tono parejo. | `#f3eae0` |
-| `antiedad` | Antiedad | Persona adulta (45–55) con líneas de expresión naturales y textura ligeramente marcada. **No** envejecida en exceso. | Piel más hidratada, luminosa y uniforme. **Conserva las líneas**: no rejuvenece 20 años. | `#e8dce8` |
-| `manchas` | Manchas | Otra persona con hiperpigmentación moderada: pequeñas manchas en pómulos y frente. | Tono más uniforme y luminoso; manchas muy atenuadas, no borradas. | `#f1e0d8` |
-| `cabello-y-unas` | Cabello y Uñas | Otra persona con cabello ligeramente seco, opaco o frágil en puntas. Una mano con uñas cortas, naturales. | Cabello con brillo y aspecto sano; uñas cuidadas. | `#e3ccd3` |
-| `piel-de-bebe` | Piel de Bebé | **Escena delicada, no médica**: madre o padre sosteniendo a su bebé, piel con algo de resequedad leve. | Sensación de piel hidratada, protegida y cuidada; luz más cálida. Sin «antes/después» exagerado. | `#faf2ed` |
-| `proteccion-solar` | Protección Solar | Otra persona con piel normal, al aire libre en luz de día. **Sin quemaduras**. | La misma piel, con sensación de protección: luz solar cálida, piel luminosa e hidratada. | `#f4edde` |
-| `suplementos` | Suplementos | Otra persona con apariencia normal, algo cansada. | Sensación de bienestar y luminosidad. **Sin promesas médicas visuales.** | `#e4d9e1` |
+Ocho personas distintas (edad, sexo y tono de piel variados, pensadas para clientes en México). Cada
+problema se muestra como se ve en la realidad y **solo donde corresponde**: granos únicamente en
+Acné. La descripción sale de fuentes dermatológicas (al final) y de lo que vende cada categoría.
 
----
+| Slug | Persona | Cómo se ve el problema (inicio del giro) | Cómo se ve al final | Fondo |
+|---|---|---|---|---|
+| `acne` | Mujer de 19–23 años, piel morena clara. | Acné leve a moderado: unas cuantas pápulas rojas y 2–3 pústulas pequeñas en mejillas, mentón y línea de la mandíbula; puntos negros en nariz y frente; algunas marcas cafés de granos anteriores (en piel morena las marcas quedan cafés, no rojas). | Casi sin lesiones inflamadas y con menos enrojecimiento. Se ven los poros y quedan marcas cafés tenues: las marcas tardan más que los granos en irse. | `#f6e9eb` |
+| `dermatitis` | Hombre de 30–38 años, piel morena media. | Dermatitis atópica en la cara: parches secos y ásperos con descamación fina en mejillas, párpados y alrededor de la boca. En piel morena se ven más oscuros, grisáceos o violáceos que rojos. Labios resecos. **Sin granos.** | Piel hidratada, sin descamación, textura lisa y tono más parejo; puede quedar un leve oscurecimiento donde estaban los parches. | `#f3eae0` |
+| `antiedad` | Mujer de 50–55 años, piel clara a media. | Fotoenvejecimiento normal para su edad: patas de gallo, líneas en la frente, surcos junto a la nariz, textura áspera, piel opaca y ojeras leves. **Sin granos ni manchas exageradas.** | Más hidratada y luminosa, textura más lisa y líneas finas suavizadas. Los surcos y las arrugas marcadas siguen ahí: **no rejuvenece**, sigue teniendo su edad. | `#e8dce8` |
+| `manchas` | Mujer de 35–45 años, piel morena (fototipo IV). | Melasma («paño»): manchas café claro a oscuro, **simétricas** y de borde irregular en pómulos, frente, dorso de la nariz y labio superior. **Sin granos.** | Manchas más claras y difusas, tono más uniforme y luminoso. **No desaparecen por completo.** | `#f1e0d8` |
+| `cabello-y-unas` | Mujer de 40–48 años con cabello largo, suelto, a media espalda. Suéter oscuro. | Cabello opaco, seco y con frizz, puntas abiertas y algo de quiebre; caspa visible: copos blancos finos en la raya y sobre los hombros del suéter oscuro. **La piel de la cara no cambia.** | Cabello con brillo, puntas definidas y más cuerpo; cuero cabelludo y hombros limpios. | `#e3ccd3` |
+| `piel-de-bebe` | Bebé de 6–9 meses con mameluco, en brazos de su mamá o papá; del adulto solo se ven brazos y hombro. Lo que gira es el adulto, despacio, con el bebé de frente. | Resequedad o eccema infantil leve: mejillas con parches secos, ásperos y un poco rojizos; algo de resequedad alrededor de la boca. Nada de llagas, heridas ni bebé llorando. | Mejillas suaves, hidratadas y con su color natural. Escena tierna, luz cálida. | `#faf2ed` |
+| `proteccion-solar` | Hombre de 25–32 años, al aire libre con luz de sol directa (fondo de cielo claro o pared cálida desenfocada). | No es una enfermedad: es **protección**. Al empezar el giro tiene rayas blancas de protector solar recién puesto en pómulos, nariz y frente, y la piel con un poco de brillo por el calor. | El protector ya está extendido y absorbido: piel pareja, cómoda y luminosa bajo el sol, sin capa blanca. **No se muestra que el protector «cure» una quemadura.** | `#f4edde` |
+| `suplementos` | Mujer u hombre de 28–38 años con ropa deportiva (la categoría vende proteína, BCAA y colágeno). | Cansancio, como se ve tras dormir poco: ojeras, párpados algo caídos, piel opaca y pálida, labios resecos, mirada cansada. **Sin granos.** | Descansada: piel con color y luminosidad, ojeras más suaves, mirada despierta. **Sin músculos nuevos ni cambios corporales**: nada que parezca promesa médica. | `#e4d9e1` |
 
 ## Cómo generarlos con IA
 
@@ -81,26 +86,61 @@ Un **video de 4 a 6 segundos** (o una carpeta con sus cuadros en orden) de **una
 
 ### Prompts de imagen por persona
 
-- **Acné, inicio**: *Photorealistic head-and-shoulders portrait of a young adult, three-quarter
-  left view, mild to moderate acne on cheeks and chin with localized redness, visible pores, natural
-  skin texture, plain {#f6e9eb} background, soft editorial light, no makeup, neutral expression.*
-  **Final**: *same person, three-quarter right view, calmer and more even skin, pores still
-  visible, one or two faint marks remain, same light and background.*
-- **Dermatitis**: *…sensitive skin with mild irritation and slightly reddish dry patches on the
-  cheeks…* → *…calm, hydrated, even-toned skin…*
-- **Antiedad**: *…adult in their late 40s, natural expression lines and slightly marked texture,
-  not exaggerated…* → *…more hydrated, luminous, even skin, expression lines still present, same
-  age…*
-- **Manchas**: *…moderate hyperpigmentation, small sun spots on cheekbones and forehead…* → *…more
-  even, luminous tone, spots softened but not erased…*
-- **Cabello y Uñas**: *…slightly dry, dull hair with frizzy ends, one hand near the face with
-  short natural nails…* → *…healthy shiny hair, cared-for nails…*
-- **Piel de Bebé**: *…a parent gently holding a baby, tender premium editorial scene, baby skin
-  slightly dry…* → *…same scene, soft warm light, baby skin looks hydrated and cared for…*
-- **Protección Solar**: *…person outdoors in warm daylight, normal healthy skin, no sunburn…* →
-  *…same person, luminous protected-looking skin, warm sunlight glow…*
-- **Suplementos**: *…person with a normal, slightly tired appearance…* → *…same person radiating
-  well-being and luminosity, no medical claims…*
+Base común (va antes de cada prompt): *Photorealistic editorial portrait, head and shoulders,
+vertical 3:4, plain seamless background in {color}, soft key light from the upper left, natural
+skin texture with visible pores, no makeup unless stated, no beauty filter, neutral calm expression.*
+
+Imagen inicial en **¾ izquierdo**; imagen final de **la misma persona** en **¾ derecho** (usar la
+inicial como referencia).
+
+- **Acné** — inicio: *Mexican woman, 21, light-brown skin, mild to moderate acne: a few red papules
+  and two or three small pustules on the cheeks, chin and jawline, blackheads on the nose and
+  forehead, a few brown post-acne marks.* Final: *same woman, almost no inflamed spots, less
+  redness, pores still visible, faint brown marks remain.*
+- **Dermatitis** — inicio: *Mexican man, 34, medium-brown skin, facial atopic dermatitis: dry,
+  rough, finely scaling patches on the cheeks, eyelids and around the mouth that look darker and
+  slightly greyish-violet rather than red, dry lips, no acne.* Final: *same man, hydrated smooth
+  skin, no scaling, more even tone, slight residual darkening where the patches were.*
+- **Antiedad** — inicio: *woman, 53, light-medium skin, natural photoaging: crow's feet, forehead
+  lines, nasolabial folds, rough dull texture, mild under-eye shadows, no acne.* Final: *same woman,
+  same age, more hydrated and luminous skin, smoother texture, fine lines softened, deep folds still
+  present.*
+- **Manchas** — inicio: *Mexican woman, 40, brown skin (Fitzpatrick IV), melasma: symmetrical
+  light-to-dark brown patches with irregular borders on both cheekbones, forehead, bridge of the
+  nose and upper lip, no acne.* Final: *same woman, patches lighter and more diffuse, more even and
+  luminous tone, not completely erased.*
+- **Cabello y Uñas** — inicio: *woman, 45, long loose hair to mid-back, dull dry frizzy hair with
+  split ends, fine white dandruff flakes along the parting and on the shoulders of a dark sweater,
+  skin normal.* Final: *same woman, glossy healthy hair with defined ends and more body, clean
+  scalp and shoulders, skin unchanged.*
+- **Piel de Bebé** — inicio: *a 7-month-old baby in a soft onesie held in a parent's arms (only
+  the adult's arms and shoulder visible), baby facing camera, mild infant dryness: rough, slightly
+  reddish dry patches on both cheeks, calm baby, tender warm scene.* Final: *same baby and parent,
+  soft hydrated cheeks with natural color, warm light.*
+- **Protección Solar** — inicio: *Mexican man, 28, outdoors in direct sunlight, warm blurred
+  background, freshly applied white streaks of sunscreen on the cheekbones, nose and forehead,
+  slight shine from the heat.* Final: *same man, sunscreen fully blended and invisible, even,
+  comfortable, luminous skin in the sun.*
+- **Suplementos** — inicio: *woman, 32, athletic wear, tired look from poor sleep: dark under-eye
+  circles, slightly heavy eyelids, dull pale skin, dry lips.* Final: *same woman, rested look,
+  healthy color and glow, softer under-eye circles, alert eyes, same body.*
+
+### Fuentes de la investigación
+
+- Acné: [StatPearls – Acne Vulgaris](https://www.ncbi.nlm.nih.gov/sites/books/NBK459173/),
+  [acné en mujeres adultas (PMC)](https://pmc.ncbi.nlm.nih.gov/articles/PMC5986265/).
+- Dermatitis: [Cleveland Clinic – eccema en piel morena](https://health.clevelandclinic.org/eczema-in-skin-of-color),
+  [Healthline – dermatitis atópica en la cara](https://www.healthline.com/health/atopic-dermatitis-face).
+- Antiedad: [tretinoína en fotoenvejecimiento (PMC)](https://pmc.ncbi.nlm.nih.gov/articles/PMC12615114/),
+  [Cleveland Clinic – retinol](https://my.clevelandclinic.org/health/treatments/23293-retinol).
+- Manchas: [Cleveland Clinic – melasma](https://my.clevelandclinic.org/health/diseases/21454-melasma),
+  [MedlinePlus – melasma](https://medlineplus.gov/ency/article/000836.htm).
+- Cabello y Uñas: [uñas frágiles (PMC)](https://pmc.ncbi.nlm.nih.gov/articles/PMC6994568/).
+- Piel de Bebé: [Cleveland Clinic – eccema del bebé](https://my.clevelandclinic.org/health/diseases/23408-baby-eczema).
+- Protección Solar: [Cleveland Clinic – daño solar](https://my.clevelandclinic.org/health/diseases/5240-sun-damage-protecting-yourself),
+  [DermNet – manchas solares](https://dermnetnz.org/topics/brown-spots-and-freckles).
+- Suplementos: [AASM – la cara de la falta de sueño](https://aasm.org/study-reveals-the-face-of-sleep-deprivation/),
+  [estudio de restricción de sueño en 24 mujeres](https://www.sciencedirect.com/science/article/pii/S1389945721005761).
 
 ---
 
@@ -115,6 +155,8 @@ Un **video de 4 a 6 segundos** (o una carpeta con sus cuadros en orden) de **una
 - Modo `doble` (opcional): si se tienen dos secuencias alineadas cuadro por cuadro (antes y
   después), se pasan con `--despues` y el sistema las funde entre el 35 % y el 68 % del giro.
 - Movimiento reducido: se muestra un solo cuadro fijo, ya mejorado.
+- Pantallas muy bajas (menos de 560 px de alto en celular o 620 px en computadora): las categorías
+  quedan como bloques normales y la persona cruza mientras el bloque pasa por la pantalla.
 
 ## Antes de publicar con personas
 
