@@ -6,6 +6,7 @@ import { useCart } from '@/store/cart';
 import { ShoppingBag, Menu, X, Search } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { SearchModal } from './search-modal';
+import { BarraDeAvisos } from './barra-avisos';
 import { Mariposa } from './ui/mariposa';
 import { cn } from '@/utils';
 
@@ -54,22 +55,20 @@ export function Header() {
   }, [isMenuOpen]);
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+  // En el inicio el encabezado flota sobre la intro cinematográfica, aparece
+  // al final de la escena y su logo recibe a la mariposa (ver styles/intro.css).
+  const enInicio = pathname === '/';
 
   return (
     <>
-      <div className="bg-sw-pink-soft">
-        <p className="sw-container flex justify-center gap-x-6 py-2 text-center text-sw-xs font-medium text-sw-ink">
-          <span className="hidden sm:inline">Precios en pesos mexicanos (MXN)</span>
-          <span>Envío gratis en CDMX</span>
-          <span>Productos 100% originales</span>
-        </p>
-      </div>
+      {!enInicio && <BarraDeAvisos />}
 
       {/* La altura baja de 72 a 60 px al hacer scroll; el margen inferior crece
           lo mismo, así el contenido de la página no brinca. */}
       <header
         className={cn(
           'sticky top-0 z-50 border-b bg-sw-warm-white transition-[height,margin,box-shadow,border-color] duration-sw ease-sw',
+          enInicio && 'sw-header-intro',
           isScrolled
             ? 'mb-3 h-[60px] border-transparent shadow-sw-sm'
             : 'mb-0 h-[72px] border-sw-border'
@@ -81,14 +80,18 @@ export function Header() {
             className="flex items-center gap-2.5 rounded-sw-sm text-sw-ink"
             aria-label="Skinworld, ir al inicio"
           >
-            <Mariposa
-              className={cn(
-                'w-auto text-sw-pink transition-[height] duration-sw ease-sw',
-                isScrolled ? 'h-7' : 'h-8'
-              )}
-            />
-            <span className="flex flex-col leading-none">
-              <span className="font-display text-[1.375rem] font-semibold tracking-tight">Skinworld</span>
+            <span data-intro-logo="mariposa" data-intro-destino="mariposa" className="inline-flex">
+              <Mariposa
+                className={cn(
+                  'w-auto text-sw-pink transition-[height] duration-sw ease-sw',
+                  isScrolled ? 'h-7' : 'h-8'
+                )}
+              />
+            </span>
+            <span data-intro-logo="nombre" className="flex flex-col leading-none">
+              <span data-intro-destino="nombre" className="font-display text-[1.375rem] font-semibold tracking-tight">
+                Skinworld
+              </span>
               <span className="mt-1 hidden text-[0.6875rem] font-medium text-sw-muted sm:block">
                 by Karina Alfaro
               </span>

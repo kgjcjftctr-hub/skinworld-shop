@@ -1,4 +1,5 @@
-import { HeroSection } from '@/components/sections/hero';
+import { IntroCinematica } from '@/components/intro/intro-cinematica';
+import { BarraDeAvisos } from '@/components/barra-avisos';
 import { CategoriesSection } from '@/components/sections/categories';
 import { SkinworldEdit } from '@/components/sections/skinworld-edit';
 import { BrandsSection } from '@/components/sections/brands';
@@ -12,19 +13,24 @@ import { datosDeLaPortada } from '@/lib/escaparate';
 export const revalidate = 3600;
 
 export default async function Home() {
-  const { totalProductos, marcas, porCategoria, destacados, portada } = await datosDeLaPortada();
+  const { marcas, porCategoria, destacados } = await datosDeLaPortada();
 
   return (
     <>
-      <HeroSection productCount={totalProductos} portada={portada} />
-      <CategoriesSection porCategoria={porCategoria} />
-      <SkinworldEdit destacados={destacados} />
-      <BrandsSection marcas={marcas} />
-      <EditorialSection />
-      <ExpertiseSection />
-      <TestimonialsSection />
-      <BlogPreview />
-      <CTASection />
+      <IntroCinematica />
+      {/* El resto del inicio sube sobre el final de la intro, como una hoja que
+          entra desde abajo; por eso va por encima (z-10) y con fondo propio. */}
+      <div className="relative z-10 bg-sw-warm-white">
+        <BarraDeAvisos />
+        <CategoriesSection porCategoria={porCategoria} />
+        <SkinworldEdit destacados={destacados} />
+        <BrandsSection marcas={marcas} />
+        <EditorialSection />
+        <ExpertiseSection />
+        <TestimonialsSection />
+        <BlogPreview />
+        <CTASection />
+      </div>
     </>
   );
 }
