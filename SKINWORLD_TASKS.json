@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "SkinWorld Task Center",
-  "lastInspectedAt": "2026-09-30T16:40:00-06:00",
-  "lastInspectedBy": "Claude Code auditing the storefront before the V1 redesign",
+  "lastInspectedAt": "2026-09-30T17:55:00-06:00",
+  "lastInspectedBy": "Codex auditing and verifying the Skinworld V1 redesign",
   "sourceOfTruth": "This file is the durable source of truth. Do not replace it with a new list; update tasks by stable id and retain completed items and history. Every task carries detectedIn, the lastInspectedAt value of the inspection that first registered it, which is what marks a finding as new. The rendered page is published as a Claude artifact at artifactUrl; always republish to that same url instead of creating a second Task Center.",
   "statusDefinitions": {
     "pending": "Open work that has been detected or accepted.",
@@ -249,6 +249,10 @@
         {
           "date": "2026-09-30",
           "note": "Unchanged and still blocked on the owner: completion needs the legal entity name, RFC and full domicile, plus a qualified reviewer. No code change can close this one."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Redesign re-audit found two additional operational mismatches: the terms still describe physical and nutritional status rather than dermatology ecommerce, and the shipping policy says the tracking number is sent with purchase confirmation even though the system can only send it after staff capture it when marking the order shipped."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -279,6 +283,10 @@
         {
           "date": "2026-09-30",
           "note": "Partially verified in production: a real test purchase produced a stored order and the store notification email arrived. Remaining unknowns split into SW-014 (live payments) and SW-015 (customer email)."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Redesign verification reached a correctly populated Stripe Checkout session from home, search, product, cart and postal-code address entry. It remains a test-mode session and no payment was completed, so webhook persistence and both email recipients were not re-verified in this pass."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -299,12 +307,16 @@
         "src/components/checkout/shipping-address-form.tsx",
         "src/app/carrito/page.tsx"
       ],
-      "details": "The code contains labels for several controls, but the audit did not run an assistive-technology or device matrix. Modal focus handling, mobile menu behavior, filter controls, error announcements, contrast, and full checkout keyboard use need browser verification.",
+      "details": "Manual browser checks now pass at desktop and 390 × 844 px: search and filter dialogs contain and restore focus, Escape closes them, mobile cards and product detail fit, cart controls have accessible names, and shipping labels are associated with their fields. A full screen-reader and automated accessibility scan is still outstanding.",
       "doneWhen": "The main buyer routes work at mobile and desktop breakpoints using keyboard only; focus is trapped/restored correctly in dialogs; form errors are announced; and an accessibility scan plus manual checks has no unresolved critical issue.",
       "history": [
         {
           "date": "2026-09-30",
           "note": "Browser/device testing was outside this source-only audit."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Advanced with browser evidence: desktop and 390px phone journeys were exercised through search, product, cart and checkout; dialog focus trapping and restoration passed. Shipping labels, postal-code status messages and remaining low-contrast checkout copy were fixed. Kept requires_verification until a screen-reader and automated scan are run."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -433,6 +445,10 @@
         {
           "date": "2026-09-30",
           "note": "Unchanged and still blocked on the owner: activating live payments requires connecting a bank account to the Stripe account, which only the owner can do."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Rechecked against the configured Stripe account: the keys are still test-mode and the account reports charges_enabled=false, payouts_enabled=false and details_submitted=false. The redesigned checkout reaches Stripe correctly, but only as an explicit test environment."
         }
       ],
       "detectedIn": "2026-09-30T10:40:00-06:00"
@@ -458,6 +474,10 @@
         {
           "date": "2026-09-30",
           "note": "Detected during the 2026-09-30 re-inspection."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "The local environment used for redesign verification has none of RESEND_API_KEY, CONTACT_NOTIFY_EMAIL or CONTACT_FROM_EMAIL, so current production delivery could not be rechecked from this checkout. Code paths for store and customer mail exist; external inbox delivery remains unproven."
         }
       ],
       "detectedIn": "2026-09-30T10:40:00-06:00"
@@ -532,8 +552,8 @@
         "Supabase products table",
         "src/app/admin/admin-dashboard.tsx"
       ],
-      "details": "Three catalog items were researched but left unresolved because they need a business decision or a price the owner holds: which Flavo C version to list (Ultraglican, Melatonin, Forte, Intense, or the Día+Noche ampoule pack — only the generic \"Flavo C Sérum 30 Ml\" exists today), and the selling prices for the ISDIN Pediatrics stick and the Daeha capsules, for which no reliable Mexican price was found.",
-      "doneWhen": "The owner confirms the Flavo C version and the two prices, the products are published with correct IVA-inclusive pricing and images, and they appear on the storefront.",
+      "details": "The ISDIN Pediatrics stick and Daeha probiotic now appear in the catalog at $580 and $1,250 respectively, but this audit found no approval evidence for those prices. The Flavo C decision remains unresolved: only the generic \"Flavo C Sérum 30 Ml\" exists, without identifying Ultraglican, Melatonin, Forte, Intense or Día+Noche.",
+      "doneWhen": "The owner confirms the Flavo C version and confirms the two already-published prices; the catalog then carries the approved IVA-inclusive values, names and images.",
       "detectedAt": "2026-09-30",
       "updatedAt": "2026-09-30",
       "history": [
@@ -544,6 +564,10 @@
         {
           "date": "2026-09-30",
           "note": "Redesign audit: the four products flagged as featured, shown on the home page as \"Seleccionados por la Dra. Karina\", are Effezel, Retacnyl, Clobexpro shampoo and Clobexpro lotion; three of the four have no brand, and they are prescription items. The planned \"Skinworld Edit\" section reads this same featured flag, so the owner should confirm the selection before it becomes the editorial centrepiece."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Current catalog check: Pediatrics Stick and Daeha are visible with prices, so the remaining work is owner approval of those values plus the exact Flavo C version."
         }
       ],
       "detectedIn": "2026-09-30T10:40:00-06:00"
@@ -707,6 +731,10 @@
         {
           "date": "2026-09-30",
           "note": "Found while rebuilding the brands section from the catalog: the section could only show 14 laboratories because the rest of the products carry no brand at all."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Recounted against the current catalog: the customer sees 164 grouped products and 46 still have no brand; the finding is unchanged."
         }
       ]
     },
@@ -723,7 +751,7 @@
       ],
       "details": "Measured against white: body copy in text-slate-600 (#868E96) is 3.32:1 and 3.15:1 on the grey section background; text-slate-500 (#ADB5BD) is 2.07:1; text-slate-400 (#CED4DA), used for \"Con IVA\", category labels and dates, is 1.49:1. The small uppercase pink labels in primary-700 (#BC7F8F) are 3.2:1, the gold brand label gold-600 (#B8942A) is 2.87:1, and the About page call to action puts white text on primary-500 at 2.14:1. The project redefines Tailwind slate with much lighter values, so every default-looking grey class is lighter than it appears in code.",
       "doneWhen": "Body and small text reach at least 4.5:1 and large text at least 3:1 on their real backgrounds, verified with a contrast check of every text token in the new design system.",
-      "status": "pending",
+      "status": "completed",
       "detectedAt": "2026-09-30",
       "updatedAt": "2026-09-30",
       "detectedIn": "2026-09-30T16:40:00-06:00",
@@ -731,6 +759,10 @@
         {
           "date": "2026-09-30",
           "note": "Found in the redesign audit by computing contrast ratios for every grey and pink text colour in use."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed by the Skinworld V1 tokens: ink, body, muted and deep-pink text meet the documented ratios on their real surfaces. The remaining old low-contrast classes in the shipping and confirmation views were replaced, and both views were checked in the browser."
         }
       ]
     },
@@ -757,6 +789,10 @@
         {
           "date": "2026-09-30",
           "note": "Found in the redesign audit while tracing the cart summary back to /api/checkout. Not changed: the redesign will keep the current wording until the owner decides."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Reconfirmed in the redesigned flow: checkout still decides shipping only from subtotal and never reads the state, while four customer-facing locations promise free CDMX shipping. This remains a business decision, not a presentation fix."
         }
       ]
     },
@@ -773,7 +809,7 @@
       ],
       "details": "On a 390px phone the shop grid is one column and each card is about 1,000 CSS px tall (square image, category, name, price, \"Con IVA\", full-width black button), so the 164-product catalog is roughly 100 screens of scrolling. On the product page the square image fills the first screen and the price sits below the fold.",
       "doneWhen": "The phone catalog shows two products per row with a tappable add button, and the product page shows image, name and price within the first screen at 375-430px.",
-      "status": "pending",
+      "status": "completed",
       "detectedAt": "2026-09-30",
       "updatedAt": "2026-09-30",
       "detectedIn": "2026-09-30T16:40:00-06:00",
@@ -781,6 +817,10 @@
         {
           "date": "2026-09-30",
           "note": "Measured from full-page captures of production on 2026-09-30."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed and browser-verified at 390 × 844 px: the shop renders two cards per row with separate accessible add buttons, and the product image, name, price, quantity and add button all fit in the first phone screen."
         }
       ]
     },
@@ -799,7 +839,7 @@
       ],
       "details": "The header and footer use a 512x407 PNG butterfly (the footer turns it white with a CSS filter). public/logo.svg is not the butterfly at all but a leaf drawing and is unused. public/images/logo-full.png has damaged transparency (speckled edges) and is unused. The butterfly pink measures #E9A9B9, while the site colour called primary is #D4A5AF, so the brand pink on the page does not match the logo.",
       "doneWhen": "One vector butterfly traced from the current header mark (same proportions) is used everywhere, unused or damaged logo files are retired, and the design system pink is taken from the logo.",
-      "status": "pending",
+      "status": "completed",
       "detectedAt": "2026-09-30",
       "updatedAt": "2026-09-30",
       "detectedIn": "2026-09-30T16:40:00-06:00",
@@ -807,6 +847,10 @@
         {
           "date": "2026-09-30",
           "note": "Found in the redesign audit."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed: header, footer, decorative marks and the new 3D motion use one vector component traced from the official butterfly; the design token uses its #E9A9B9 pink, and the unused damaged PNG and leaf SVG were removed."
         }
       ]
     },
@@ -823,7 +867,7 @@
       ],
       "details": "The product card places its \"Agregar\" button inside the product link, which nests two interactive controls. The mobile menu button does not expose aria-expanded. The mobile filter drawer has no Escape handling or focus management, and the mobile menu the same. Related to SW-010, which covers verifying the journeys on devices.",
       "doneWhen": "No interactive element is nested in another, menu and drawers announce their state, close with Escape and return focus, verified by keyboard.",
-      "status": "pending",
+      "status": "completed",
       "detectedAt": "2026-09-30",
       "updatedAt": "2026-09-30",
       "detectedIn": "2026-09-30T16:40:00-06:00",
@@ -831,6 +875,10 @@
         {
           "date": "2026-09-30",
           "note": "Found by reading the components during the redesign audit."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Fixed and manually verified: product add buttons are outside the card links; menu and filter controls expose state; mobile menu, filter drawer and search close with Escape; filter and search dialogs contain and restore focus."
         }
       ]
     },
@@ -846,9 +894,9 @@
         "src/components/**",
         "src/app/(storefront pages)"
       ],
-      "details": "Owner-requested redesign in phases: design system, global components, home, shop and cards, product page, About, Journal, contact, cart (visual only), responsive polish, accessibility and performance. Stripe, checkout, cart store, address form logic, emails, APIs, database and admin are out of scope. Audit and phase plan presented on 2026-09-30; waiting for owner approval before any storefront file changes.",
+      "details": "Owner-requested redesign completed in nine phases: design system, global components, home, shop and cards, product page, About, Journal, contact and cart, followed by responsive, contrast and keyboard polish. Checkout logic, email behavior, APIs, database and admin remain governed by their own tasks.",
       "doneWhen": "Every phase is built, passes build and browser checks at 375-1920px, and the cart, filters, product add, forms and checkout still behave exactly as before.",
-      "status": "pending",
+      "status": "completed",
       "detectedAt": "2026-09-30",
       "updatedAt": "2026-09-30",
       "detectedIn": "2026-09-30T16:40:00-06:00",
@@ -856,6 +904,10 @@
         {
           "date": "2026-09-30",
           "note": "Audit completed and plan presented; no files changed yet."
+        },
+        {
+          "date": "2026-09-30",
+          "note": "Completed phases 1–9 and a final audit pass. Production build and type-check pass; browser checks covered desktop plus 390 × 844 px, search, filters, product add, postal-code address completion, cart totals and arrival at a correctly populated Stripe test Checkout. Two 3D butterfly animations were added with reduced-motion support."
         }
       ]
     },
@@ -881,9 +933,36 @@
           "note": "Found while checking what the redesigned product page could display."
         }
       ]
+    },
+    {
+      "id": "SW-032",
+      "title": "Correct compare-at prices that are lower than the current price",
+      "kind": "detected_problem",
+      "category": "Ecommerce",
+      "priority": "P1",
+      "status": "pending",
+      "origin": [
+        "Supabase products table",
+        "src/components/product-card.tsx"
+      ],
+      "details": "Two current catalog rows have compare_at_price_with_iva below price_with_iva, so the storefront labels a lower amount as \"Antes\": Protector Solar SPF 50 is $760 with $754 before, and Sérum Hidratante Intenso is $1,250 with $986 before. The card suppresses a negative discount badge but still prints the contradictory struck-through price.",
+      "doneWhen": "The owner confirms the intended regular and current price for both products, the catalog is corrected, and cards never render a compare-at amount that is less than or equal to the current amount.",
+      "detectedAt": "2026-09-30",
+      "updatedAt": "2026-09-30",
+      "detectedIn": "2026-09-30T17:55:00-06:00",
+      "history": [
+        {
+          "date": "2026-09-30",
+          "note": "Detected during final redesign browser verification and confirmed by a read-only query over all 201 catalog rows. No price was changed because the correct business values are unknown."
+        }
+      ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-09-30",
+      "summary": "Skinworld V1 redesign completed and audited. SW-025, SW-027, SW-028, SW-029 and SW-030 closed after production build, type-check and browser verification on desktop and 390 × 844 px. Search, product add, cart, postal-code address completion and Stripe test Checkout passed. Two 3D butterfly animations with reduced-motion support were added. SW-010 advanced but stays open for a full screen-reader/automated scan. SW-032 registered two inverted compare-at prices; no catalog price was changed without owner confirmation."
+    },
     {
       "date": "2026-09-30",
       "summary": "Redesign audit (phase 0) completed without changing any storefront file. Seven findings registered: SW-025 text contrast below WCAG AA, SW-026 the \"free shipping in CDMX\" promise versus a $100 charge under $500, SW-027 one-column phone catalog, SW-028 duplicated and mismatched logo assets, SW-029 keyboard and nesting issues, SW-030 the redesign programme itself, and SW-031 missing product-detail content. SW-011 and SW-018 got new evidence."

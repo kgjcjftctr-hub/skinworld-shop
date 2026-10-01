@@ -1,4 +1,7 @@
-import { Award, MapPin, Phone, Clock } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowRight, Clock, MapPin, Phone } from 'lucide-react';
+import { Mariposa } from '@/components/ui/mariposa';
+import { DRA_KARINA } from '@/lib/dra-karina';
 
 export const metadata = {
   title: 'Sobre Nosotros',
@@ -7,164 +10,161 @@ export const metadata = {
   alternates: { canonical: '/sobre-nosotros' },
 };
 
+// Todo el texto de esta página ya estaba publicado; aquí solo se reorganiza.
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero */}
-      <section className="bg-primary-50 py-20">
-        <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <h1 className="font-display text-4xl font-bold text-ink sm:text-5xl">Sobre Nosotros</h1>
-        </div>
-      </section>
-
-      {/* Nuestra Historia */}
-      <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
-            <video
-              src="/videos/skinworld-logo.mp4"
-              poster="/videos/skinworld-logo-poster.jpg"
-              autoPlay
-              muted
-              playsInline
-              preload="auto"
-              aria-label="Animación del logotipo de Skinworld by Karina Alfaro"
-              className="aspect-square w-full rounded-[20px] object-cover shadow-card"
-            />
-            <div>
-              <h2 className="mb-6 font-display text-3xl font-bold text-ink sm:text-4xl">
-                ¿Quiénes Somos?
-              </h2>
-              <p className="mb-5 text-justify leading-loose text-slate-600">
-                Somos una empresa experta en el cuidado de la piel y el bienestar general, que
-                cuenta con una gran variedad de productos dermatológicos y suplementos
-                alimenticios, respaldada por profesionales de la salud y comprometida con nuestros
-                clientes, quienes pueden tener la seguridad de que lo que encuentran en este sitio
-                es de la más alta calidad y con tecnología de punta, avalada por dermatólogos con
-                años de experiencia.
-              </p>
-              <p className="text-justify leading-loose text-slate-600">
-                Esta empresa surgió de la necesidad de encontrar respuesta pronta y atención
-                personalizada para satisfacer las necesidades de nuestros clientes.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Dra. Karina Alfaro López */}
-      <section className="bg-slate-50 py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
-            <img
-              loading="lazy"
-              decoding="async"
-              src="/images/dra-karina-alfaro.jpg"
-              alt="Dra. Karina Alfaro López"
-              className="aspect-square w-full rounded-[20px] object-cover lg:order-1"
-            />
-
-            <div>
-              <span className="mb-4 inline-block font-accent text-xs font-bold uppercase tracking-[0.15em] text-gold-600">
-                Experta
-              </span>
-              <h2 className="mb-2 font-display text-3xl font-bold text-ink sm:text-4xl">
-                Dra. Karina Alfaro López
-              </h2>
-              <p className="mb-6 font-accent font-semibold text-primary-700">
-                Especialista en Dermatología · 25 años de experiencia
-              </p>
-
-              <p className="mb-8 text-justify leading-loose text-slate-600">
-                La Dra. Karina Alfaro es dermatóloga. Realizó Medicina Interna en el Hospital ABC y
-                la especialidad de Dermatología en el Centro Médico Nacional 20 de Noviembre. Está
-                certificada ante el Consejo Mexicano de Dermatología y es miembro activo de la
-                Academia Mexicana de Dermatología, del Colegio Iberolatinoamericano de Dermatología
-                y de la Fundación para la Dermatología. Actualmente atiende a sus pacientes en
-                Grupo Médico Pediátrico, en la Ciudad de México.
-              </p>
-
-              <div className="space-y-8">
-                <div>
-                  <h3 className="mb-3 font-display text-lg font-semibold text-ink">Consultorio</h3>
-                  <p className="mb-3 text-slate-600">
-                    Atiende en <span className="font-semibold text-ink">Grupo Médico Pediátrico</span>,
-                    sede Lomas.
-                  </p>
-                  <ul className="space-y-2 text-slate-600">
-                    <li className="flex items-start gap-2.5">
-                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary-500" />
-                      <span>Acueducto Río Hondo 30, Hospital Ángeles Lomas, CDMX</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary-500" />
-                      <a href="tel:+525511001200" className="transition-colors hover:text-primary-700">
-                        55 1100 1200
-                      </a>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary-500" />
-                      <span>Lun-Vie 10:00-19:00 · Sáb 11:00-14:00 y 16:00-18:00 · Dom 11:00-14:00 y 16:00-18:00</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="mb-3 font-display text-lg font-semibold text-ink">Educación</h3>
-                  <ul className="space-y-1.5 text-slate-600">
-                    <li>Medicina General — UNAM</li>
-                    <li>Medicina Interna — Hospital ABC</li>
-                    <li>Dermatología — Centro Médico Nacional 20 de Noviembre, ISSSTE</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="mb-3 font-display text-lg font-semibold text-ink">Certificaciones</h3>
-                  <ul className="space-y-1.5 text-slate-600">
-                    <li>Consejo Mexicano de Dermatología (vigencia 2030)</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="mb-3 font-display text-lg font-semibold text-ink">Membresías</h3>
-                  <ul className="space-y-2 text-slate-600">
-                    <li className="flex items-start gap-2.5">
-                      <Award className="mt-0.5 h-4 w-4 shrink-0 text-primary-500" />
-                      <span>Academia Mexicana de Dermatología</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <Award className="mt-0.5 h-4 w-4 shrink-0 text-primary-500" />
-                      <span>Colegio Iberolatinoamericano de Dermatología</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <Award className="mt-0.5 h-4 w-4 shrink-0 text-primary-500" />
-                      <span>Fundación para la Dermatología</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="bg-gradient-to-b from-primary-500 to-primary-400 py-20">
-        <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="mb-4 font-display text-3xl font-bold text-white sm:text-4xl">
-            Comienza tu Rutina Dermatológica
-          </h2>
-          <p className="mx-auto mb-8 max-w-2xl text-white/90">
-            Descubre los productos recomendados por criterio profesional para el cuidado de tu piel.
+    <>
+      {/* Apertura */}
+      <section className="sw-container pb-sw-section pt-12 sm:pt-16">
+        <p className="sw-label">Sobre nosotros</p>
+        <h1 className="mt-4 max-w-[16ch] font-display text-sw-display font-semibold text-sw-ink">
+          Dermatología detrás de cada elección
+        </h1>
+        <div className="mt-10 grid gap-8 border-t border-sw-ink/80 pt-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
+          <p className="font-display text-2xl leading-snug text-sw-ink sm:text-[1.75rem]">
+            Skinworld es una tienda de productos dermatológicos y suplementos alimenticios,
+            respaldada por profesionales de la salud.
           </p>
-          <a
-            href="/tienda"
-            className="inline-flex items-center gap-2 rounded-md bg-white px-8 py-4 font-accent text-sm font-semibold text-ink transition-transform hover:scale-[1.03]"
-          >
-            Explorar Tienda
-          </a>
+          <div className="max-w-sw-prose space-y-5 text-sw-lead text-sw-text">
+            <p>
+              Surgió de la necesidad de encontrar respuesta pronta y atención personalizada para
+              quienes cuidan su piel.
+            </p>
+            <p>
+              Quien compra aquí puede tener la seguridad de que lo que encuentra es de la más alta
+              calidad, con tecnología de punta y avalado por dermatólogos con años de experiencia.
+            </p>
+          </div>
         </div>
       </section>
-    </div>
+
+      {/* Criterio */}
+      <section className="bg-sw-surface">
+        <div className="sw-container grid items-center gap-10 py-sw-section lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-20">
+          <video
+            src="/videos/skinworld-logo.mp4"
+            poster="/videos/skinworld-logo-poster.jpg"
+            autoPlay
+            muted
+            playsInline
+            preload="metadata"
+            aria-label="Animación del logotipo de Skinworld by Karina Alfaro"
+            className="mx-auto aspect-square w-full max-w-[16rem] rounded-sw-lg bg-sw-white object-cover sm:max-w-[26rem]"
+          />
+          <div>
+            <Mariposa className="h-7 w-auto text-sw-pink" />
+            <h2 className="mt-6 font-display text-sw-h2 font-semibold text-sw-ink">Nuestro criterio</h2>
+            <p className="mt-5 max-w-sw-prose text-sw-lead text-sw-text">
+              Cada producto Skinworld es seleccionado bajo un riguroso criterio médico y científico,
+              para el cuidado profesional de tu piel.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Dra. Karina */}
+      <section aria-labelledby="dra-titulo" className="sw-container py-sw-section">
+        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
+          <img
+            loading="lazy"
+            decoding="async"
+            src={DRA_KARINA.foto}
+            alt={`${DRA_KARINA.nombre}, dermatóloga`}
+            className="aspect-[4/5] w-full rounded-sw-lg object-cover object-top lg:sticky lg:top-24"
+          />
+
+          <div>
+            <p className="sw-label">Quién elige cada producto</p>
+            <h2 id="dra-titulo" className="mt-3 font-display text-sw-h2 font-semibold text-sw-ink">
+              {DRA_KARINA.nombre}
+            </h2>
+            <p className="mt-3 text-sw-lead text-sw-muted">
+              {DRA_KARINA.especialidad}, con {DRA_KARINA.experiencia}.
+            </p>
+
+            <p className="mt-8 max-w-sw-prose text-sw-lead text-sw-text">
+              La Dra. Karina Alfaro es dermatóloga. Realizó Medicina Interna en el Hospital ABC y la
+              especialidad de Dermatología en el Centro Médico Nacional 20 de Noviembre. Está
+              certificada ante el Consejo Mexicano de Dermatología y es miembro activo de la Academia
+              Mexicana de Dermatología, del Colegio Iberolatinoamericano de Dermatología y de la
+              Fundación para la Dermatología. Actualmente atiende a sus pacientes en Grupo Médico
+              Pediátrico, en la Ciudad de México.
+            </p>
+
+            <dl className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2">
+              <div className="border-t border-sw-ink/80 pt-4">
+                <dt className="font-display text-xl font-semibold text-sw-ink">Formación</dt>
+                {DRA_KARINA.formacion.map((f) => (
+                  <dd key={f.titulo} className="mt-3 text-sw-body text-sw-text">
+                    <span className="block font-semibold text-sw-ink">{f.titulo}</span>
+                    {f.lugar}
+                  </dd>
+                ))}
+              </div>
+              <div className="border-t border-sw-ink/80 pt-4">
+                <dt className="font-display text-xl font-semibold text-sw-ink">Certificación</dt>
+                <dd className="mt-3 text-sw-body text-sw-text">{DRA_KARINA.certificacion}</dd>
+                <dt className="mt-8 font-display text-xl font-semibold text-sw-ink">Membresías</dt>
+                {DRA_KARINA.membresias.map((m) => (
+                  <dd key={m} className="mt-2 text-sw-body text-sw-text">
+                    {m}
+                  </dd>
+                ))}
+              </div>
+            </dl>
+
+            <div className="mt-12 rounded-sw-lg border border-sw-border bg-sw-white p-6 sm:p-8">
+              <h3 className="font-display text-xl font-semibold text-sw-ink">Consultorio</h3>
+              <p className="mt-2 text-sw-body text-sw-text">
+                Atiende en <span className="font-semibold text-sw-ink">{DRA_KARINA.consultorio.lugar}</span>.
+              </p>
+              <ul className="mt-5 space-y-3 text-sw-body text-sw-text">
+                <li className="flex items-start gap-3">
+                  <MapPin className="mt-1 h-4 w-4 shrink-0 text-sw-pink-deep" aria-hidden />
+                  <span>{DRA_KARINA.consultorio.direccion}</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Phone className="mt-1 h-4 w-4 shrink-0 text-sw-pink-deep" aria-hidden />
+                  <a href={DRA_KARINA.consultorio.telefonoEnlace} className="text-sw-ink underline decoration-sw-pink underline-offset-4 hover:text-sw-pink-deep">
+                    {DRA_KARINA.consultorio.telefono}
+                  </a>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Clock className="mt-1 h-4 w-4 shrink-0 text-sw-pink-deep" aria-hidden />
+                  <span>
+                    {DRA_KARINA.consultorio.horario.map((linea) => (
+                      <span key={linea} className="block">
+                        {linea}
+                      </span>
+                    ))}
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Cierre */}
+      <section className="bg-sw-pink">
+        <div className="sw-container flex flex-col gap-8 py-sw-section lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <h2 className="max-w-[18ch] font-display text-sw-h2 font-semibold text-sw-ink">
+              Comienza tu rutina dermatológica
+            </h2>
+            <p className="mt-4 max-w-sw-prose text-sw-lead text-sw-ink/80">
+              Descubre los productos recomendados por criterio profesional para el cuidado de tu piel.
+            </p>
+          </div>
+          <Link
+            href="/tienda"
+            className="sw-btn h-12 shrink-0 self-start bg-sw-ink px-7 text-[0.9375rem] text-sw-warm-white hover:bg-sw-pink-deep lg:self-auto"
+          >
+            Explorar la tienda
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </Link>
+        </div>
+      </section>
+    </>
   );
 }

@@ -3,7 +3,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Star, MessageSquarePlus } from 'lucide-react';
 import { toast } from 'sonner';
-import { Reveal } from '@/components/reveal';
 
 type Review = {
   id: string;
@@ -14,7 +13,7 @@ type Review = {
 
 function StarDisplay({ rating }: { rating: number }) {
   return (
-    <div className="flex gap-0.5 text-gold-500">
+    <div className="flex gap-0.5 text-sw-pink-deep">
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
@@ -42,10 +41,10 @@ function StarInput({ value, onChange }: { value: number; onChange: (v: number) =
             onMouseEnter={() => setHovered(starValue)}
             onMouseLeave={() => setHovered(0)}
             aria-label={`${starValue} estrella${starValue > 1 ? 's' : ''}`}
-            className="p-0.5"
+            className="rounded-sw-sm p-1"
           >
             <Star
-              className={`h-7 w-7 transition-colors ${filled ? 'text-gold-500' : 'text-slate-300'}`}
+              className={`h-7 w-7 transition-colors ${filled ? 'text-sw-pink-deep' : 'text-sw-muted/50'}`}
               fill={filled ? 'currentColor' : 'none'}
               strokeWidth={filled ? 0 : 1.5}
             />
@@ -133,77 +132,102 @@ export function TestimonialsSection() {
     }
   };
 
-  return (
-    <section className="bg-white py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Reveal className="mb-10 max-w-2xl">
-          <div className="mb-5 flex items-center gap-3">
-            <span className="h-px w-10 bg-gold-500" />
-            <span className="font-accent text-xs font-semibold uppercase tracking-[0.2em] text-primary-700">
-              Testimonios
-            </span>
-          </div>
-          <h2 className="mb-5 font-display text-4xl font-bold text-ink sm:text-5xl">
-            La confianza de quienes ya nos eligieron
-          </h2>
-          <p className="text-slate-600">
-            ¿Ya tuviste una consulta con la Dra. Karina? Escribe tu reseña y califica tu
-            experiencia — se publica de forma 100% anónima, sin pedirte nombre ni datos
-            personales.
-          </p>
-        </Reveal>
+  const destacada = reviews[0];
 
-        {/* Resumen + CTA */}
-        <Reveal className="mb-10 flex flex-col items-start justify-between gap-6 rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-4">
-            {count > 0 ? (
-              <>
-                <span className="font-display text-4xl font-bold text-ink">
+  return (
+    <section aria-labelledby="opiniones-titulo" className="bg-sw-surface py-12 sm:py-16">
+      <div className="sw-container">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,6fr)_auto] lg:items-center lg:gap-12">
+          <div>
+            <h2 id="opiniones-titulo" className="font-display text-2xl font-semibold text-sw-ink">
+              Opiniones de consulta
+            </h2>
+            {loading ? (
+              <p className="mt-2 text-sw-small text-sw-muted">Cargando opiniones…</p>
+            ) : count > 0 ? (
+              <div className="mt-3 flex items-center gap-3">
+                <span className="font-display text-4xl font-semibold tabular-nums text-sw-ink">
                   {average.toFixed(1)}
                 </span>
                 <div>
                   <StarDisplay rating={Math.round(average)} />
-                  <p className="mt-1 text-sm text-slate-500">
-                    {count} reseña{count !== 1 && 's'} de pacientes reales
+                  <p className="mt-1 text-sw-small text-sw-muted">
+                    {count} {count === 1 ? 'opinión publicada' : 'opiniones publicadas'}
                   </p>
                 </div>
-              </>
+              </div>
             ) : (
-              <p className="text-slate-600">
-                Todavía no hay reseñas — sé la primera persona en calificar tu consulta.
+              <p className="mt-2 text-sw-body text-sw-muted">
+                Todavía no hay opiniones. Si ya tuviste consulta, puedes dejar la primera.
               </p>
             )}
           </div>
-          <button
-            onClick={() => setShowForm((v) => !v)}
-            className="inline-flex shrink-0 items-center gap-2 rounded-md bg-ink px-5 py-2.5 font-accent text-sm font-semibold text-white transition-colors hover:bg-primary-800"
-          >
-            <MessageSquarePlus className="h-4 w-4" />
-            <span>Calificar mi consulta</span>
-          </button>
-        </Reveal>
 
-        {/* Formulario */}
+          {destacada ? (
+            <figure className="border-l-2 border-sw-pink pl-5 sm:pl-6">
+              <blockquote className="font-display text-xl leading-snug text-sw-ink sm:text-2xl">
+                &ldquo;{destacada.comment}&rdquo;
+              </blockquote>
+              <figcaption className="mt-3 text-sw-small text-sw-muted">
+                Opinión anónima, {timeAgo(destacada.createdAt).toLowerCase()}
+              </figcaption>
+            </figure>
+          ) : (
+            <div className="hidden lg:block" />
+          )}
+
+          <button
+            type="button"
+            onClick={() => setShowForm((v) => !v)}
+            aria-expanded={showForm}
+            aria-controls="formulario-opinion"
+            className="sw-btn sw-btn-secondary h-12 self-start lg:self-center"
+          >
+            <MessageSquarePlus className="h-4 w-4" aria-hidden />
+            Calificar mi consulta
+          </button>
+        </div>
+
+        {reviews.length > 1 && (
+          <ul className="mt-10 grid gap-6 border-t border-sw-ink/10 pt-8 sm:grid-cols-2 lg:grid-cols-3">
+            {reviews.slice(1).map((r) => (
+              <li key={r.id}>
+                <figure>
+                  <StarDisplay rating={r.rating} />
+                  <blockquote className="mt-3 font-display text-lg leading-snug text-sw-ink">
+                    &ldquo;{r.comment}&rdquo;
+                  </blockquote>
+                  <figcaption className="mt-2 text-sw-xs text-sw-muted">
+                    Opinión anónima, {timeAgo(r.createdAt).toLowerCase()}
+                  </figcaption>
+                </figure>
+              </li>
+            ))}
+          </ul>
+        )}
+
         {showForm && (
           <form
+            id="formulario-opinion"
             onSubmit={handleSubmit}
-            className="mb-14 rounded-2xl border border-gold-400/40 bg-primary-50/40 p-6 sm:p-8"
+            className="mt-10 max-w-2xl rounded-sw-lg border border-sw-border bg-sw-warm-white p-6 sm:p-8"
           >
-            <p className="mb-5 text-sm text-slate-600">
+            <p className="mb-6 text-sw-body text-sw-muted">
               Si ya tuviste una consulta con la Dra. Karina, cuéntanos cómo fue. No pedimos tu
-              nombre ni ningún dato personal — tu reseña se publica de forma anónima.
+              nombre ni ningún dato personal: tu opinión se publica de forma anónima.
             </p>
 
-            <div className="mb-4">
-              <label className="mb-2 block text-sm font-semibold text-ink">
-                Tu calificación
-              </label>
+            <fieldset className="mb-5">
+              <legend className="mb-2 text-sw-small font-semibold text-sw-ink">Tu calificación</legend>
               <StarInput value={rating} onChange={setRating} />
-            </div>
+            </fieldset>
 
-            <div className="mb-5">
-              <label className="mb-2 block text-sm font-semibold text-ink">Tu reseña</label>
+            <div className="mb-6">
+              <label htmlFor="opinion-texto" className="mb-2 block text-sw-small font-semibold text-sw-ink">
+                Tu opinión
+              </label>
               <textarea
+                id="opinion-texto"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 rows={4}
@@ -223,55 +247,19 @@ export function TestimonialsSection() {
               onChange={() => {}}
             />
 
-            <div className="flex items-center gap-4">
-              <button
-                type="submit"
-                disabled={submitting}
-                className="btn btn-primary disabled:opacity-50"
-              >
-                {submitting ? 'Enviando...' : 'Publicar reseña'}
+            <div className="flex flex-wrap items-center gap-4">
+              <button type="submit" disabled={submitting} className="sw-btn sw-btn-primary h-12">
+                {submitting ? 'Enviando...' : 'Publicar opinión'}
               </button>
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
-                className="font-accent text-sm font-semibold text-slate-500 transition-colors hover:text-ink"
+                className="h-12 px-2 text-sw-small font-semibold text-sw-muted transition-colors hover:text-sw-ink"
               >
                 Cancelar
               </button>
             </div>
           </form>
-        )}
-
-        {/* Lista de reseñas */}
-        {loading ? (
-          <p className="py-8 text-center text-sm text-slate-400">Cargando reseñas...</p>
-        ) : reviews.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-slate-300 py-16 text-center">
-            <p className="text-slate-500">
-              Todavía no hay reseñas publicadas. ¡Sé quien deje la primera!
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {reviews.map((r, i) => (
-              <Reveal key={r.id} delay={(i % 3) * 100}>
-                <figure className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-shadow duration-300 hover:shadow-card">
-                  <div className="mb-5">
-                    <StarDisplay rating={r.rating} />
-                  </div>
-                  <blockquote className="mb-6 flex-1 font-display text-lg italic leading-relaxed text-ink">
-                    &ldquo;{r.comment}&rdquo;
-                  </blockquote>
-                  <figcaption className="flex items-center justify-between border-t border-slate-100 pt-5 text-xs text-slate-500">
-                    <span className="font-accent font-semibold uppercase tracking-wide text-slate-400">
-                      Paciente verificado
-                    </span>
-                    <span>{timeAgo(r.createdAt)}</span>
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
-          </div>
         )}
       </div>
     </section>

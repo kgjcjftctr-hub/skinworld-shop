@@ -1,65 +1,66 @@
 import Link from 'next/link';
-import { Droplet, ShieldCheck, Sparkles, Sun, Scissors, Heart, Umbrella, Pill } from 'lucide-react';
-import { Reveal } from '@/components/reveal';
-import { getCategoryCounts } from '@/lib/products';
+import { ArrowUpRight } from 'lucide-react';
 
-const categories = [
-  { name: 'Acné', slug: 'Acné', bg: 'bg-primary-50', icon: Droplet },
-  { name: 'Dermatitis', slug: 'Dermatitis', bg: 'bg-accent-50', icon: ShieldCheck },
-  { name: 'Antiedad', slug: 'Antiedad', bg: 'bg-gold-50', icon: Sparkles },
-  { name: 'Manchas', slug: 'Manchas', bg: 'bg-slate-50', icon: Sun },
-  { name: 'Cabello y Uñas', slug: 'Cabello y Uñas', bg: 'bg-primary-100', icon: Scissors },
-  { name: 'Piel de Bebé', slug: 'Piel de Bebé', bg: 'bg-accent-100', icon: Heart },
-  { name: 'Protección Solar', slug: 'Protección Solar', bg: 'bg-gold-100', icon: Umbrella },
-  { name: 'Suplementos', slug: 'Suplementos', bg: 'bg-slate-100', icon: Pill },
+// Mismo orden que tenía la sección. Los nombres son exactamente las
+// categorías del catálogo, porque de ellos depende el filtro de la tienda.
+const necesidades = [
+  'Acné',
+  'Dermatitis',
+  'Antiedad',
+  'Manchas',
+  'Cabello y Uñas',
+  'Piel de Bebé',
+  'Protección Solar',
+  'Suplementos',
 ];
 
-export async function CategoriesSection() {
-  const counts = await getCategoryCounts();
-
+/**
+ * Índice de necesidades de la piel: una lista tipográfica en lugar de ocho
+ * cajas con íconos. Cada renglón lleva a la tienda ya filtrada y dice cuántos
+ * productos hay, para que se lea de un vistazo dónde hay más opciones.
+ */
+export function CategoriesSection({ porCategoria }: { porCategoria: Record<string, number> }) {
   return (
-    <section className="bg-white py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Reveal className="mb-14 max-w-2xl">
-          <div className="mb-5 flex items-center gap-3">
-            <span className="h-px w-10 bg-gold-500" />
-            <span className="font-accent text-xs font-semibold uppercase tracking-[0.2em] text-primary-700">
-              Catálogo
-            </span>
-          </div>
-          <h2 className="mb-5 font-display text-4xl font-bold text-ink sm:text-5xl">
+    <section aria-labelledby="necesidades-titulo" className="sw-section border-t border-sw-border">
+      <div className="sw-container grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
+        <div className="lg:sticky lg:top-28 lg:self-start">
+          <p className="sw-label">Por necesidad</p>
+          <h2 id="necesidades-titulo" className="mt-3 font-display text-sw-h2 font-semibold text-sw-ink">
             Encuentra soluciones por problema
           </h2>
-          <p className="text-lg text-slate-600">
-            Navega por nuestro catálogo categorizado. Todos nuestros productos están avalados por criterio dermatológico profesional.
+          <p className="mt-5 max-w-sw-prose text-sw-body text-sw-muted">
+            Navega el catálogo por lo que tu piel necesita. Todos los productos están avalados por
+            criterio dermatológico profesional.
           </p>
-        </Reveal>
+          <Link href="/tienda" className="sw-link mt-6 inline-block">
+            Ver todo el catálogo
+          </Link>
+        </div>
 
-        {/* Mobile carousel / Desktop grid */}
-        <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:grid sm:grid-cols-4 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0">
-          {categories.map((category, i) => {
-            const Icon = category.icon;
+        <ul className="border-t border-sw-ink/80">
+          {necesidades.map((nombre) => {
+            const total = porCategoria[nombre] ?? 0;
             return (
-              <Reveal key={category.slug} delay={i * 60} className="min-w-[45%] snap-start sm:min-w-0">
-                <Link href={`/tienda?categoria=${encodeURIComponent(category.slug)}`} className="block h-full">
-                  <div
-                    className={`group flex h-full flex-col items-center justify-center rounded-2xl ${category.bg} p-6 text-center shadow-sm ring-1 ring-inset ring-ink/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-card`}
-                  >
-                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-ink text-white transition-colors duration-300 group-hover:bg-primary-800">
-                      <Icon className="h-5 w-5" strokeWidth={1.75} />
-                    </div>
-                    <h3 className="mb-1 font-display text-base font-semibold text-ink">
-                      {category.name}
-                    </h3>
-                    <p className="font-accent text-xs font-medium uppercase tracking-wider text-slate-500">
-                      {counts[category.slug] || 0} productos
-                    </p>
-                  </div>
+              <li key={nombre} className="border-b border-sw-border">
+                <Link
+                  href={`/tienda?categoria=${encodeURIComponent(nombre)}`}
+                  className="group flex min-h-[4rem] items-center gap-4 py-3 text-sw-ink sm:min-h-[5rem]"
+                >
+                  <span className="flex-1 font-display text-[1.5rem] font-semibold leading-tight transition-colors duration-sw-fast group-hover:text-sw-pink-deep sm:text-sw-h3">
+                    {nombre}
+                  </span>
+                  <span className="text-sw-small tabular-nums text-sw-muted">
+                    {total} {total === 1 ? 'producto' : 'productos'}
+                  </span>
+                  <ArrowUpRight
+                    aria-hidden
+                    className="h-5 w-5 shrink-0 text-sw-pink-deep transition-transform duration-sw ease-sw group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  />
                 </Link>
-              </Reveal>
+              </li>
             );
           })}
-        </div>
+        </ul>
       </div>
     </section>
   );

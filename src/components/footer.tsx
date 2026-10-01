@@ -2,7 +2,8 @@
 
 import { useState, type FormEvent } from 'react';
 import Link from 'next/link';
-import { Mail, Phone, MapPin, Instagram, ArrowRight } from 'lucide-react';
+import { Mail, Phone, MapPin, Instagram, ArrowRight, ChevronDown } from 'lucide-react';
+import { Mariposa } from './ui/mariposa';
 import { toast } from 'sonner';
 
 const shopLinks = [
@@ -14,10 +15,10 @@ const shopLinks = [
 ];
 
 const companyLinks = [
-  { label: 'Sobre Nosotros', href: '/sobre-nosotros' },
-  { label: 'Blog', href: '/blog' },
+  { label: 'Sobre nosotros', href: '/sobre-nosotros' },
+  { label: 'Journal', href: '/blog' },
   { label: 'Contacto', href: '/contacto' },
-  { label: 'Preguntas Frecuentes', href: '/preguntas-frecuentes' },
+  { label: 'Preguntas frecuentes', href: '/preguntas-frecuentes' },
 ];
 
 export function Footer() {
@@ -51,154 +52,161 @@ export function Footer() {
   };
 
   return (
-    <footer className="border-t border-gold-500/30 bg-ink text-slate-100">
-      {/* Newsletter */}
-      <div className="border-b border-white/10">
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
-            <div>
-              <h3 className="mb-2 font-display text-2xl font-semibold text-white">
-                Consejos dermatológicos en tu correo
-              </h3>
-              <p className="text-sm text-slate-400">
-                Rutinas, lanzamientos y recomendaciones de la Dra. Karina. Sin spam.
-              </p>
-            </div>
-            <form onSubmit={handleSubscribe} className="flex w-full max-w-md gap-3">
-              {/* Campo trampa para robots: no se ve ni se puede enfocar. */}
-              <input
-                type="text"
-                name="website"
-                value={trampa}
-                onChange={(e) => setTrampa(e.target.value)}
-                tabIndex={-1}
-                autoComplete="off"
-                aria-hidden="true"
-                className="absolute left-[-9999px] h-0 w-0 opacity-0"
-              />
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="tu@email.com"
-                className="!w-auto flex-1 !rounded-md !border-white/15 !bg-white/5 !text-white placeholder:text-slate-500 focus:!border-gold-500 focus:!ring-gold-500/40"
-              />
-              <button
-                type="submit"
-                disabled={enviando}
-                className="inline-flex shrink-0 items-center gap-2 rounded-md bg-gold-500 px-5 py-2.5 font-accent text-sm font-semibold text-ink transition-colors hover:bg-gold-400 disabled:opacity-60"
-              >
-                <span>{enviando ? 'Enviando…' : 'Suscribirme'}</span>
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        {/* Main Footer Content */}
-        <div className="mb-12 grid grid-cols-1 gap-10 md:grid-cols-4">
-          {/* Brand */}
+    <footer>
+      {/* Boletín: banda propia antes del pie. En el celular el campo y el botón
+          se apilan a todo lo ancho para que nada se salga de la pantalla. */}
+      <section aria-labelledby="boletin-titulo" className="bg-sw-pink-pale">
+        <div className="sw-container grid gap-8 py-14 sm:py-16 lg:grid-cols-[1fr_minmax(0,28rem)] lg:items-center lg:gap-16">
           <div>
-            <div className="mb-4 flex items-center space-x-2.5">
-              <img src="/images/logo-icon.png" alt="" className="h-10 w-10 object-contain brightness-0 invert" />
-              <span className="font-display text-lg font-semibold">Skinworld</span>
-            </div>
-            <p className="text-sm leading-relaxed text-slate-400">
-              Productos dermatológicos profesionales respaldados por expertos en salud de la piel.
+            <h2 id="boletin-titulo" className="font-display text-sw-h3 font-semibold text-sw-ink">
+              Consejos dermatológicos en tu correo
+            </h2>
+            <p className="mt-3 max-w-sw-prose text-sw-body text-sw-muted">
+              Rutinas, lanzamientos y recomendaciones de la Dra. Karina. Sin spam.
             </p>
           </div>
-
-          {/* Shop Links */}
-          <div>
-            <h3 className="mb-4 font-display text-sm font-semibold text-white">Tienda</h3>
-            <ul className="space-y-2.5 text-sm">
-              {shopLinks.map((link) => (
-                <li key={link.label}>
-                  <Link href={link.href} className="text-slate-400 transition-colors hover:text-white">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company Links */}
-          <div>
-            <h3 className="mb-4 font-display text-sm font-semibold text-white">Empresa</h3>
-            <ul className="space-y-2.5 text-sm">
-              {companyLinks.map((link) => (
-                <li key={link.label}>
-                  <Link href={link.href} className="text-slate-400 transition-colors hover:text-white">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h3 className="mb-4 font-display text-sm font-semibold text-white">Contacto</h3>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-center space-x-2.5">
-                <Mail className="h-4 w-4 text-primary-400" />
-                <a href="mailto:contacto@skinworld.shop" className="text-slate-400 transition-colors hover:text-white">
-                  contacto@skinworld.shop
-                </a>
-              </li>
-              <li className="flex items-center space-x-2.5">
-                <Phone className="h-4 w-4 text-primary-400" />
-                <a href="tel:+525612884245" className="text-slate-400 transition-colors hover:text-white">
-                  +52 56 1288 4245
-                </a>
-              </li>
-              <li className="flex items-start space-x-2.5">
-                <MapPin className="mt-0.5 h-4 w-4 text-primary-400" />
-                <span className="text-slate-400">CDMX, México</span>
-              </li>
-            </ul>
-          </div>
+          <form onSubmit={handleSubscribe} className="flex w-full flex-col gap-3 sm:flex-row">
+            {/* Campo trampa para robots: no se ve ni se puede enfocar. */}
+            <input
+              type="text"
+              name="website"
+              value={trampa}
+              onChange={(e) => setTrampa(e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="absolute left-[-9999px] h-0 w-0 opacity-0"
+            />
+            <label htmlFor="boletin-correo" className="sr-only">
+              Tu correo electrónico
+            </label>
+            <input
+              id="boletin-correo"
+              type="email"
+              required
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="tu@email.com"
+              className="!h-12 min-w-0 flex-1 !rounded-full !border-sw-border !bg-sw-white !px-5 !text-sw-ink placeholder:!text-sw-muted focus:!border-sw-pink-deep focus:!ring-sw-pink-deep/30"
+            />
+            <button type="submit" disabled={enviando} className="sw-btn sw-btn-primary h-12 shrink-0">
+              <span>{enviando ? 'Enviando…' : 'Suscribirme'}</span>
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </button>
+          </form>
         </div>
+      </section>
 
-        {/* Divider */}
-        <div className="my-8 border-t border-white/10" />
+      <div className="bg-sw-charcoal text-sw-cream">
+        <div className="sw-container pb-8 pt-14 sm:pt-16">
+          <div className="grid md:grid-cols-[1.4fr_1fr_1fr_1.2fr] md:gap-12">
+            <div className="pb-8 md:pb-0">
+              <p className="max-w-xs text-sw-body leading-relaxed text-sw-cream-muted">
+                Productos dermatológicos profesionales respaldados por expertos en salud de la piel.
+              </p>
+              <a
+                href="https://www.instagram.com/skinworld_ka/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 inline-flex h-11 items-center gap-2.5 rounded-full border border-sw-cream/20 px-4 text-sw-small font-semibold text-sw-cream transition-colors duration-sw-fast hover:border-sw-pink hover:text-sw-pink"
+              >
+                <Instagram className="h-4 w-4" aria-hidden />
+                Instagram
+              </a>
+            </div>
 
-        {/* Bottom Section */}
-        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-          <p className="text-sm text-slate-400">
-            &copy; {currentYear} Skinworld. Todos los derechos reservados.
-          </p>
+            <GrupoDeEnlaces titulo="Tienda" enlaces={shopLinks} />
+            <GrupoDeEnlaces titulo="Empresa" enlaces={companyLinks} />
 
-          {/* Social Links */}
-          <div className="flex items-center space-x-4">
-            <a
-              href="https://www.instagram.com/skinworld_ka/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-slate-400 transition-colors hover:text-white"
-              aria-label="Instagram"
-            >
-              <Instagram className="h-5 w-5" />
-            </a>
+            <div className="pt-8 md:pt-0">
+              <h2 className="mb-4 font-display text-lg font-semibold text-sw-cream">Contacto</h2>
+              <ul className="space-y-3 text-sw-body">
+                <li className="flex items-center gap-3">
+                  <Mail className="h-4 w-4 shrink-0 text-sw-pink" aria-hidden />
+                  <a href="mailto:contacto@skinworld.shop" className="text-sw-cream-muted transition-colors hover:text-sw-cream">
+                    contacto@skinworld.shop
+                  </a>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Phone className="h-4 w-4 shrink-0 text-sw-pink" aria-hidden />
+                  <a href="tel:+525612884245" className="text-sw-cream-muted transition-colors hover:text-sw-cream">
+                    +52 56 1288 4245
+                  </a>
+                </li>
+                <li className="flex items-center gap-3">
+                  <MapPin className="h-4 w-4 shrink-0 text-sw-pink" aria-hidden />
+                  <span className="text-sw-cream-muted">CDMX, México</span>
+                </li>
+              </ul>
+            </div>
           </div>
 
-          {/* Legal Links */}
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
-            <Link href="/envios" className="text-slate-400 transition-colors hover:text-white">
-              Envíos y Devoluciones
-            </Link>
-            <Link href="/terminos" className="text-slate-400 transition-colors hover:text-white">
-              Términos
-            </Link>
-            <Link href="/privacidad" className="text-slate-400 transition-colors hover:text-white">
-              Privacidad
-            </Link>
+          {/* Cierre de marca: la mariposa y el nombre a gran escala. */}
+          <div aria-hidden className="mt-14 flex items-end gap-[0.12em] border-t border-sw-cream/10 pt-10 text-sw-pink">
+            <Mariposa className="h-[0.62em] w-auto shrink-0 text-[clamp(3.5rem,15vw,11rem)]" />
+            <span className="font-display text-[clamp(3.5rem,15vw,11rem)] font-semibold leading-[0.8] tracking-tight">
+              Skinworld
+            </span>
+          </div>
+
+          <div className="mt-10 flex flex-col gap-4 text-sw-small text-sw-cream-muted md:flex-row md:items-center md:justify-between">
+            <p>&copy; {currentYear} Skinworld. Todos los derechos reservados.</p>
+            <ul className="flex flex-wrap gap-x-6 gap-y-2">
+              <li>
+                <Link href="/envios" className="text-sw-cream-muted transition-colors hover:text-sw-cream">
+                  Envíos y Devoluciones
+                </Link>
+              </li>
+              <li>
+                <Link href="/terminos" className="text-sw-cream-muted transition-colors hover:text-sw-cream">
+                  Términos
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacidad" className="text-sw-cream-muted transition-colors hover:text-sw-cream">
+                  Privacidad
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
     </footer>
+  );
+}
+
+/**
+ * Un grupo de enlaces del pie. En el celular es un acordeón (details/summary,
+ * accesible sin JavaScript) para no apilar una columna larga; desde tableta se
+ * muestra abierto como lista normal.
+ */
+function GrupoDeEnlaces({ titulo, enlaces }: { titulo: string; enlaces: { label: string; href: string }[] }) {
+  const lista = (
+    <ul className="space-y-3 text-sw-body">
+      {enlaces.map((link) => (
+        <li key={link.label}>
+          <Link href={link.href} className="text-sw-cream-muted transition-colors hover:text-sw-cream">
+            {link.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+
+  return (
+    <div>
+      <details className="group -mt-px border-y border-sw-cream/10 md:hidden">
+        <summary className="flex min-h-[3.25rem] cursor-pointer list-none items-center justify-between font-display text-lg font-semibold text-sw-cream [&::-webkit-details-marker]:hidden">
+          {titulo}
+          <ChevronDown className="h-5 w-5 text-sw-pink transition-transform duration-sw group-open:rotate-180" aria-hidden />
+        </summary>
+        <div className="pb-5">{lista}</div>
+      </details>
+      <div className="hidden md:block">
+        <h2 className="mb-4 font-display text-lg font-semibold text-sw-cream">{titulo}</h2>
+        {lista}
+      </div>
+    </div>
   );
 }

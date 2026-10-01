@@ -5,16 +5,16 @@ export const metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
-        <h1 className="mb-3 font-display text-4xl font-bold text-ink">Términos y Condiciones</h1>
-        <p className="mb-12 text-sm text-slate-400">
+    <div className="min-h-[60vh]">
+      <div className="mx-auto max-w-3xl px-sw-gutter pb-sw-section pt-12 sm:pt-16">
+        <h1 className="mb-4 font-display text-sw-h1 font-semibold text-sw-ink">Términos y Condiciones</h1>
+        <p className="mb-12 text-sw-small text-sw-muted">
           Última actualización: 28 de septiembre de 2026
         </p>
 
-        <div className="space-y-10 leading-relaxed text-slate-600">
+        <div className="space-y-12 text-sw-body leading-relaxed text-sw-text">
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
               Uso del sitio y del contenido
             </h2>
             <div className="space-y-4">
@@ -41,7 +41,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
               Deslinde de responsabilidad de contenido
             </h2>
             <div className="space-y-4">
@@ -61,11 +61,11 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">Compras y envíos</h2>
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">Compras y envíos</h2>
             <p>
               Las compras están sujetas a disponibilidad y a la aceptación del pedido. Las
               condiciones de envío, devolución y reembolso se detallan en nuestra{' '}
-              <a href="/envios" className="font-semibold text-primary-700 underline">
+              <a href="/envios" className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
                 Política de Envíos y Devoluciones
               </a>
               .

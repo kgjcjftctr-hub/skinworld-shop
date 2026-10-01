@@ -10,43 +10,81 @@ export const metadata = {
 };
 
 export default function BlogPage() {
-  return (
-    <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <div className="mb-16 text-center">
-          <h1 className="mb-4 font-display text-4xl font-bold text-ink sm:text-5xl">
-            Blog Educativo
-          </h1>
-          <p className="text-lg text-slate-600">
-            Artículos y recursos sobre cuidado dermatológico.
-          </p>
-        </div>
+  // Más reciente primero. La dirección sigue siendo /blog por SEO; lo que
+  // cambia es el nombre visible de la sección.
+  const [principal, ...resto] = [...blogPosts].sort((a, b) => b.date.localeCompare(a.date));
 
-        <div className="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-          {blogPosts.map((post) => (
-            <Link key={post.slug} href={`/blog/${post.slug}`} className="group block">
-              <article>
-                <img
-                  loading="lazy"
-                  decoding="async"
-                  src={post.image}
-                  alt=""
-                  className="mb-5 aspect-[4/3] w-full rounded-xl object-cover transition-shadow group-hover:shadow-md"
-                />
-                <p className="mb-2 font-accent text-xs font-bold uppercase tracking-wider text-gold-600">
-                  {post.category}
-                </p>
-                <h2 className="mb-2 font-display text-lg font-semibold text-ink transition-colors group-hover:text-primary-700">
-                  {post.title}
-                </h2>
-                <p className="mb-3 line-clamp-2 text-sm text-slate-500">{post.excerpt}</p>
-                <p className="text-xs text-slate-400">
-                  {post.author} · {formatDate(post.date)}
-                </p>
-              </article>
-            </Link>
-          ))}
-        </div>
+  return (
+    <div className="pb-sw-section pt-12 sm:pt-16">
+      <div className="sw-container">
+        <header className="border-b border-sw-ink/80 pb-8">
+          <p className="sw-label">Skinworld Journal</p>
+          <h1 className="mt-3 max-w-[18ch] font-display text-sw-h1 font-semibold text-sw-ink">
+            Ciencia, piel y decisiones mejor informadas
+          </h1>
+          <p className="mt-4 max-w-sw-prose text-sw-lead text-sw-muted">
+            Artículos y recursos sobre cuidado dermatológico, escritos por la Dra. Karina Alfaro López.
+          </p>
+        </header>
+
+        {principal && (
+          <article className="group relative mt-10 grid gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-center lg:gap-14">
+            <div className="overflow-hidden rounded-sw-lg bg-sw-surface">
+              <img
+                src={principal.image}
+                alt=""
+                decoding="async"
+                className="aspect-[16/10] w-full object-cover transition-transform duration-sw-slow ease-sw [@media(hover:hover)]:group-hover:scale-[1.03]"
+              />
+            </div>
+            <div>
+              <p className="text-sw-small font-semibold text-sw-pink-deep">{principal.category}</p>
+              <h2 className="mt-2 font-display text-sw-h2 font-semibold text-sw-ink">
+                <Link
+                  href={`/blog/${principal.slug}`}
+                  className="text-sw-ink after:absolute after:inset-0 after:content-[''] group-hover:text-sw-pink-deep"
+                >
+                  {principal.title}
+                </Link>
+              </h2>
+              <p className="mt-4 text-sw-lead text-sw-muted">{principal.excerpt}</p>
+              <p className="mt-5 text-sw-small text-sw-muted">
+                {principal.author}, {formatDate(principal.date)}
+              </p>
+            </div>
+          </article>
+        )}
+
+        {resto.length > 0 && (
+          <ul className="mt-14 grid gap-x-8 gap-y-12 border-t border-sw-border pt-10 sm:grid-cols-2 lg:grid-cols-3">
+            {resto.map((post) => (
+              <li key={post.slug}>
+                <article className="group relative">
+                  <div className="overflow-hidden rounded-sw bg-sw-surface">
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      src={post.image}
+                      alt=""
+                      className="aspect-[4/3] w-full object-cover transition-transform duration-sw-slow ease-sw [@media(hover:hover)]:group-hover:scale-[1.03]"
+                    />
+                  </div>
+                  <p className="mt-4 text-sw-small font-semibold text-sw-pink-deep">{post.category}</p>
+                  <h2 className="mt-1.5 font-display text-2xl font-semibold leading-snug text-sw-ink">
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="text-sw-ink after:absolute after:inset-0 after:content-[''] group-hover:text-sw-pink-deep"
+                    >
+                      {post.title}
+                    </Link>
+                  </h2>
+                  <p className="mt-2 line-clamp-2 text-sw-body text-sw-muted">{post.excerpt}</p>
+                  <p className="mt-3 text-sw-small text-sw-muted">{formatDate(post.date)}</p>
+                </article>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

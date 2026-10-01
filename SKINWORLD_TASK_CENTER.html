@@ -129,21 +129,21 @@
       <h1>SkinWorld Task Center</h1>
       <p class="intro">Panel maestro de pendientes de la tienda: lo que está roto, lo que se puede mejorar y lo que falta confirmar. Cada tarea conserva su identificador y su historial, así que se actualiza en lugar de duplicarse.</p>
       <p class="sello">
-        <span>Última inspección <b>2026-09-30 a las 16:40</b></span>
-        <span>Por <b>Claude Code auditing the storefront before the V1 redesign</b></span>
+        <span>Última inspección <b>2026-09-30 a las 17:55</b></span>
+        <span>Por <b>Codex auditing and verifying the Skinworld V1 redesign</b></span>
         <span>Fuente <b>SKINWORLD_TASKS.json</b></span>
       </p>
 
       <div class="avance">
-        <div class="barra"><i style="width:42%"></i></div>
-        <p>13 de 31 tareas terminadas · 42% del registro histórico</p>
+        <div class="barra"><i style="width:56%"></i></div>
+        <p>18 de 32 tareas terminadas · 56% del registro histórico</p>
       </div>
 
       <div class="cifras">
         <div class="cifra p0"><b>3</b><span>abiertas que bloquean la venta</span></div>
         <div class="cifra p1"><b>5</b><span>abiertas importantes</span></div>
         <div class="cifra duda"><b>8</b><span>requieren verificación</span></div>
-        <div class="cifra listo"><b>13</b><span>terminadas y verificadas</span></div>
+        <div class="cifra listo"><b>18</b><span>terminadas y verificadas</span></div>
       </div>
     </header>
 
@@ -155,14 +155,14 @@
     </section>
 
     <h2>Nuevos pendientes detectados</h2>
-    <ul class="chips"><li><code>SW-025</code>Raise text contrast to WCAG AA across the storefront</li><li><code>SW-026</code>Reconcile the &quot;free shipping in CDMX&quot; promise with what checkout charges</li><li><code>SW-027</code>Stop product cards from taking a full phone screen each</li><li><code>SW-029</code>Fix keyboard and semantic issues in product cards, menu and filter drawer</li><li><code>SW-030</code>Visual redesign Skinworld V1 (presentation layer only)</li><li><code>SW-028</code>Consolidate the butterfly and logo assets into one official version</li><li><code>SW-031</code>Decide what product-detail content exists beyond the description</li></ul>
+    <ul class="chips"><li><code>SW-032</code>Correct compare-at prices that are lower than the current price</li></ul>
 
     <h2>Tareas</h2>
     <div class="filtros">
       <div class="grupo" data-eje="estado">
         <b>Estado</b>
-        <button data-valor="todo" aria-pressed="true">Todas (31)</button>
-        <button data-valor="pending" aria-pressed="false">Pendiente (10)</button><button data-valor="in_progress" aria-pressed="false">En progreso (0)</button><button data-valor="requires_verification" aria-pressed="false">Requiere verificación (8)</button><button data-valor="completed" aria-pressed="false">Terminada (13)</button>
+        <button data-valor="todo" aria-pressed="true">Todas (32)</button>
+        <button data-valor="pending" aria-pressed="false">Pendiente (6)</button><button data-valor="in_progress" aria-pressed="false">En progreso (0)</button><button data-valor="requires_verification" aria-pressed="false">Requiere verificación (8)</button><button data-valor="completed" aria-pressed="false">Terminada (18)</button>
       </div>
       <div class="grupo" data-eje="prioridad">
         <b>Prioridad</b>
@@ -215,7 +215,7 @@
             <p><strong>Dónde está</strong><br>.env.local (names not values)<br>src/lib/stripe.ts<br>src/lib/correo.ts<br>src/app/api/stripe/webhook/route.ts<br>src/app/api/admin/probar-correo/route.ts</p>
             <p><strong>Terminada cuando</strong><br>A controlled production or staging purchase proves payment, order persistence, staff notification, customer confirmation, status-update emails, and cancellation behavior; deployment logs show the webhook arriving; and secrets remain server-only.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Marked requires verification; no credentials or live external state were inspected.</li><li><span>2026-09-30</span> Partially verified in production: a real test purchase produced a stored order and the store notification email arrived. Remaining unknowns split into SW-014 (live payments) and SW-015 (customer email).</li></ul>
+            <ul><li><span>2026-09-30</span> Marked requires verification; no credentials or live external state were inspected.</li><li><span>2026-09-30</span> Partially verified in production: a real test purchase produced a stored order and the store notification email arrived. Remaining unknowns split into SW-014 (live payments) and SW-015 (customer email).</li><li><span>2026-09-30</span> Redesign verification reached a correctly populated Stripe Checkout session from home, search, product, cart and postal-code address entry. It remains a test-mode session and no payment was completed, so webhook persistence and both email recipients were not re-verified in this pass.</li></ul>
           </div>
         </details>
       </article>
@@ -236,7 +236,7 @@
             <p><strong>Dónde está</strong><br>src/lib/stripe.ts<br>Vercel environment variables<br>Stripe account</p>
             <p><strong>Terminada cuando</strong><br>The Stripe account reports charges_enabled=true, live keys are set in Vercel, a live-mode webhook endpoint is registered for https://www.skinworld.shop/api/stripe/webhook with its own signing secret stored as STRIPE_WEBHOOK_SECRET, and one real low-value purchase is completed, recorded and refunded.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Unchanged and still blocked on the owner: activating live payments requires connecting a bank account to the Stripe account, which only the owner can do.</li></ul>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Unchanged and still blocked on the owner: activating live payments requires connecting a bank account to the Stripe account, which only the owner can do.</li><li><span>2026-09-30</span> Rechecked against the configured Stripe account: the keys are still test-mode and the account reports charges_enabled=false, payouts_enabled=false and details_submitted=false. The redesigned checkout reaches Stripe correctly, but only as an explicit test environment.</li></ul>
           </div>
         </details>
       </article>
@@ -257,7 +257,7 @@
             <p><strong>Dónde está</strong><br>src/app/terminos/page.tsx<br>src/app/privacidad/page.tsx<br>src/app/envios/page.tsx</p>
             <p><strong>Terminada cuando</strong><br>A qualified owner or legal reviewer approves text tailored to SkinWorld, and all operational claims match the checkout, shipping, privacy, and provider configuration actually in use.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected wording mismatch plus legal facts requiring verification.</li><li><span>2026-09-30</span> Recorded the concrete missing fields in the privacy notice: razón social, RFC and full legal domicile.</li><li><span>2026-09-30</span> Unchanged and still blocked on the owner: completion needs the legal entity name, RFC and full domicile, plus a qualified reviewer. No code change can close this one.</li></ul>
+            <ul><li><span>2026-09-30</span> Detected wording mismatch plus legal facts requiring verification.</li><li><span>2026-09-30</span> Recorded the concrete missing fields in the privacy notice: razón social, RFC and full legal domicile.</li><li><span>2026-09-30</span> Unchanged and still blocked on the owner: completion needs the legal entity name, RFC and full domicile, plus a qualified reviewer. No code change can close this one.</li><li><span>2026-09-30</span> Redesign re-audit found two additional operational mismatches: the terms still describe physical and nutritional status rather than dermatology ecommerce, and the shipping policy says the tracking number is sent with purchase confirmation even though the system can only send it after staff capture it when marking the order shipped.</li></ul>
           </div>
         </details>
       </article>
@@ -299,28 +299,7 @@
             <p><strong>Dónde está</strong><br>src/lib/correo.ts<br>src/lib/pedidos.ts<br>Vercel environment variables<br>Hostinger DNS zone</p>
             <p><strong>Terminada cuando</strong><br>Resend shows skinworld.shop as Verified, CONTACT_FROM_EMAIL is set in Vercel, and a test sent from the admin panel to an outside address arrives in the inbox rather than spam.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li></ul>
-          </div>
-        </details>
-      </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P1" data-categoria="Accessibility">
-        <div class="tarea-cab">
-          <code>SW-025</code>
-          <div class="etiquetas">
-            <span class="pill prio P1" title="Importante">P1</span>
-            <span class="pill est pending">Pendiente</span>
-          </div>
-        </div>
-        <h3>Raise text contrast to WCAG AA across the storefront</h3>
-        <p class="clasif">Accessibility · Problema detectado</p>
-        <p class="detalle">Measured against white: body copy in text-slate-600 (#868E96) is 3.32:1 and 3.15:1 on the grey section background; text-slate-500 (#ADB5BD) is 2.07:1; text-slate-400 (#CED4DA), used for &quot;Con IVA&quot;, category labels and dates, is 1.49:1. The small uppercase pink labels in primary-700 (#BC7F8F) are 3.2:1, the gold brand label gold-600 (#B8942A) is 2.87:1, and the About page call to action puts white text on primary-500 at 2.14:1. The project redefines Tailwind slate with much lighter values, so every default-looking grey class is lighter than it appears in code.</p>
-        <details>
-          <summary>Origen, criterio de cierre e historial</summary>
-          <div class="ficha">
-            <p><strong>Dónde está</strong><br>tailwind.config.ts (custom slate and primary scales)<br>src/components/**<br>src/app/**</p>
-            <p><strong>Terminada cuando</strong><br>Body and small text reach at least 4.5:1 and large text at least 3:1 on their real backgrounds, verified with a contrast check of every text token in the new design system.</p>
-            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Found in the redesign audit by computing contrast ratios for every grey and pink text colour in use.</li></ul>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> The local environment used for redesign verification has none of RESEND_API_KEY, CONTACT_NOTIFY_EMAIL or CONTACT_FROM_EMAIL, so current production delivery could not be rechecked from this checkout. Code paths for store and customer mail exist; external inbox delivery remains unproven.</li></ul>
           </div>
         </details>
       </article>
@@ -341,7 +320,28 @@
             <p><strong>Dónde está</strong><br>src/components/header.tsx<br>src/components/sections/cta.tsx<br>src/app/envios/page.tsx<br>src/app/api/checkout/route.ts<br>src/app/carrito/page.tsx</p>
             <p><strong>Terminada cuando</strong><br>The owner states the real shipping policy, and the storefront copy and the checkout rule both match it.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Found in the redesign audit while tracing the cart summary back to /api/checkout. Not changed: the redesign will keep the current wording until the owner decides.</li></ul>
+            <ul><li><span>2026-09-30</span> Found in the redesign audit while tracing the cart summary back to /api/checkout. Not changed: the redesign will keep the current wording until the owner decides.</li><li><span>2026-09-30</span> Reconfirmed in the redesigned flow: checkout still decides shipping only from subtotal and never reads the state, while four customer-facing locations promise free CDMX shipping. This remains a business decision, not a presentation fix.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="pending" data-prioridad="P1" data-categoria="Ecommerce">
+        <div class="tarea-cab">
+          <code>SW-032</code>
+          <div class="etiquetas">
+            <span class="pill prio P1" title="Importante">P1</span>
+            <span class="pill est pending">Pendiente</span>
+          </div>
+        </div>
+        <h3>Correct compare-at prices that are lower than the current price</h3>
+        <p class="clasif">Ecommerce · Problema detectado</p>
+        <p class="detalle">Two current catalog rows have compare_at_price_with_iva below price_with_iva, so the storefront labels a lower amount as &quot;Antes&quot;: Protector Solar SPF 50 is $760 with $754 before, and Sérum Hidratante Intenso is $1,250 with $986 before. The card suppresses a negative discount badge but still prints the contradictory struck-through price.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>Supabase products table<br>src/components/product-card.tsx</p>
+            <p><strong>Terminada cuando</strong><br>The owner confirms the intended regular and current price for both products, the catalog is corrected, and cards never render a compare-at amount that is less than or equal to the current amount.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Detected during final redesign browser verification and confirmed by a read-only query over all 201 catalog rows. No price was changed because the correct business values are unknown.</li></ul>
           </div>
         </details>
       </article>
@@ -355,14 +355,14 @@
         </div>
         <h3>Verify responsive and keyboard/screen-reader journeys</h3>
         <p class="clasif">Accessibility · Requiere confirmación</p>
-        <p class="detalle">The code contains labels for several controls, but the audit did not run an assistive-technology or device matrix. Modal focus handling, mobile menu behavior, filter controls, error announcements, contrast, and full checkout keyboard use need browser verification.</p>
+        <p class="detalle">Manual browser checks now pass at desktop and 390 × 844 px: search and filter dialogs contain and restore focus, Escape closes them, mobile cards and product detail fit, cart controls have accessible names, and shipping labels are associated with their fields. A full screen-reader and automated accessibility scan is still outstanding.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/components/header.tsx<br>src/components/search-modal.tsx<br>src/components/filters.tsx<br>src/components/checkout/shipping-address-form.tsx<br>src/app/carrito/page.tsx</p>
             <p><strong>Terminada cuando</strong><br>The main buyer routes work at mobile and desktop breakpoints using keyboard only; focus is trapped/restored correctly in dialogs; form errors are announced; and an accessibility scan plus manual checks has no unresolved critical issue.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Browser/device testing was outside this source-only audit.</li></ul>
+            <ul><li><span>2026-09-30</span> Browser/device testing was outside this source-only audit.</li><li><span>2026-09-30</span> Advanced with browser evidence: desktop and 390px phone journeys were exercised through search, product, cart and checkout; dialog focus trapping and restoration passed. Shipping labels, postal-code status messages and remaining low-contrast checkout copy were fixed. Kept requires_verification until a screen-reader and automated scan are run.</li></ul>
           </div>
         </details>
       </article>
@@ -376,14 +376,14 @@
         </div>
         <h3>Resolve the outstanding catalog decisions</h3>
         <p class="clasif">Content and legal · Requiere confirmación</p>
-        <p class="detalle">Three catalog items were researched but left unresolved because they need a business decision or a price the owner holds: which Flavo C version to list (Ultraglican, Melatonin, Forte, Intense, or the Día+Noche ampoule pack — only the generic &quot;Flavo C Sérum 30 Ml&quot; exists today), and the selling prices for the ISDIN Pediatrics stick and the Daeha capsules, for which no reliable Mexican price was found.</p>
+        <p class="detalle">The ISDIN Pediatrics stick and Daeha probiotic now appear in the catalog at $580 and $1,250 respectively, but this audit found no approval evidence for those prices. The Flavo C decision remains unresolved: only the generic &quot;Flavo C Sérum 30 Ml&quot; exists, without identifying Ultraglican, Melatonin, Forte, Intense or Día+Noche.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>Supabase products table<br>src/app/admin/admin-dashboard.tsx</p>
-            <p><strong>Terminada cuando</strong><br>The owner confirms the Flavo C version and the two prices, the products are published with correct IVA-inclusive pricing and images, and they appear on the storefront.</p>
+            <p><strong>Terminada cuando</strong><br>The owner confirms the Flavo C version and confirms the two already-published prices; the catalog then carries the approved IVA-inclusive values, names and images.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Redesign audit: the four products flagged as featured, shown on the home page as &quot;Seleccionados por la Dra. Karina&quot;, are Effezel, Retacnyl, Clobexpro shampoo and Clobexpro lotion; three of the four have no brand, and they are prescription items. The planned &quot;Skinworld Edit&quot; section reads this same featured flag, so the owner should confirm the selection before it becomes the editorial centrepiece.</li></ul>
+            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Redesign audit: the four products flagged as featured, shown on the home page as &quot;Seleccionados por la Dra. Karina&quot;, are Effezel, Retacnyl, Clobexpro shampoo and Clobexpro lotion; three of the four have no brand, and they are prescription items. The planned &quot;Skinworld Edit&quot; section reads this same featured flag, so the owner should confirm the selection before it becomes the editorial centrepiece.</li><li><span>2026-09-30</span> Current catalog check: Pediatrics Stick and Daeha are visible with prices, so the remaining work is owner approval of those values plus the exact Flavo C version.</li></ul>
           </div>
         </details>
       </article>
@@ -404,70 +404,7 @@
             <p><strong>Dónde está</strong><br>Supabase products table<br>src/app/tienda/shop-client.tsx<br>src/components/sections/brands.tsx</p>
             <p><strong>Terminada cuando</strong><br>Every product either carries its laboratory in the brand field or is deliberately classified as having none, the shop brand filter accounts for all 164 products, and the home page brand list reflects the corrected data.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Found while rebuilding the brands section from the catalog: the section could only show 14 laboratories because the rest of the products carry no brand at all.</li></ul>
-          </div>
-        </details>
-      </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P2" data-categoria="Ecommerce">
-        <div class="tarea-cab">
-          <code>SW-027</code>
-          <div class="etiquetas">
-            <span class="pill prio P2" title="Deseable">P2</span>
-            <span class="pill est pending">Pendiente</span>
-          </div>
-        </div>
-        <h3>Stop product cards from taking a full phone screen each</h3>
-        <p class="clasif">Ecommerce · Problema detectado</p>
-        <p class="detalle">On a 390px phone the shop grid is one column and each card is about 1,000 CSS px tall (square image, category, name, price, &quot;Con IVA&quot;, full-width black button), so the 164-product catalog is roughly 100 screens of scrolling. On the product page the square image fills the first screen and the price sits below the fold.</p>
-        <details>
-          <summary>Origen, criterio de cierre e historial</summary>
-          <div class="ficha">
-            <p><strong>Dónde está</strong><br>src/app/tienda/shop-client.tsx<br>src/components/product-card.tsx<br>src/app/producto/[slug]/product-client.tsx</p>
-            <p><strong>Terminada cuando</strong><br>The phone catalog shows two products per row with a tappable add button, and the product page shows image, name and price within the first screen at 375-430px.</p>
-            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Measured from full-page captures of production on 2026-09-30.</li></ul>
-          </div>
-        </details>
-      </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P2" data-categoria="Accessibility">
-        <div class="tarea-cab">
-          <code>SW-029</code>
-          <div class="etiquetas">
-            <span class="pill prio P2" title="Deseable">P2</span>
-            <span class="pill est pending">Pendiente</span>
-          </div>
-        </div>
-        <h3>Fix keyboard and semantic issues in product cards, menu and filter drawer</h3>
-        <p class="clasif">Accessibility · Problema detectado</p>
-        <p class="detalle">The product card places its &quot;Agregar&quot; button inside the product link, which nests two interactive controls. The mobile menu button does not expose aria-expanded. The mobile filter drawer has no Escape handling or focus management, and the mobile menu the same. Related to SW-010, which covers verifying the journeys on devices.</p>
-        <details>
-          <summary>Origen, criterio de cierre e historial</summary>
-          <div class="ficha">
-            <p><strong>Dónde está</strong><br>src/components/product-card.tsx<br>src/components/header.tsx<br>src/app/tienda/shop-client.tsx</p>
-            <p><strong>Terminada cuando</strong><br>No interactive element is nested in another, menu and drawers announce their state, close with Escape and return focus, verified by keyboard.</p>
-            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Found by reading the components during the redesign audit.</li></ul>
-          </div>
-        </details>
-      </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P2" data-categoria="Ecommerce">
-        <div class="tarea-cab">
-          <code>SW-030</code>
-          <div class="etiquetas">
-            <span class="pill prio P2" title="Deseable">P2</span>
-            <span class="pill est pending">Pendiente</span>
-          </div>
-        </div>
-        <h3>Visual redesign Skinworld V1 (presentation layer only)</h3>
-        <p class="clasif">Ecommerce · Mejora sugerida</p>
-        <p class="detalle">Owner-requested redesign in phases: design system, global components, home, shop and cards, product page, About, Journal, contact, cart (visual only), responsive polish, accessibility and performance. Stripe, checkout, cart store, address form logic, emails, APIs, database and admin are out of scope. Audit and phase plan presented on 2026-09-30; waiting for owner approval before any storefront file changes.</p>
-        <details>
-          <summary>Origen, criterio de cierre e historial</summary>
-          <div class="ficha">
-            <p><strong>Dónde está</strong><br>tailwind.config.ts<br>src/styles/globals.css<br>src/components/**<br>src/app/(storefront pages)</p>
-            <p><strong>Terminada cuando</strong><br>Every phase is built, passes build and browser checks at 375-1920px, and the cart, filters, product add, forms and checkout still behave exactly as before.</p>
-            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Audit completed and plan presented; no files changed yet.</li></ul>
+            <ul><li><span>2026-09-30</span> Found while rebuilding the brands section from the catalog: the section could only show 14 laboratories because the rest of the products carry no brand at all.</li><li><span>2026-09-30</span> Recounted against the current catalog: the customer sees 164 grouped products and 46 still have no brand; the finding is unchanged.</li></ul>
           </div>
         </details>
       </article>
@@ -510,27 +447,6 @@
             <p><strong>Terminada cuando</strong><br>Affected boundaries use explicit TypeScript types and input schemas; valid checkout, webhook, product, and admin flows continue passing type-check and integration tests.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
             <ul><li><span>2026-09-30</span> Improvement derived from source audit; build currently passes.</li><li><span>2026-09-30</span> Partly done: the Stripe webhook and the checkout route no longer use `any`. The webhook types the event and session as Stripe types, parses the shipping address through a new DireccionDeEnvio type, and guards the nullable amount and line-item fields; the checkout route validates cart items against an explicit shape and types its line items with Stripe.Checkout.SessionCreateParams.LineItem. Type-check and production build pass. Still open for the remaining `any` in the product detail client and the admin screens.</li></ul>
-          </div>
-        </details>
-      </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P3" data-categoria="Code quality">
-        <div class="tarea-cab">
-          <code>SW-028</code>
-          <div class="etiquetas">
-            <span class="pill prio P3" title="Cuando se pueda">P3</span>
-            <span class="pill est pending">Pendiente</span>
-          </div>
-        </div>
-        <h3>Consolidate the butterfly and logo assets into one official version</h3>
-        <p class="clasif">Code quality · Mejora sugerida</p>
-        <p class="detalle">The header and footer use a 512x407 PNG butterfly (the footer turns it white with a CSS filter). public/logo.svg is not the butterfly at all but a leaf drawing and is unused. public/images/logo-full.png has damaged transparency (speckled edges) and is unused. The butterfly pink measures #E9A9B9, while the site colour called primary is #D4A5AF, so the brand pink on the page does not match the logo.</p>
-        <details>
-          <summary>Origen, criterio de cierre e historial</summary>
-          <div class="ficha">
-            <p><strong>Dónde está</strong><br>public/images/logo-icon.png<br>public/images/logo-full.png<br>public/logo.svg<br>public/videos/skinworld-logo.mp4<br>tailwind.config.ts</p>
-            <p><strong>Terminada cuando</strong><br>One vector butterfly traced from the current header mark (same proportions) is used everywhere, unused or damaged logo files are retired, and the design system pink is taken from the logo.</p>
-            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Found in the redesign audit.</li></ul>
           </div>
         </details>
       </article>
@@ -702,6 +618,27 @@
           </div>
         </details>
       </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P1" data-categoria="Accessibility">
+        <div class="tarea-cab">
+          <code>SW-025</code>
+          <div class="etiquetas">
+            <span class="pill prio P1" title="Importante">P1</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Raise text contrast to WCAG AA across the storefront</h3>
+        <p class="clasif">Accessibility · Problema detectado</p>
+        <p class="detalle">Measured against white: body copy in text-slate-600 (#868E96) is 3.32:1 and 3.15:1 on the grey section background; text-slate-500 (#ADB5BD) is 2.07:1; text-slate-400 (#CED4DA), used for &quot;Con IVA&quot;, category labels and dates, is 1.49:1. The small uppercase pink labels in primary-700 (#BC7F8F) are 3.2:1, the gold brand label gold-600 (#B8942A) is 2.87:1, and the About page call to action puts white text on primary-500 at 2.14:1. The project redefines Tailwind slate with much lighter values, so every default-looking grey class is lighter than it appears in code.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>tailwind.config.ts (custom slate and primary scales)<br>src/components/**<br>src/app/**</p>
+            <p><strong>Terminada cuando</strong><br>Body and small text reach at least 4.5:1 and large text at least 3:1 on their real backgrounds, verified with a contrast check of every text token in the new design system.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Found in the redesign audit by computing contrast ratios for every grey and pink text colour in use.</li><li><span>2026-09-30</span> Fixed by the Skinworld V1 tokens: ink, body, muted and deep-pink text meet the documented ratios on their real surfaces. The remaining old low-contrast classes in the shipping and confirmation views were replaced, and both views were checked in the browser.</li></ul>
+          </div>
+        </details>
+      </article>
       <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Security">
         <div class="tarea-cab">
           <code>SW-006</code>
@@ -807,6 +744,69 @@
           </div>
         </details>
       </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Ecommerce">
+        <div class="tarea-cab">
+          <code>SW-027</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Stop product cards from taking a full phone screen each</h3>
+        <p class="clasif">Ecommerce · Problema detectado</p>
+        <p class="detalle">On a 390px phone the shop grid is one column and each card is about 1,000 CSS px tall (square image, category, name, price, &quot;Con IVA&quot;, full-width black button), so the 164-product catalog is roughly 100 screens of scrolling. On the product page the square image fills the first screen and the price sits below the fold.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/app/tienda/shop-client.tsx<br>src/components/product-card.tsx<br>src/app/producto/[slug]/product-client.tsx</p>
+            <p><strong>Terminada cuando</strong><br>The phone catalog shows two products per row with a tappable add button, and the product page shows image, name and price within the first screen at 375-430px.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Measured from full-page captures of production on 2026-09-30.</li><li><span>2026-09-30</span> Fixed and browser-verified at 390 × 844 px: the shop renders two cards per row with separate accessible add buttons, and the product image, name, price, quantity and add button all fit in the first phone screen.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Accessibility">
+        <div class="tarea-cab">
+          <code>SW-029</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Fix keyboard and semantic issues in product cards, menu and filter drawer</h3>
+        <p class="clasif">Accessibility · Problema detectado</p>
+        <p class="detalle">The product card places its &quot;Agregar&quot; button inside the product link, which nests two interactive controls. The mobile menu button does not expose aria-expanded. The mobile filter drawer has no Escape handling or focus management, and the mobile menu the same. Related to SW-010, which covers verifying the journeys on devices.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/components/product-card.tsx<br>src/components/header.tsx<br>src/app/tienda/shop-client.tsx</p>
+            <p><strong>Terminada cuando</strong><br>No interactive element is nested in another, menu and drawers announce their state, close with Escape and return focus, verified by keyboard.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Found by reading the components during the redesign audit.</li><li><span>2026-09-30</span> Fixed and manually verified: product add buttons are outside the card links; menu and filter controls expose state; mobile menu, filter drawer and search close with Escape; filter and search dialogs contain and restore focus.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Ecommerce">
+        <div class="tarea-cab">
+          <code>SW-030</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Visual redesign Skinworld V1 (presentation layer only)</h3>
+        <p class="clasif">Ecommerce · Mejora sugerida</p>
+        <p class="detalle">Owner-requested redesign completed in nine phases: design system, global components, home, shop and cards, product page, About, Journal, contact and cart, followed by responsive, contrast and keyboard polish. Checkout logic, email behavior, APIs, database and admin remain governed by their own tasks.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>tailwind.config.ts<br>src/styles/globals.css<br>src/components/**<br>src/app/(storefront pages)</p>
+            <p><strong>Terminada cuando</strong><br>Every phase is built, passes build and browser checks at 375-1920px, and the cart, filters, product add, forms and checkout still behave exactly as before.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Audit completed and plan presented; no files changed yet.</li><li><span>2026-09-30</span> Completed phases 1–9 and a final audit pass. Production build and type-check pass; browser checks covered desktop plus 390 × 844 px, search, filters, product add, postal-code address completion, cart totals and arrival at a correctly populated Stripe test Checkout. Two 3D butterfly animations were added with reduced-motion support.</li></ul>
+          </div>
+        </details>
+      </article>
       <article class="tarea" data-estado="completed" data-prioridad="P3" data-categoria="Reliability">
         <div class="tarea-cab">
           <code>SW-019</code>
@@ -827,12 +827,33 @@
             <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Blocked on the same database change: the messages table, its date index and the unique index per newsletter email are written at supabase/migraciones/001-guia-y-mensajes.sql. Meanwhile duplicate newsletter sign-ups no longer pile up, because the stored object is now keyed by a hash of the email, which removes the worst symptom while the table is pending.</li><li><span>2026-09-30</span> Fixed once the owner ran the migration. Contact messages and newsletter sign-ups now live in the messages table, indexed by kind and date, and the admin screen reads them in one query instead of downloading every object. scripts/migrar-mensajes.mjs moves anything left in the old bucket and was run: zero objects remained. Verified: a contact message landed as a row, and the same address subscribed twice in different letter case produced a single row, because the unique index is case-insensitive.</li></ul>
           </div>
         </details>
+      </article>
+      <article class="tarea" data-estado="completed" data-prioridad="P3" data-categoria="Code quality">
+        <div class="tarea-cab">
+          <code>SW-028</code>
+          <div class="etiquetas">
+            <span class="pill prio P3" title="Cuando se pueda">P3</span>
+            <span class="pill est completed">Terminada</span>
+          </div>
+        </div>
+        <h3>Consolidate the butterfly and logo assets into one official version</h3>
+        <p class="clasif">Code quality · Mejora sugerida</p>
+        <p class="detalle">The header and footer use a 512x407 PNG butterfly (the footer turns it white with a CSS filter). public/logo.svg is not the butterfly at all but a leaf drawing and is unused. public/images/logo-full.png has damaged transparency (speckled edges) and is unused. The butterfly pink measures #E9A9B9, while the site colour called primary is #D4A5AF, so the brand pink on the page does not match the logo.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>public/images/logo-icon.png<br>public/images/logo-full.png<br>public/logo.svg<br>public/videos/skinworld-logo.mp4<br>tailwind.config.ts</p>
+            <p><strong>Terminada cuando</strong><br>One vector butterfly traced from the current header mark (same proportions) is used everywhere, unused or damaged logo files are retired, and the design system pink is taken from the logo.</p>
+            <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
+            <ul><li><span>2026-09-30</span> Found in the redesign audit.</li><li><span>2026-09-30</span> Fixed: header, footer, decorative marks and the new 3D motion use one vector component traced from the official butterfly; the design token uses its #E9A9B9 pink, and the unused damaged PNG and leaf SVG were removed.</li></ul>
+          </div>
+        </details>
       </article></div>
     <p class="vacio" id="vacio" hidden>Ninguna tarea coincide con estos filtros.</p>
 
     <h2>Cambios recientes</h2>
     <section class="aviso">
-      <ul><li><span>2026-09-30</span> — Redesign audit (phase 0) completed without changing any storefront file. Seven findings registered: SW-025 text contrast below WCAG AA, SW-026 the &quot;free shipping in CDMX&quot; promise versus a $100 charge under $500, SW-027 one-column phone catalog, SW-028 duplicated and mismatched logo assets, SW-029 keyboard and nesting issues, SW-030 the redesign programme itself, and SW-031 missing product-detail content. SW-011 and SW-018 got new evidence.</li><li><span>2026-09-30</span> — The home page brand section was showing 2 laboratories out of 14 and hid the two largest, SESDERMA and Heliocare, behind a hand-written list; it now builds itself from the catalog, shows the four deepest with a real product photo and the rest as an index, and every name links to the shop already filtered. One new finding registered, SW-024: 46 of the 164 products carry no brand at all, so they never appear under any brand filter.</li><li><span>2026-09-30</span> — The owner ran supabase/migraciones/001-guia-y-mensajes.sql, which unblocked the last two code tasks. SW-017 closed: orders carry a tracking number and stage timestamps, captured when marking an order shipped and included in the customer email. SW-019 closed: messages moved from object storage to a table with its own indexes. Four tasks remain open and none of them can be closed from code: SW-011 needs a performance measurement, SW-012 needs the remaining typing, SW-008 needs the legal entity details and a reviewer, and SW-014 needs the Stripe account activated.</li><li><span>2026-09-30</span> — Fix pass over the pending tasks. Seven closed with verification evidence: retryable webhook with an alert (SW-001), rate limiting and review moderation (SW-003), admin login hardening (SW-004), canonical checkout URLs (SW-005), no customer email on the payment-status endpoint (SW-006), robots/sitemap and per-page metadata (SW-007), and the cart address form mounted once (SW-016). SW-011 and SW-012 advanced but stay open for the parts that need a measurement or further typing. SW-017 and SW-019 are blocked on one SQL migration now written at supabase/migraciones/001-guia-y-mensajes.sql. SW-008 and SW-014 remain with the owner.</li><li><span>2026-09-30</span> — Re-inspection after the order-tracking, email and postal-code work. Four defects confirmed fixed and verified in production (SW-020 webhook host, SW-021 checkout images, SW-022 address truncation, SW-023 admin visibility). Six new items registered (SW-014 live payments, SW-015 customer email, SW-016 duplicated address form, SW-017 tracking data, SW-018 catalog decisions, SW-019 message storage). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 and SW-013 updated with evidence. A unique constraint on orders.stripe_session_id was probed and confirmed to exist, so no duplicate-order task was opened.</li><li><span>2026-09-30</span> — Initial full source audit: 13 stable tasks registered; type-check and production build passed; no pre-existing task register was found.</li></ul>
+      <ul><li><span>2026-09-30</span> — Skinworld V1 redesign completed and audited. SW-025, SW-027, SW-028, SW-029 and SW-030 closed after production build, type-check and browser verification on desktop and 390 × 844 px. Search, product add, cart, postal-code address completion and Stripe test Checkout passed. Two 3D butterfly animations with reduced-motion support were added. SW-010 advanced but stays open for a full screen-reader/automated scan. SW-032 registered two inverted compare-at prices; no catalog price was changed without owner confirmation.</li><li><span>2026-09-30</span> — Redesign audit (phase 0) completed without changing any storefront file. Seven findings registered: SW-025 text contrast below WCAG AA, SW-026 the &quot;free shipping in CDMX&quot; promise versus a $100 charge under $500, SW-027 one-column phone catalog, SW-028 duplicated and mismatched logo assets, SW-029 keyboard and nesting issues, SW-030 the redesign programme itself, and SW-031 missing product-detail content. SW-011 and SW-018 got new evidence.</li><li><span>2026-09-30</span> — The home page brand section was showing 2 laboratories out of 14 and hid the two largest, SESDERMA and Heliocare, behind a hand-written list; it now builds itself from the catalog, shows the four deepest with a real product photo and the rest as an index, and every name links to the shop already filtered. One new finding registered, SW-024: 46 of the 164 products carry no brand at all, so they never appear under any brand filter.</li><li><span>2026-09-30</span> — The owner ran supabase/migraciones/001-guia-y-mensajes.sql, which unblocked the last two code tasks. SW-017 closed: orders carry a tracking number and stage timestamps, captured when marking an order shipped and included in the customer email. SW-019 closed: messages moved from object storage to a table with its own indexes. Four tasks remain open and none of them can be closed from code: SW-011 needs a performance measurement, SW-012 needs the remaining typing, SW-008 needs the legal entity details and a reviewer, and SW-014 needs the Stripe account activated.</li><li><span>2026-09-30</span> — Fix pass over the pending tasks. Seven closed with verification evidence: retryable webhook with an alert (SW-001), rate limiting and review moderation (SW-003), admin login hardening (SW-004), canonical checkout URLs (SW-005), no customer email on the payment-status endpoint (SW-006), robots/sitemap and per-page metadata (SW-007), and the cart address form mounted once (SW-016). SW-011 and SW-012 advanced but stay open for the parts that need a measurement or further typing. SW-017 and SW-019 are blocked on one SQL migration now written at supabase/migraciones/001-guia-y-mensajes.sql. SW-008 and SW-014 remain with the owner.</li><li><span>2026-09-30</span> — Re-inspection after the order-tracking, email and postal-code work. Four defects confirmed fixed and verified in production (SW-020 webhook host, SW-021 checkout images, SW-022 address truncation, SW-023 admin visibility). Six new items registered (SW-014 live payments, SW-015 customer email, SW-016 duplicated address form, SW-017 tracking data, SW-018 catalog decisions, SW-019 message storage). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 and SW-013 updated with evidence. A unique constraint on orders.stripe_session_id was probed and confirmed to exist, so no duplicate-order task was opened.</li><li><span>2026-09-30</span> — Initial full source audit: 13 stable tasks registered; type-check and production build passed; no pre-existing task register was found.</li></ul>
     </section>
 
     <h2>Cómo se mantiene</h2>

@@ -6,25 +6,25 @@ export const metadata = {
 
 export default function ShippingPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
-        <h1 className="mb-3 font-display text-4xl font-bold text-ink">
+    <div className="min-h-[60vh]">
+      <div className="mx-auto max-w-3xl px-sw-gutter pb-sw-section pt-12 sm:pt-16">
+        <h1 className="mb-4 font-display text-sw-h1 font-semibold text-sw-ink">
           Política de Envíos y Devoluciones
         </h1>
-        <p className="mb-10 text-sm text-slate-400">
+        <p className="mb-10 text-sw-small text-sw-muted">
           Última actualización: 28 de septiembre de 2026
         </p>
 
-        <div className="mb-12 rounded-2xl bg-primary-50 p-6">
-          <p className="font-display text-lg font-semibold text-ink">
+        <div className="mb-12 rounded-sw-lg bg-sw-pink-pale p-6">
+          <p className="font-display text-lg font-semibold text-sw-ink">
             Envío gratis en CDMX. Los envíos al interior de la República se cotizan según el
             destino.
           </p>
         </div>
 
-        <div className="space-y-10 leading-relaxed text-slate-600">
+        <div className="space-y-12 text-sw-body leading-relaxed text-sw-text">
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
               Tiempos de entrega
             </h2>
             <div className="space-y-4">
@@ -34,13 +34,13 @@ export default function ShippingPage() {
               </p>
               <ul className="ml-5 list-disc space-y-2">
                 <li>
-                  <span className="font-semibold text-ink">
+                  <span className="font-semibold text-sw-ink">
                     Ciudad de México y Área Metropolitana:
                   </span>{' '}
                   de 1 a 3 días hábiles.
                 </li>
                 <li>
-                  <span className="font-semibold text-ink">Resto de la República Mexicana:</span> de
+                  <span className="font-semibold text-sw-ink">Resto de la República Mexicana:</span> de
                   3 a 5 días hábiles, según el método de envío seleccionado al realizar la compra.
                 </li>
               </ul>
@@ -58,7 +58,7 @@ export default function ShippingPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
               Errores en el domicilio de entrega
             </h2>
             <div className="space-y-4">
@@ -83,11 +83,11 @@ export default function ShippingPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">Devoluciones</h2>
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">Devoluciones</h2>
             <div className="space-y-4">
               <p>
                 El Cliente puede solicitar la devolución del producto adquirido dentro de los{' '}
-                <span className="font-semibold text-ink">
+                <span className="font-semibold text-sw-ink">
                   10 días hábiles posteriores a la entrega
                 </span>{' '}
                 del referido producto.
@@ -99,27 +99,27 @@ export default function ShippingPage() {
                 no sea por causas imputables a Skinworld tendrá un costo, mismo que será descontado
                 del monto total del producto.
               </p>
-              <p className="font-semibold text-ink">Para hacer válida una devolución necesitas:</p>
+              <p className="font-semibold text-sw-ink">Para hacer válida una devolución necesitas:</p>
               <ul className="ml-5 list-disc space-y-2">
                 <li>Contar con el comprobante de compra o de pago.</li>
                 <li>El nombre de quien realizó la compra.</li>
               </ul>
               <p>Los productos que no cumplan con estos criterios no serán aceptados.</p>
               <p>
-                <span className="font-semibold text-ink">Artículos en oferta o con descuento:</span>{' '}
+                <span className="font-semibold text-sw-ink">Artículos en oferta o con descuento:</span>{' '}
                 no pueden ser objeto de reembolso ni devolución; sólo aplican los productos de precio
                 regular. Esto no aplica cuando se trate de defectos de origen o fabricación, como
                 producto roto o caducado, en cuyo caso sí procede la devolución.
               </p>
               <p>
-                <span className="font-semibold text-ink">Artículos dañados:</span> si recibes un
+                <span className="font-semibold text-sw-ink">Artículos dañados:</span> si recibes un
                 producto dañado, comunícate de inmediato con nosotros para obtener ayuda.
               </p>
             </div>
           </section>
 
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
               Gastos de envío por devolución
             </h2>
             <div className="space-y-4">
@@ -142,17 +142,17 @@ export default function ShippingPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">Reembolsos</h2>
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">Reembolsos</h2>
             <div className="space-y-4">
               <p>
-                Los reembolsos se realizan <span className="font-semibold text-ink">únicamente</span>{' '}
+                Los reembolsos se realizan <span className="font-semibold text-sw-ink">únicamente</span>{' '}
                 en la tarjeta de crédito o débito utilizada en la compra, o a la cuenta con la que se
                 realizó el pago si fue por transferencia electrónica.
               </p>
               <p>
                 Una vez solicitado el reembolso, Skinworld realizará las gestiones necesarias para
                 entregarlo en un plazo de{' '}
-                <span className="font-semibold text-ink">15 días hábiles</span> contados a partir de
+                <span className="font-semibold text-sw-ink">15 días hábiles</span> contados a partir de
                 la entrega del paquete al remitente. Este período incluye el tiempo de tránsito para
                 que Skinworld reciba la devolución (de 5 a 10 días hábiles) y el tiempo de procesarla
                 una vez recibida y aceptada (de 3 a 5 días hábiles).
@@ -161,7 +161,7 @@ export default function ShippingPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
               Cancelaciones
             </h2>
             <p>
@@ -174,7 +174,7 @@ export default function ShippingPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
               Demoras o inconvenientes en la entrega
             </h2>
             <p>
@@ -184,22 +184,22 @@ export default function ShippingPage() {
             </p>
           </section>
 
-          <section className="rounded-2xl border border-slate-200 p-6">
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">Atención a clientes</h2>
+          <section className="rounded-sw-lg border border-sw-border bg-sw-white p-6">
+            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">Atención a clientes</h2>
             <p className="mb-3">Horario de atención personalizada: lunes a viernes de 10:00 a 18:00 horas.</p>
             <ul className="space-y-1">
               <li>
                 Correo:{' '}
                 <a
                   href="mailto:contacto@skinworld.shop"
-                  className="font-semibold text-primary-700 underline"
+                  className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink"
                 >
                   contacto@skinworld.shop
                 </a>
               </li>
               <li>
                 Teléfono y WhatsApp:{' '}
-                <a href="tel:+525612884245" className="font-semibold text-primary-700 underline">
+                <a href="tel:+525612884245" className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
                   +52 56 1288 4245
                 </a>
               </li>

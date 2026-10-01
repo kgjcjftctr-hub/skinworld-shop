@@ -49,14 +49,14 @@ export default async function ProductPage({
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-20 text-center sm:px-6 lg:px-8">
-          <h1 className="mb-4 font-display text-3xl font-bold text-ink">Producto no encontrado</h1>
-          <p className="mb-8 text-slate-600">Lo sentimos, el producto que buscas no existe.</p>
-          <Link href="/tienda" className="btn btn-primary">
-            Ir a la tienda
-          </Link>
-        </div>
+      <div className="sw-container py-sw-section text-center">
+        <h1 className="font-display text-sw-h2 font-semibold text-sw-ink">Producto no encontrado</h1>
+        <p className="mx-auto mt-4 max-w-sw-prose text-sw-body text-sw-muted">
+          Este producto ya no está en el catálogo o la dirección cambió.
+        </p>
+        <Link href="/tienda" className="sw-btn sw-btn-primary mt-8 h-12">
+          Ir a la tienda
+        </Link>
       </div>
     );
   }
