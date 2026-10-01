@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "SkinWorld Task Center",
-  "lastInspectedAt": "2026-10-01T11:00:00-06:00",
-  "lastInspectedBy": "Claude Code verifying the cinematic intro in production",
+  "lastInspectedAt": "2026-10-01T14:15:11-06:00",
+  "lastInspectedBy": "Codex publishing and verifying the eight needs worlds in production",
   "sourceOfTruth": "This file is the durable source of truth. Do not replace it with a new list; update tasks by stable id and retain completed items and history. Every task carries detectedIn, the lastInspectedAt value of the inspection that first registered it, which is what marks a finding as new. The rendered page is published as a Claude artifact at artifactUrl; always republish to that same url instead of creating a second Task Center.",
   "statusDefinitions": {
     "pending": "Open work that has been detected or accepted.",
@@ -959,7 +959,7 @@
     },
     {
       "id": "SW-033",
-      "title": "Verify the cinematic home intro on a real iPhone and on Safari",
+      "title": "Verify the cinematic home scenes on a real iPhone and on Safari",
       "kind": "requires_confirmation",
       "category": "Accessibility",
       "priority": "P2",
@@ -973,10 +973,14 @@
         "src/components/intro/linea-de-tiempo.ts",
         "src/styles/intro.css",
         "src/components/header.tsx",
-        "src/app/layout.tsx"
+        "src/app/layout.tsx",
+        "src/components/sections/categories.tsx",
+        "src/components/sections/necesidades-motor.ts",
+        "src/components/sections/necesidades-timeline.ts",
+        "src/styles/necesidades.css"
       ],
-      "details": "The home page now opens with a scroll-driven intro (4.8 screens on desktop, 4.2 on phones): the official butterfly, split into its three original vector pieces, crosses a dark scene, turns, settles, reveals the Skinworld name and flies into the header logo, while the rest of the page slides up from below. Verified in headless Chrome only: no overlap between butterfly and name across 61 frames each at 1280×720, 1440×900, 1920×1080, 1024×768, 390×844, 375×667 and 430×932; buttons never covered; no horizontal overflow; no console errors; scrolling back reproduces the same frame; Skip lands on the end with focus on \"Explorar productos\"; reduced motion and no-JavaScript show a static composition; with 4× CPU throttling the intro uses about 1 ms of script per frame and no layout. Real iOS Safari and desktop Safari, which handle sticky scenes, 3D transforms and the address bar differently, have not been tested.",
-      "doneWhen": "The intro is checked on a physical iPhone (Safari) and on desktop Safari: smooth scrolling forward and back, no flicker on load, the butterfly lands in the header logo, the buttons are tappable, and the address-bar show/hide causes no jump.",
+      "details": "The home page opens with a scroll-driven intro and now continues with eight scroll-controlled editorial worlds for Acné, Dermatitis, Antiedad, Manchas, Cabello y Uñas, Piel de Bebé, Protección Solar and Suplementos. Chrome verification covers desktop and phone layouts, the category routes and live catalog counts, horizontal overflow, console errors, reduced motion and no-JavaScript fallbacks. Real iOS Safari and desktop Safari, which handle sticky scenes, 3D transforms and the address bar differently, have not been tested.",
+      "doneWhen": "Both home scenes are checked on a physical iPhone (Safari) and on desktop Safari: smooth scrolling forward and back, no flicker on load, the butterfly lands in the header logo, every needs world appears in order, all buttons and category links are tappable, and the address-bar show/hide causes no jump.",
       "history": [
         {
           "date": "2026-10-01",
@@ -985,11 +989,19 @@
         {
           "date": "2026-10-01",
           "note": "Published to production (merge 7d61da7). Re-verified on https://www.skinworld.shop with headless Chrome: no butterfly/name overlap and no covered buttons at 1440×900, 1280×720, 390×844 and 375×667; no console errors or horizontal overflow; reversal, Skip, reduced motion, no-JavaScript and the shop header all behave as on the branch; all main pages answer 200. The Vercel preview could not be tested because it requires Vercel sign-in. Still open for a physical iPhone and desktop Safari check."
+        },
+        {
+          "date": "2026-10-01",
+          "note": "Published the eight needs worlds through PR #1 and production merge 8267863. Vercel passed for both preview and main. Re-verified https://www.skinworld.shop at 1440×800 and 375×812: all eight worlds and counts match the catalog, desktop uses the scroll scene, phone uses the stacked layout, there is no horizontal overflow or console error, Acné opens the correct 19-product filter, and product and cart pages still load correctly. Still open only for a physical iPhone and desktop Safari check."
         }
       ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-01",
+      "summary": "The eight editorial needs worlds are live in production after PR #1 and Vercel deployment 8267863. Desktop, phone, category filtering, product and cart paths passed buyer-facing verification; SW-033 remains open only for a real iPhone and desktop Safari check."
+    },
     {
       "date": "2026-10-01",
       "summary": "The cinematic home intro is live in production and passed the same headless checks there; SW-033 stays open for a real iPhone and Safari check."
