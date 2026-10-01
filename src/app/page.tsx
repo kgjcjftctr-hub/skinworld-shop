@@ -1,5 +1,4 @@
 import { IntroCinematica } from '@/components/intro/intro-cinematica';
-import { BarraDeAvisos } from '@/components/barra-avisos';
 import { CategoriesSection } from '@/components/sections/categories';
 import { SkinworldEdit } from '@/components/sections/skinworld-edit';
 import { BrandsSection } from '@/components/sections/brands';
@@ -21,7 +20,6 @@ export default async function Home() {
       {/* El resto del inicio sube sobre el final de la intro, como una hoja que
           entra desde abajo; por eso va por encima (z-10) y con fondo propio. */}
       <div className="relative z-10 bg-sw-warm-white">
-        <BarraDeAvisos />
         <CategoriesSection porCategoria={porCategoria} />
         <SkinworldEdit destacados={destacados} />
         <BrandsSection marcas={marcas} />
