@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "SkinWorld Task Center",
-  "lastInspectedAt": "2026-10-01T15:09:00-06:00",
-  "lastInspectedBy": "Claude Code building the persona system for the needs section",
+  "lastInspectedAt": "2026-10-01T15:46:00-06:00",
+  "lastInspectedBy": "Claude Code building the needs-section personas",
   "sourceOfTruth": "This file is the durable source of truth. Do not replace it with a new list; update tasks by stable id and retain completed items and history. Every task carries detectedIn, the lastInspectedAt value of the inspection that first registered it, which is what marks a finding as new. The rendered page is published as a Claude artifact at artifactUrl; always republish to that same url instead of creating a second Task Center.",
   "statusDefinitions": {
     "pending": "Open work that has been detected or accepted.",
@@ -1022,6 +1022,10 @@
         {
           "date": "2026-10-01",
           "note": "The owner liked the movement and asked for: a fixed page where only the person moves, conditions researched and shown only where they make sense, one head that turns, and a different person per problem. Done on the branch: fixed scene on phones as well, one person at a time, and research-based briefs for eight different people. Verified on 390x844, 375x667, 820x1180, 1280x720 and 1440x900 with no overlap or overflow, plus reduced motion and landscape phone as stacked blocks, about 60 fps on a phone with 4x CPU throttling, and at most four sequences in memory. Images still have to be generated with an AI tool; Claude cannot create photographs itself. Waiting for the owner to choose how to generate them."
+        },
+        {
+          "date": "2026-10-01",
+          "note": "Acné persona built from eight ChatGPT stills of the same AI-generated woman at different angles, made in the owner's ChatGPT with permission. ChatGPT can no longer make video because Sora is closed. The stills were aligned and joined by morphing, using Apple Vision face points and a person cut-out, into a 48-frame transparent sequence: 2.2 MB on desktop and 0.9 MB on phone. It is registered in the manifest and verified at 390x844 and 1440x900. The tools are in scripts/personas and the method is in docs/personas-necesidades.md. Seven personas remain. Waiting for the owner visual approval and a decision on the AI-image notice; nothing is published."
         }
       ]
     },
@@ -1050,6 +1054,10 @@
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-01",
+      "summary": "Needs section on branch personas-necesidades (not published): the scene now stays fixed on phones as well and shows one person at a time. Persona briefs are based on dermatology research. The first real persona, Acné, was built from eight ChatGPT stills joined by morphing (scripts/personas). SW-034 updated."
+    },
     {
       "date": "2026-10-01",
       "summary": "Persona system for the needs section built on branch personas-necesidades (not published): scroll-driven entrance, 3D turn, transformation and exit per category, lazy frame loading, phone and reduced-motion modes, asset pipeline and generation guide. Registered SW-034 (persona assets and approval) and SW-035 (overlapping category texts, fixed on the branch)."
