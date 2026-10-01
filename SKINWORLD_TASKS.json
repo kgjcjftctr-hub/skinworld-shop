@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "SkinWorld Task Center",
-  "lastInspectedAt": "2026-10-01T14:15:11-06:00",
-  "lastInspectedBy": "Codex publishing and verifying the eight needs worlds in production",
+  "lastInspectedAt": "2026-10-01T16:30:00-06:00",
+  "lastInspectedBy": "Claude Code building the persona system for the needs section",
   "sourceOfTruth": "This file is the durable source of truth. Do not replace it with a new list; update tasks by stable id and retain completed items and history. Every task carries detectedIn, the lastInspectedAt value of the inspection that first registered it, which is what marks a finding as new. The rendered page is published as a Claude artifact at artifactUrl; always republish to that same url instead of creating a second Task Center.",
   "statusDefinitions": {
     "pending": "Open work that has been detected or accepted.",
@@ -995,9 +995,61 @@
           "note": "Published the eight needs worlds through PR #1 and production merge 8267863. Vercel passed for both preview and main. Re-verified https://www.skinworld.shop at 1440×800 and 375×812: all eight worlds and counts match the catalog, desktop uses the scroll scene, phone uses the stacked layout, there is no horizontal overflow or console error, Acné opens the correct 19-product filter, and product and cart pages still load correctly. Still open only for a physical iPhone and desktop Safari check."
         }
       ]
+    },
+    {
+      "id": "SW-034",
+      "title": "Produce the eight persona sequences for the needs section",
+      "kind": "requires_confirmation",
+      "category": "Content and legal",
+      "priority": "P2",
+      "status": "requires_verification",
+      "detectedAt": "2026-10-01",
+      "updatedAt": "2026-10-01",
+      "detectedIn": "2026-10-01T16:30:00-06:00",
+      "origin": [
+        "docs/personas-necesidades.md",
+        "src/data/personas-necesidades.json",
+        "scripts/preparar-persona.mjs",
+        "src/components/sections/necesidades-personas.ts"
+      ],
+      "details": "The needs section can now show one person per category who enters from the left, turns on the vertical axis, improves during the turn and exits right, all driven by scroll. The project has no photographs of people other than Dra. Karina, so no persona is shown yet: each category keeps its sculpture until its sequence exists. The asset specification, per-persona briefs and generation prompts are in docs/personas-necesidades.md, and scripts/preparar-persona.mjs turns a video or frame folder into optimised desktop and phone sequences and registers it. AI-generated skin-improvement imagery next to products may read as a result claim, so an \"illustrative image\" notice should be considered.",
+      "doneWhen": "All eight sequences meet the specification (same identity, moderate condition, improvement finished before the end of the turn, natural texture), are registered in the manifest, and the owner approves them visually on desktop and phone before publishing.",
+      "history": [
+        {
+          "date": "2026-10-01",
+          "note": "System built on branch personas-necesidades and verified with a test sequence (?muestra=personas): scroll forward and back, eight transitions, links and index, phone layout, reduced motion, about 60 fps with 4x CPU throttling, and at most three sequences in memory. Waiting for the persona assets and the owner visual approval; nothing is published."
+        }
+      ]
+    },
+    {
+      "id": "SW-035",
+      "title": "Stop category texts from overlapping during transitions in the needs section",
+      "kind": "detected_problem",
+      "category": "Ecommerce",
+      "priority": "P3",
+      "status": "in_progress",
+      "detectedAt": "2026-10-01",
+      "updatedAt": "2026-10-01",
+      "detectedIn": "2026-10-01T16:30:00-06:00",
+      "origin": [
+        "src/components/sections/necesidades-timeline.ts",
+        "src/styles/necesidades.css"
+      ],
+      "details": "On desktop, while one category faded into the next, both names, descriptions, counts and giant words were visible on top of each other for a moment, and the last category overlapped the closing line.",
+      "doneWhen": "Each category text leaves before the next one appears and the closing line appears alone, verified in production.",
+      "history": [
+        {
+          "date": "2026-10-01",
+          "note": "Fixed on branch personas-necesidades: texts now have their own staggered fade while the backgrounds still cross-fade. Verified in captures at 0.21 and 0.95 of the section; pending publication with SW-034 approval."
+        }
+      ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-01",
+      "summary": "Persona system for the needs section built on branch personas-necesidades (not published): scroll-driven entrance, 3D turn, transformation and exit per category, lazy frame loading, phone and reduced-motion modes, asset pipeline and generation guide. Registered SW-034 (persona assets and approval) and SW-035 (overlapping category texts, fixed on the branch)."
+    },
     {
       "date": "2026-10-01",
       "summary": "The eight editorial needs worlds are live in production after PR #1 and Vercel deployment 8267863. Desktop, phone, category filtering, product and cart paths passed buyer-facing verification; SW-033 remains open only for a real iPhone and desktop Safari check."

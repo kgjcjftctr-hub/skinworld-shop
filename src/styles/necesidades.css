@@ -88,6 +88,12 @@
   .necesidades[data-inmersiva] .necesidades__cierre p { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; }
   .necesidades[data-inmersiva] .necesidades__cierre > span { font: 400 clamp(44px,6vw,80px)/1.07 var(--font-playfair), Georgia, serif; letter-spacing: -1.5px; }
   .necesidades[data-inmersiva] .necesidades__cierre em { color: #92495f; }
+  /* Textos de cada categoría: entran y salen sin cruzarse con los de la vecina. */
+  .necesidades[data-inmersiva] .necesidades__texto,
+  .necesidades[data-inmersiva] .necesidades__cantidad,
+  .necesidades[data-inmersiva] .necesidades__pie-arte { opacity: var(--ne-texto, 1); }
+  .necesidades[data-inmersiva] .necesidades__gigante { opacity: calc(var(--ne-texto, 1) * 0.5); }
+  .necesidades[data-inmersiva] [data-persona-activa] .necesidades__gigante { opacity: calc(var(--ne-texto, 1) * 0.32); }
   .necesidades[data-inmersiva] .necesidades__progreso { display: block; position: absolute; z-index: 7; height: 2px; bottom: 0; left: 0; right: 0; background: #92495f; transform: scaleX(var(--ne-progreso,0)); transform-origin: left; }
 }
 @media (min-width: 1024px) and (max-height: 780px) and (min-height: 620px) {
@@ -108,4 +114,59 @@
   .necesidades__arte { height: 180px; }
   .necesidades__mundo { break-inside: avoid; }
   .necesidades__indice { display: none; }
+}
+
+/* ---------- Personas por necesidad ----------
+   El motor crea el canvas solo cuando la categoría tiene secuencia en
+   src/data/personas-necesidades.json; sin ella, todo se ve como antes. */
+.necesidades__persona { display: none; }
+.necesidades__mundo[data-persona-activa] .necesidades__persona {
+  display: block;
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 0;
+  height: 100%;
+  aspect-ratio: 3 / 4;
+  opacity: var(--ne-p-opacidad, 1);
+  transform: translate3d(calc(-50% + var(--ne-p-x, 0vw)), 0, 0) perspective(1100px) rotateY(var(--ne-p-plano, 0deg)) scale(var(--ne-p-escala, 1));
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+.necesidades__persona-lienzo { position: absolute; inset: 0; width: 100%; height: 100%; }
+.necesidades__persona[data-fondo='solido'] .necesidades__persona-lienzo {
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 48%, #000 68%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 48%, #000 68%, transparent 100%);
+}
+.necesidades__persona-suelo {
+  position: absolute; left: 18%; right: 18%; bottom: -1%; height: 7%; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(92, 38, 52, 0.26), transparent);
+}
+.necesidades__persona-luz { display: none; }
+/* Con persona, la escultura pasa a ser fondo: más tenue y en paralaje. */
+.necesidades__mundo[data-persona-activa] .necesidades__escultura { opacity: 0.5; }
+.necesidades__mundo[data-persona-activa] .necesidades__gigante { opacity: 0.32; }
+.necesidades__aviso-muestra {
+  position: absolute; z-index: 8; left: 50%; top: 44px; transform: translateX(-50%);
+  margin: 0; padding: 6px 12px; border-radius: 999px; white-space: nowrap;
+  background: rgba(51, 35, 43, 0.82); color: #fff; font-size: 11px; font-weight: 600;
+}
+@media (min-width: 1024px) and (min-height: 620px) and (prefers-reduced-motion: no-preference) {
+  .necesidades[data-inmersiva] [data-persona-activa] .necesidades__escultura {
+    transform: translate(calc(var(--ne-cursor-x, 0px) + var(--ne-p-x, 0vw) * -0.12), var(--ne-cursor-y, 0px)) rotate(var(--ne-angulo)) scale(0.92);
+  }
+  .necesidades[data-inmersiva] [data-persona-activa] .necesidades__perla { transform: translateX(calc(var(--ne-p-x, 0vw) * 0.4)); }
+  .necesidades[data-inmersiva] [data-persona-activa] .necesidades__gigante { transform: translateX(calc(var(--ne-p-x, 0vw) * -0.06)); }
+  /* Barrido de luz que acompaña el giro. */
+  .necesidades[data-inmersiva] [data-persona-activa] .necesidades__persona-luz {
+    display: block; position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(100deg, transparent 38%, rgba(255, 250, 252, 0.28) 50%, transparent 62%);
+    transform: translateX(calc((var(--ne-p-luz, 0.5) - 0.5) * 120%));
+    -webkit-mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
+    mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
+    mix-blend-mode: soft-light;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .necesidades__mundo[data-persona-activa] .necesidades__persona { transform: translateX(-50%); opacity: 1; }
 }

@@ -41,11 +41,17 @@ export function CategoriesSection({ porCategoria }: { porCategoria: Record<strin
               '--ne-claro': mundo.claro, '--ne-angulo': `${mundo.angulo}deg`,
             } as CSSProperties;
             return (
-              <article key={mundo.nombre} id={`necesidad-${i + 1}`} className={`necesidades__mundo necesidades__mundo--${i % 2}`} style={tema} data-necesidad aria-labelledby={`necesidad-titulo-${i + 1}`}>
+              <article key={mundo.nombre} id={`necesidad-${i + 1}`} className={`necesidades__mundo necesidades__mundo--${i % 2}`} style={tema} data-necesidad data-categoria={mundo.nombre} aria-labelledby={`necesidad-titulo-${i + 1}`}>
                 <div className="necesidades__ambiente" aria-hidden="true" />
                 <div className="necesidades__arte" aria-hidden="true">
                   <span className="necesidades__gigante">{mundo.palabra}</span>
                   <div className="necesidades__escultura"><div className="necesidades__sombra" /><div className="necesidades__lamina" /><div className="necesidades__aro" /><div className="necesidades__perla" /><div className="necesidades__reflejo" /></div>
+                  {/* Persona de la categoría: el motor crea aquí su canvas solo si hay
+                      secuencia en src/data/personas-necesidades.json. */}
+                  <div className="necesidades__persona" data-persona>
+                    <div className="necesidades__persona-suelo" />
+                    <div className="necesidades__persona-luz" />
+                  </div>
                   <span className="necesidades__pie-arte">{numero} — {mundo.capitulo}</span>
                 </div>
                 <div className="necesidades__cantidad"><strong>{total}</strong><span>{total === 1 ? 'producto' : 'productos'}<br /> por descubrir</span></div>

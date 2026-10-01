@@ -129,20 +129,20 @@
       <h1>SkinWorld Task Center</h1>
       <p class="intro">Panel maestro de pendientes de la tienda: lo que está roto, lo que se puede mejorar y lo que falta confirmar. Cada tarea conserva su identificador y su historial, así que se actualiza en lugar de duplicarse.</p>
       <p class="sello">
-        <span>Última inspección <b>2026-10-01 a las 14:15</b></span>
-        <span>Por <b>Codex publishing and verifying the eight needs worlds in production</b></span>
+        <span>Última inspección <b>2026-10-01 a las 16:30</b></span>
+        <span>Por <b>Claude Code building the persona system for the needs section</b></span>
         <span>Fuente <b>SKINWORLD_TASKS.json</b></span>
       </p>
 
       <div class="avance">
-        <div class="barra"><i style="width:55%"></i></div>
-        <p>18 de 33 tareas terminadas · 55% del registro histórico</p>
+        <div class="barra"><i style="width:51%"></i></div>
+        <p>18 de 35 tareas terminadas · 51% del registro histórico</p>
       </div>
 
       <div class="cifras">
         <div class="cifra p0"><b>3</b><span>abiertas que bloquean la venta</span></div>
         <div class="cifra p1"><b>5</b><span>abiertas importantes</span></div>
-        <div class="cifra duda"><b>9</b><span>requieren verificación</span></div>
+        <div class="cifra duda"><b>10</b><span>requieren verificación</span></div>
         <div class="cifra listo"><b>18</b><span>terminadas y verificadas</span></div>
       </div>
     </header>
@@ -155,14 +155,14 @@
     </section>
 
     <h2>Nuevos pendientes detectados</h2>
-    <section class="aviso"><p>La última inspección no encontró pendientes nuevos.</p></section>
+    <ul class="chips"><li><code>SW-034</code>Produce the eight persona sequences for the needs section</li><li><code>SW-035</code>Stop category texts from overlapping during transitions in the needs section</li></ul>
 
     <h2>Tareas</h2>
     <div class="filtros">
       <div class="grupo" data-eje="estado">
         <b>Estado</b>
-        <button data-valor="todo" aria-pressed="true">Todas (33)</button>
-        <button data-valor="pending" aria-pressed="false">Pendiente (6)</button><button data-valor="in_progress" aria-pressed="false">En progreso (0)</button><button data-valor="requires_verification" aria-pressed="false">Requiere verificación (9)</button><button data-valor="completed" aria-pressed="false">Terminada (18)</button>
+        <button data-valor="todo" aria-pressed="true">Todas (35)</button>
+        <button data-valor="pending" aria-pressed="false">Pendiente (6)</button><button data-valor="in_progress" aria-pressed="false">En progreso (1)</button><button data-valor="requires_verification" aria-pressed="false">Requiere verificación (10)</button><button data-valor="completed" aria-pressed="false">Terminada (18)</button>
       </div>
       <div class="grupo" data-eje="prioridad">
         <b>Prioridad</b>
@@ -429,6 +429,27 @@
           </div>
         </details>
       </article>
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P2" data-categoria="Content and legal">
+        <div class="tarea-cab">
+          <code>SW-034</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est requires_verification">Requiere verificación</span>
+          </div>
+        </div>
+        <h3>Produce the eight persona sequences for the needs section</h3>
+        <p class="clasif">Content and legal · Requiere confirmación</p>
+        <p class="detalle">The needs section can now show one person per category who enters from the left, turns on the vertical axis, improves during the turn and exits right, all driven by scroll. The project has no photographs of people other than Dra. Karina, so no persona is shown yet: each category keeps its sculpture until its sequence exists. The asset specification, per-persona briefs and generation prompts are in docs/personas-necesidades.md, and scripts/preparar-persona.mjs turns a video or frame folder into optimised desktop and phone sequences and registers it. AI-generated skin-improvement imagery next to products may read as a result claim, so an &quot;illustrative image&quot; notice should be considered.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>docs/personas-necesidades.md<br>src/data/personas-necesidades.json<br>scripts/preparar-persona.mjs<br>src/components/sections/necesidades-personas.ts</p>
+            <p><strong>Terminada cuando</strong><br>All eight sequences meet the specification (same identity, moderate condition, improvement finished before the end of the turn, natural texture), are registered in the manifest, and the owner approves them visually on desktop and phone before publishing.</p>
+            <p><strong>Detectada</strong> 2026-10-01 · <strong>Actualizada</strong> 2026-10-01</p>
+            <ul><li><span>2026-10-01</span> System built on branch personas-necesidades and verified with a test sequence (?muestra=personas): scroll forward and back, eight transitions, links and index, phone layout, reduced motion, about 60 fps with 4x CPU throttling, and at most three sequences in memory. Waiting for the persona assets and the owner visual approval; nothing is published.</li></ul>
+          </div>
+        </details>
+      </article>
       <article class="tarea" data-estado="pending" data-prioridad="P3" data-categoria="Performance">
         <div class="tarea-cab">
           <code>SW-011</code>
@@ -489,6 +510,27 @@
             <p><strong>Terminada cuando</strong><br>The owner either supplies that content for the products or confirms the product page shows the description only.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
             <ul><li><span>2026-09-30</span> Found while checking what the redesigned product page could display.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="in_progress" data-prioridad="P3" data-categoria="Ecommerce">
+        <div class="tarea-cab">
+          <code>SW-035</code>
+          <div class="etiquetas">
+            <span class="pill prio P3" title="Cuando se pueda">P3</span>
+            <span class="pill est in_progress">En progreso</span>
+          </div>
+        </div>
+        <h3>Stop category texts from overlapping during transitions in the needs section</h3>
+        <p class="clasif">Ecommerce · Problema detectado</p>
+        <p class="detalle">On desktop, while one category faded into the next, both names, descriptions, counts and giant words were visible on top of each other for a moment, and the last category overlapped the closing line.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/components/sections/necesidades-timeline.ts<br>src/styles/necesidades.css</p>
+            <p><strong>Terminada cuando</strong><br>Each category text leaves before the next one appears and the closing line appears alone, verified in production.</p>
+            <p><strong>Detectada</strong> 2026-10-01 · <strong>Actualizada</strong> 2026-10-01</p>
+            <ul><li><span>2026-10-01</span> Fixed on branch personas-necesidades: texts now have their own staggered fade while the backgrounds still cross-fade. Verified in captures at 0.21 and 0.95 of the section; pending publication with SW-034 approval.</li></ul>
           </div>
         </details>
       </article>
@@ -874,7 +916,7 @@
 
     <h2>Cambios recientes</h2>
     <section class="aviso">
-      <ul><li><span>2026-10-01</span> — The eight editorial needs worlds are live in production after PR #1 and Vercel deployment 8267863. Desktop, phone, category filtering, product and cart paths passed buyer-facing verification; SW-033 remains open only for a real iPhone and desktop Safari check.</li><li><span>2026-10-01</span> — The cinematic home intro is live in production and passed the same headless checks there; SW-033 stays open for a real iPhone and Safari check.</li><li><span>2026-10-01</span> — Home page intro replaced by a scroll-driven cinematic sequence built only with CSS transforms and one requestAnimationFrame loop (no new libraries). The butterfly vector was split into its three original pieces without changing the shape. One verification task registered, SW-033: test on a real iPhone and on Safari.</li><li><span>2026-09-30</span> — Skinworld V1 redesign completed and audited. SW-025, SW-027, SW-028, SW-029 and SW-030 closed after production build, type-check and browser verification on desktop and 390 × 844 px. Search, product add, cart, postal-code address completion and Stripe test Checkout passed. Two 3D butterfly animations with reduced-motion support were added. SW-010 advanced but stays open for a full screen-reader/automated scan. SW-032 registered two inverted compare-at prices; no catalog price was changed without owner confirmation.</li><li><span>2026-09-30</span> — Redesign audit (phase 0) completed without changing any storefront file. Seven findings registered: SW-025 text contrast below WCAG AA, SW-026 the &quot;free shipping in CDMX&quot; promise versus a $100 charge under $500, SW-027 one-column phone catalog, SW-028 duplicated and mismatched logo assets, SW-029 keyboard and nesting issues, SW-030 the redesign programme itself, and SW-031 missing product-detail content. SW-011 and SW-018 got new evidence.</li><li><span>2026-09-30</span> — The home page brand section was showing 2 laboratories out of 14 and hid the two largest, SESDERMA and Heliocare, behind a hand-written list; it now builds itself from the catalog, shows the four deepest with a real product photo and the rest as an index, and every name links to the shop already filtered. One new finding registered, SW-024: 46 of the 164 products carry no brand at all, so they never appear under any brand filter.</li><li><span>2026-09-30</span> — The owner ran supabase/migraciones/001-guia-y-mensajes.sql, which unblocked the last two code tasks. SW-017 closed: orders carry a tracking number and stage timestamps, captured when marking an order shipped and included in the customer email. SW-019 closed: messages moved from object storage to a table with its own indexes. Four tasks remain open and none of them can be closed from code: SW-011 needs a performance measurement, SW-012 needs the remaining typing, SW-008 needs the legal entity details and a reviewer, and SW-014 needs the Stripe account activated.</li><li><span>2026-09-30</span> — Fix pass over the pending tasks. Seven closed with verification evidence: retryable webhook with an alert (SW-001), rate limiting and review moderation (SW-003), admin login hardening (SW-004), canonical checkout URLs (SW-005), no customer email on the payment-status endpoint (SW-006), robots/sitemap and per-page metadata (SW-007), and the cart address form mounted once (SW-016). SW-011 and SW-012 advanced but stay open for the parts that need a measurement or further typing. SW-017 and SW-019 are blocked on one SQL migration now written at supabase/migraciones/001-guia-y-mensajes.sql. SW-008 and SW-014 remain with the owner.</li><li><span>2026-09-30</span> — Re-inspection after the order-tracking, email and postal-code work. Four defects confirmed fixed and verified in production (SW-020 webhook host, SW-021 checkout images, SW-022 address truncation, SW-023 admin visibility). Six new items registered (SW-014 live payments, SW-015 customer email, SW-016 duplicated address form, SW-017 tracking data, SW-018 catalog decisions, SW-019 message storage). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 and SW-013 updated with evidence. A unique constraint on orders.stripe_session_id was probed and confirmed to exist, so no duplicate-order task was opened.</li><li><span>2026-09-30</span> — Initial full source audit: 13 stable tasks registered; type-check and production build passed; no pre-existing task register was found.</li></ul>
+      <ul><li><span>2026-10-01</span> — Persona system for the needs section built on branch personas-necesidades (not published): scroll-driven entrance, 3D turn, transformation and exit per category, lazy frame loading, phone and reduced-motion modes, asset pipeline and generation guide. Registered SW-034 (persona assets and approval) and SW-035 (overlapping category texts, fixed on the branch).</li><li><span>2026-10-01</span> — The eight editorial needs worlds are live in production after PR #1 and Vercel deployment 8267863. Desktop, phone, category filtering, product and cart paths passed buyer-facing verification; SW-033 remains open only for a real iPhone and desktop Safari check.</li><li><span>2026-10-01</span> — The cinematic home intro is live in production and passed the same headless checks there; SW-033 stays open for a real iPhone and Safari check.</li><li><span>2026-10-01</span> — Home page intro replaced by a scroll-driven cinematic sequence built only with CSS transforms and one requestAnimationFrame loop (no new libraries). The butterfly vector was split into its three original pieces without changing the shape. One verification task registered, SW-033: test on a real iPhone and on Safari.</li><li><span>2026-09-30</span> — Skinworld V1 redesign completed and audited. SW-025, SW-027, SW-028, SW-029 and SW-030 closed after production build, type-check and browser verification on desktop and 390 × 844 px. Search, product add, cart, postal-code address completion and Stripe test Checkout passed. Two 3D butterfly animations with reduced-motion support were added. SW-010 advanced but stays open for a full screen-reader/automated scan. SW-032 registered two inverted compare-at prices; no catalog price was changed without owner confirmation.</li><li><span>2026-09-30</span> — Redesign audit (phase 0) completed without changing any storefront file. Seven findings registered: SW-025 text contrast below WCAG AA, SW-026 the &quot;free shipping in CDMX&quot; promise versus a $100 charge under $500, SW-027 one-column phone catalog, SW-028 duplicated and mismatched logo assets, SW-029 keyboard and nesting issues, SW-030 the redesign programme itself, and SW-031 missing product-detail content. SW-011 and SW-018 got new evidence.</li><li><span>2026-09-30</span> — The home page brand section was showing 2 laboratories out of 14 and hid the two largest, SESDERMA and Heliocare, behind a hand-written list; it now builds itself from the catalog, shows the four deepest with a real product photo and the rest as an index, and every name links to the shop already filtered. One new finding registered, SW-024: 46 of the 164 products carry no brand at all, so they never appear under any brand filter.</li><li><span>2026-09-30</span> — The owner ran supabase/migraciones/001-guia-y-mensajes.sql, which unblocked the last two code tasks. SW-017 closed: orders carry a tracking number and stage timestamps, captured when marking an order shipped and included in the customer email. SW-019 closed: messages moved from object storage to a table with its own indexes. Four tasks remain open and none of them can be closed from code: SW-011 needs a performance measurement, SW-012 needs the remaining typing, SW-008 needs the legal entity details and a reviewer, and SW-014 needs the Stripe account activated.</li><li><span>2026-09-30</span> — Fix pass over the pending tasks. Seven closed with verification evidence: retryable webhook with an alert (SW-001), rate limiting and review moderation (SW-003), admin login hardening (SW-004), canonical checkout URLs (SW-005), no customer email on the payment-status endpoint (SW-006), robots/sitemap and per-page metadata (SW-007), and the cart address form mounted once (SW-016). SW-011 and SW-012 advanced but stay open for the parts that need a measurement or further typing. SW-017 and SW-019 are blocked on one SQL migration now written at supabase/migraciones/001-guia-y-mensajes.sql. SW-008 and SW-014 remain with the owner.</li><li><span>2026-09-30</span> — Re-inspection after the order-tracking, email and postal-code work. Four defects confirmed fixed and verified in production (SW-020 webhook host, SW-021 checkout images, SW-022 address truncation, SW-023 admin visibility). Six new items registered (SW-014 live payments, SW-015 customer email, SW-016 duplicated address form, SW-017 tracking data, SW-018 catalog decisions, SW-019 message storage). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 and SW-013 updated with evidence. A unique constraint on orders.stripe_session_id was probed and confirmed to exist, so no duplicate-order task was opened.</li><li><span>2026-09-30</span> — Initial full source audit: 13 stable tasks registered; type-check and production build passed; no pre-existing task register was found.</li></ul>
     </section>
 
     <h2>Cómo se mantiene</h2>
