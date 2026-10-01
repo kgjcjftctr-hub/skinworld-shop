@@ -1,0 +1,537 @@
+/* ==========================================================================
+   Intro cinematográfica del inicio.
+
+   Sin la clase html.sw-intro-js (sin JavaScript) o con "reducir movimiento",
+   se ve una composición fija: mariposa, Skinworld y los dos botones.
+   Con la clase, la escena queda fija mientras se hace scroll y el motor
+   (src/components/intro/motor.ts) mueve las capas con transform y opacity.
+   ========================================================================== */
+
+/* ---------- Composición fija (base) ---------- */
+
+.sw-intro {
+  position: relative;
+  background: rgb(var(--sw-warm-white));
+}
+
+.sw-intro__escena {
+  position: relative;
+  overflow: hidden;
+}
+
+.sw-intro__sonda {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 100vh;
+  height: 100svh;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.sw-intro__capas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sw-intro__fondo {
+  position: absolute;
+  inset: 0;
+}
+
+.sw-intro__fondo--oscuro {
+  opacity: 0;
+  background:
+    radial-gradient(55% 45% at 28% 72%, rgba(91, 26, 46, 0.75), transparent 70%),
+    radial-gradient(45% 40% at 78% 22%, rgba(122, 42, 66, 0.45), transparent 70%),
+    radial-gradient(70% 60% at 50% 50%, rgba(43, 20, 28, 0.9), transparent 80%),
+    #151113;
+}
+
+.sw-intro__fondo--rosa {
+  opacity: 0;
+  background:
+    radial-gradient(60% 55% at 50% 42%, #edb8c6 0%, transparent 70%),
+    radial-gradient(55% 50% at 18% 80%, #b892aa 0%, transparent 70%),
+    radial-gradient(50% 45% at 85% 15%, #d9a7b4 0%, transparent 70%),
+    #cf9aab;
+}
+
+.sw-intro__fondo--claro {
+  background:
+    radial-gradient(45% 38% at 50% 40%, #f4d3dc 0%, transparent 72%),
+    radial-gradient(60% 50% at 85% 90%, #f6eeea 0%, transparent 70%),
+    rgb(var(--sw-warm-white));
+}
+
+.sw-intro__campo,
+.sw-intro__haz,
+.sw-intro__luz,
+.sw-intro__particulas,
+.sw-intro__estela,
+.sw-intro__frente,
+.sw-intro__pista,
+.sw-intro__saltar,
+.sw-intro__progreso,
+.sw-intro__vineta,
+.sw-intro__grano {
+  display: none;
+}
+
+.sw-intro__plano {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.75rem, 4vh, 2.75rem);
+  padding: 6.5rem 1rem 4rem;
+}
+
+.sw-intro__mariposa {
+  position: relative;
+  order: 1;
+  width: min(56vw, 20rem);
+  aspect-ratio: 512 / 407;
+}
+
+@media (min-width: 768px) {
+  .sw-intro__mariposa {
+    width: min(26vw, 22rem);
+  }
+}
+
+.sw-intro__pieza {
+  position: absolute;
+  inset: 0;
+}
+
+.sw-intro__pieza svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.sw-intro__nombre {
+  order: 2;
+  margin: 0;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(3.5rem, 13vw, 12rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: rgb(var(--sw-ink));
+  white-space: nowrap;
+}
+
+.sw-intro__letras,
+.sw-intro__letra {
+  display: inline-block;
+}
+
+.sw-intro__acciones {
+  order: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1.5rem;
+}
+
+@media (max-width: 767px) {
+  .sw-intro__acciones {
+    flex-direction: column;
+    width: min(20rem, calc(100vw - 2rem));
+  }
+
+  .sw-intro__acciones .sw-btn {
+    width: 100%;
+  }
+}
+
+/* ---------- Escena cinematográfica ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html.sw-intro-js .sw-intro {
+    --sw-intro-pantallas: 4.8;
+    height: calc(var(--sw-intro-pantallas) * 100vh);
+    height: calc(var(--sw-intro-pantallas) * 100svh);
+    /* La sección siguiente sube sobre el final de la escena (SOLAPE en motor.ts). */
+    margin-bottom: -32vh;
+    margin-bottom: -32svh;
+    background: #151113;
+  }
+
+  @media (max-width: 767px) {
+    html.sw-intro-js .sw-intro {
+      --sw-intro-pantallas: 4.2;
+    }
+  }
+
+  html.sw-intro-js .sw-intro__escena {
+    position: sticky;
+    top: 0;
+    z-index: 0;
+    height: 100vh;
+    height: 100lvh;
+    background: #151113;
+  }
+
+  html.sw-intro-js .sw-intro__fondo--oscuro {
+    opacity: 1;
+  }
+
+  html.sw-intro-js .sw-intro__fondo--claro {
+    opacity: 0;
+  }
+
+  html.sw-intro-js .sw-intro__campo {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  html.sw-intro-js .sw-intro__campo--1 {
+    width: 70vw;
+    height: 70vw;
+    left: -10vw;
+    top: 30vh;
+    background: radial-gradient(closest-side, rgba(154, 71, 96, 0.55), transparent);
+  }
+
+  html.sw-intro-js .sw-intro__campo--2 {
+    width: 60vw;
+    height: 60vw;
+    right: -12vw;
+    top: -20vh;
+    background: radial-gradient(closest-side, rgba(233, 169, 185, 0.45), transparent);
+  }
+
+  html.sw-intro-js .sw-intro__campo--3 {
+    width: 50vw;
+    height: 50vw;
+    left: 40vw;
+    top: 55vh;
+    background: radial-gradient(closest-side, rgba(184, 146, 170, 0.5), transparent);
+  }
+
+  html.sw-intro-js .sw-intro__haz {
+    display: block;
+    position: absolute;
+    width: 22vw;
+    height: 160vh;
+    top: -30vh;
+    left: 39vw;
+    border-radius: 50%;
+    opacity: 0;
+    will-change: transform, opacity;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 214, 228, 0),
+      rgba(255, 214, 228, 0.32) 35%,
+      rgba(255, 236, 242, 0.5) 50%,
+      rgba(255, 214, 228, 0.32) 65%,
+      rgba(255, 214, 228, 0)
+    );
+  }
+
+  html.sw-intro-js .sw-intro__plano {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100svh;
+    min-height: 0;
+    display: block;
+    padding: 0;
+  }
+
+  html.sw-intro-js .sw-intro__luz {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 40vmin;
+    height: 40vmin;
+    margin: -20vmin 0 0 -20vmin;
+    border-radius: 50%;
+    opacity: 0;
+    will-change: transform, opacity;
+    background: radial-gradient(
+      closest-side,
+      rgba(255, 226, 234, 0.95) 0%,
+      rgba(240, 182, 198, 0.62) 18%,
+      rgba(214, 132, 158, 0.32) 38%,
+      rgba(154, 71, 96, 0.14) 60%,
+      rgba(154, 71, 96, 0.05) 80%,
+      rgba(154, 71, 96, 0) 100%
+    );
+  }
+
+  html.sw-intro-js .sw-intro__particulas {
+    display: block;
+    position: absolute;
+    inset: 0;
+  }
+
+  .sw-intro__particula {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 50%;
+    opacity: 0;
+    will-change: transform, opacity;
+    background: radial-gradient(
+      closest-side,
+      rgba(255, 232, 238, 0.9),
+      rgba(246, 190, 206, 0.35) 45%,
+      rgba(246, 190, 206, 0) 100%
+    );
+  }
+
+  html.sw-intro-js .sw-intro__estela {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    color: rgb(var(--sw-pink));
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  html.sw-intro-js .sw-intro__nombre {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  html.sw-intro-js .sw-intro__letra {
+    will-change: transform;
+  }
+
+  html.sw-intro-js .sw-intro__mariposa {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    aspect-ratio: auto;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  html.sw-intro-js .sw-intro__ala {
+    transform-origin: 50% 50%;
+    will-change: transform;
+  }
+
+  html.sw-intro-js .sw-intro__frente {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 22vw;
+    height: 22vw;
+    border-radius: 50%;
+    opacity: 0;
+    will-change: transform, opacity;
+    background: radial-gradient(closest-side, rgba(255, 228, 236, 0.55), transparent);
+  }
+
+  html.sw-intro-js .sw-intro__frente--2 {
+    width: 30vw;
+    height: 30vw;
+  }
+
+  html.sw-intro-js .sw-intro__acciones {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    opacity: 0;
+    visibility: hidden;
+    will-change: transform, opacity;
+  }
+
+  @media (min-width: 768px) {
+    html.sw-intro-js .sw-intro__acciones {
+      width: max-content;
+    }
+  }
+
+  /* Interfaz: se ubica respecto a la parte visible (100svh), no al alto
+     total de la escena, para que no quede bajo las barras del navegador. */
+  html.sw-intro-js .sw-intro__pista {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: calc(100vh - 76px);
+    top: calc(100svh - 76px);
+    width: 22px;
+    height: 36px;
+    margin-left: -11px;
+    border: 1.5px solid rgba(255, 230, 236, 0.6);
+    border-radius: 12px;
+  }
+
+  html.sw-intro-js .sw-intro__pista span {
+    position: absolute;
+    left: 50%;
+    top: 7px;
+    width: 3px;
+    height: 7px;
+    margin-left: -1.5px;
+    border-radius: 2px;
+    background: rgba(255, 230, 236, 0.85);
+    animation: sw-intro-pista 1.8s ease-in-out infinite;
+  }
+
+  html.sw-intro-js .sw-intro__saltar {
+    display: block;
+    position: absolute;
+    right: 16px;
+    top: calc(100vh - 62px);
+    top: calc(100svh - 62px);
+    min-height: 44px;
+    padding: 0 16px;
+    border: 1px solid rgba(255, 232, 238, 0.28);
+    border-radius: 999px;
+    background: rgba(21, 17, 19, 0.25);
+    color: rgba(255, 236, 241, 0.86);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    opacity: 0;
+    transition: background-color 180ms, border-color 180ms;
+  }
+
+  html.sw-intro-js .sw-intro__saltar:hover {
+    background: rgba(255, 236, 241, 0.12);
+    border-color: rgba(255, 232, 238, 0.5);
+  }
+
+  html.sw-intro-js .sw-intro__saltar:focus-visible {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    outline-color: rgb(var(--sw-pink));
+  }
+
+  html.sw-intro-js .sw-intro__progreso {
+    display: block;
+    position: absolute;
+    left: 16px;
+    top: calc(100vh - 41px);
+    top: calc(100svh - 41px);
+    width: 64px;
+    height: 2px;
+    background: rgba(255, 232, 238, 0.2);
+    opacity: 0;
+  }
+
+  .sw-intro__progreso i {
+    display: block;
+    height: 100%;
+    background: rgb(var(--sw-pink));
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+  }
+
+  @media (min-width: 768px) {
+    html.sw-intro-js .sw-intro__saltar {
+      right: 24px;
+    }
+
+    html.sw-intro-js .sw-intro__progreso {
+      left: 24px;
+    }
+  }
+
+  @keyframes sw-intro-pista {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    60% {
+      transform: translateY(11px);
+      opacity: 0.2;
+    }
+  }
+}
+
+/* Viñeta y grano: solo en la escena animada. */
+@media (prefers-reduced-motion: no-preference) {
+  html.sw-intro-js .sw-intro__vineta,
+  html.sw-intro-js .sw-intro__grano {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  html.sw-intro-js .sw-intro__vineta {
+    opacity: 0.9;
+    background: radial-gradient(120% 90% at 50% 50%, transparent 45%, rgba(10, 6, 8, 0.85) 100%);
+  }
+
+  html.sw-intro-js .sw-intro__grano {
+    opacity: 0.07;
+    background-image: url('/images/grano.png');
+    background-size: 160px 160px;
+  }
+}
+
+/* ---------- Encabezado en el inicio ---------- */
+
+/* En el inicio el encabezado flota sobre la escena y no ocupa espacio. */
+header.sw-header-intro {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.sw-intro-js {
+    --sw-intro-header: 0;
+    --sw-intro-fondo: 0;
+    --sw-intro-logo-mariposa: 0;
+    --sw-intro-logo-nombre: 0;
+  }
+
+  html.sw-intro-js header.sw-header-intro {
+    opacity: var(--sw-intro-header);
+    transform: translate3d(0, calc((var(--sw-intro-header) - 1) * 100%), 0);
+    background-color: rgb(var(--sw-warm-white) / var(--sw-intro-fondo));
+  }
+
+  html.sw-intro-js:not([data-intro-fondo='si']) header.sw-header-intro {
+    box-shadow: none;
+    border-color: transparent;
+  }
+
+  html.sw-intro-js:not([data-intro-header='visible']) header.sw-header-intro:not(:focus-within) {
+    pointer-events: none;
+  }
+
+  /* Quien navega con teclado y entra al menú lo ve aunque la intro siga. */
+  html.sw-intro-js header.sw-header-intro:focus-within {
+    opacity: 1;
+    transform: none;
+    background-color: rgb(var(--sw-warm-white));
+  }
+
+  html.sw-intro-js [data-intro-logo='mariposa'] {
+    opacity: var(--sw-intro-logo-mariposa);
+  }
+
+  html.sw-intro-js [data-intro-logo='nombre'] {
+    opacity: var(--sw-intro-logo-nombre);
+  }
+}

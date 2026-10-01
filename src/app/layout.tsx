@@ -80,6 +80,16 @@ export default function RootLayout({
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#d4a5af" />
+        {/* Activa la intro cinematográfica antes del primer pintado, solo en el
+            inicio y sin "reducir movimiento". Si en 4 s el motor no arrancó
+            (el JavaScript falló), vuelve a la versión fija para que la página
+            nunca se quede oscura. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(location.pathname==='/'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){var d=document.documentElement;d.classList.add('sw-intro-js');setTimeout(function(){if(!window.__swIntroActiva)d.classList.remove('sw-intro-js')},4000)}}catch(e){}",
+          }}
+        />
       </head>
       <body className="flex flex-col min-h-screen" suppressHydrationWarning>
         <Header />

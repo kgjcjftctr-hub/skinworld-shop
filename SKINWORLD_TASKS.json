@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "SkinWorld Task Center",
-  "lastInspectedAt": "2026-09-30T17:55:00-06:00",
-  "lastInspectedBy": "Codex auditing and verifying the Skinworld V1 redesign",
+  "lastInspectedAt": "2026-10-01T10:30:00-06:00",
+  "lastInspectedBy": "Claude Code building the cinematic home intro",
   "sourceOfTruth": "This file is the durable source of truth. Do not replace it with a new list; update tasks by stable id and retain completed items and history. Every task carries detectedIn, the lastInspectedAt value of the inspection that first registered it, which is what marks a finding as new. The rendered page is published as a Claude artifact at artifactUrl; always republish to that same url instead of creating a second Task Center.",
   "statusDefinitions": {
     "pending": "Open work that has been detected or accepted.",
@@ -956,9 +956,40 @@
           "note": "Detected during final redesign browser verification and confirmed by a read-only query over all 201 catalog rows. No price was changed because the correct business values are unknown."
         }
       ]
+    },
+    {
+      "id": "SW-033",
+      "title": "Verify the cinematic home intro on a real iPhone and on Safari",
+      "kind": "requires_confirmation",
+      "category": "Accessibility",
+      "priority": "P2",
+      "status": "requires_verification",
+      "detectedAt": "2026-10-01",
+      "updatedAt": "2026-10-01",
+      "detectedIn": "2026-10-01T10:30:00-06:00",
+      "origin": [
+        "src/components/intro/intro-cinematica.tsx",
+        "src/components/intro/motor.ts",
+        "src/components/intro/linea-de-tiempo.ts",
+        "src/styles/intro.css",
+        "src/components/header.tsx",
+        "src/app/layout.tsx"
+      ],
+      "details": "The home page now opens with a scroll-driven intro (4.8 screens on desktop, 4.2 on phones): the official butterfly, split into its three original vector pieces, crosses a dark scene, turns, settles, reveals the Skinworld name and flies into the header logo, while the rest of the page slides up from below. Verified in headless Chrome only: no overlap between butterfly and name across 61 frames each at 1280×720, 1440×900, 1920×1080, 1024×768, 390×844, 375×667 and 430×932; buttons never covered; no horizontal overflow; no console errors; scrolling back reproduces the same frame; Skip lands on the end with focus on \"Explorar productos\"; reduced motion and no-JavaScript show a static composition; with 4× CPU throttling the intro uses about 1 ms of script per frame and no layout. Real iOS Safari and desktop Safari, which handle sticky scenes, 3D transforms and the address bar differently, have not been tested.",
+      "doneWhen": "The intro is checked on a physical iPhone (Safari) and on desktop Safari: smooth scrolling forward and back, no flicker on load, the butterfly lands in the header logo, the buttons are tappable, and the address-bar show/hide causes no jump.",
+      "history": [
+        {
+          "date": "2026-10-01",
+          "note": "Built and published after the owner approved the plan; the owner asked to drop the claim and the doctor line from the end frame and to keep the butterfly and the name from overlapping, both done. Headless verification listed in details; device verification pending."
+        }
+      ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-01",
+      "summary": "Home page intro replaced by a scroll-driven cinematic sequence built only with CSS transforms and one requestAnimationFrame loop (no new libraries). The butterfly vector was split into its three original pieces without changing the shape. One verification task registered, SW-033: test on a real iPhone and on Safari."
+    },
     {
       "date": "2026-09-30",
       "summary": "Skinworld V1 redesign completed and audited. SW-025, SW-027, SW-028, SW-029 and SW-030 closed after production build, type-check and browser verification on desktop and 390 × 844 px. Search, product add, cart, postal-code address completion and Stripe test Checkout passed. Two 3D butterfly animations with reduced-motion support were added. SW-010 advanced but stays open for a full screen-reader/automated scan. SW-032 registered two inverted compare-at prices; no catalog price was changed without owner confirmation."

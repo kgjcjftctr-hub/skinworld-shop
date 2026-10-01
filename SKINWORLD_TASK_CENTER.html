@@ -129,20 +129,20 @@
       <h1>SkinWorld Task Center</h1>
       <p class="intro">Panel maestro de pendientes de la tienda: lo que está roto, lo que se puede mejorar y lo que falta confirmar. Cada tarea conserva su identificador y su historial, así que se actualiza en lugar de duplicarse.</p>
       <p class="sello">
-        <span>Última inspección <b>2026-09-30 a las 17:55</b></span>
-        <span>Por <b>Codex auditing and verifying the Skinworld V1 redesign</b></span>
+        <span>Última inspección <b>2026-10-01 a las 10:30</b></span>
+        <span>Por <b>Claude Code building the cinematic home intro</b></span>
         <span>Fuente <b>SKINWORLD_TASKS.json</b></span>
       </p>
 
       <div class="avance">
-        <div class="barra"><i style="width:56%"></i></div>
-        <p>18 de 32 tareas terminadas · 56% del registro histórico</p>
+        <div class="barra"><i style="width:55%"></i></div>
+        <p>18 de 33 tareas terminadas · 55% del registro histórico</p>
       </div>
 
       <div class="cifras">
         <div class="cifra p0"><b>3</b><span>abiertas que bloquean la venta</span></div>
         <div class="cifra p1"><b>5</b><span>abiertas importantes</span></div>
-        <div class="cifra duda"><b>8</b><span>requieren verificación</span></div>
+        <div class="cifra duda"><b>9</b><span>requieren verificación</span></div>
         <div class="cifra listo"><b>18</b><span>terminadas y verificadas</span></div>
       </div>
     </header>
@@ -155,14 +155,14 @@
     </section>
 
     <h2>Nuevos pendientes detectados</h2>
-    <ul class="chips"><li><code>SW-032</code>Correct compare-at prices that are lower than the current price</li></ul>
+    <ul class="chips"><li><code>SW-033</code>Verify the cinematic home intro on a real iPhone and on Safari</li></ul>
 
     <h2>Tareas</h2>
     <div class="filtros">
       <div class="grupo" data-eje="estado">
         <b>Estado</b>
-        <button data-valor="todo" aria-pressed="true">Todas (32)</button>
-        <button data-valor="pending" aria-pressed="false">Pendiente (6)</button><button data-valor="in_progress" aria-pressed="false">En progreso (0)</button><button data-valor="requires_verification" aria-pressed="false">Requiere verificación (8)</button><button data-valor="completed" aria-pressed="false">Terminada (18)</button>
+        <button data-valor="todo" aria-pressed="true">Todas (33)</button>
+        <button data-valor="pending" aria-pressed="false">Pendiente (6)</button><button data-valor="in_progress" aria-pressed="false">En progreso (0)</button><button data-valor="requires_verification" aria-pressed="false">Requiere verificación (9)</button><button data-valor="completed" aria-pressed="false">Terminada (18)</button>
       </div>
       <div class="grupo" data-eje="prioridad">
         <b>Prioridad</b>
@@ -405,6 +405,27 @@
             <p><strong>Terminada cuando</strong><br>Every product either carries its laboratory in the brand field or is deliberately classified as having none, the shop brand filter accounts for all 164 products, and the home page brand list reflects the corrected data.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
             <ul><li><span>2026-09-30</span> Found while rebuilding the brands section from the catalog: the section could only show 14 laboratories because the rest of the products carry no brand at all.</li><li><span>2026-09-30</span> Recounted against the current catalog: the customer sees 164 grouped products and 46 still have no brand; the finding is unchanged.</li></ul>
+          </div>
+        </details>
+      </article>
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P2" data-categoria="Accessibility">
+        <div class="tarea-cab">
+          <code>SW-033</code>
+          <div class="etiquetas">
+            <span class="pill prio P2" title="Deseable">P2</span>
+            <span class="pill est requires_verification">Requiere verificación</span>
+          </div>
+        </div>
+        <h3>Verify the cinematic home intro on a real iPhone and on Safari</h3>
+        <p class="clasif">Accessibility · Requiere confirmación</p>
+        <p class="detalle">The home page now opens with a scroll-driven intro (4.8 screens on desktop, 4.2 on phones): the official butterfly, split into its three original vector pieces, crosses a dark scene, turns, settles, reveals the Skinworld name and flies into the header logo, while the rest of the page slides up from below. Verified in headless Chrome only: no overlap between butterfly and name across 61 frames each at 1280×720, 1440×900, 1920×1080, 1024×768, 390×844, 375×667 and 430×932; buttons never covered; no horizontal overflow; no console errors; scrolling back reproduces the same frame; Skip lands on the end with focus on &quot;Explorar productos&quot;; reduced motion and no-JavaScript show a static composition; with 4× CPU throttling the intro uses about 1 ms of script per frame and no layout. Real iOS Safari and desktop Safari, which handle sticky scenes, 3D transforms and the address bar differently, have not been tested.</p>
+        <details>
+          <summary>Origen, criterio de cierre e historial</summary>
+          <div class="ficha">
+            <p><strong>Dónde está</strong><br>src/components/intro/intro-cinematica.tsx<br>src/components/intro/motor.ts<br>src/components/intro/linea-de-tiempo.ts<br>src/styles/intro.css<br>src/components/header.tsx<br>src/app/layout.tsx</p>
+            <p><strong>Terminada cuando</strong><br>The intro is checked on a physical iPhone (Safari) and on desktop Safari: smooth scrolling forward and back, no flicker on load, the butterfly lands in the header logo, the buttons are tappable, and the address-bar show/hide causes no jump.</p>
+            <p><strong>Detectada</strong> 2026-10-01 · <strong>Actualizada</strong> 2026-10-01</p>
+            <ul><li><span>2026-10-01</span> Built and published after the owner approved the plan; the owner asked to drop the claim and the doctor line from the end frame and to keep the butterfly and the name from overlapping, both done. Headless verification listed in details; device verification pending.</li></ul>
           </div>
         </details>
       </article>
@@ -853,7 +874,7 @@
 
     <h2>Cambios recientes</h2>
     <section class="aviso">
-      <ul><li><span>2026-09-30</span> — Skinworld V1 redesign completed and audited. SW-025, SW-027, SW-028, SW-029 and SW-030 closed after production build, type-check and browser verification on desktop and 390 × 844 px. Search, product add, cart, postal-code address completion and Stripe test Checkout passed. Two 3D butterfly animations with reduced-motion support were added. SW-010 advanced but stays open for a full screen-reader/automated scan. SW-032 registered two inverted compare-at prices; no catalog price was changed without owner confirmation.</li><li><span>2026-09-30</span> — Redesign audit (phase 0) completed without changing any storefront file. Seven findings registered: SW-025 text contrast below WCAG AA, SW-026 the &quot;free shipping in CDMX&quot; promise versus a $100 charge under $500, SW-027 one-column phone catalog, SW-028 duplicated and mismatched logo assets, SW-029 keyboard and nesting issues, SW-030 the redesign programme itself, and SW-031 missing product-detail content. SW-011 and SW-018 got new evidence.</li><li><span>2026-09-30</span> — The home page brand section was showing 2 laboratories out of 14 and hid the two largest, SESDERMA and Heliocare, behind a hand-written list; it now builds itself from the catalog, shows the four deepest with a real product photo and the rest as an index, and every name links to the shop already filtered. One new finding registered, SW-024: 46 of the 164 products carry no brand at all, so they never appear under any brand filter.</li><li><span>2026-09-30</span> — The owner ran supabase/migraciones/001-guia-y-mensajes.sql, which unblocked the last two code tasks. SW-017 closed: orders carry a tracking number and stage timestamps, captured when marking an order shipped and included in the customer email. SW-019 closed: messages moved from object storage to a table with its own indexes. Four tasks remain open and none of them can be closed from code: SW-011 needs a performance measurement, SW-012 needs the remaining typing, SW-008 needs the legal entity details and a reviewer, and SW-014 needs the Stripe account activated.</li><li><span>2026-09-30</span> — Fix pass over the pending tasks. Seven closed with verification evidence: retryable webhook with an alert (SW-001), rate limiting and review moderation (SW-003), admin login hardening (SW-004), canonical checkout URLs (SW-005), no customer email on the payment-status endpoint (SW-006), robots/sitemap and per-page metadata (SW-007), and the cart address form mounted once (SW-016). SW-011 and SW-012 advanced but stay open for the parts that need a measurement or further typing. SW-017 and SW-019 are blocked on one SQL migration now written at supabase/migraciones/001-guia-y-mensajes.sql. SW-008 and SW-014 remain with the owner.</li><li><span>2026-09-30</span> — Re-inspection after the order-tracking, email and postal-code work. Four defects confirmed fixed and verified in production (SW-020 webhook host, SW-021 checkout images, SW-022 address truncation, SW-023 admin visibility). Six new items registered (SW-014 live payments, SW-015 customer email, SW-016 duplicated address form, SW-017 tracking data, SW-018 catalog decisions, SW-019 message storage). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 and SW-013 updated with evidence. A unique constraint on orders.stripe_session_id was probed and confirmed to exist, so no duplicate-order task was opened.</li><li><span>2026-09-30</span> — Initial full source audit: 13 stable tasks registered; type-check and production build passed; no pre-existing task register was found.</li></ul>
+      <ul><li><span>2026-10-01</span> — Home page intro replaced by a scroll-driven cinematic sequence built only with CSS transforms and one requestAnimationFrame loop (no new libraries). The butterfly vector was split into its three original pieces without changing the shape. One verification task registered, SW-033: test on a real iPhone and on Safari.</li><li><span>2026-09-30</span> — Skinworld V1 redesign completed and audited. SW-025, SW-027, SW-028, SW-029 and SW-030 closed after production build, type-check and browser verification on desktop and 390 × 844 px. Search, product add, cart, postal-code address completion and Stripe test Checkout passed. Two 3D butterfly animations with reduced-motion support were added. SW-010 advanced but stays open for a full screen-reader/automated scan. SW-032 registered two inverted compare-at prices; no catalog price was changed without owner confirmation.</li><li><span>2026-09-30</span> — Redesign audit (phase 0) completed without changing any storefront file. Seven findings registered: SW-025 text contrast below WCAG AA, SW-026 the &quot;free shipping in CDMX&quot; promise versus a $100 charge under $500, SW-027 one-column phone catalog, SW-028 duplicated and mismatched logo assets, SW-029 keyboard and nesting issues, SW-030 the redesign programme itself, and SW-031 missing product-detail content. SW-011 and SW-018 got new evidence.</li><li><span>2026-09-30</span> — The home page brand section was showing 2 laboratories out of 14 and hid the two largest, SESDERMA and Heliocare, behind a hand-written list; it now builds itself from the catalog, shows the four deepest with a real product photo and the rest as an index, and every name links to the shop already filtered. One new finding registered, SW-024: 46 of the 164 products carry no brand at all, so they never appear under any brand filter.</li><li><span>2026-09-30</span> — The owner ran supabase/migraciones/001-guia-y-mensajes.sql, which unblocked the last two code tasks. SW-017 closed: orders carry a tracking number and stage timestamps, captured when marking an order shipped and included in the customer email. SW-019 closed: messages moved from object storage to a table with its own indexes. Four tasks remain open and none of them can be closed from code: SW-011 needs a performance measurement, SW-012 needs the remaining typing, SW-008 needs the legal entity details and a reviewer, and SW-014 needs the Stripe account activated.</li><li><span>2026-09-30</span> — Fix pass over the pending tasks. Seven closed with verification evidence: retryable webhook with an alert (SW-001), rate limiting and review moderation (SW-003), admin login hardening (SW-004), canonical checkout URLs (SW-005), no customer email on the payment-status endpoint (SW-006), robots/sitemap and per-page metadata (SW-007), and the cart address form mounted once (SW-016). SW-011 and SW-012 advanced but stay open for the parts that need a measurement or further typing. SW-017 and SW-019 are blocked on one SQL migration now written at supabase/migraciones/001-guia-y-mensajes.sql. SW-008 and SW-014 remain with the owner.</li><li><span>2026-09-30</span> — Re-inspection after the order-tracking, email and postal-code work. Four defects confirmed fixed and verified in production (SW-020 webhook host, SW-021 checkout images, SW-022 address truncation, SW-023 admin visibility). Six new items registered (SW-014 live payments, SW-015 customer email, SW-016 duplicated address form, SW-017 tracking data, SW-018 catalog decisions, SW-019 message storage). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 and SW-013 updated with evidence. A unique constraint on orders.stripe_session_id was probed and confirmed to exist, so no duplicate-order task was opened.</li><li><span>2026-09-30</span> — Initial full source audit: 13 stable tasks registered; type-check and production build passed; no pre-existing task register was found.</li></ul>
     </section>
 
     <h2>Cómo se mantiene</h2>
