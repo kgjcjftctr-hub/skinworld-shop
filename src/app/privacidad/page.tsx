@@ -1,230 +1,99 @@
+import { PaginaLegal, type SeccionLegal } from '@/components/legal-page';
+
 export const metadata = {
   title: 'Aviso de Privacidad · Skinworld',
   description:
     'Cómo Skinworld recaba, usa y protege tus datos personales, y cómo ejercer tus derechos ARCO.',
 };
 
-const CORREO = 'contacto@skinworld.shop';
+const secciones: SeccionLegal[] = [
+  {
+    titulo: '¿Quién es responsable de sus datos?',
+    bloques: [
+      'Karina Alfaro López, quien opera comercialmente bajo el nombre Skinworld, con domicilio en Calle Acueducto Río Hondo número 30, 3er piso, Colonia Lomas de Chapultepec IV Sección, C.P. 11000, Miguel Hidalgo, Ciudad de México, y correo electrónico contacto@skinworld.shop, es responsable del tratamiento de los datos personales recabados a través de skinworld.shop.',
+    ],
+  },
+  {
+    titulo: '¿Para qué utilizaremos sus datos personales?',
+    bloques: [
+      'Utilizamos sus datos personales para las siguientes finalidades necesarias:',
+      [
+        'Procesar, cobrar y dar seguimiento a sus compras.',
+        'Preparar y gestionar la entrega de sus productos.',
+        'Contactarle respecto de su pedido.',
+        'Atender dudas, aclaraciones, devoluciones, reembolsos o reclamaciones.',
+        'Cumplir con obligaciones legales, fiscales y administrativas relacionadas con las operaciones realizadas.',
+      ],
+      'De manera adicional, si usted se suscribe voluntariamente a nuestro boletín, podremos utilizar su correo electrónico para enviar información sobre productos, novedades y comunicaciones comerciales. Puede solicitar la baja en cualquier momento escribiendo a contacto@skinworld.shop. La negativa a recibir estas comunicaciones no afecta la posibilidad de comprar productos o recibir nuestros servicios.',
+    ],
+  },
+  {
+    titulo: '¿Qué datos personales utilizaremos?',
+    bloques: [
+      'Podremos tratar los siguientes datos:',
+      [
+        'Nombre.',
+        'Correo electrónico.',
+        'Número telefónico.',
+        'Domicilio de entrega.',
+        'Información relacionada con sus pedidos y transacciones.',
+      ],
+      'Skinworld no almacena directamente los datos completos de tarjetas bancarias utilizados para procesar pagos. Estos son tratados por la plataforma de pagos correspondiente.',
+      'No solicitamos datos personales sensibles para realizar compras a través de la tienda.',
+    ],
+  },
+  {
+    titulo: 'Proveedores tecnológicos',
+    bloques: [
+      'Para operar skinworld.shop utilizamos proveedores tecnológicos que pueden tratar información necesaria para prestar sus respectivos servicios, entre ellos Stripe para procesamiento de pagos, Supabase para infraestructura y almacenamiento de información relacionada con pedidos, y Vercel para alojamiento e infraestructura del sitio.',
+      'El tratamiento de información por dichos proveedores estará sujeto a las disposiciones aplicables y a las condiciones correspondientes a cada servicio.',
+      'Skinworld no vende ni alquila datos personales con fines publicitarios.',
+    ],
+  },
+  {
+    titulo: 'Derechos ARCO',
+    bloques: [
+      'Usted puede ejercer sus derechos de Acceso, Rectificación, Cancelación y Oposición respecto de sus datos personales.',
+      'Para solicitar el ejercicio de cualquiera de estos derechos, puede escribir a contacto@skinworld.shop indicando:',
+      [
+        'Su nombre y un medio para recibir la respuesta.',
+        'El derecho que desea ejercer.',
+        'Una descripción clara de los datos personales involucrados.',
+        'La información o documentación necesaria para acreditar su identidad y, cuando corresponda, la representación de otra persona.',
+      ],
+      'Skinworld atenderá las solicitudes conforme a los procedimientos y plazos establecidos por la legislación aplicable.',
+    ],
+  },
+  {
+    titulo: 'Revocación del consentimiento',
+    bloques: [
+      'Cuando legalmente proceda, usted podrá solicitar la revocación de su consentimiento para determinados tratamientos de datos personales escribiendo a contacto@skinworld.shop.',
+      'La revocación no tendrá efectos retroactivos y podrá estar limitada cuando Skinworld deba conservar o tratar determinada información para cumplir una obligación legal.',
+    ],
+  },
+  {
+    titulo: 'Limitación del uso o divulgación',
+    bloques: [
+      'Puede solicitar la limitación del uso o divulgación de sus datos personales mediante contacto@skinworld.shop.',
+    ],
+  },
+  {
+    titulo: 'Tecnologías de rastreo',
+    bloques: [
+      'Actualmente, Skinworld no utiliza cookies publicitarias, Google Analytics, píxeles de redes sociales ni herramientas similares de seguimiento publicitario.',
+      'El sitio puede utilizar almacenamiento local necesario para conservar temporalmente información del carrito de compras.',
+      'Los proveedores utilizados para procesar pagos u ofrecer funciones técnicas pueden utilizar tecnologías propias necesarias para prestar sus servicios, conforme a sus respectivas políticas.',
+    ],
+  },
+  {
+    titulo: 'Cambios al aviso',
+    bloques: [
+      'Este aviso puede modificarse como consecuencia de cambios legales, tecnológicos, operativos o en los servicios ofrecidos por Skinworld.',
+      'La versión actualizada estará disponible permanentemente en skinworld.shop e indicará su fecha de última actualización.',
+    ],
+  },
+];
 
 export default function PrivacyPage() {
-  return (
-    <div className="min-h-[60vh]">
-      <div className="mx-auto max-w-3xl px-sw-gutter pb-sw-section pt-12 sm:pt-16">
-        <h1 className="mb-4 font-display text-sw-h1 font-semibold text-sw-ink">Aviso de Privacidad</h1>
-        <p className="mb-12 text-sw-small text-sw-muted">
-          Última actualización: 28 de septiembre de 2026
-        </p>
-
-        <div className="space-y-12 text-sw-body leading-relaxed text-sw-text">
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
-              ¿Quién es responsable de sus datos?
-            </h2>
-            <p>
-              Skinworld, con domicilio en la Ciudad de México y correo de contacto{' '}
-              <a href={`mailto:${CORREO}`} className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
-                {CORREO}
-              </a>
-              , es responsable del tratamiento de los datos personales que usted proporcione a través
-              de este sitio.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
-              ¿Para qué fines utilizaremos sus datos personales?
-            </h2>
-            <div className="space-y-4">
-              <p>
-                Utilizamos sus datos personales únicamente para las finalidades necesarias para
-                prestarle el servicio que nos solicita:
-              </p>
-              <ul className="ml-5 list-disc space-y-2">
-                <li>Procesar su compra y cobrar el pedido</li>
-                <li>Enviarle los productos al domicilio que nos indique</li>
-                <li>Contactarle sobre su pedido o responder a las dudas que nos escriba</li>
-              </ul>
-              <p>
-                Si usted se suscribe voluntariamente a nuestro boletín, utilizaremos su correo
-                electrónico para enviarle información sobre productos y novedades. Puede pedirnos que
-                lo demos de baja en cualquier momento escribiendo a{' '}
-                <a href={`mailto:${CORREO}`} className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
-                  {CORREO}
-                </a>
-                . La negativa a recibir el boletín no es motivo para que le neguemos los servicios y
-                productos que solicita o contrata con nosotros.
-              </p>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
-              ¿Qué datos personales utilizaremos?
-            </h2>
-            <div className="space-y-4">
-              <p>
-                Para llevar a cabo las finalidades descritas en el presente aviso de privacidad,
-                utilizaremos los siguientes datos personales de identificación y contacto:
-              </p>
-              <ul className="ml-5 list-disc space-y-2">
-                <li>Nombre</li>
-                <li>Correo electrónico</li>
-                <li>Teléfono</li>
-                <li>Domicilio de entrega</li>
-              </ul>
-              <p>
-                No solicitamos ni almacenamos datos sensibles, ni datos financieros: los datos de su
-                tarjeta se capturan directamente en la plataforma de pago y nunca pasan por nuestros
-                servidores.
-              </p>
-              <p>
-                Las reseñas que se publican en este sitio son anónimas: sólo guardamos la
-                calificación y el comentario, sin nombre ni ningún dato que permita identificarle.
-              </p>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
-              ¿Con quién compartimos sus datos?
-            </h2>
-            <div className="space-y-4">
-              <p>
-                Para poder operar la tienda utilizamos los servicios de los siguientes proveedores,
-                que tratan sus datos por nuestra cuenta y bajo sus propias políticas de privacidad:
-              </p>
-              <ul className="ml-5 list-disc space-y-2">
-                <li>
-                  <span className="font-semibold text-sw-ink">Stripe</span> — procesa los pagos y recibe
-                  su nombre, correo electrónico y los datos de su método de pago.
-                </li>
-                <li>
-                  <span className="font-semibold text-sw-ink">Supabase</span> — almacena los pedidos,
-                  incluyendo nombre, teléfono y domicilio de entrega.
-                </li>
-                <li>
-                  <span className="font-semibold text-sw-ink">Vercel</span> — aloja el sitio y conserva
-                  registros técnicos de servidor.
-                </li>
-              </ul>
-              <p>
-                No vendemos, alquilamos ni cedemos sus datos personales a terceros con fines
-                publicitarios.
-              </p>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
-              ¿Cómo puede acceder, rectificar o cancelar sus datos personales, u oponerse a su uso?
-            </h2>
-            <div className="space-y-4">
-              <p>
-                Usted tiene derecho a conocer qué datos personales tenemos de usted, para qué los
-                utilizamos y las condiciones del uso que les damos (Acceso). Asimismo, es su derecho
-                solicitar la corrección de su información personal en caso de que esté
-                desactualizada, sea inexacta o incompleta (Rectificación); que la eliminemos de
-                nuestros registros o bases de datos cuando considere que la misma no está siendo
-                utilizada adecuadamente (Cancelación); así como oponerse al uso de sus datos
-                personales para fines específicos (Oposición). Estos derechos se conocen como
-                derechos ARCO.
-              </p>
-              <p>
-                Para el ejercicio de cualquiera de los derechos ARCO, deberá presentar la solicitud
-                respectiva al correo{' '}
-                <a href={`mailto:${CORREO}`} className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
-                  {CORREO}
-                </a>
-                . En ese mismo medio ponemos a su disposición el procedimiento y los requisitos para
-                ejercerlos.
-              </p>
-              <p>
-                El área a cargo de dar trámite a las solicitudes de derechos ARCO es Atención a
-                Clientes, en el correo señalado.
-              </p>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
-              Usted puede revocar su consentimiento para el uso de sus datos personales
-            </h2>
-            <div className="space-y-4">
-              <p>
-                Usted puede revocar el consentimiento que, en su caso, nos haya otorgado para el
-                tratamiento de sus datos personales. Sin embargo, es importante que tenga en cuenta
-                que no en todos los casos podremos atender su solicitud o concluir el uso de forma
-                inmediata, ya que es posible que por alguna obligación legal requiramos seguir
-                tratando sus datos personales. Asimismo, deberá considerar que para ciertos fines la
-                revocación de su consentimiento implicará que no le podamos seguir prestando el
-                servicio que nos solicitó, o la conclusión de su relación con nosotros.
-              </p>
-              <p>
-                Para revocar su consentimiento deberá presentar su solicitud al correo{' '}
-                <a href={`mailto:${CORREO}`} className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
-                  {CORREO}
-                </a>
-                , medio en el que también ponemos a su disposición el procedimiento y los requisitos
-                para la revocación.
-              </p>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
-              ¿Cómo puede limitar el uso o divulgación de su información personal?
-            </h2>
-            <p>
-              Con objeto de que usted pueda limitar el uso y divulgación de su información personal,
-              le ofrecemos el siguiente medio: correo electrónico{' '}
-              <a href={`mailto:${CORREO}`} className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
-                {CORREO}
-              </a>
-              .
-            </p>
-          </section>
-
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
-              El uso de tecnologías de rastreo en nuestro portal de internet
-            </h2>
-            <div className="space-y-4">
-              <p>
-                Este sitio <span className="font-semibold text-sw-ink">no utiliza cookies publicitarias,
-                web beacons ni herramientas de analítica</span> que monitoreen su comportamiento de
-                navegación. No usamos Google Analytics, píxeles de redes sociales ni servicios
-                similares.
-              </p>
-              <p>
-                El único almacenamiento que utilizamos en su navegador es el de su carrito de
-                compras, que guarda los productos que va agregando para que no los pierda al cambiar
-                de página. Esa información permanece en su dispositivo y no se envía a nuestros
-                servidores hasta que usted decide finalizar la compra. Puede borrarla en cualquier
-                momento vaciando el carrito o limpiando los datos del sitio en su navegador.
-              </p>
-              <p>
-                La plataforma de pago puede utilizar sus propias cookies cuando usted es dirigido a
-                ella para completar la compra, conforme a su política de privacidad.
-              </p>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
-              ¿Cómo puede conocer los cambios en este aviso de privacidad?
-            </h2>
-            <p>
-              El presente aviso de privacidad puede sufrir modificaciones, cambios o actualizaciones
-              derivadas de nuevos requerimientos legales; de nuestras propias necesidades por los
-              productos o servicios que ofrecemos; de nuestras prácticas de privacidad; de cambios en
-              nuestro modelo de negocio, o por otras causas. Nos comprometemos a mantenerlo informado
-              sobre los cambios que pueda sufrir el presente aviso publicando la versión actualizada
-              en esta misma página, con su fecha de última actualización. Le sugerimos revisarla
-              periódicamente.
-            </p>
-          </section>
-        </div>
-      </div>
-    </div>
-  );
+  return <PaginaLegal titulo="Aviso de Privacidad" actualizacion="2 de octubre de 2026" secciones={secciones} />;
 }

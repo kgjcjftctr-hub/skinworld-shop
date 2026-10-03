@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-03T13:44:00-06:00",
-  "lastInspectedBy": "Claude Code, al publicar los anillos de cristal de la sección de necesidades",
+  "lastInspectedAt": "2026-10-03T14:27:00-06:00",
+  "lastInspectedBy": "Claude Code, al publicar los textos legales de la dueña",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -227,16 +227,20 @@
       "kind": "detected_problem",
       "category": "Contenido y legal",
       "priority": "P1",
-      "status": "pending",
+      "status": "requires_verification",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-09-30",
+      "updatedAt": "2026-10-03",
       "origin": [
         "src/app/terminos/page.tsx",
         "src/app/privacidad/page.tsx",
-        "src/app/envios/page.tsx"
+        "src/app/envios/page.tsx",
+        "src/components/legal-page.tsx",
+        "scripts/generar-politicas.mjs",
+        "docs/politicas/politicas-skinworld.docx",
+        "docs/politicas/politicas-skinworld.pdf"
       ],
-      "details": "Los términos describen un servicio sobre estado físico y nutrición, que no corresponde a una tienda dermatológica. Las páginas legales también necesitan revisión de la dueña o de un abogado para confirmar el responsable, domicilio, proveedores, devoluciones, compromisos de entrega y fechas de vigencia. Falta concreta confirmada en el aviso de privacidad: el responsable aparece solo como \"Skinworld, con domicilio en la Ciudad de México\", sin la razón social, el RFC ni el domicilio completo que exige la LFPDPPP.",
-      "doneWhen": "La dueña o un revisor legal calificado aprueba textos hechos para SkinWorld, y todo lo que dicen sobre la operación coincide con el pago, los envíos, la privacidad y los proveedores que de verdad se usan.",
+      "details": "Los términos describen un servicio sobre estado físico y nutrición, que no corresponde a una tienda dermatológica. Las páginas legales también necesitan revisión de la dueña o de un abogado para confirmar el responsable, domicilio, proveedores, devoluciones, compromisos de entrega y fechas de vigencia. Falta concreta confirmada en el aviso de privacidad: el responsable aparece solo como \"Skinworld, con domicilio en la Ciudad de México\", sin la razón social, el RFC ni el domicilio completo que exige la LFPDPPP. Actualización 2026-10-03: la dueña redactó los tres textos (aviso de privacidad, términos y política de envíos, devoluciones, reembolsos y cancelaciones) con sus datos reales como responsable y los dio por buenos; y fueron publicados en producción el 2026-10-03 por indicación de la dueña. Sigue pendiente la revisión legal por un profesional.",
+      "doneWhen": "Un revisor legal calificado confirma los textos ya publicados (aviso de privacidad, términos y política de envíos) y la dueña los ajusta si él lo indica.",
       "history": [
         {
           "date": "2026-09-30",
@@ -253,6 +257,22 @@
         {
           "date": "2026-09-30",
           "note": "La nueva auditoría del rediseño encontró otras dos diferencias con la operación: los términos siguen hablando de estado físico y nutrición en lugar de una tienda dermatológica, y la política de envíos dice que el número de guía se manda con la confirmación de compra, cuando el sistema solo puede mandarlo después de que el equipo lo captura al marcar el pedido como enviado."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Se corrigieron los dos errores factuales autorizados: los términos ahora describen una tienda dermatológica y la guía se promete solo después de que el equipo la registra al enviar. Sigue abierta para revisión legal y para completar responsable, razón social, RFC y domicilio; no se inventaron datos ni compromisos de envío."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Aclaración de la dueña: los cambios en términos y envíos están solo en el proyecto local (src/app/terminos/page.tsx y src/app/envios/page.tsx), sin commit y sin publicar en producción, y requieren revisión legal antes de publicarse. Producción sigue con los textos anteriores."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "La dueña entregó los textos finales de las tres políticas y pidió que quedaran así, sin cambios salvo que ella los pida. Puestos tal cual en /privacidad, /terminos y /envios, solo en local (sin commit ni publicación), con el componente src/components/legal-page.tsx; reemplazan los retoques parciales anteriores de términos y envíos. Fecha de última actualización: 2 de octubre de 2026. Se quitaron de la web solo tres restos de citas de ChatGPT que venían pegados al final de algunos bloques, y se unió una frase de domicilio que venía repetida; el contenido no se modificó. Se generó el documento con las tres políticas en docs/politicas/ (Word y PDF, 8 páginas) con scripts/generar-politicas.mjs, a partir de los mismos textos. Verificado en local: las tres páginas cargan sin errores, sin desborde horizontal, y correos, teléfono y el enlace a envíos funcionan. La revisión de tipos pasa. El texto nuevo ya no incluye la promesa de envío gratis en CDMX que mostraba la página de envíos (ver SW-026). Falta la revisión legal y la autorización para publicar."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Por indicación de la dueña, se resolvieron las tres diferencias con el texto pegado (domicilio una sola vez, sin las notas de ChatGPT y sin el cuadro de envío gratis en CDMX en la página de envíos) y se publicaron los tres textos en producción: /privacidad, /terminos y /envios. La compilación de producción pasa. Queda abierta solo para la revisión legal por un profesional; el arreglo de precios de SW-032 no se incluyó en esta publicación."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -265,7 +285,7 @@
       "priority": "P0",
       "status": "requires_verification",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-09-30",
+      "updatedAt": "2026-10-03",
       "origin": [
         ".env.local (solo los nombres, no los valores)",
         "src/lib/stripe.ts",
@@ -273,7 +293,7 @@
         "src/app/api/stripe/webhook/route.ts",
         "src/app/api/admin/probar-correo/route.ts"
       ],
-      "details": "La configuración en vivo hay que confirmarla contra las cuentas reales, no suponerla. Al 2026-09-30 están verificados en producción el webhook de Stripe, el guardado del pedido y el correo de aviso a la tienda; falta confirmar el cambio a llaves reales de Stripe (se sigue aparte en SW-014) y la entrega de correos a los clientes (se sigue aparte en SW-015).",
+      "details": "En esta revisión de producción, una sesión de pago de prueba abrió Stripe y mostró el entorno de prueba y el pedido por $1,600 MXN. No se completó pago alguno, así que no se verificaron el webhook, el guardado del pedido ni la cancelación. La entrega de correo al cliente se confirmó por separado en SW-015; pagos reales están en SW-014.",
       "doneWhen": "Una compra controlada en producción o en pruebas demuestra el pago, el guardado del pedido, el aviso al equipo, la confirmación al cliente, los correos de cambio de estado y la cancelación; los registros del despliegue muestran que llega el webhook, y los secretos siguen solo en el servidor.",
       "history": [
         {
@@ -287,6 +307,10 @@
         {
           "date": "2026-09-30",
           "note": "La verificación del rediseño llegó a una sesión de pago de Stripe bien llenada desde inicio, búsqueda, producto, carrito y captura de dirección por código postal. Sigue siendo una sesión en modo de prueba y no se completó ningún pago, así que en esta pasada no se volvieron a verificar el guardado por webhook ni los dos destinatarios de correo."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "En producción se recorrieron producto, carrito y checkout con datos sintéticos. Stripe abrió una sesión cs_test_ y mostró el entorno de prueba y el total de $1,600 MXN; no se completó el pago. El webhook, el guardado final del pedido, la cancelación y el surtido no se verificaron en esta sesión. SW-014 y SW-015 llevan el estado de pagos reales y correos."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -299,7 +323,7 @@
       "priority": "P2",
       "status": "requires_verification",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-09-30",
+      "updatedAt": "2026-10-03",
       "origin": [
         "src/components/header.tsx",
         "src/components/search-modal.tsx",
@@ -317,6 +341,10 @@
         {
           "date": "2026-09-30",
           "note": "Avanzó con evidencia del navegador: se recorrieron búsqueda, producto, carrito y pago en computadora y en un celular de 390 px; la retención y devolución del foco en los diálogos pasó. Se corrigieron las etiquetas del envío, los mensajes de estado del código postal y los textos de bajo contraste que quedaban en el pago. Sigue en requiere verificación hasta hacer la revisión con lector de pantalla y el análisis automático."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Inicio, catálogo, detalle, carrito y checkout se revisaron en Chrome de escritorio y vista estrecha; Safari de escritorio también cargó el inicio con navegación y categorías. Esto no sustituye una prueba completa de teclado, lector de pantalla ni auditoría automática, que siguen pendientes."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -327,9 +355,9 @@
       "kind": "improvement_suggestion",
       "category": "Rendimiento",
       "priority": "P3",
-      "status": "pending",
+      "status": "requires_verification",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-09-30",
+      "updatedAt": "2026-10-03",
       "origin": [
         "src/components/product-card.tsx",
         "src/components/search-modal.tsx",
@@ -354,6 +382,10 @@
         {
           "date": "2026-09-30",
           "note": "Auditoría del rediseño: 159 de las 201 imágenes de producto se cargan directo desde skinworld.mx, el sitio anterior en WordPress. Si ese sitio se da de baja o mueve sus archivos, esos productos se quedan sin foto; copiar las imágenes al proyecto o a Supabase Storage quitaría esa dependencia."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Verificación en producción: las tarjetas de producto usan ImagenProducto con respaldo accesible, y las imágenes cargan de forma diferida con decodificación asíncrona en secciones de tienda. El fallback está implementado; no se midieron Core Web Vitals de campo, así que no se afirma una mejora de rendimiento y queda pendiente esa medición."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -366,7 +398,7 @@
       "priority": "P3",
       "status": "pending",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-09-30",
+      "updatedAt": "2026-10-03",
       "origin": [
         "src/app/api/stripe/webhook/route.ts",
         "src/app/api/checkout/route.ts",
@@ -383,6 +415,10 @@
         {
           "date": "2026-09-30",
           "note": "Hecho en parte: el webhook de Stripe y la ruta de pago ya no usan `any`. El webhook tipa el evento y la sesión con los tipos de Stripe, interpreta la dirección de envío con un nuevo tipo DireccionDeEnvio y protege el monto y los artículos que pueden venir vacíos; la ruta de pago valida los artículos del carrito contra una forma explícita y tipa sus líneas con Stripe.Checkout.SessionCreateParams.LineItem. La revisión de tipos y la compilación de producción pasan. Sigue abierta por los `any` que quedan en el detalle de producto y en las pantallas del panel."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "La revisión de tipos y el build pasan, pero el detalle de producto todavía contiene any en product, relatedProducts y variants, además de parámetros de iteración. No se tipó superficialmente sin inspeccionar los contratos del catálogo y el panel; la limpieza completa sigue pendiente."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -459,17 +495,17 @@
       "kind": "requires_confirmation",
       "category": "Operación",
       "priority": "P1",
-      "status": "requires_verification",
+      "status": "completed",
       "origin": [
         "src/lib/correo.ts",
         "src/lib/pedidos.ts",
         "Variables de entorno de Vercel",
         "Zona DNS en Hostinger"
       ],
-      "details": "RESEND_API_KEY y CONTACT_NOTIFY_EMAIL están en Vercel y el 2026-09-29 llegó un aviso a la tienda, así que el envío funciona, pero cayó en spam porque salió del remitente compartido onboarding@resend.dev. El 2026-09-30 se confirmó que los tres registros DNS de Resend están publicados (TXT resend._domainkey y los CNAME rsend y send, ambos hacia forge.rmta.net), y que los registros MX y SPF de Hostinger no cambiaron. Falta confirmar si Resend ya marcó el dominio como verificado y si se configuró CONTACT_FROM_EMAIL; mientras no se cumplan las dos cosas, Resend no manda correo a nadie que no sea la dueña de la cuenta, así que las confirmaciones de pedido y los avisos de empacado y enviado nunca llegan a los clientes.",
-      "doneWhen": "Resend muestra skinworld.shop como verificado, CONTACT_FROM_EMAIL está en Vercel y una prueba enviada desde el panel a una dirección externa llega a la bandeja de entrada y no a spam.",
+      "details": "Resend muestra skinworld.shop verificado y listo para enviar. Las variables necesarias están configuradas en Vercel y hay confirmaciones de pedido y correos de estado con estado Delivered en Resend; una confirmación de pedido también se comprobó en la bandeja de entrada.",
+      "doneWhen": "El dominio está verificado, la configuración de producción existe y las confirmaciones al cliente se entregan a un destinatario externo.",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-09-30",
+      "updatedAt": "2026-10-03",
       "history": [
         {
           "date": "2026-09-30",
@@ -478,6 +514,10 @@
         {
           "date": "2026-09-30",
           "note": "El entorno local usado para verificar el rediseño no tiene RESEND_API_KEY, CONTACT_NOTIFY_EMAIL ni CONTACT_FROM_EMAIL, así que desde esta copia no se pudo volver a revisar la entrega en producción. El código para los correos de la tienda y del cliente existe; la entrega a bandejas externas sigue sin demostrarse."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Resend muestra skinworld.shop verificado y listo para enviar; Vercel tiene CONTACT_FROM_EMAIL, CONTACT_NOTIFY_EMAIL y RESEND_API_KEY en producción (sin exponer valores). El registro de Resend muestra confirmaciones y correos de estado Delivered a destinatarios externos; una confirmación de pedido también aparece en la bandeja de entrada. No se envió correo nuevo durante esta revisión."
         }
       ],
       "detectedIn": "2026-09-30T10:40:00-06:00"
@@ -940,20 +980,25 @@
       "kind": "detected_problem",
       "category": "Tienda en línea",
       "priority": "P1",
-      "status": "pending",
+      "status": "in_progress",
       "origin": [
         "Tabla products de Supabase",
-        "src/components/product-card.tsx"
+        "src/components/product-card.tsx",
+        "src/lib/products.ts"
       ],
       "details": "Dos productos del catálogo actual tienen compare_at_price_with_iva menor que price_with_iva, así que la tienda muestra como \"Antes\" una cantidad más baja: el Protector Solar SPF 50 cuesta $760 con un antes de $754, y el Sérum Hidratante Intenso cuesta $1,250 con un antes de $986. La tarjeta oculta la etiqueta de descuento negativo, pero sigue mostrando el precio tachado contradictorio.",
       "doneWhen": "La dueña confirma el precio regular y el actual de los dos productos, el catálogo se corrige y las tarjetas nunca muestran un precio \"Antes\" menor o igual al actual.",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-09-30",
+      "updatedAt": "2026-10-03",
       "detectedIn": "2026-09-30T17:55:00-06:00",
       "history": [
         {
           "date": "2026-09-30",
           "note": "Detectado en la verificación final del rediseño en el navegador y confirmado con una consulta de solo lectura de los 201 productos. No se cambió ningún precio porque no se conocen los valores correctos del negocio."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Corregida la parte de código, solo en local (sin commit ni publicación): src/lib/products.ts, donde se lee el catálogo para la tienda, descarta el precio \"Antes\" cuando no es mayor al actual, así que ninguna tarjeta ni página de producto lo muestra. Verificado en local: Sérum Hidratante Intenso y Protector Solar SPF 50 ya no muestran precio \"Antes\", mientras que producción todavía muestra \"Antes $986\" junto a $1,250. La revisión de tipos pasa. No se cambió ningún precio de la base de datos: la dueña debe confirmar el precio regular y el actual de los dos productos para cerrar la tarea. El panel de administración sigue mostrando los valores tal como están guardados."
         }
       ]
     },
@@ -997,6 +1042,10 @@
         {
           "date": "2026-10-03",
           "note": "La escena de necesidades en producción ahora usa los anillos de cristal con WebGL (SW-034). Sigue pendiente revisarla en un iPhone físico y en Safari de computadora, donde WebGL, las escenas fijas y la barra de direcciones pueden comportarse distinto."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Verificado en Safari de escritorio en producción: el inicio cargó con navegación y los ocho mundos de necesidades. La sección también se revisó en Chrome en vista estrecha. Falta Safari en un iPhone físico; por eso no se cierra."
         }
       ]
     },
@@ -1022,8 +1071,8 @@
         "src/styles/necesidades.css",
         "package.json (three)"
       ],
-      "details": "La sección «Encuentra soluciones por problema» se queda fija y el scroll gira anillos de cristal rosa claro con bordes redondeados alrededor de la misma mujer, que no se mueve. El anillo ancho es esmerilado: cuando se pone de canto la tapa por completo y solo entonces cambia la foto; los anillos delgados son de cristal transparente y la enmarcan. Por categoría se ve primero el problema y luego la piel perfecta. Son 9 fotos: un solo resultado con piel perfecta para todas las categorías y 8 problemas severos pero no desagradables, hechos en el ChatGPT de la dueña con su permiso y alineados a menos de 1 px. El cristal se dibuja con WebGL (three.js), que solo se descarga cuando la sección está cerca; sin WebGL se muestra la foto sola. Al subir desde la portada la sección ya está llena: el título y el anillo cerrado tapándola, que se abre para revelarla. Publicado en producción el 2026-10-03 (commit aa1776c en main).",
-      "doneWhen": "La dueña decide si se pone el aviso «Imágenes ilustrativas generadas con IA» y la sección se revisa en un iPhone real y en Safari de computadora (junto con SW-033).",
+      "details": "La sección «Encuentra soluciones por problema» se queda fija y el scroll gira anillos de cristal rosa claro con bordes redondeados alrededor de la misma mujer, que no se mueve. El anillo ancho es esmerilado: cuando se pone de canto la tapa por completo y solo entonces cambia la foto; los anillos delgados son de cristal transparente y la enmarcan. Por categoría se ve primero el problema y luego la piel perfecta. Son 9 fotos: un solo resultado con piel perfecta para todas las categorías y 8 problemas severos pero no desagradables, hechos en el ChatGPT de la dueña con su permiso y alineados a menos de 1 px. El cristal se dibuja con WebGL (three.js), que solo se descarga cuando la sección está cerca; sin WebGL se muestra la foto sola. Al subir desde la portada la sección ya está llena: el título y el anillo cerrado tapándola, que se abre para revelarla. Publicado en producción el 2026-10-03 (commit aa1776c en main). Revisado en producción el 2026-10-03 en Chrome de escritorio y vista estrecha, y Safari de escritorio; la sección carga con los anillos y una categoría visible a la vez.",
+      "doneWhen": "La dueña decide si se pone el aviso «Imágenes ilustrativas generadas con IA».",
       "history": [
         {
           "date": "2026-10-01",
@@ -1056,6 +1105,10 @@
         {
           "date": "2026-10-03",
           "note": "La dueña aprobó el resultado y pidió publicarlo. Pruebas (6) y revisión de tipos pasan, la compilación de producción pasa. Commit aa1776c subido a la rama y a main (avance directo, sin conflictos); Vercel desplegó. Verificado en https://www.skinworld.shop en una pantalla de celular: se ve el título, el anillo de cristal y la mujer con su problema de Acné, la foto carga desde /necesidades/estados/ y no hay errores en consola; inicio, tienda, carrito, un producto y las fotos de las 8 categorías responden 200. Falta decidir el aviso de imágenes con IA y revisar en iPhone y Safari reales."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Publicado en producción y revisado en Chrome de escritorio, vista estrecha y Safari de escritorio. Type-check, build y seis pruebas de regresión pasan. SW-035 se verificó en la página real. Solo falta la decisión de la dueña sobre mostrar el aviso «Imágenes ilustrativas generadas con IA»; queda como requiere verificación hasta esa decisión."
         }
       ]
     },
@@ -1065,9 +1118,9 @@
       "kind": "detected_problem",
       "category": "Tienda en línea",
       "priority": "P3",
-      "status": "in_progress",
+      "status": "completed",
       "detectedAt": "2026-10-01",
-      "updatedAt": "2026-10-01",
+      "updatedAt": "2026-10-03",
       "detectedIn": "2026-10-01T14:42:00-06:00",
       "origin": [
         "src/components/sections/necesidades-timeline.ts",
@@ -1083,11 +1136,31 @@
         {
           "date": "2026-10-01",
           "note": "La revisión local mantiene los textos sin encimarse aunque las escenas visuales se traslapen. El último texto sale antes del mensaje de cierre. Las pruebas matemáticas de regresión y la navegación por categorías en Chrome pasan; sigue sin verificarse en producción porque la dueña pidió no publicar."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Verificado en producción el 2026-10-03 en Chrome y Safari de escritorio: los nombres y descripciones de categorías aparecen de uno en uno; la escena final queda después de la categoría. Seis pruebas de regresión, revisión de tipos y build pasan."
         }
       ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-03",
+      "summary": "Publicados en producción el aviso de privacidad, los términos y la política de envíos, devoluciones, reembolsos y cancelaciones con los textos finales de la dueña. SW-008 sigue abierta solo para la revisión legal profesional."
+    },
+    {
+      "date": "2026-10-03",
+      "summary": "Aviso de privacidad, términos y política de envíos, devoluciones, reembolsos y cancelaciones puestos en el proyecto local con los textos finales de la dueña, y documento Word/PDF con las tres políticas (docs/politicas). Sin commit ni publicación; SW-008 sigue abierta para revisión legal y autorización."
+    },
+    {
+      "date": "2026-10-03",
+      "summary": "SW-032 avanzó a en progreso: la tienda ya no muestra un precio \"Antes\" menor o igual al actual (cambio solo en local, sin publicar). Faltan los precios correctos de los dos productos, que debe confirmar la dueña."
+    },
+    {
+      "date": "2026-10-03",
+      "summary": "Verificación de cierre: SW-035 terminada; SW-015 confirmado con dominio Resend verificado y correos de cliente entregados; SW-034 publicado y comprobado en Chrome/Safari de escritorio. Corregidos dos textos factuales de SW-008, que sigue requiriendo revisión legal y datos del responsable. Se recorrieron tienda, producto, carrito y checkout en prueba; no se pagó ni se modificó Stripe. SW-014 permanece como último paso para activar pagos reales."
+    },
     {
       "date": "2026-10-03",
       "summary": "Publicada en producción la sección «Encuentra soluciones por problema» con anillos de cristal rosa y la misma mujer (commit aa1776c). Verificada en el sitio real: se ve bien, sin errores en consola, y inicio, tienda, carrito, producto y fotos responden 200. SW-034 y SW-033 siguen abiertas para decidir el aviso de imágenes con IA y revisar en iPhone y Safari reales."

@@ -1,212 +1,99 @@
+import { PaginaLegal, type SeccionLegal } from '@/components/legal-page';
+
 export const metadata = {
-  title: 'Envíos y Devoluciones · Skinworld',
+  title: 'Envíos, Devoluciones y Reembolsos · Skinworld',
   description:
-    'Tiempos de entrega, costos de envío, devoluciones y reembolsos de Skinworld.',
+    'Tiempos de entrega, rastreo, devoluciones, reembolsos y cancelaciones de Skinworld.',
 };
+
+const secciones: SeccionLegal[] = [
+  {
+    titulo: 'Procesamiento y entrega',
+    bloques: [
+      'Los pedidos normalmente se procesan a partir del siguiente día hábil posterior a la confirmación de la compra.',
+      'No se procesan ni programan envíos ordinarios durante fines de semana o días festivos.',
+      'Tiempos estimados:',
+      [
+        'Ciudad de México y Área Metropolitana: 1 a 3 días hábiles.',
+        'Resto de la República Mexicana: 3 a 5 días hábiles, dependiendo del destino y método de envío.',
+      ],
+      'Estos plazos son estimados y pueden variar por circunstancias fuera del control razonable de Skinworld, incluyendo condiciones climatológicas, incidencias de transporte, temporadas de alta demanda o casos fortuitos o de fuerza mayor.',
+      'Skinworld mantendrá disponible un medio de atención para ayudar al cliente ante incidencias relacionadas con la entrega.',
+    ],
+  },
+  {
+    titulo: 'Rastreo',
+    bloques: [
+      'Cuando el transportista genere la guía correspondiente, Skinworld proporcionará al cliente la información disponible para el seguimiento de su pedido.',
+    ],
+  },
+  {
+    titulo: 'Dirección de entrega',
+    bloques: [
+      'El cliente deberá verificar que los datos de entrega sean correctos antes de finalizar la compra.',
+      'Si detecta un error, deberá contactar a Skinworld lo antes posible.',
+      'Una vez despachado el pedido, Skinworld no puede garantizar que el transportista permita modificar el domicilio. Cuando sea posible, Skinworld colaborará con el cliente para gestionar la modificación. Los cargos adicionales ocasionados exclusivamente por información incorrecta proporcionada por el cliente podrán correr a cargo de éste.',
+    ],
+  },
+  {
+    titulo: 'Devoluciones',
+    bloques: [
+      'El cliente podrá solicitar una devolución dentro de los 10 días hábiles posteriores a la entrega del producto, sin perjuicio de otros derechos que le correspondan conforme a la legislación aplicable.',
+      'Para iniciar una solicitud deberá contactar a Skinworld y proporcionar información suficiente para identificar la compra.',
+      'Cuando la devolución se origine por un producto incorrecto, defectuoso, dañado, caducado o por otra causa imputable a Skinworld, Skinworld asumirá los costos razonables asociados con la devolución y aplicará la solución que corresponda.',
+      'Cuando la devolución sea voluntaria y no exista una causa imputable a Skinworld, podrán aplicarse gastos de devolución, siempre que ello sea legalmente procedente y se informe al consumidor.',
+    ],
+  },
+  {
+    titulo: 'Productos con descuento',
+    bloques: [
+      'Las promociones o descuentos no eliminan los derechos legales del consumidor.',
+      'Cuando un producto presente defectos, daños, caducidad, no corresponda a lo solicitado o se actualice cualquier otro supuesto previsto por la legislación aplicable, podrá solicitarse la solución correspondiente aunque el producto se haya adquirido con descuento.',
+    ],
+  },
+  {
+    titulo: 'Condiciones sanitarias',
+    bloques: [
+      'Por razones de higiene y seguridad, Skinworld podrá limitar la devolución voluntaria de determinados productos abiertos, utilizados o cuyo sello de seguridad haya sido alterado, cuando dicha limitación sea legalmente procedente.',
+      'Esta restricción no afectará los derechos del consumidor cuando exista un defecto, daño, error en el producto recibido u otro supuesto protegido por la legislación aplicable.',
+    ],
+  },
+  {
+    titulo: 'Reembolsos',
+    bloques: [
+      'Cuando proceda un reembolso, Skinworld realizará las gestiones correspondientes utilizando, cuando sea posible, el mismo medio de pago utilizado en la compra.',
+      'Una vez recibida y, cuando corresponda, revisada la devolución, Skinworld procesará el reembolso en un plazo estimado de 3 a 5 días hábiles. El tiempo adicional para que el monto aparezca en la cuenta del cliente puede depender de su institución financiera o proveedor de pagos.',
+    ],
+  },
+  {
+    titulo: 'Cancelaciones',
+    bloques: [
+      'Si el pedido aún no ha sido despachado, el cliente puede contactar inmediatamente a Skinworld para solicitar su cancelación.',
+      'Si ya fue despachado, Skinworld informará al cliente sobre las opciones disponibles de devolución o cancelación conforme a la legislación aplicable.',
+      'Cuando resulte aplicable un derecho legal de revocación del consentimiento, Skinworld respetará los plazos y condiciones previstos por la Ley Federal de Protección al Consumidor.',
+    ],
+  },
+  {
+    titulo: 'Problemas con la entrega',
+    bloques: [
+      'Si el rastreo no presenta movimiento durante un periodo inusual o existe alguna incidencia con el envío, el cliente puede contactar directamente a Skinworld.',
+      'Skinworld podrá solicitar información adicional o un reporte del transportista para investigar la incidencia, sin trasladar al consumidor la responsabilidad de resolver por sí solo un problema imputable al proceso de entrega.',
+    ],
+  },
+  {
+    titulo: 'Atención a clientes',
+    bloques: [
+      'Horario: lunes a viernes de 10:00 a 18:00 horas.\nCorreo: contacto@skinworld.shop\nTeléfono y WhatsApp: +52 56 1288 4245.',
+    ],
+  },
+];
 
 export default function ShippingPage() {
   return (
-    <div className="min-h-[60vh]">
-      <div className="mx-auto max-w-3xl px-sw-gutter pb-sw-section pt-12 sm:pt-16">
-        <h1 className="mb-4 font-display text-sw-h1 font-semibold text-sw-ink">
-          Política de Envíos y Devoluciones
-        </h1>
-        <p className="mb-10 text-sw-small text-sw-muted">
-          Última actualización: 28 de septiembre de 2026
-        </p>
-
-        <div className="mb-12 rounded-sw-lg bg-sw-pink-pale p-6">
-          <p className="font-display text-lg font-semibold text-sw-ink">
-            Envío gratis en CDMX. Los envíos al interior de la República se cotizan según el
-            destino.
-          </p>
-        </div>
-
-        <div className="space-y-12 text-sw-body leading-relaxed text-sw-text">
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
-              Tiempos de entrega
-            </h2>
-            <div className="space-y-4">
-              <p>
-                Los pedidos se procesan y envían al siguiente día hábil de la confirmación de la
-                compra. No se realizan ni programan envíos los fines de semana ni días festivos.
-              </p>
-              <ul className="ml-5 list-disc space-y-2">
-                <li>
-                  <span className="font-semibold text-sw-ink">
-                    Ciudad de México y Área Metropolitana:
-                  </span>{' '}
-                  de 1 a 3 días hábiles.
-                </li>
-                <li>
-                  <span className="font-semibold text-sw-ink">Resto de la República Mexicana:</span> de
-                  3 a 5 días hábiles, según el método de envío seleccionado al realizar la compra.
-                </li>
-              </ul>
-              <p>
-                El número de guía asignado a tu pedido se envía al momento de recibir la confirmación
-                de compra, al correo electrónico que proporciones.
-              </p>
-              <p>
-                Ciertas eventualidades como el clima, demoras en transporte, direcciones no válidas o
-                incompletas, o temporadas altas pueden ocasionar retrasos. Skinworld no se hace
-                responsable por el incumplimiento en la entrega de los productos ocasionado por caso
-                fortuito o fuerza mayor.
-              </p>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
-              Errores en el domicilio de entrega
-            </h2>
-            <div className="space-y-4">
-              <p>
-                Es responsabilidad del Cliente verificar la dirección de entrega para evitar demoras
-                por errores de captura: número exterior, número interior, colonia, código postal,
-                etcétera. Una vez que el paquete ha salido de las instalaciones de Skinworld, no
-                pueden realizarse cambios en el domicilio señalado.
-              </p>
-              <p>
-                Skinworld no se hace responsable por pérdidas o extravíos debidos a cualquier error
-                en el domicilio proporcionado por el Cliente, ni por órdenes no reclamadas o
-                rechazadas.
-              </p>
-              <p>
-                Si necesitas cambiar la dirección de un pedido que ya está en proceso o en tránsito,
-                es responsabilidad del Cliente contactar a la empresa de transporte para hacer las
-                gestiones necesarias (puede haber un cargo adicional). Si el cambio es inmediato a la
-                confirmación del pedido, escríbenos y lo modificamos.
-              </p>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">Devoluciones</h2>
-            <div className="space-y-4">
-              <p>
-                El Cliente puede solicitar la devolución del producto adquirido dentro de los{' '}
-                <span className="font-semibold text-sw-ink">
-                  10 días hábiles posteriores a la entrega
-                </span>{' '}
-                del referido producto.
-              </p>
-              <p>
-                Los costos de devolución corren a cargo de Skinworld siempre y cuando la devolución
-                sea por causas imputables a Skinworld, señalando de manera enunciativa mas no
-                limitativa la recepción de un artículo incorrecto o defectuoso. Toda devolución que
-                no sea por causas imputables a Skinworld tendrá un costo, mismo que será descontado
-                del monto total del producto.
-              </p>
-              <p className="font-semibold text-sw-ink">Para hacer válida una devolución necesitas:</p>
-              <ul className="ml-5 list-disc space-y-2">
-                <li>Contar con el comprobante de compra o de pago.</li>
-                <li>El nombre de quien realizó la compra.</li>
-              </ul>
-              <p>Los productos que no cumplan con estos criterios no serán aceptados.</p>
-              <p>
-                <span className="font-semibold text-sw-ink">Artículos en oferta o con descuento:</span>{' '}
-                no pueden ser objeto de reembolso ni devolución; sólo aplican los productos de precio
-                regular. Esto no aplica cuando se trate de defectos de origen o fabricación, como
-                producto roto o caducado, en cuyo caso sí procede la devolución.
-              </p>
-              <p>
-                <span className="font-semibold text-sw-ink">Artículos dañados:</span> si recibes un
-                producto dañado, comunícate de inmediato con nosotros para obtener ayuda.
-              </p>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
-              Gastos de envío por devolución
-            </h2>
-            <div className="space-y-4">
-              <p>
-                Todos los gastos de envío por devolución deben ser prepagados por el Cliente. No se
-                aceptan pagos contra entrega.
-              </p>
-              <p>
-                El Cliente es responsable de pagar los costos de envío por concepto de devolución,
-                siempre que los productos se le hayan entregado en óptimas condiciones. Asimismo,
-                deberá cubrir los gastos en caso de pérdida o daño del producto durante el envío
-                hacia Skinworld.
-              </p>
-              <p>
-                Es responsabilidad del Cliente conservar el número de guía o rastreo con el que
-                realizó la devolución, hasta el momento en que el paquete sea recibido por nuestro
-                personal de atención a clientes.
-              </p>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">Reembolsos</h2>
-            <div className="space-y-4">
-              <p>
-                Los reembolsos se realizan <span className="font-semibold text-sw-ink">únicamente</span>{' '}
-                en la tarjeta de crédito o débito utilizada en la compra, o a la cuenta con la que se
-                realizó el pago si fue por transferencia electrónica.
-              </p>
-              <p>
-                Una vez solicitado el reembolso, Skinworld realizará las gestiones necesarias para
-                entregarlo en un plazo de{' '}
-                <span className="font-semibold text-sw-ink">15 días hábiles</span> contados a partir de
-                la entrega del paquete al remitente. Este período incluye el tiempo de tránsito para
-                que Skinworld reciba la devolución (de 5 a 10 días hábiles) y el tiempo de procesarla
-                una vez recibida y aceptada (de 3 a 5 días hábiles).
-              </p>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
-              Cancelaciones
-            </h2>
-            <p>
-              Una vez que el pedido se encuentra en tránsito, no es posible cancelarlo ni
-              modificarlo. Si el pedido ya va en camino, la cancelación se podrá realizar una vez que
-              el Cliente reciba el producto: para recibir un reembolso, puede devolver el paquete en
-              su estado original a la dirección de origen. Una vez que el paquete llegue,
-              procesaremos un reembolso menos el costo original de envío.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
-              Demoras o inconvenientes en la entrega
-            </h2>
-            <p>
-              Si el seguimiento de tu envío no indica movimiento o cambio de estado después de 3 días
-              hábiles, deberás iniciar un reclamo dentro del portal de la paquetería. Si ya cuentas
-              con un reporte y el problema persiste, escríbenos para brindarte el apoyo necesario.
-            </p>
-          </section>
-
-          <section className="rounded-sw-lg border border-sw-border bg-sw-white p-6">
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">Atención a clientes</h2>
-            <p className="mb-3">Horario de atención personalizada: lunes a viernes de 10:00 a 18:00 horas.</p>
-            <ul className="space-y-1">
-              <li>
-                Correo:{' '}
-                <a
-                  href="mailto:contacto@skinworld.shop"
-                  className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink"
-                >
-                  contacto@skinworld.shop
-                </a>
-              </li>
-              <li>
-                Teléfono y WhatsApp:{' '}
-                <a href="tel:+525612884245" className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
-                  +52 56 1288 4245
-                </a>
-              </li>
-            </ul>
-          </section>
-        </div>
-      </div>
-    </div>
+    <PaginaLegal
+      titulo="Política de Envíos, Devoluciones, Reembolsos y Cancelaciones"
+      actualizacion="2 de octubre de 2026"
+      secciones={secciones}
+    />
   );
 }

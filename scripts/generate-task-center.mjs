@@ -38,7 +38,7 @@ const PRIORIDADES = {
 
 const tareas = [...datos.tasks].sort((a, b) => {
   const abierta = (t) => (t.status === 'completed' ? 1 : 0);
-  return abierta(a) - abierta(b) || a.priority.localeCompare(b.priority) || a.id.localeCompare(b.id);
+  return abierta(a) - abierta(b) || (abierta(a) === 0 && (a.id === 'SW-014' ? 1 : 0) - (b.id === 'SW-014' ? 1 : 0)) || a.priority.localeCompare(b.priority) || a.id.localeCompare(b.id);
 });
 const abiertas = tareas.filter((t) => t.status !== 'completed');
 const cuenta = (estado) => tareas.filter((t) => t.status === estado).length;

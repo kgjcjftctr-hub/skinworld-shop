@@ -1,78 +1,93 @@
+import { PaginaLegal, type SeccionLegal } from '@/components/legal-page';
+
 export const metadata = {
   title: 'Términos y Condiciones · Skinworld',
   description: 'Términos legales de uso del sitio y de los productos de Skinworld.',
 };
 
+const secciones: SeccionLegal[] = [
+  {
+    titulo: 'Identificación del proveedor',
+    bloques: [
+      'Skinworld es un nombre comercial operado por Karina Alfaro López, RFC: AALK7407226K8, persona física con actividades empresariales y profesionales.',
+      'Contacto:',
+      [
+        'Correo: contacto@skinworld.shop',
+        'Teléfono y WhatsApp: +52 56 1288 4245',
+        'Domicilio: Calle Acueducto Río Hondo número 30, 3er piso, Colonia Lomas de Chapultepec IV Sección, C.P. 11000, Miguel Hidalgo, Ciudad de México',
+      ],
+    ],
+  },
+  {
+    titulo: 'Uso del sitio',
+    bloques: [
+      'skinworld.shop permite consultar información y adquirir los productos ofrecidos por Skinworld.',
+      'Al realizar una compra, el cliente declara haber revisado la descripción, precio y condiciones aplicables al producto y acepta estos términos y las políticas correspondientes.',
+      'Skinworld podrá actualizar el contenido del sitio, catálogo, disponibilidad y estos términos cuando resulte necesario. Los cambios no afectarán los derechos ya adquiridos por consumidores respecto de operaciones previamente celebradas.',
+    ],
+  },
+  {
+    titulo: 'Información sobre salud',
+    bloques: [
+      'La información publicada sobre cuidado de la piel, bienestar, ingredientes o productos tiene fines informativos y educativos y no sustituye una consulta, diagnóstico o tratamiento realizado por un profesional de la salud.',
+      'Ante dudas relacionadas con una condición médica, el consumidor deberá consultar a un profesional de la salud.',
+      'Nada de lo establecido en estos términos pretende excluir o limitar derechos que correspondan al consumidor conforme a la legislación aplicable.',
+    ],
+  },
+  {
+    titulo: 'Productos, precios y disponibilidad',
+    bloques: [
+      'Los productos están sujetos a disponibilidad.',
+      'Los precios aplicables serán los mostrados al consumidor antes de finalizar la compra. Antes del pago deberán mostrarse los cargos aplicables a la operación, incluyendo, cuando corresponda, los costos de envío.',
+      'En caso de existir un error evidente de disponibilidad, precio o información que impida cumplir razonablemente un pedido, Skinworld contactará al cliente para informarle las opciones disponibles y, cuando corresponda, realizar el reembolso respectivo.',
+    ],
+  },
+  {
+    titulo: 'Proceso de compra',
+    bloques: [
+      'El cliente selecciona los productos, proporciona la información necesaria para entrega y contacto, revisa su pedido y completa el pago mediante los métodos habilitados en el sitio.',
+      'Una vez confirmada la operación, Skinworld proporcionará al cliente una confirmación o comprobante electrónico de la transacción.',
+    ],
+  },
+  {
+    titulo: 'Pagos',
+    bloques: [
+      'Los pagos podrán realizarse mediante los métodos habilitados durante el proceso de compra.',
+      'El procesamiento de pagos con tarjeta podrá realizarse mediante proveedores externos especializados. Skinworld no almacena directamente los datos completos de la tarjeta.',
+    ],
+  },
+  {
+    titulo: 'Facturación',
+    bloques: [
+      'El cliente podrá solicitar el comprobante fiscal correspondiente proporcionando la información fiscal necesaria a través del mecanismo habilitado por Skinworld.',
+    ],
+  },
+  {
+    titulo: 'Envíos',
+    bloques: [
+      'Los tiempos, costos y condiciones de entrega se encuentran en la Política de Envíos, Devoluciones, Reembolsos y Cancelaciones.',
+    ],
+  },
+  {
+    titulo: 'Cancelaciones, devoluciones y garantías',
+    bloques: [
+      'Los procedimientos aplicables se describen en la Política de Envíos, Devoluciones, Reembolsos y Cancelaciones.',
+      'Ninguna disposición de estos términos deberá interpretarse como una renuncia a los derechos que la legislación mexicana reconozca al consumidor.',
+    ],
+  },
+  {
+    titulo: 'Atención y reclamaciones',
+    bloques: [
+      'Para aclaraciones, reclamaciones o problemas relacionados con una compra:',
+      [
+        'Correo: contacto@skinworld.shop',
+        'WhatsApp/teléfono: +52 56 1288 4245',
+        'Horario: lunes a viernes de 10:00 a 18:00 horas.',
+      ],
+    ],
+  },
+];
+
 export default function TermsPage() {
-  return (
-    <div className="min-h-[60vh]">
-      <div className="mx-auto max-w-3xl px-sw-gutter pb-sw-section pt-12 sm:pt-16">
-        <h1 className="mb-4 font-display text-sw-h1 font-semibold text-sw-ink">Términos y Condiciones</h1>
-        <p className="mb-12 text-sw-small text-sw-muted">
-          Última actualización: 28 de septiembre de 2026
-        </p>
-
-        <div className="space-y-12 text-sw-body leading-relaxed text-sw-text">
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
-              Uso del sitio y del contenido
-            </h2>
-            <div className="space-y-4">
-              <p>
-                La información contenida en el sitio web skinworld.shop es sólo para fines de
-                información general.
-              </p>
-              <p>
-                Skinworld no asume ninguna responsabilidad por errores u omisiones en los contenidos
-                del Servicio.
-              </p>
-              <p>
-                En ningún caso Skinworld será responsable de ningún daño especial, directo,
-                indirecto, consecuente o incidental o de cualquier daño, ya sea en una acción de
-                contrato, negligencia u otro agravio, que surja de o en relación con el uso de los
-                productos. Skinworld se reserva el derecho de hacer adiciones, eliminaciones o
-                modificaciones a los contenidos del Servicio en cualquier momento sin previo aviso.
-              </p>
-              <p>
-                Skinworld no garantiza que el Servicio esté libre de virus u otros componentes
-                dañinos.
-              </p>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">
-              Deslinde de responsabilidad de contenido
-            </h2>
-            <div className="space-y-4">
-              <p>
-                El Servicio ofrece información sobre estado físico y nutricional y está diseñado sólo
-                con fines educativos. No debe confiar en esta información como sustituto de, ni
-                reemplazo, el consejo médico profesional, el diagnóstico o el tratamiento. Si tiene
-                alguna inquietud o pregunta sobre su salud, siempre debe consultar con un médico u
-                otro profesional de la salud.
-              </p>
-              <p>
-                No ignore, evite ni demore la obtención de consejos médicos o relacionados con la
-                salud de su médico debido a algo que haya leído en el Servicio. El uso de cualquier
-                información provista en el Servicio es bajo su propio riesgo.
-              </p>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="mb-4 font-display text-2xl font-semibold text-sw-ink">Compras y envíos</h2>
-            <p>
-              Las compras están sujetas a disponibilidad y a la aceptación del pedido. Las
-              condiciones de envío, devolución y reembolso se detallan en nuestra{' '}
-              <a href="/envios" className="font-semibold text-sw-pink-deep underline underline-offset-4 hover:text-sw-ink">
-                Política de Envíos y Devoluciones
-              </a>
-              .
-            </p>
-          </section>
-        </div>
-      </div>
-    </div>
-  );
+  return <PaginaLegal titulo="Términos y Condiciones" actualizacion="2 de octubre de 2026" secciones={secciones} />;
 }
