@@ -108,11 +108,11 @@ export function IntroCinematica() {
           <div className="sw-intro__frente sw-intro__frente--2" data-intro="frente" aria-hidden />
 
           <div className="sw-intro__acciones" data-intro="acciones">
-            <Link href="/tienda" className="sw-btn sw-btn-primary h-12 px-7 text-[0.9375rem]">
+            <Link href="/tienda" className="sw-btn sw-btn-primary h-14 px-9 text-base">
               Explorar productos
               <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
-            <Link href="/sobre-nosotros" className="sw-link py-2 text-[0.9375rem]">
+            <Link href="/sobre-nosotros" className="sw-btn sw-btn-secondary h-14 px-9 text-base">
               Conocer a la Dra. Karina
             </Link>
           </div>

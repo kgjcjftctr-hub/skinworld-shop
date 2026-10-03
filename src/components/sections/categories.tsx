@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useEffect, useRef, type CSSProperties } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { BarraDeAvisos } from '@/components/barra-avisos';
 import { iniciarNecesidades } from './necesidades-motor';
 import { estadosDe } from './necesidades-personas';
 import '@/styles/necesidades.css';
@@ -27,7 +26,6 @@ export function CategoriesSection({ porCategoria }: { porCategoria: Record<strin
   return (
     <section ref={raiz} className="necesidades" aria-labelledby="necesidades-titulo" id="necesidades">
       <div className="necesidades__escena" data-necesidades-escena>
-        <div className="necesidades__avisos"><BarraDeAvisos ambiente /></div>
         <div className="necesidades__encabezado">
           <p className="necesidades__etiqueta">Por necesidad</p>
           <h2 id="necesidades-titulo"><span>Encuentra</span><span>soluciones por</span><span><em>problema.</em></span></h2>

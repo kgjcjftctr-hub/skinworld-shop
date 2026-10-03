@@ -346,6 +346,20 @@
     background: radial-gradient(closest-side, rgba(255, 228, 236, 0.55), transparent);
   }
 
+  /* El final de la portada se funde con el color liso de la página justo donde
+     empieza el contenido siguiente (margin-bottom de arriba): sin borde. */
+  html.sw-intro-js .sw-intro::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 32vh; /* = lo que la sección siguiente sube sobre la portada */
+    z-index: 2;
+    height: clamp(90px, 13vh, 140px);
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgb(var(--sw-warm-white) / 0), rgb(var(--sw-warm-white)));
+  }
+
   html.sw-intro-js .sw-intro__frente--2 {
     width: 30vw;
     height: 30vw;

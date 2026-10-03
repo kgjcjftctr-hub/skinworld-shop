@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { Mariposa, Mariposa3D } from '@/components/ui/mariposa';
 
 // Mismas promesas que ya mostraba el sitio; no se agrega ninguna.
-const trustSignals = ['100% original', 'Envío gratis en CDMX', 'Atención lunes a viernes, 10 a 18 h'];
+const trustSignals = ['100% original', 'Atención lunes a viernes, 10 a 18 h'];
 
 export function CTASection() {
   return (

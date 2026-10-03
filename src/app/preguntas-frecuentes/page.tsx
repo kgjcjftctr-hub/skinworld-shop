@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { COSTO_DE_ENVIO } from '@/lib/envio';
 
 export const metadata = {
   title: 'Preguntas Frecuentes · Skinworld',
@@ -8,7 +9,7 @@ export const metadata = {
 const faqs = [
   {
     q: '¿Cuánto cuesta el envío?',
-    a: 'En la Ciudad de México el envío es gratis. Los envíos al interior de la República se cotizan según el destino.',
+    a: `El envío cuesta ${COSTO_DE_ENVIO} pesos, el mismo monto para todos los pedidos y todos los destinos de la República Mexicana. Lo ves en el carrito antes de pagar.`,
   },
   {
     q: '¿Cuánto tarda en llegar mi pedido?',

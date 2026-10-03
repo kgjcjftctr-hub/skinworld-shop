@@ -3,14 +3,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
 import { getSupabase } from '@/lib/supabase';
 import { origenSeguro } from '@/lib/sitio';
+import { COSTO_DE_ENVIO } from '@/lib/envio';
 
 interface ArticuloDelCarrito {
   id: string;
   cartQuantity?: number;
 }
-
-const FREE_SHIPPING_THRESHOLD = 500;
-const SHIPPING_COST = 100;
 
 const REQUIRED_ADDRESS_FIELDS = [
   'nombre',
@@ -103,16 +101,15 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (subtotal <= FREE_SHIPPING_THRESHOLD) {
-    line_items.push({
-      quantity: 1,
-      price_data: {
-        currency: 'mxn',
-        unit_amount: SHIPPING_COST * 100,
-        product_data: { name: 'Envío' },
-      },
-    });
-  }
+  // El envío cuesta lo mismo siempre, sin importar el total ni el destino.
+  line_items.push({
+    quantity: 1,
+    price_data: {
+      currency: 'mxn',
+      unit_amount: COSTO_DE_ENVIO * 100,
+      product_data: { name: 'Envío' },
+    },
+  });
 
   try {
     const stripe = getStripe();

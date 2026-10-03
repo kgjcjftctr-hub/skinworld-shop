@@ -10,8 +10,6 @@
   position: relative;
 }
 .necesidades__escena { position: relative; isolation: isolate; }
-.necesidades__avisos { position: relative; z-index: 6; background: linear-gradient(#fcf8f7, #f6e9eb); }
-.necesidades__avisos p { font-size: 11px; }
 .necesidades__encabezado { padding: 48px var(--ne-gutter) 30px; position: relative; z-index: 4; }
 .necesidades__etiqueta { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; }
 .necesidades__encabezado h2 { font-family: var(--font-playfair), Georgia, serif; font-size: clamp(42px, 5vw, 76px); font-weight: 400; line-height: 1.04; letter-spacing: -1.8px; }
@@ -56,9 +54,11 @@
    altura suficiente y el usuario permite movimiento: la página se queda quieta
    y el scroll sólo cambia de categoría y mueve el cristal. */
 .necesidades[data-inmersiva] { height: 600vh; height: 600svh; }
-.necesidades[data-inmersiva] .necesidades__escena { position: sticky; top: var(--sw-header-h); height: calc(100vh - var(--sw-header-h)); height: calc(100svh - var(--sw-header-h)); min-height: 480px; overflow: clip; background: radial-gradient(ellipse at 60% 35%, #f4d3dc, transparent 64%), #fcf8f7; }
+.necesidades[data-inmersiva] .necesidades__escena { position: sticky; top: var(--sw-header-h); height: calc(100vh - var(--sw-header-h)); height: calc(100svh - var(--sw-header-h)); min-height: 480px; overflow: clip; }
+.necesidades[data-inmersiva] { background: transparent; }
+.necesidades[data-inmersiva] .necesidades__escena::before { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse at 60% 35%, #f4d3dc, transparent 64%), #fcf8f7; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 clamp(140px, 26svh, 260px)); mask-image: linear-gradient(to bottom, transparent, #000 clamp(140px, 26svh, 260px)); }
+.necesidades:not([data-inmersiva]) { background: linear-gradient(#fcf8f7, #f6e9eb 240px); }
 .necesidades[data-inmersiva] .necesidades__escena::after { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: #f5edec; opacity: var(--ne-salida); }
-.necesidades[data-inmersiva] .necesidades__avisos { background: transparent; height: 32px; }
 .necesidades[data-inmersiva] .necesidades__encabezado { position: absolute; padding: 0; pointer-events: none; opacity: calc(1 - var(--ne-salida)); transform-origin: top left; }
 .necesidades[data-inmersiva] .necesidades__etiqueta { transform: translateY(calc((1 - var(--ne-intro)) * 12px)); }
 .necesidades[data-inmersiva] .necesidades__encabezado h2 { transform: scale(calc(1.08 - var(--ne-intro) * .08)); transform-origin: top left; }
@@ -124,7 +124,6 @@
 /* Celular y tableta: título arriba, la mujer al centro, textos abajo y el
    índice reducido a números (el nombre sigue en el enlace para lectores). */
 @media (max-width: 1023px) {
-  .necesidades[data-inmersiva] .necesidades__avisos p { gap: 4px 14px; padding-top: 6px; padding-bottom: 6px; font-size: 10px; }
   .necesidades[data-inmersiva] .necesidades__encabezado { top: 40px; left: var(--ne-gutter); right: var(--ne-gutter); }
   .necesidades[data-inmersiva] .necesidades__etiqueta { display: none; }
   .necesidades[data-inmersiva] .necesidades__encabezado h2 { font-size: clamp(25px, 6.6vw, 44px); letter-spacing: -.6px; line-height: 1.08; }

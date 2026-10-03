@@ -8,6 +8,7 @@ import { useCart } from '@/store/cart';
 import { useShippingAddress, isShippingAddressComplete } from '@/store/shipping-address';
 import { ShippingAddressForm } from '@/components/checkout/shipping-address-form';
 import { formatPrice } from '@/utils';
+import { COSTO_DE_ENVIO } from '@/lib/envio';
 import { ShoppingBag, Trash2, ArrowLeft, ArrowRight, Minus, Plus } from 'lucide-react';
 
 export default function CartPage() {
@@ -53,7 +54,7 @@ export default function CartPage() {
   // subtotal ya incluye el 16% de IVA (priceWithIVA); aquí solo se
   // desglosa para mostrarlo, no se vuelve a sumar.
   const tax = subtotal - subtotal / 1.16;
-  const shipping = subtotal > 500 ? 0 : 100;
+  const shipping = COSTO_DE_ENVIO;
   const total = subtotal + shipping;
 
   const handleRemove = (id: string, name: string) => {
@@ -196,7 +197,7 @@ export default function CartPage() {
                 <div className="flex justify-between text-sw-text">
                   <dt>Envío</dt>
                   <dd className="font-semibold tabular-nums text-sw-ink">
-                    {shipping === 0 ? 'Gratis' : formatPrice(shipping)}
+                    {formatPrice(shipping)}
                   </dd>
                 </div>
               </dl>
