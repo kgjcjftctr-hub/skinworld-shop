@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-03T13:24:00-06:00",
-  "lastInspectedBy": "Claude Code, al pasar el Centro de tareas al español y cerrar la versión de anillos de la sección de necesidades",
+  "lastInspectedAt": "2026-10-03T13:44:00-06:00",
+  "lastInspectedBy": "Claude Code, al publicar los anillos de cristal de la sección de necesidades",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -965,7 +965,7 @@
       "priority": "P2",
       "status": "requires_verification",
       "detectedAt": "2026-10-01",
-      "updatedAt": "2026-10-01",
+      "updatedAt": "2026-10-03",
       "detectedIn": "2026-10-01T10:30:00-06:00",
       "origin": [
         "src/components/intro/intro-cinematica.tsx",
@@ -993,6 +993,10 @@
         {
           "date": "2026-10-01",
           "note": "Se publicaron los ocho mundos de necesidades con el PR #1 y el merge a producción 8267863. Vercel pasó tanto en vista previa como en main. Se volvió a verificar https://www.skinworld.shop a 1440×800 y 375×812: los ocho mundos y sus conteos coinciden con el catálogo, la computadora usa la escena con scroll, el celular usa los bloques apilados, no hay desborde horizontal ni errores de consola, Acné abre el filtro correcto de 19 productos, y las páginas de producto y carrito siguen cargando bien. Sigue abierta solo para revisarla en un iPhone físico y en Safari de computadora."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "La escena de necesidades en producción ahora usa los anillos de cristal con WebGL (SW-034). Sigue pendiente revisarla en un iPhone físico y en Safari de computadora, donde WebGL, las escenas fijas y la barra de direcciones pueden comportarse distinto."
         }
       ]
     },
@@ -1018,8 +1022,8 @@
         "src/styles/necesidades.css",
         "package.json (three)"
       ],
-      "details": "La sección «Encuentra soluciones por problema» se queda fija y el scroll gira anillos de cristal rosa claro con bordes redondeados alrededor de la misma mujer, que no se mueve. El anillo ancho es esmerilado: cuando se pone de canto la tapa por completo y solo entonces cambia la foto; los anillos delgados son de cristal transparente y la enmarcan. Por categoría se ve primero el problema y luego la piel perfecta. Son 9 fotos: un solo resultado con piel perfecta para todas las categorías y 8 problemas severos pero no desagradables, hechos en el ChatGPT de la dueña con su permiso y alineados a menos de 1 px. El cristal se dibuja con WebGL (three.js), que solo se descarga cuando la sección está cerca; sin WebGL se muestra la foto sola. Al subir desde la portada la sección ya está llena: el título y el anillo cerrado tapándola, que se abre para revelarla. Todo es local: nada tiene commit, push ni despliegue.",
-      "doneWhen": "La dueña aprueba visualmente la transición y los 16 estados en computadora y celular, decide si se pone el aviso «Imágenes ilustrativas generadas con IA», y el cambio tiene commit, se despliega y se verifica en producción.",
+      "details": "La sección «Encuentra soluciones por problema» se queda fija y el scroll gira anillos de cristal rosa claro con bordes redondeados alrededor de la misma mujer, que no se mueve. El anillo ancho es esmerilado: cuando se pone de canto la tapa por completo y solo entonces cambia la foto; los anillos delgados son de cristal transparente y la enmarcan. Por categoría se ve primero el problema y luego la piel perfecta. Son 9 fotos: un solo resultado con piel perfecta para todas las categorías y 8 problemas severos pero no desagradables, hechos en el ChatGPT de la dueña con su permiso y alineados a menos de 1 px. El cristal se dibuja con WebGL (three.js), que solo se descarga cuando la sección está cerca; sin WebGL se muestra la foto sola. Al subir desde la portada la sección ya está llena: el título y el anillo cerrado tapándola, que se abre para revelarla. Publicado en producción el 2026-10-03 (commit aa1776c en main).",
+      "doneWhen": "La dueña decide si se pone el aviso «Imágenes ilustrativas generadas con IA» y la sección se revisa en un iPhone real y en Safari de computadora (junto con SW-033).",
       "history": [
         {
           "date": "2026-10-01",
@@ -1048,6 +1052,10 @@
         {
           "date": "2026-10-03",
           "note": "La dueña cambió la esfera por los anillos, pidió que se vieran más cristalinos, luego un rosa más claro y bordes más redondeados, y al final que no quedara vacío el espacio entre la portada y esta sección. Hecho en local: anillos de cristal con transmisión real en WebGL (three.js 0.180 instalado como dependencia, en un archivo aparte de unos 125 KB comprimido que solo se descarga cerca de la sección; el inicio sigue en 63.3 kB), un anillo ancho esmerilado que la tapa al cambiar la foto y tres delgados transparentes, entorno rosa propio y bandas con cantos redondeados. La sección entra ya con el título y el anillo cerrado, que se abre para revelarla. Verificado a 1440 y 390 px: el scroll regresa exactamente, el recuadro idéntico en 41 posiciones, los 17 enlaces, el índice 05 lleva al problema de Cabello, foco de teclado visible, p95 de 16.8 ms por cuadro con el procesador 4 veces más lento, sin errores de consola, la tienda, un producto y el carrito cargan, y con movimiento reducido, pantalla baja o celular horizontal se ven los 8 retratos fijos. Seis pruebas pasan (incluida que la foto solo cambia cuando el anillo ancho la tapa), la revisión de tipos y la compilación pasan. La dueña dijo que el resultado está perfecto. Sigue pendiente decidir el aviso de imágenes con IA y autorizar commit, push y despliegue."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "La dueña aprobó el resultado y pidió publicarlo. Pruebas (6) y revisión de tipos pasan, la compilación de producción pasa. Commit aa1776c subido a la rama y a main (avance directo, sin conflictos); Vercel desplegó. Verificado en https://www.skinworld.shop en una pantalla de celular: se ve el título, el anillo de cristal y la mujer con su problema de Acné, la foto carga desde /necesidades/estados/ y no hay errores en consola; inicio, tienda, carrito, un producto y las fotos de las 8 categorías responden 200. Falta decidir el aviso de imágenes con IA y revisar en iPhone y Safari reales."
         }
       ]
     },
@@ -1080,6 +1088,10 @@
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-03",
+      "summary": "Publicada en producción la sección «Encuentra soluciones por problema» con anillos de cristal rosa y la misma mujer (commit aa1776c). Verificada en el sitio real: se ve bien, sin errores en consola, y inicio, tienda, carrito, producto y fotos responden 200. SW-034 y SW-033 siguen abiertas para decidir el aviso de imágenes con IA y revisar en iPhone y Safari reales."
+    },
     {
       "date": "2026-10-03",
       "summary": "El Centro de tareas quedó todo en español: títulos, detalles, criterios de cierre, historial, áreas y cambios recientes, sin cambiar identificadores, estados ni fechas. SW-034 actualizada con la versión final de anillos de cristal rosa claro y la entrada sin hueco desde la portada, que la dueña aprobó visualmente; sigue sin commit ni publicación."
