@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-// Genera el SkinWorld Task Center a partir de SKINWORLD_TASKS.json, que es la
+// Genera el Centro de tareas de SkinWorld a partir de SKINWORLD_TASKS.json, que es la
 // fuente de verdad. Produce dos archivos con el mismo contenido:
 //   SKINWORLD_TASK_CENTER.html        documento completo, para abrirlo local
 //   .artifact/task-center.html        sin <html>/<head>/<body>, para publicarlo
@@ -74,7 +74,7 @@ const tarjeta = (t) => `
         </details>
       </article>`;
 
-const titulo = 'SkinWorld Task Center';
+const titulo = datos.title ?? 'Centro de tareas de SkinWorld';
 
 const estilos = `
     /* Tablero de trabajo: resumen arriba, filtros fijos, rejilla de tarjetas.

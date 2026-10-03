@@ -1,56 +1,41 @@
 {
-  "nota": "Manifiesto de las secuencias de personas de la sección de necesidades. Lo escribe scripts/preparar-persona.mjs; ver docs/personas-necesidades.md. Mientras una categoría tenga null, esa categoría muestra la escultura actual.",
-  "personas": {
-    "acne": {
-      "modo": "unica",
-      "fondo": "transparente",
-      "mejora": [
-        0.35,
-        0.68
-      ],
-      "escritorio": {
-        "cuadros": 48,
-        "ancho": 825,
-        "alto": 1100,
-        "ruta": "/necesidades/personas/acne/escritorio",
-        "formato": "webp"
-      },
-      "movil": {
-        "cuadros": 32,
-        "ancho": 570,
-        "alto": 760,
-        "ruta": "/necesidades/personas/acne/movil",
-        "formato": "webp"
-      }
-    },
-    "dermatitis": null,
-    "antiedad": null,
-    "manchas": null,
-    "cabello-y-unas": null,
-    "piel-de-bebe": null,
-    "proteccion-solar": null,
-    "suplementos": null
+  "nota": "La misma mujer dentro de la esfera: un problema por categoría y una sola foto con la piel perfecta como resultado. Alineadas entre sí con scripts/personas/preparar-estados.py. Una categoría sin problema conserva su arte original. Ver docs/personas-necesidades.md.",
+  "perfecta": {
+    "escritorio": "/necesidades/estados/perfecta-escritorio.webp",
+    "movil": "/necesidades/estados/perfecta-movil.webp"
   },
-  "muestra": {
-    "modo": "unica",
-    "fondo": "transparente",
-    "mejora": [
-      0.35,
-      0.68
-    ],
-    "escritorio": {
-      "cuadros": 48,
-      "ancho": 825,
-      "alto": 1100,
-      "ruta": "/necesidades/muestra/escritorio",
-      "formato": "webp"
+  "problemas": {
+    "acne": {
+      "escritorio": "/necesidades/estados/acne/problema-escritorio.webp",
+      "movil": "/necesidades/estados/acne/problema-movil.webp"
     },
-    "movil": {
-      "cuadros": 32,
-      "ancho": 570,
-      "alto": 760,
-      "ruta": "/necesidades/muestra/movil",
-      "formato": "webp"
+    "dermatitis": {
+      "escritorio": "/necesidades/estados/dermatitis/problema-escritorio.webp",
+      "movil": "/necesidades/estados/dermatitis/problema-movil.webp"
+    },
+    "antiedad": {
+      "escritorio": "/necesidades/estados/antiedad/problema-escritorio.webp",
+      "movil": "/necesidades/estados/antiedad/problema-movil.webp"
+    },
+    "manchas": {
+      "escritorio": "/necesidades/estados/manchas/problema-escritorio.webp",
+      "movil": "/necesidades/estados/manchas/problema-movil.webp"
+    },
+    "cabello-y-unas": {
+      "escritorio": "/necesidades/estados/cabello-y-unas/problema-escritorio.webp",
+      "movil": "/necesidades/estados/cabello-y-unas/problema-movil.webp"
+    },
+    "piel-de-bebe": {
+      "escritorio": "/necesidades/estados/piel-de-bebe/problema-escritorio.webp",
+      "movil": "/necesidades/estados/piel-de-bebe/problema-movil.webp"
+    },
+    "proteccion-solar": {
+      "escritorio": "/necesidades/estados/proteccion-solar/problema-escritorio.webp",
+      "movil": "/necesidades/estados/proteccion-solar/problema-movil.webp"
+    },
+    "suplementos": {
+      "escritorio": "/necesidades/estados/suplementos/problema-escritorio.webp",
+      "movil": "/necesidades/estados/suplementos/problema-movil.webp"
     }
   }
 }

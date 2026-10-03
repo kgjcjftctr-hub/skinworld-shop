@@ -5,6 +5,7 @@ import { useEffect, useRef, type CSSProperties } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { BarraDeAvisos } from '@/components/barra-avisos';
 import { iniciarNecesidades } from './necesidades-motor';
+import { estadosDe } from './necesidades-personas';
 import '@/styles/necesidades.css';
 
 // Estos nombres siguen siendo los valores exactos del filtro del catálogo.
@@ -36,6 +37,7 @@ export function CategoriesSection({ porCategoria }: { porCategoria: Record<strin
           {necesidades.map((mundo, i) => {
             const numero = String(i + 1).padStart(2, '0');
             const total = porCategoria[mundo.nombre] ?? 0;
+            const estados = estadosDe(mundo.nombre);
             const tema = {
               '--ne-base': mundo.base, '--ne-tono': mundo.tono, '--ne-profundo': mundo.profundo,
               '--ne-claro': mundo.claro, '--ne-angulo': `${mundo.angulo}deg`,
@@ -46,12 +48,11 @@ export function CategoriesSection({ porCategoria }: { porCategoria: Record<strin
                 <div className="necesidades__arte" aria-hidden="true">
                   <span className="necesidades__gigante">{mundo.palabra}</span>
                   <div className="necesidades__escultura"><div className="necesidades__sombra" /><div className="necesidades__lamina" /><div className="necesidades__aro" /><div className="necesidades__perla" /><div className="necesidades__reflejo" /></div>
-                  {/* Persona de la categoría: el motor crea aquí su canvas solo si hay
-                      secuencia en src/data/personas-necesidades.json. */}
-                  <div className="necesidades__persona" data-persona>
-                    <div className="necesidades__persona-suelo" />
-                    <div className="necesidades__persona-luz" />
-                  </div>
+                  {/* Sin escena fija (movimiento reducido, pantallas bajas o sin JS):
+                      el problema de la categoría dentro de la esfera, quieto. */}
+                  {estados && (
+                    <img className="necesidades__retrato" src={estados.antes.movil} srcSet={`${estados.antes.movil} 640w, ${estados.antes.escritorio} 1000w`} sizes="(min-width: 768px) 420px, 70vw" width={640} height={640} alt="" loading="lazy" decoding="async" />
+                  )}
                   <span className="necesidades__pie-arte">{numero} — {mundo.capitulo}</span>
                 </div>
                 <div className="necesidades__cantidad"><strong>{total}</strong><span>{total === 1 ? 'producto' : 'productos'}<br /> por descubrir</span></div>
@@ -64,6 +65,13 @@ export function CategoriesSection({ porCategoria }: { porCategoria: Record<strin
               </article>
             );
           })}
+        </div>
+        {/* La misma mujer, quieta y de frente, dentro de un giroscopio de anillos
+            de cristal (WebGL). La foto cambia cuando un anillo la tapa. Lo
+            controla necesidades-motor.ts. */}
+        <div className="necesidades__estudio" data-estudio aria-hidden="true">
+          <img className="necesidades__foto" data-capa="foto" alt="" decoding="async" />
+          <canvas className="necesidades__anillos" data-anillos />
         </div>
         <div className="necesidades__cierre" aria-hidden="true"><p>El cuidado continúa</p><span>Una selección.<br /><em>Tu siguiente ritual.</em></span></div>
         <div className="necesidades__inferior"><Link href="/tienda">Ver todo el catálogo <ArrowUpRight size={20} aria-hidden="true" /></Link><span aria-hidden="true">Explora a tu ritmo</span></div>

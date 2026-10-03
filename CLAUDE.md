@@ -30,4 +30,8 @@ At the end of every SkinWorld implementation, audit, or production-verification 
    (payments, emails, deployments, cache freshness, accessibility/device behavior) must remain
    `requires_verification` until actually tested.
 
+Write every Task Center text in Spanish (titles, details, `doneWhen`, history notes, categories, origins that
+are not file paths, `recentChanges`), because the owner reads it in Spanish. Keep JSON keys and the
+`status`/`kind`/`priority` codes in English: the generator maps them to Spanish labels.
+
 Do not modify storefront functionality merely to maintain the Task Center.

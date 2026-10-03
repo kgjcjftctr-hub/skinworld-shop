@@ -1,237 +1,206 @@
-import { centroNecesidad, estadoNecesidad, estadoPersona, estadoPersonaCompacta, indiceNecesidad, limitar, transicion } from './necesidades-timeline';
-import { enModoMuestra, personaDe, PersonaEnEscena } from './necesidades-personas';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { destinoNecesidad, estadoAnillos, estadoNecesidad, indiceNecesidad, transicion } from './necesidades-timeline';
+import { estadosDe, fuenteDeEstado, Precarga, type Perfil } from './necesidades-personas';
 
-/** Crea la persona de cada mundo que tenga secuencia en el manifiesto. */
-function crearPersonas(paneles: HTMLElement[], perfil: 'escritorio' | 'movil') {
-  return paneles.map((panel) => {
-    const persona = personaDe(panel.dataset.categoria ?? '');
-    const ranura = panel.querySelector<HTMLElement>('[data-persona]');
-    if (!persona || !ranura) return null;
-    panel.dataset.personaActiva = 'true';
-    return new PersonaEnEscena(ranura, persona, perfil);
-  });
-}
-
-function quitarPersonas(paneles: HTMLElement[], personas: (PersonaEnEscena | null)[]) {
-  personas.forEach((persona, i) => {
-    if (!persona) return;
-    persona.liberar();
-    persona.canvas.remove();
-    delete paneles[i].dataset.personaActiva;
-  });
-}
-
-function avisoDeMuestra(escenario: HTMLElement) {
-  if (!enModoMuestra()) return () => {};
-  const aviso = document.createElement('p');
-  aviso.className = 'necesidades__aviso-muestra';
-  aviso.textContent = 'Secuencia de prueba: aquí irá la persona de cada categoría';
-  escenario.appendChild(aviso);
-  return () => aviso.remove();
-}
+gsap.registerPlugin(ScrollTrigger);
 
 /**
- * Personas fuera de la escena fija (pantallas muy bajas, o cualquier tamaño
- * con movimiento reducido): cada bloque dibuja su persona mientras cruza la
- * pantalla, o un solo cuadro fijo si se pidió reducir el movimiento.
+ * Estudio compartido: la mujer nunca se mueve; un giroscopio de anillos de
+ * cristal gira a su alrededor (WebGL, necesidades-anillos.ts). La foto solo
+ * cambia cuando el anillo principal está de canto frente al rostro y la tapa.
+ * Three.js se carga aparte, solo cuando la sección se acerca; mientras tanto (o
+ * sin WebGL) se ve la foto sola.
  */
-function iniciarPersonasApiladas(raiz: HTMLElement, reducido: boolean) {
-  const paneles = Array.from(raiz.querySelectorAll<HTMLElement>('[data-necesidad]'));
-  const personas = crearPersonas(paneles, window.innerWidth < 768 ? 'movil' : 'escritorio');
-  if (!personas.some(Boolean)) return () => {};
-  const quitarAviso = avisoDeMuestra(raiz.querySelector<HTMLElement>('[data-necesidades-escena]')!);
-  const cerca = new Set<number>();
-  let cuadro = 0;
+function crearEstudio(raiz: HTMLElement, perfil: Perfil) {
+  const estudio = raiz.querySelector<HTMLElement>('[data-estudio]');
+  const categorias = Array.from(raiz.querySelectorAll<HTMLElement>('[data-necesidad]')).map(panel => estadosDe(panel.dataset.categoria ?? ''));
+  if (!estudio || !categorias.some(Boolean)) return null;
+  const lienzo = estudio.querySelector<HTMLCanvasElement>('[data-anillos]')!;
+  const respaldo = estudio.querySelector<HTMLImageElement>('[data-capa="foto"]')!;
+  const fondos = Array.from(raiz.querySelectorAll<HTMLElement>('[data-necesidad]')).map(panel => getComputedStyle(panel).getPropertyValue('--ne-base').trim());
+  const precarga = new Precarga();
+  const fuente = (s: number) => (s < 0 || s > 15 ? null : fuenteDeEstado(categorias, s, perfil));
+  let anillos: import('./necesidades-anillos').Anillos | null = null;
+  let cargando = false, vivo = true, lado = 0, ultimo = '';
+  let alLlegar: () => void = () => {};
+  raiz.dataset.estudio = 'true';
 
-  function pintar() {
-    cuadro = 0;
-    const alto = window.innerHeight;
-    cerca.forEach((i) => {
-      const persona = personas[i];
-      if (!persona) return;
-      if (reducido) return persona.dibujar(1);
-      const r = paneles[i].getBoundingClientRect();
-      const t = limitar((alto - r.top) / (alto + r.height));
-      const e = estadoPersonaCompacta(t);
-      // Las variables van en el mundo completo: la escultura también las usa
-      // para moverse en paralaje detrás de la persona.
-      const mundo = paneles[i];
-      mundo.style.setProperty('--ne-p-x', e.x.toFixed(4));
-      mundo.style.setProperty('--ne-p-escala', e.escala.toFixed(4));
-      mundo.style.setProperty('--ne-p-plano', `${e.plano.toFixed(2)}deg`);
-      mundo.style.setProperty('--ne-p-opacidad', e.opacidad.toFixed(4));
-      persona.dibujar(e.giro);
-    });
-  }
-  const programar = () => { if (!cuadro) cuadro = requestAnimationFrame(pintar); };
-  personas.forEach((p) => { if (p) p.alNecesitarCuadro = programar; });
+  const medir = () => {
+    lado = Math.round(Math.min(estudio.clientWidth, estudio.clientHeight));
+    lienzo.style.width = lienzo.style.height = `${lado}px`;
+    anillos?.medir(lado);
+    ultimo = '';
+  };
+  const cargarAnillos = () => {
+    if (cargando || anillos) return;
+    cargando = true;
+    import('./necesidades-anillos').then(m => {
+      if (!vivo || !m.hayWebGL()) return;
+      anillos = new m.Anillos(lienzo, perfil === 'movil');
+      estudio.dataset.webgl = 'true';
+      medir();
+      alLlegar();
+    }).catch(() => undefined);
+  };
 
-  const observador = new IntersectionObserver((entradas) => {
-    entradas.forEach((entrada) => {
-      const i = paneles.indexOf(entrada.target as HTMLElement);
-      const persona = personas[i];
-      if (!persona) return;
-      if (entrada.isIntersecting) {
-        cerca.add(i);
-        persona.medir();
-        if (reducido) persona.cargarFinal(); else persona.cargar();
-      } else {
-        cerca.delete(i);
-        persona.liberar();
-      }
-    });
-    programar();
-  }, { rootMargin: '60% 0px' });
-  paneles.forEach((panel, i) => { if (personas[i]) observador.observe(panel); });
-  const alRedimensionar = () => { personas.forEach((p) => p?.medir()); programar(); };
-  window.addEventListener('scroll', programar, { passive: true });
-  window.addEventListener('resize', alRedimensionar);
-  return () => {
-    cancelAnimationFrame(cuadro);
-    observador.disconnect();
-    window.removeEventListener('scroll', programar);
-    window.removeEventListener('resize', alRedimensionar);
-    quitarAviso();
-    quitarPersonas(paneles, personas);
+  return {
+    medir,
+    set alLlegar(fn: () => void) { alLlegar = fn; precarga.alLlegar = fn; },
+    pintar(p: number, cerca: boolean) {
+      if (cerca) cargarAnillos();
+      const e = estadoAnillos(p);
+      const vecinas = [fuente(e.estado), fuente(e.estado + 1), fuente(e.estado + 2), fuente(e.estado - 1)];
+      precarga.pedir(cerca ? vecinas : []);
+      anillos?.conservar(vecinas);
+      const url = fuente(e.estado);
+      const lista = !!url && precarga.lista(url);
+      // Respaldo sin WebGL: la foto sola.
+      if (lista && respaldo.getAttribute('src') !== url) respaldo.src = url!;
+      const presencia = url && lista ? e.presencia : 0;
+      estudio.style.setProperty('--ne-e-presencia', presencia.toFixed(4));
+      raiz.style.setProperty('--ne-cristal', Math.sin((e.giro * Math.PI) / 180).toFixed(4));
+      if (!anillos || !url) return;
+      if (!anillos.ponerFoto(url, precarga.imagen(url))) return;
+      const fondo = fondos[Math.floor(e.estado / 2)] ?? '#f6e9eb';
+      anillos.fondo(fondo);
+      const clave = `${e.giro.toFixed(2)}|${url}|${lado}|${fondo}`;
+      if (clave === ultimo) return;
+      ultimo = clave;
+      anillos.pintar(e.giro);
+    },
+    liberar() { precarga.vaciar(); },
+    quitar() {
+      vivo = false;
+      precarga.vaciar();
+      anillos?.destruir();
+      anillos = null;
+      delete raiz.dataset.estudio;
+      delete estudio.dataset.webgl;
+      raiz.style.removeProperty('--ne-cristal');
+      respaldo.removeAttribute('src');
+      lienzo.removeAttribute('style');
+      estudio.style.removeProperty('--ne-e-presencia');
+    },
   };
 }
 
-/** Mejora progresiva: sin JS, en pantallas muy bajas y con movimiento reducido son ocho escenas normales. */
 export function iniciarNecesidades(raiz: HTMLElement) {
-  // La escena fija necesita altura: 620 px en computadora, 560 px en celular y tableta.
-  const fija = window.matchMedia(
-    '(min-width: 1024px) and (min-height: 620px) and (prefers-reduced-motion: no-preference), ' +
-    '(max-width: 1023px) and (min-height: 560px) and (prefers-reduced-motion: no-preference)'
-  );
-  const cursor = window.matchMedia('(hover: hover) and (pointer: fine)');
-  let detener: (() => void) | undefined;
-
-  function iniciarEscena() {
-    const escenario = raiz.querySelector<HTMLElement>('[data-necesidades-escena]')!;
-    const paneles = Array.from(raiz.querySelectorAll<HTMLElement>('[data-necesidad]'));
-    const enlaces = Array.from(raiz.querySelectorAll<HTMLAnchorElement>('[data-necesidad-enlace]'));
-    let cuadro = 0, visible = true, inicio = 0, rango = 1, actual = -2, pendienteMedir = true;
+  const escena = raiz.querySelector<HTMLElement>('[data-necesidades-escena]')!;
+  const paneles = Array.from(raiz.querySelectorAll<HTMLElement>('[data-necesidad]'));
+  const enlaces = Array.from(raiz.querySelectorAll<HTMLAnchorElement>('[data-necesidad-enlace]'));
+  const mm = gsap.matchMedia();
+  mm.add({
+    escritorio: '(min-width: 768px)',
+    fija: '(min-width: 1024px) and (min-height: 620px), (max-width: 1023px) and (min-height: 600px)',
+    reducido: '(prefers-reduced-motion: reduce)',
+  }, context => {
+    const { escritorio, fija, reducido } = context.conditions!;
+    // Sin escena fija (movimiento reducido o pantalla baja) quedan ocho
+    // bloques normales, cada uno con su retrato quieto.
+    if (!fija || reducido) return;
     raiz.dataset.inmersiva = 'true';
-    const personas = crearPersonas(paneles, window.innerWidth < 768 ? 'movil' : 'escritorio');
-    const quitarAviso = personas.some(Boolean) ? avisoDeMuestra(escenario) : () => {};
+    const estudio = crearEstudio(raiz, escritorio ? 'escritorio' : 'movil');
+    let vivo = true, cuadro = 0, progreso = 0, actual = -2, cerca = false;
+    const set = (el: HTMLElement, key: string, value: number) => el.style.setProperty(key, value.toFixed(4));
 
-    function medir() {
-      const margen = parseFloat(getComputedStyle(escenario).top) || 0;
-      inicio = raiz.getBoundingClientRect().top + window.scrollY - margen;
-      rango = Math.max(1, raiz.offsetHeight - escenario.offsetHeight);
-      pendienteMedir = false;
-      personas.forEach((persona) => persona?.medir());
-    }
     function pintar() {
       cuadro = 0;
-      if (pendienteMedir) medir();
-      const p = limitar((window.scrollY - inicio) / rango);
+      if (!vivo) return;
+      const p = progreso;
       const indice = indiceNecesidad(p);
-      const intro = transicion(p, 0, 0.105);
-      const salida = transicion(p, 0.92, 1);
-      escenario.style.setProperty('--ne-intro', String(intro));
-      escenario.style.setProperty('--ne-salida', String(salida));
-      escenario.style.setProperty('--ne-progreso', String(p));
-      const nueva = p >= 0.12 && p < 0.97 ? indice : -1;
+      const activa = p >= 0.12 && p < 0.92 ? indice : -1;
+      // El título ya está completo cuando la sección entra: nada de pantalla vacía.
+      set(escena, '--ne-intro', 1);
+      set(escena, '--ne-salida', transicion(p, 0.94, 1));
+      set(escena, '--ne-progreso', p);
       const focoAnterior = paneles.some(panel => panel.contains(document.activeElement));
       paneles.forEach((panel, i) => {
-        const estado = estadoNecesidad(p, i);
-        panel.style.setProperty('--ne-opacidad', estado.opacidad.toFixed(4));
-        panel.style.setProperty('--ne-texto', estado.texto.toFixed(4));
-        panel.style.visibility = estado.opacidad > 0.001 ? 'visible' : 'hidden';
-        if (nueva !== actual) {
-          panel.inert = nueva !== i;
-          panel.setAttribute('aria-hidden', String(nueva !== i));
+        const e = estadoNecesidad(p, i);
+        const mostrando = e.opacidad > 0.001;
+        if (mostrando || panel.style.visibility !== 'hidden') {
+          set(panel, '--ne-opacidad', e.opacidad);
+          set(panel, '--ne-texto', e.texto);
+          panel.style.visibility = mostrando ? 'visible' : 'hidden';
+          panel.dataset.visible = String(mostrando);
         }
-        const persona = personas[i];
-        if (persona) {
-          // Solo se cargan la categoría en pantalla y sus vecinas; las demás se liberan.
-          const distancia = Math.abs(i - (p - 0.17) / 0.1);
-          if (distancia < 1.3) persona.cargar();
-          else if (distancia > 1.9 && persona.cargando) persona.liberar();
-          const e = estadoPersona(p, i);
-          panel.style.setProperty('--ne-p-x', e.x.toFixed(4));
-          panel.style.setProperty('--ne-p-escala', e.escala.toFixed(4));
-          panel.style.setProperty('--ne-p-plano', `${e.plano.toFixed(2)}deg`);
-          panel.style.setProperty('--ne-p-opacidad', e.opacidad.toFixed(4));
-          panel.style.setProperty('--ne-p-luz', e.luz.toFixed(4));
-          if (e.visible) persona.dibujar(e.giro);
+        if (activa !== actual) {
+          panel.inert = activa !== i;
+          panel.setAttribute('aria-hidden', String(activa !== i));
         }
       });
-      if (nueva !== actual) {
+      estudio?.pintar(p, cerca);
+      if (activa !== actual) {
         enlaces.forEach((enlace, i) => {
-          if (i === nueva) enlace.setAttribute('aria-current', 'step');
+          if (i === activa) enlace.setAttribute('aria-current', 'step');
           else enlace.removeAttribute('aria-current');
         });
-        if (focoAnterior && nueva >= 0) paneles[nueva].querySelector<HTMLAnchorElement>('a')?.focus({ preventScroll: true });
-        actual = nueva;
+        if (focoAnterior) (activa >= 0 ? paneles[activa].querySelector<HTMLAnchorElement>('a') : enlaces[actual])?.focus({ preventScroll: true });
+        actual = activa;
       }
     }
-    function programar() { if (!cuadro && visible) cuadro = requestAnimationFrame(pintar); }
-    personas.forEach((persona) => { if (persona) persona.alNecesitarCuadro = programar; });
-    function redimensionar() { pendienteMedir = true; programar(); }
-    const observador = new IntersectionObserver(([entrada]) => {
-      visible = entrada.isIntersecting;
-      if (visible) { pendienteMedir = true; programar(); }
-    }, { rootMargin: '200px 0px' });
-    const tamano = new ResizeObserver(redimensionar);
-    observador.observe(raiz);
-    tamano.observe(escenario);
-    window.addEventListener('scroll', programar, { passive: true });
-    window.addEventListener('resize', redimensionar);
+    function programar() { if (vivo && !cuadro) cuadro = requestAnimationFrame(pintar); }
+    if (estudio) estudio.alLlegar = programar;
 
-    const saltos = enlaces.map((enlace, i) => {
-      const saltar = (evento: MouseEvent) => {
-        if (evento.metaKey || evento.ctrlKey || evento.shiftKey || evento.altKey || evento.button !== 0) return;
-        evento.preventDefault();
-        medir();
-        window.scrollTo({ top: inicio + centroNecesidad(i) * rango, behavior: 'smooth' });
+    const principal = ScrollTrigger.create({
+      trigger: raiz,
+      start: () => `top top+=${parseFloat(getComputedStyle(escena).top) || 0}`,
+      end: () => `+=${Math.max(1, raiz.offsetHeight - escena.offsetHeight)}`,
+      onUpdate: self => { progreso = self.progress; programar(); },
+      onRefresh: self => { progreso = self.progress; estudio?.medir(); programar(); },
+    });
+    // Las fotos solo se piden cuando la sección está cerca de la pantalla.
+    const observador = new IntersectionObserver(([entry]) => {
+      cerca = entry.isIntersecting;
+      if (!cerca) estudio?.liberar();
+      programar();
+    }, { rootMargin: '600px 0px' });
+    observador.observe(raiz);
+
+    const limpiarSaltos: (() => void)[] = [];
+    const ir = (i: number, suave: boolean) => {
+      window.scrollTo({ top: principal.start + destinoNecesidad(i) * (principal.end - principal.start), behavior: suave ? 'smooth' : 'instant' });
+    };
+    enlaces.forEach((enlace, i) => {
+      const saltar = (event: MouseEvent) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+        event.preventDefault();
+        history.replaceState(null, '', enlace.hash);
+        ir(i, true);
       };
       enlace.addEventListener('click', saltar);
-      return () => enlace.removeEventListener('click', saltar);
+      limpiarSaltos.push(() => enlace.removeEventListener('click', saltar));
     });
-    let cursorCuadro = 0, x = 0, y = 0;
-    const pintarCursor = () => {
-      cursorCuadro = 0;
-      escenario.style.setProperty('--ne-cursor-x', `${x.toFixed(1)}px`);
-      escenario.style.setProperty('--ne-cursor-y', `${y.toFixed(1)}px`);
+    const desdeHash = () => {
+      const i = enlaces.findIndex(enlace => enlace.hash === location.hash);
+      if (i >= 0) ir(i, false);
     };
-    const mover = (e: PointerEvent) => {
-      if (!cursor.matches) return;
-      const r = escenario.getBoundingClientRect();
-      x = ((e.clientX - r.left) / r.width - 0.5) * 10;
-      y = ((e.clientY - r.top) / r.height - 0.5) * 8;
-      if (!cursorCuadro) cursorCuadro = requestAnimationFrame(pintarCursor);
-    };
-    const salir = () => { x = 0; y = 0; if (!cursorCuadro) cursorCuadro = requestAnimationFrame(pintarCursor); };
-    escenario.addEventListener('pointermove', mover, { passive: true });
-    escenario.addEventListener('pointerleave', salir);
-    medir();
-    pintar();
-    document.fonts.ready.then(() => { if (raiz.dataset.inmersiva) redimensionar(); });
+    window.addEventListener('hashchange', desdeHash);
+    limpiarSaltos.push(() => window.removeEventListener('hashchange', desdeHash));
+    desdeHash();
+
+    const medidas = new ResizeObserver(() => { estudio?.medir(); programar(); });
+    medidas.observe(escena);
+    document.fonts.ready.then(() => { if (vivo) { principal.refresh(); programar(); } });
+    estudio?.medir();
+    programar();
     return () => {
-      delete raiz.dataset.inmersiva;
+      vivo = false;
       cancelAnimationFrame(cuadro);
-      cancelAnimationFrame(cursorCuadro);
-      observador.disconnect();
-      tamano.disconnect();
-      window.removeEventListener('scroll', programar);
-      window.removeEventListener('resize', redimensionar);
-      escenario.removeEventListener('pointermove', mover);
-      escenario.removeEventListener('pointerleave', salir);
-      saltos.forEach(limpiar => limpiar());
-      paneles.forEach(panel => { panel.inert = false; panel.removeAttribute('aria-hidden'); panel.style.removeProperty('visibility'); });
-      quitarAviso();
-      quitarPersonas(paneles, personas);
+      observador.disconnect(); medidas.disconnect();
+      principal.kill();
+      limpiarSaltos.forEach(fn => fn());
+      estudio?.quitar();
+      delete raiz.dataset.inmersiva;
+      paneles.forEach(panel => {
+        panel.inert = false; panel.removeAttribute('aria-hidden');
+        delete panel.dataset.visible;
+        panel.style.removeProperty('visibility');
+        panel.style.removeProperty('--ne-opacidad');
+        panel.style.removeProperty('--ne-texto');
+      });
       enlaces.forEach(enlace => enlace.removeAttribute('aria-current'));
     };
-  }
-  const reducido = window.matchMedia('(prefers-reduced-motion: reduce)');
-  function cambiar() {
-    detener?.();
-    detener = fija.matches ? iniciarEscena() : iniciarPersonasApiladas(raiz, reducido.matches);
-  }
-  cambiar();
-  fija.addEventListener('change', cambiar);
-  return () => { fija.removeEventListener('change', cambiar); detener?.(); };
+  });
+  return () => mm.revert();
 }

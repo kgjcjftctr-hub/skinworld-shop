@@ -54,7 +54,7 @@
 .necesidades__cierre, .necesidades__progreso { display: none; }
 /* Escena fija. El motor sólo pone data-inmersiva cuando la pantalla tiene
    altura suficiente y el usuario permite movimiento: la página se queda quieta
-   y el scroll sólo cambia de categoría y mueve a la persona. */
+   y el scroll sólo cambia de categoría y mueve el cristal. */
 .necesidades[data-inmersiva] { height: 600vh; height: 600svh; }
 .necesidades[data-inmersiva] .necesidades__escena { position: sticky; top: var(--sw-header-h); height: calc(100vh - var(--sw-header-h)); height: calc(100svh - var(--sw-header-h)); min-height: 480px; overflow: clip; background: radial-gradient(ellipse at 60% 35%, #f4d3dc, transparent 64%), #fcf8f7; }
 .necesidades[data-inmersiva] .necesidades__escena::after { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: #f5edec; opacity: var(--ne-salida); }
@@ -81,10 +81,10 @@
 .necesidades[data-inmersiva] .necesidades__cantidad,
 .necesidades[data-inmersiva] .necesidades__pie-arte { opacity: var(--ne-texto, 1); }
 .necesidades[data-inmersiva] .necesidades__gigante { opacity: calc(var(--ne-texto, 1) * 0.5); }
-.necesidades[data-inmersiva] [data-persona-activa] .necesidades__gigante { opacity: calc(var(--ne-texto, 1) * 0.32); }
+.necesidades[data-inmersiva][data-estudio] .necesidades__gigante { opacity: calc(var(--ne-texto, 1) * 0.3); }
 .necesidades[data-inmersiva] .necesidades__progreso { display: block; position: absolute; z-index: 7; height: 2px; bottom: 0; left: 0; right: 0; background: #92495f; transform: scaleX(var(--ne-progreso,0)); transform-origin: left; }
 
-/* Computadora: textos a la izquierda, persona a la derecha. */
+/* Computadora: textos a la izquierda, la mujer a la derecha. */
 @media (min-width: 1024px) {
   .necesidades[data-inmersiva] .necesidades__escena { min-height: 540px; }
   .necesidades[data-inmersiva] .necesidades__encabezado { top: 55px; left: var(--ne-gutter); width: 43%; }
@@ -121,7 +121,7 @@
   .necesidades[data-inmersiva] .necesidades__explorar { margin-top: 3px; }
 }
 
-/* Celular y tableta: título arriba, persona al centro, textos abajo y el
+/* Celular y tableta: título arriba, la mujer al centro, textos abajo y el
    índice reducido a números (el nombre sigue en el enlace para lectores). */
 @media (max-width: 1023px) {
   .necesidades[data-inmersiva] .necesidades__avisos p { gap: 4px 14px; padding-top: 6px; padding-bottom: 6px; font-size: 10px; }
@@ -158,58 +158,67 @@
   .necesidades__indice { display: none; }
 }
 
-/* ---------- Personas por necesidad ----------
-   El motor crea el canvas solo cuando la categoría tiene secuencia en
-   src/data/personas-necesidades.json; sin ella, todo se ve como antes. */
-.necesidades__persona { display: none; }
-.necesidades__mundo[data-persona-activa] .necesidades__persona {
-  display: block;
-  position: absolute;
-  z-index: 2;
-  left: 50%;
-  top: 0;
-  height: 100%;
-  aspect-ratio: 3 / 4;
-  opacity: var(--ne-p-opacidad, 1);
-  transform: translate3d(calc(-50% + var(--ne-p-x, 0) * var(--ne-p-recorrido)), 0, 0) perspective(1100px) rotateY(var(--ne-p-plano, 0deg)) scale(var(--ne-p-escala, 1));
-  will-change: transform, opacity;
-  pointer-events: none;
+/* ---------- La misma mujer y el cristal ----------
+   Un estudio compartido sobre los ocho mundos: la cabeza no se mueve; un
+   cristal rosa la cruza de izquierda a derecha y revela el siguiente estado
+   (problema → mejora → problema de la categoría siguiente). */
+
+/* Escenario compartido: los fondos se funden sin tapar al estudio. */
+.necesidades[data-inmersiva] .necesidades__mundo { background: transparent; opacity: 1; isolation: auto; }
+.necesidades[data-inmersiva] .necesidades__ambiente {
+  background: radial-gradient(ellipse at 71% 35%, var(--ne-claro), transparent 48%),
+    radial-gradient(ellipse at 74% 76%, var(--ne-tono), transparent 62%), var(--ne-base);
+  opacity: var(--ne-opacidad, 0);
 }
-.necesidades__persona-lienzo { position: absolute; inset: 0; width: 100%; height: 100%; }
-.necesidades__persona[data-fondo='solido'] .necesidades__persona-lienzo {
-  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 48%, #000 68%, transparent 100%);
-  mask-image: radial-gradient(ellipse 50% 50% at 50% 48%, #000 68%, transparent 100%);
+.necesidades[data-inmersiva] .necesidades__arte { z-index: 1; }
+.necesidades[data-inmersiva] .necesidades__cantidad { z-index: 3; }
+/* Un único grano sobre el escenario evita ocho superficies de pantalla completa. */
+.necesidades[data-inmersiva] .necesidades__mundo::after { display: none; }
+.necesidades[data-inmersiva] .necesidades__escena::before {
+  content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: url('/images/grano.png') repeat; opacity: .025;
 }
-.necesidades__persona-suelo {
-  position: absolute; left: 18%; right: 18%; bottom: -1%; height: 7%; border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(92, 38, 52, 0.26), transparent);
+.necesidades[data-inmersiva] [data-visible='true'] .necesidades__ambiente { will-change: opacity; }
+/* Con la mujer en escena, la escultura queda de fondo y se desplaza apenas con el cristal. */
+.necesidades[data-inmersiva] .necesidades__escultura { opacity: calc(.7 * var(--ne-opacidad, 0)); }
+.necesidades[data-inmersiva][data-estudio] .necesidades__escultura {
+  opacity: calc(.3 * var(--ne-opacidad, 0));
+  transform: translate3d(calc(var(--ne-cristal, 0) * -36px), 0, 0) rotate(var(--ne-angulo));
 }
-.necesidades__persona-luz { display: none; }
-/* Con persona, la escultura pasa a ser fondo: más tenue y en paralaje. */
-.necesidades__mundo[data-persona-activa] .necesidades__escultura { opacity: 0.5; }
-.necesidades__mundo[data-persona-activa] .necesidades__gigante { opacity: 0.32; }
-.necesidades__mundo[data-persona-activa] .necesidades__perla { display: none; }
-.necesidades__aviso-muestra {
-  position: absolute; z-index: 8; left: 50%; top: 44px; transform: translateX(-50%);
-  margin: 0; padding: 6px 12px; border-radius: 999px; white-space: nowrap;
-  background: rgba(51, 35, 43, 0.82); color: #fff; font-size: 11px; font-weight: 600;
+.necesidades[data-inmersiva][data-estudio] .necesidades__perla { display: none; }
+
+.necesidades__estudio { display: none; }
+.necesidades[data-inmersiva][data-estudio] .necesidades__estudio {
+  display: flex; align-items: center; justify-content: center;
+  position: absolute; z-index: 2; pointer-events: none;
+  opacity: var(--ne-e-presencia, 0);
+}
+/* Los anillos y la foto se funden con el fondo hacia los bordes. */
+.necesidades__anillos, .necesidades__foto {
+  -webkit-mask-image: radial-gradient(circle closest-side, #000 84%, transparent 100%);
+  mask-image: radial-gradient(circle closest-side, #000 84%, transparent 100%);
+}
+.necesidades__anillos { display: block; }
+/* Sin WebGL (o mientras carga): la foto sola, del tamaño que tendría dentro de los anillos. */
+.necesidades__foto { position: absolute; height: 82%; aspect-ratio: 1; max-width: 82%; object-fit: cover; }
+.necesidades__foto:not([src]), .necesidades__estudio[data-webgl='true'] .necesidades__foto { display: none; }
+@media (min-width: 1024px) {
+  .necesidades[data-inmersiva][data-estudio] .necesidades__estudio { left: 38%; right: 0; top: 70px; bottom: 112px; }
 }
 @media (max-width: 1023px) {
-  .necesidades__aviso-muestra { top: 4px; font-size: 10px; }
+  .necesidades[data-inmersiva][data-estudio] .necesidades__estudio { left: 0; right: 0; top: clamp(96px, 12svh, 130px); bottom: 258px; }
+  .necesidades[data-inmersiva] .necesidades__escultura { left: 14%; }
 }
-/* Distancia que recorre la persona al entrar y salir (x de -1 a 1). */
-.necesidades { --ne-p-recorrido: 85vw; }
-.necesidades[data-inmersiva] { --ne-p-recorrido: 92vw; }
-@media (min-width: 1024px) { .necesidades[data-inmersiva] { --ne-p-recorrido: 64vw; } }
-/* Barrido de luz que acompaña el giro. */
-.necesidades[data-inmersiva] [data-persona-activa] .necesidades__persona-luz {
-  display: block; position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(100deg, transparent 38%, rgba(255, 250, 252, 0.28) 50%, transparent 62%);
-  transform: translateX(calc((var(--ne-p-luz, 0.5) - 0.5) * 120%));
-  -webkit-mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
-  mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
-  mix-blend-mode: soft-light;
+
+/* Sin escena fija: retrato quieto con la mejora, dentro del arte de cada bloque. */
+.necesidades__retrato { position: absolute; z-index: 2; left: 50%; top: 50%; height: 92%; width: auto; aspect-ratio: 1; max-width: 92%; transform: translate(-50%, -50%); object-fit: cover; border-radius: 50%; box-shadow: 0 0 0 3px rgba(255, 255, 255, .7), 0 0 0 9px rgba(240, 176, 204, .45), 0 30px 60px -20px rgba(120, 50, 80, .3); }
+.necesidades__mundo:has(.necesidades__retrato) .necesidades__escultura { opacity: .35; }
+.necesidades__mundo:has(.necesidades__retrato) .necesidades__perla { display: none; }
+.necesidades[data-inmersiva] .necesidades__retrato { display: none; }
+
+.necesidades__indice a:focus-visible, .necesidades__explorar:focus-visible, .necesidades__inferior a:focus-visible {
+  outline: 2px solid #743950; outline-offset: 4px;
 }
 @media (prefers-reduced-motion: reduce) {
-  .necesidades__mundo[data-persona-activa] .necesidades__persona { transform: translateX(-50%); opacity: 1; }
+  .necesidades__explorar svg { transition: none; }
 }

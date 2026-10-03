@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap">
-  <title>SkinWorld Task Center</title>
+  <title>Centro de tareas de SkinWorld</title>
   <style>
     /* Tablero de trabajo: resumen arriba, filtros fijos, rejilla de tarjetas.
        Paleta tomada del rosa y el oro de la tienda, sobre papel cálido. */
@@ -126,11 +126,11 @@
 <body>
   <main class="hoja">
     <header>
-      <h1>SkinWorld Task Center</h1>
+      <h1>Centro de tareas de SkinWorld</h1>
       <p class="intro">Panel maestro de pendientes de la tienda: lo que está roto, lo que se puede mejorar y lo que falta confirmar. Cada tarea conserva su identificador y su historial, así que se actualiza en lugar de duplicarse.</p>
       <p class="sello">
-        <span>Última inspección <b>2026-10-01 a las 15:46</b></span>
-        <span>Por <b>Claude Code building the needs-section personas</b></span>
+        <span>Última inspección <b>2026-10-03 a las 13:24</b></span>
+        <span>Por <b>Claude Code, al pasar el Centro de tareas al español y cerrar la versión de anillos de la sección de necesidades</b></span>
         <span>Fuente <b>SKINWORLD_TASKS.json</b></span>
       </p>
 
@@ -172,12 +172,12 @@
       <div class="grupo" data-eje="categoria">
         <b>Área</b>
         <button data-valor="todo" aria-pressed="true">Todas</button>
-        <button data-valor="Accessibility" aria-pressed="false">Accessibility</button><button data-valor="Code quality" aria-pressed="false">Code quality</button><button data-valor="Content and legal" aria-pressed="false">Content and legal</button><button data-valor="Ecommerce" aria-pressed="false">Ecommerce</button><button data-valor="Operations" aria-pressed="false">Operations</button><button data-valor="Performance" aria-pressed="false">Performance</button><button data-valor="Reliability" aria-pressed="false">Reliability</button><button data-valor="SEO" aria-pressed="false">SEO</button><button data-valor="Security" aria-pressed="false">Security</button>
+        <button data-valor="Accesibilidad" aria-pressed="false">Accesibilidad</button><button data-valor="Calidad del código" aria-pressed="false">Calidad del código</button><button data-valor="Confiabilidad" aria-pressed="false">Confiabilidad</button><button data-valor="Contenido y legal" aria-pressed="false">Contenido y legal</button><button data-valor="Operación" aria-pressed="false">Operación</button><button data-valor="Rendimiento" aria-pressed="false">Rendimiento</button><button data-valor="SEO" aria-pressed="false">SEO</button><button data-valor="Seguridad" aria-pressed="false">Seguridad</button><button data-valor="Tienda en línea" aria-pressed="false">Tienda en línea</button>
       </div>
     </div>
 
     <div class="rejilla" id="rejilla">
-      <article class="tarea" data-estado="requires_verification" data-prioridad="P0" data-categoria="Ecommerce">
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P0" data-categoria="Tienda en línea">
         <div class="tarea-cab">
           <code>SW-002</code>
           <div class="etiquetas">
@@ -185,20 +185,20 @@
             <span class="pill est requires_verification">Requiere verificación</span>
           </div>
         </div>
-        <h3>Decide and enforce inventory reservation and depletion</h3>
-        <p class="clasif">Ecommerce · Requiere confirmación</p>
-        <p class="detalle">Checkout checks only the current in_stock flag. The inspected payment and webhook flow does not reserve inventory or decrement quantities. This is correct only if inventory is intentionally managed as a simple available/unavailable flag.</p>
+        <h3>Decidir y aplicar cómo se aparta y descuenta el inventario</h3>
+        <p class="clasif">Tienda en línea · Requiere confirmación</p>
+        <p class="detalle">El pago solo revisa la marca in_stock del producto. El flujo de pago y webhook que se revisó no aparta inventario ni descuenta cantidades. Eso solo es correcto si el inventario se maneja a propósito como un simple disponible/no disponible.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
-            <p><strong>Dónde está</strong><br>src/app/api/checkout/route.ts<br>src/app/api/stripe/webhook/route.ts<br>Supabase products/orders</p>
-            <p><strong>Terminada cuando</strong><br>The owner confirms the inventory model. If quantities are required, payment completion atomically updates stock, overselling is prevented under concurrent checkout, and the admin shows the resulting stock state.</p>
+            <p><strong>Dónde está</strong><br>src/app/api/checkout/route.ts<br>src/app/api/stripe/webhook/route.ts<br>Productos y pedidos en Supabase</p>
+            <p><strong>Terminada cuando</strong><br>La dueña confirma el modelo de inventario. Si se necesitan cantidades, al completarse el pago se descuenta el stock de forma atómica, no se vende de más aunque haya pagos simultáneos y el panel muestra el stock resultante.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Needs business-rule confirmation; not asserted as a defect.</li></ul>
+            <ul><li><span>2026-09-30</span> Necesita que se confirme la regla del negocio; no se afirma que sea un defecto.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="requires_verification" data-prioridad="P0" data-categoria="Operations">
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P0" data-categoria="Operación">
         <div class="tarea-cab">
           <code>SW-009</code>
           <div class="etiquetas">
@@ -206,20 +206,20 @@
             <span class="pill est requires_verification">Requiere verificación</span>
           </div>
         </div>
-        <h3>Verify live payment, webhook, email, and order-fulfillment configuration</h3>
-        <p class="clasif">Operations · Requiere confirmación</p>
-        <p class="detalle">Live configuration must be confirmed against the real accounts rather than assumed. As of 2026-09-30 the Stripe webhook endpoint, the order write and the store notification email are verified working in production; what remains unconfirmed is the switch to live Stripe keys (tracked separately in SW-014) and customer-facing email delivery (tracked separately in SW-015).</p>
+        <h3>Verificar en vivo el pago, el webhook, los correos y el surtido de pedidos</h3>
+        <p class="clasif">Operación · Requiere confirmación</p>
+        <p class="detalle">La configuración en vivo hay que confirmarla contra las cuentas reales, no suponerla. Al 2026-09-30 están verificados en producción el webhook de Stripe, el guardado del pedido y el correo de aviso a la tienda; falta confirmar el cambio a llaves reales de Stripe (se sigue aparte en SW-014) y la entrega de correos a los clientes (se sigue aparte en SW-015).</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
-            <p><strong>Dónde está</strong><br>.env.local (names not values)<br>src/lib/stripe.ts<br>src/lib/correo.ts<br>src/app/api/stripe/webhook/route.ts<br>src/app/api/admin/probar-correo/route.ts</p>
-            <p><strong>Terminada cuando</strong><br>A controlled production or staging purchase proves payment, order persistence, staff notification, customer confirmation, status-update emails, and cancellation behavior; deployment logs show the webhook arriving; and secrets remain server-only.</p>
+            <p><strong>Dónde está</strong><br>.env.local (solo los nombres, no los valores)<br>src/lib/stripe.ts<br>src/lib/correo.ts<br>src/app/api/stripe/webhook/route.ts<br>src/app/api/admin/probar-correo/route.ts</p>
+            <p><strong>Terminada cuando</strong><br>Una compra controlada en producción o en pruebas demuestra el pago, el guardado del pedido, el aviso al equipo, la confirmación al cliente, los correos de cambio de estado y la cancelación; los registros del despliegue muestran que llega el webhook, y los secretos siguen solo en el servidor.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Marked requires verification; no credentials or live external state were inspected.</li><li><span>2026-09-30</span> Partially verified in production: a real test purchase produced a stored order and the store notification email arrived. Remaining unknowns split into SW-014 (live payments) and SW-015 (customer email).</li><li><span>2026-09-30</span> Redesign verification reached a correctly populated Stripe Checkout session from home, search, product, cart and postal-code address entry. It remains a test-mode session and no payment was completed, so webhook persistence and both email recipients were not re-verified in this pass.</li></ul>
+            <ul><li><span>2026-09-30</span> Se marcó como requiere verificación; no se revisaron credenciales ni el estado de servicios externos en vivo.</li><li><span>2026-09-30</span> Verificado en parte en producción: una compra de prueba real generó un pedido guardado y llegó el correo de aviso a la tienda. Lo que queda por confirmar se separó en SW-014 (pagos reales) y SW-015 (correo al cliente).</li><li><span>2026-09-30</span> La verificación del rediseño llegó a una sesión de pago de Stripe bien llenada desde inicio, búsqueda, producto, carrito y captura de dirección por código postal. Sigue siendo una sesión en modo de prueba y no se completó ningún pago, así que en esta pasada no se volvieron a verificar el guardado por webhook ni los dos destinatarios de correo.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P0" data-categoria="Operations">
+      <article class="tarea" data-estado="pending" data-prioridad="P0" data-categoria="Operación">
         <div class="tarea-cab">
           <code>SW-014</code>
           <div class="etiquetas">
@@ -227,20 +227,20 @@
             <span class="pill est pending">Pendiente</span>
           </div>
         </div>
-        <h3>Switch Stripe from test mode to live payments</h3>
-        <p class="clasif">Operations · Problema detectado</p>
-        <p class="detalle">Queried live on 2026-09-30: the configured Stripe key is a test key and the account reports charges_enabled=false and payouts_enabled=false. Real customers therefore cannot pay — the storefront takes orders only with Stripe test cards. Activating the account requires the owner to connect a bank account, after which the live secret and publishable keys must replace the test ones.</p>
+        <h3>Pasar Stripe del modo de prueba a pagos reales</h3>
+        <p class="clasif">Operación · Problema detectado</p>
+        <p class="detalle">Consultado en vivo el 2026-09-30: la llave de Stripe configurada es de prueba y la cuenta reporta charges_enabled=false y payouts_enabled=false. Por eso los clientes reales no pueden pagar: la tienda solo acepta pedidos con tarjetas de prueba de Stripe. Para activar la cuenta, la dueña tiene que conectar una cuenta bancaria; después, las llaves reales (secreta y pública) deben reemplazar a las de prueba.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
-            <p><strong>Dónde está</strong><br>src/lib/stripe.ts<br>Vercel environment variables<br>Stripe account</p>
-            <p><strong>Terminada cuando</strong><br>The Stripe account reports charges_enabled=true, live keys are set in Vercel, a live-mode webhook endpoint is registered for https://www.skinworld.shop/api/stripe/webhook with its own signing secret stored as STRIPE_WEBHOOK_SECRET, and one real low-value purchase is completed, recorded and refunded.</p>
+            <p><strong>Dónde está</strong><br>src/lib/stripe.ts<br>Variables de entorno de Vercel<br>Cuenta de Stripe</p>
+            <p><strong>Terminada cuando</strong><br>La cuenta de Stripe reporta charges_enabled=true, las llaves reales están en Vercel, hay un webhook en modo real registrado en https://www.skinworld.shop/api/stripe/webhook con su propio secreto de firma guardado como STRIPE_WEBHOOK_SECRET, y se completa, registra y reembolsa una compra real de bajo monto.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Unchanged and still blocked on the owner: activating live payments requires connecting a bank account to the Stripe account, which only the owner can do.</li><li><span>2026-09-30</span> Rechecked against the configured Stripe account: the keys are still test-mode and the account reports charges_enabled=false, payouts_enabled=false and details_submitted=false. The redesigned checkout reaches Stripe correctly, but only as an explicit test environment.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la reinspección del 2026-09-30.</li><li><span>2026-09-30</span> Sin cambios y aún depende de la dueña: activar los pagos reales requiere conectar una cuenta bancaria a Stripe, y eso solo lo puede hacer ella.</li><li><span>2026-09-30</span> Se volvió a revisar la cuenta de Stripe configurada: las llaves siguen en modo de prueba y la cuenta reporta charges_enabled=false, payouts_enabled=false y details_submitted=false. El pago rediseñado llega bien a Stripe, pero solo como entorno de prueba declarado.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P1" data-categoria="Content and legal">
+      <article class="tarea" data-estado="pending" data-prioridad="P1" data-categoria="Contenido y legal">
         <div class="tarea-cab">
           <code>SW-008</code>
           <div class="etiquetas">
@@ -248,20 +248,20 @@
             <span class="pill est pending">Pendiente</span>
           </div>
         </div>
-        <h3>Review legal copy for business accuracy and medical relevance</h3>
-        <p class="clasif">Content and legal · Problema detectado</p>
-        <p class="detalle">The terms describe a service about physical state and nutrition, which does not match a dermatology ecommerce site. Legal pages also need owner/legal review to confirm the responsible entity, address, providers, returns, delivery commitments, and effective dates. Specific gap confirmed in the privacy notice: the responsible party is given only as &quot;Skinworld, con domicilio en la Ciudad de México&quot;, without the legal entity name (razón social), RFC or full address that the LFPDPPP requires.</p>
+        <h3>Revisar los textos legales para que correspondan al negocio y a la dermatología</h3>
+        <p class="clasif">Contenido y legal · Problema detectado</p>
+        <p class="detalle">Los términos describen un servicio sobre estado físico y nutrición, que no corresponde a una tienda dermatológica. Las páginas legales también necesitan revisión de la dueña o de un abogado para confirmar el responsable, domicilio, proveedores, devoluciones, compromisos de entrega y fechas de vigencia. Falta concreta confirmada en el aviso de privacidad: el responsable aparece solo como &quot;Skinworld, con domicilio en la Ciudad de México&quot;, sin la razón social, el RFC ni el domicilio completo que exige la LFPDPPP.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/app/terminos/page.tsx<br>src/app/privacidad/page.tsx<br>src/app/envios/page.tsx</p>
-            <p><strong>Terminada cuando</strong><br>A qualified owner or legal reviewer approves text tailored to SkinWorld, and all operational claims match the checkout, shipping, privacy, and provider configuration actually in use.</p>
+            <p><strong>Terminada cuando</strong><br>La dueña o un revisor legal calificado aprueba textos hechos para SkinWorld, y todo lo que dicen sobre la operación coincide con el pago, los envíos, la privacidad y los proveedores que de verdad se usan.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected wording mismatch plus legal facts requiring verification.</li><li><span>2026-09-30</span> Recorded the concrete missing fields in the privacy notice: razón social, RFC and full legal domicile.</li><li><span>2026-09-30</span> Unchanged and still blocked on the owner: completion needs the legal entity name, RFC and full domicile, plus a qualified reviewer. No code change can close this one.</li><li><span>2026-09-30</span> Redesign re-audit found two additional operational mismatches: the terms still describe physical and nutritional status rather than dermatology ecommerce, and the shipping policy says the tracking number is sent with purchase confirmation even though the system can only send it after staff capture it when marking the order shipped.</li></ul>
+            <ul><li><span>2026-09-30</span> Se detectó un texto que no corresponde y datos legales que hay que verificar.</li><li><span>2026-09-30</span> Se anotaron los datos que faltan en el aviso de privacidad: razón social, RFC y domicilio legal completo.</li><li><span>2026-09-30</span> Sin cambios y aún depende de la dueña: para cerrarla hacen falta la razón social, el RFC y el domicilio completo, además de un revisor calificado. Ningún cambio de código la puede cerrar.</li><li><span>2026-09-30</span> La nueva auditoría del rediseño encontró otras dos diferencias con la operación: los términos siguen hablando de estado físico y nutrición en lugar de una tienda dermatológica, y la política de envíos dice que el número de guía se manda con la confirmación de compra, cuando el sistema solo puede mandarlo después de que el equipo lo captura al marcar el pedido como enviado.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="requires_verification" data-prioridad="P1" data-categoria="Ecommerce">
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P1" data-categoria="Tienda en línea">
         <div class="tarea-cab">
           <code>SW-013</code>
           <div class="etiquetas">
@@ -269,20 +269,20 @@
             <span class="pill est requires_verification">Requiere verificación</span>
           </div>
         </div>
-        <h3>Verify all buyer-visible paths after catalog changes</h3>
-        <p class="clasif">Ecommerce · Requiere confirmación</p>
-        <p class="detalle">The homepage is ISR-cached for one hour while catalog and product views use current server data. This has previously produced stale featured prices after a catalog update. The current source is configured with revalidate = 3600, but freshness must be checked whenever prices or featured products change.</p>
+        <h3>Verificar todo lo que ve el comprador después de cambiar el catálogo</h3>
+        <p class="clasif">Tienda en línea · Requiere confirmación</p>
+        <p class="detalle">La página de inicio se guarda en caché (ISR) por una hora, mientras que el catálogo y el producto usan datos actuales del servidor. Antes esto ya mostró precios destacados viejos después de actualizar el catálogo. El código actual tiene revalidate = 3600, pero hay que revisar que esté al día cada vez que cambien precios o productos destacados.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/app/page.tsx<br>src/components/sections/featured-products.tsx<br>src/app/tienda/page.tsx<br>src/app/producto/[slug]/page.tsx<br>src/app/carrito/page.tsx</p>
-            <p><strong>Terminada cuando</strong><br>After the next approved catalog change, homepage featured cards, catalog, product detail, cart, and hosted checkout all display the intended price and stock state after the documented cache window or an approved revalidation process.</p>
+            <p><strong>Terminada cuando</strong><br>Después del siguiente cambio de catálogo aprobado, las tarjetas destacadas del inicio, el catálogo, el detalle de producto, el carrito y el pago en Stripe muestran el precio y la existencia correctos, pasado el tiempo de caché documentado o con una revalidación aprobada.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Existing operational risk retained as a verification task; no present mismatch asserted.</li><li><span>2026-09-30</span> Partial live evidence gathered: /api/codigo-postal returns correct data on production for CDMX, Michoacán, Oaxaca and Sonora, and a checkout session is created successfully from the live site. Full buyer-path verification after catalog changes is still outstanding.</li><li><span>2026-09-30</span> The home page brand section is no longer a hand-written list: it is built from the catalog, so adding a laboratory in the panel now updates the front page by itself. Verified locally at desktop and phone widths, and each brand links to the shop already filtered — the SESDERMA link returns exactly the 31 products the home page promises.</li></ul>
+            <ul><li><span>2026-09-30</span> Riesgo de operación que se conserva como tarea de verificación; no se afirma que hoy haya una diferencia.</li><li><span>2026-09-30</span> Se reunió evidencia parcial en vivo: /api/codigo-postal devuelve datos correctos en producción para CDMX, Michoacán, Oaxaca y Sonora, y desde el sitio en vivo se crea bien una sesión de pago. Falta la verificación completa del recorrido del comprador después de un cambio de catálogo.</li><li><span>2026-09-30</span> La sección de marcas del inicio ya no es una lista escrita a mano: se arma desde el catálogo, así que al agregar un laboratorio en el panel la portada se actualiza sola. Verificado en local en computadora y celular; cada marca lleva a la tienda ya filtrada, y el enlace de SESDERMA devuelve exactamente los 31 productos que promete el inicio.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="requires_verification" data-prioridad="P1" data-categoria="Operations">
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P1" data-categoria="Operación">
         <div class="tarea-cab">
           <code>SW-015</code>
           <div class="etiquetas">
@@ -290,20 +290,20 @@
             <span class="pill est requires_verification">Requiere verificación</span>
           </div>
         </div>
-        <h3>Confirm Resend domain verification and customer email delivery</h3>
-        <p class="clasif">Operations · Requiere confirmación</p>
-        <p class="detalle">RESEND_API_KEY and CONTACT_NOTIFY_EMAIL are set in Vercel and a store notification was received on 2026-09-29, so sending works — but it landed in spam because it was sent from the shared onboarding@resend.dev sender. The three Resend DNS records were confirmed present in public DNS on 2026-09-30 (TXT resend._domainkey plus CNAMEs rsend and send, both to forge.rmta.net), and the Hostinger MX and SPF records were confirmed unchanged. What is not confirmed is whether Resend marked the domain Verified and whether CONTACT_FROM_EMAIL was set; until both are true, Resend refuses mail to anyone other than the account owner, so order confirmations and packed/shipped notices never reach customers.</p>
+        <h3>Confirmar el dominio en Resend y la entrega de correos a clientes</h3>
+        <p class="clasif">Operación · Requiere confirmación</p>
+        <p class="detalle">RESEND_API_KEY y CONTACT_NOTIFY_EMAIL están en Vercel y el 2026-09-29 llegó un aviso a la tienda, así que el envío funciona, pero cayó en spam porque salió del remitente compartido onboarding@resend.dev. El 2026-09-30 se confirmó que los tres registros DNS de Resend están publicados (TXT resend._domainkey y los CNAME rsend y send, ambos hacia forge.rmta.net), y que los registros MX y SPF de Hostinger no cambiaron. Falta confirmar si Resend ya marcó el dominio como verificado y si se configuró CONTACT_FROM_EMAIL; mientras no se cumplan las dos cosas, Resend no manda correo a nadie que no sea la dueña de la cuenta, así que las confirmaciones de pedido y los avisos de empacado y enviado nunca llegan a los clientes.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
-            <p><strong>Dónde está</strong><br>src/lib/correo.ts<br>src/lib/pedidos.ts<br>Vercel environment variables<br>Hostinger DNS zone</p>
-            <p><strong>Terminada cuando</strong><br>Resend shows skinworld.shop as Verified, CONTACT_FROM_EMAIL is set in Vercel, and a test sent from the admin panel to an outside address arrives in the inbox rather than spam.</p>
+            <p><strong>Dónde está</strong><br>src/lib/correo.ts<br>src/lib/pedidos.ts<br>Variables de entorno de Vercel<br>Zona DNS en Hostinger</p>
+            <p><strong>Terminada cuando</strong><br>Resend muestra skinworld.shop como verificado, CONTACT_FROM_EMAIL está en Vercel y una prueba enviada desde el panel a una dirección externa llega a la bandeja de entrada y no a spam.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> The local environment used for redesign verification has none of RESEND_API_KEY, CONTACT_NOTIFY_EMAIL or CONTACT_FROM_EMAIL, so current production delivery could not be rechecked from this checkout. Code paths for store and customer mail exist; external inbox delivery remains unproven.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la reinspección del 2026-09-30.</li><li><span>2026-09-30</span> El entorno local usado para verificar el rediseño no tiene RESEND_API_KEY, CONTACT_NOTIFY_EMAIL ni CONTACT_FROM_EMAIL, así que desde esta copia no se pudo volver a revisar la entrega en producción. El código para los correos de la tienda y del cliente existe; la entrega a bandejas externas sigue sin demostrarse.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="requires_verification" data-prioridad="P1" data-categoria="Ecommerce">
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P1" data-categoria="Tienda en línea">
         <div class="tarea-cab">
           <code>SW-026</code>
           <div class="etiquetas">
@@ -311,20 +311,20 @@
             <span class="pill est requires_verification">Requiere verificación</span>
           </div>
         </div>
-        <h3>Reconcile the &quot;free shipping in CDMX&quot; promise with what checkout charges</h3>
-        <p class="clasif">Ecommerce · Requiere confirmación</p>
-        <p class="detalle">The top bar, the closing call to action and the shipping page promise free shipping in CDMX. The checkout route charges a $100 shipping line to every order of $500 or less regardless of state, and the cart shows the same rule. A CDMX customer buying the $370 Cicaplast pays $470. Either the copy or the rule is wrong; which one is a business decision.</p>
+        <h3>Hacer coincidir la promesa de &quot;envío gratis en CDMX&quot; con lo que cobra el pago</h3>
+        <p class="clasif">Tienda en línea · Requiere confirmación</p>
+        <p class="detalle">La barra superior, la llamada final y la página de envíos prometen envío gratis en CDMX. La ruta de pago cobra una línea de envío de $100 a todo pedido de $500 o menos sin importar el estado, y el carrito muestra la misma regla. Un cliente de CDMX que compra el Cicaplast de $370 paga $470. O el texto o la regla está mal; cuál de los dos es una decisión del negocio.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/components/header.tsx<br>src/components/sections/cta.tsx<br>src/app/envios/page.tsx<br>src/app/api/checkout/route.ts<br>src/app/carrito/page.tsx</p>
-            <p><strong>Terminada cuando</strong><br>The owner states the real shipping policy, and the storefront copy and the checkout rule both match it.</p>
+            <p><strong>Terminada cuando</strong><br>La dueña dice cuál es la política real de envío, y tanto los textos de la tienda como la regla del pago coinciden con ella.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Found in the redesign audit while tracing the cart summary back to /api/checkout. Not changed: the redesign will keep the current wording until the owner decides.</li><li><span>2026-09-30</span> Reconfirmed in the redesigned flow: checkout still decides shipping only from subtotal and never reads the state, while four customer-facing locations promise free CDMX shipping. This remains a business decision, not a presentation fix.</li></ul>
+            <ul><li><span>2026-09-30</span> Se encontró en la auditoría del rediseño al seguir el resumen del carrito hasta /api/checkout. No se cambió: el rediseño conserva el texto actual hasta que la dueña decida.</li><li><span>2026-09-30</span> Reconfirmado en el flujo rediseñado: el pago sigue decidiendo el envío solo por el subtotal y nunca lee el estado, mientras cuatro lugares visibles para el cliente prometen envío gratis en CDMX. Sigue siendo una decisión del negocio, no un arreglo de presentación.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P1" data-categoria="Ecommerce">
+      <article class="tarea" data-estado="pending" data-prioridad="P1" data-categoria="Tienda en línea">
         <div class="tarea-cab">
           <code>SW-032</code>
           <div class="etiquetas">
@@ -332,20 +332,20 @@
             <span class="pill est pending">Pendiente</span>
           </div>
         </div>
-        <h3>Correct compare-at prices that are lower than the current price</h3>
-        <p class="clasif">Ecommerce · Problema detectado</p>
-        <p class="detalle">Two current catalog rows have compare_at_price_with_iva below price_with_iva, so the storefront labels a lower amount as &quot;Antes&quot;: Protector Solar SPF 50 is $760 with $754 before, and Sérum Hidratante Intenso is $1,250 with $986 before. The card suppresses a negative discount badge but still prints the contradictory struck-through price.</p>
+        <h3>Corregir precios &quot;Antes&quot; que son menores que el precio actual</h3>
+        <p class="clasif">Tienda en línea · Problema detectado</p>
+        <p class="detalle">Dos productos del catálogo actual tienen compare_at_price_with_iva menor que price_with_iva, así que la tienda muestra como &quot;Antes&quot; una cantidad más baja: el Protector Solar SPF 50 cuesta $760 con un antes de $754, y el Sérum Hidratante Intenso cuesta $1,250 con un antes de $986. La tarjeta oculta la etiqueta de descuento negativo, pero sigue mostrando el precio tachado contradictorio.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
-            <p><strong>Dónde está</strong><br>Supabase products table<br>src/components/product-card.tsx</p>
-            <p><strong>Terminada cuando</strong><br>The owner confirms the intended regular and current price for both products, the catalog is corrected, and cards never render a compare-at amount that is less than or equal to the current amount.</p>
+            <p><strong>Dónde está</strong><br>Tabla products de Supabase<br>src/components/product-card.tsx</p>
+            <p><strong>Terminada cuando</strong><br>La dueña confirma el precio regular y el actual de los dos productos, el catálogo se corrige y las tarjetas nunca muestran un precio &quot;Antes&quot; menor o igual al actual.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during final redesign browser verification and confirmed by a read-only query over all 201 catalog rows. No price was changed because the correct business values are unknown.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la verificación final del rediseño en el navegador y confirmado con una consulta de solo lectura de los 201 productos. No se cambió ningún precio porque no se conocen los valores correctos del negocio.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="requires_verification" data-prioridad="P2" data-categoria="Accessibility">
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P2" data-categoria="Accesibilidad">
         <div class="tarea-cab">
           <code>SW-010</code>
           <div class="etiquetas">
@@ -353,20 +353,20 @@
             <span class="pill est requires_verification">Requiere verificación</span>
           </div>
         </div>
-        <h3>Verify responsive and keyboard/screen-reader journeys</h3>
-        <p class="clasif">Accessibility · Requiere confirmación</p>
-        <p class="detalle">Manual browser checks now pass at desktop and 390 × 844 px: search and filter dialogs contain and restore focus, Escape closes them, mobile cards and product detail fit, cart controls have accessible names, and shipping labels are associated with their fields. A full screen-reader and automated accessibility scan is still outstanding.</p>
+        <h3>Verificar los recorridos en celular, con teclado y con lector de pantalla</h3>
+        <p class="clasif">Accesibilidad · Requiere confirmación</p>
+        <p class="detalle">Las revisiones manuales en el navegador ya pasan en computadora y a 390 × 844 px: los diálogos de búsqueda y filtros retienen y devuelven el foco, Escape los cierra, las tarjetas y el detalle de producto caben en celular, los controles del carrito tienen nombre accesible y las etiquetas del envío están ligadas a sus campos. Falta una revisión completa con lector de pantalla y un análisis automático de accesibilidad.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/components/header.tsx<br>src/components/search-modal.tsx<br>src/components/filters.tsx<br>src/components/checkout/shipping-address-form.tsx<br>src/app/carrito/page.tsx</p>
-            <p><strong>Terminada cuando</strong><br>The main buyer routes work at mobile and desktop breakpoints using keyboard only; focus is trapped/restored correctly in dialogs; form errors are announced; and an accessibility scan plus manual checks has no unresolved critical issue.</p>
+            <p><strong>Terminada cuando</strong><br>Los recorridos principales de compra funcionan en celular y computadora solo con teclado; el foco se retiene y se devuelve bien en los diálogos; los errores de los formularios se anuncian, y un análisis de accesibilidad más revisiones manuales no dejan ningún problema crítico sin resolver.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Browser/device testing was outside this source-only audit.</li><li><span>2026-09-30</span> Advanced with browser evidence: desktop and 390px phone journeys were exercised through search, product, cart and checkout; dialog focus trapping and restoration passed. Shipping labels, postal-code status messages and remaining low-contrast checkout copy were fixed. Kept requires_verification until a screen-reader and automated scan are run.</li></ul>
+            <ul><li><span>2026-09-30</span> Las pruebas en navegador y dispositivos quedaron fuera de esta auditoría, que fue solo de código.</li><li><span>2026-09-30</span> Avanzó con evidencia del navegador: se recorrieron búsqueda, producto, carrito y pago en computadora y en un celular de 390 px; la retención y devolución del foco en los diálogos pasó. Se corrigieron las etiquetas del envío, los mensajes de estado del código postal y los textos de bajo contraste que quedaban en el pago. Sigue en requiere verificación hasta hacer la revisión con lector de pantalla y el análisis automático.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="requires_verification" data-prioridad="P2" data-categoria="Content and legal">
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P2" data-categoria="Contenido y legal">
         <div class="tarea-cab">
           <code>SW-018</code>
           <div class="etiquetas">
@@ -374,20 +374,20 @@
             <span class="pill est requires_verification">Requiere verificación</span>
           </div>
         </div>
-        <h3>Resolve the outstanding catalog decisions</h3>
-        <p class="clasif">Content and legal · Requiere confirmación</p>
-        <p class="detalle">The ISDIN Pediatrics stick and Daeha probiotic now appear in the catalog at $580 and $1,250 respectively, but this audit found no approval evidence for those prices. The Flavo C decision remains unresolved: only the generic &quot;Flavo C Sérum 30 Ml&quot; exists, without identifying Ultraglican, Melatonin, Forte, Intense or Día+Noche.</p>
+        <h3>Resolver las decisiones pendientes del catálogo</h3>
+        <p class="clasif">Contenido y legal · Requiere confirmación</p>
+        <p class="detalle">El stick de ISDIN Pediatrics y el probiótico Daeha ya aparecen en el catálogo a $580 y $1,250 respectivamente, pero esta auditoría no encontró evidencia de que esos precios se hayan aprobado. Sigue sin resolverse Flavo C: solo existe el genérico &quot;Flavo C Sérum 30 Ml&quot;, sin decir si es Ultraglican, Melatonin, Forte, Intense o Día+Noche.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
-            <p><strong>Dónde está</strong><br>Supabase products table<br>src/app/admin/admin-dashboard.tsx</p>
-            <p><strong>Terminada cuando</strong><br>The owner confirms the Flavo C version and confirms the two already-published prices; the catalog then carries the approved IVA-inclusive values, names and images.</p>
+            <p><strong>Dónde está</strong><br>Tabla products de Supabase<br>src/app/admin/admin-dashboard.tsx</p>
+            <p><strong>Terminada cuando</strong><br>La dueña confirma la versión de Flavo C y los dos precios ya publicados; el catálogo queda con los valores con IVA, nombres e imágenes aprobados.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Redesign audit: the four products flagged as featured, shown on the home page as &quot;Seleccionados por la Dra. Karina&quot;, are Effezel, Retacnyl, Clobexpro shampoo and Clobexpro lotion; three of the four have no brand, and they are prescription items. The planned &quot;Skinworld Edit&quot; section reads this same featured flag, so the owner should confirm the selection before it becomes the editorial centrepiece.</li><li><span>2026-09-30</span> Current catalog check: Pediatrics Stick and Daeha are visible with prices, so the remaining work is owner approval of those values plus the exact Flavo C version.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la reinspección del 2026-09-30.</li><li><span>2026-09-30</span> Auditoría del rediseño: los cuatro productos marcados como destacados, que el inicio muestra como &quot;Seleccionados por la Dra. Karina&quot;, son Effezel, Retacnyl, el champú Clobexpro y la loción Clobexpro; tres de los cuatro no tienen marca y son de receta. La sección planeada &quot;Skinworld Edit&quot; lee esa misma marca de destacado, así que la dueña debería confirmar la selección antes de que se vuelva la pieza central editorial.</li><li><span>2026-09-30</span> Revisión del catálogo actual: Pediatrics Stick y Daeha se ven con precio, así que lo que falta es que la dueña apruebe esos valores y diga la versión exacta de Flavo C.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P2" data-categoria="Ecommerce">
+      <article class="tarea" data-estado="pending" data-prioridad="P2" data-categoria="Tienda en línea">
         <div class="tarea-cab">
           <code>SW-024</code>
           <div class="etiquetas">
@@ -395,20 +395,20 @@
             <span class="pill est pending">Pendiente</span>
           </div>
         </div>
-        <h3>Assign a brand to the products that have none</h3>
-        <p class="clasif">Ecommerce · Problema detectado</p>
-        <p class="detalle">Counted on 2026-09-30: 46 of the 164 products the shop lists have an empty brand field — mostly prescription dermatology items such as Desowen, Nutracort, Presteme, Retacnyl and Bactroban. A customer filtering by brand never sees them, and they cannot appear in the brands section of the home page, which now builds itself from that same field. Roughly a quarter of the catalog is invisible to that whole way of browsing.</p>
+        <h3>Ponerle marca a los productos que no tienen</h3>
+        <p class="clasif">Tienda en línea · Problema detectado</p>
+        <p class="detalle">Contado el 2026-09-30: 46 de los 164 productos que muestra la tienda tienen la marca vacía, en su mayoría productos dermatológicos de receta como Desowen, Nutracort, Presteme, Retacnyl y Bactroban. Un cliente que filtra por marca nunca los ve, y no pueden aparecer en la sección de marcas del inicio, que ahora se arma con ese mismo campo. Cerca de una cuarta parte del catálogo queda fuera de esa forma de buscar.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
-            <p><strong>Dónde está</strong><br>Supabase products table<br>src/app/tienda/shop-client.tsx<br>src/components/sections/brands.tsx</p>
-            <p><strong>Terminada cuando</strong><br>Every product either carries its laboratory in the brand field or is deliberately classified as having none, the shop brand filter accounts for all 164 products, and the home page brand list reflects the corrected data.</p>
+            <p><strong>Dónde está</strong><br>Tabla products de Supabase<br>src/app/tienda/shop-client.tsx<br>src/components/sections/brands.tsx</p>
+            <p><strong>Terminada cuando</strong><br>Cada producto tiene su laboratorio en el campo de marca o está clasificado a propósito como sin marca, el filtro de marcas de la tienda cubre los 164 productos y la lista de marcas del inicio refleja los datos corregidos.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Found while rebuilding the brands section from the catalog: the section could only show 14 laboratories because the rest of the products carry no brand at all.</li><li><span>2026-09-30</span> Recounted against the current catalog: the customer sees 164 grouped products and 46 still have no brand; the finding is unchanged.</li></ul>
+            <ul><li><span>2026-09-30</span> Se encontró al rehacer la sección de marcas desde el catálogo: la sección solo podía mostrar 14 laboratorios porque el resto de los productos no tiene marca.</li><li><span>2026-09-30</span> Se volvió a contar con el catálogo actual: el cliente ve 164 productos agrupados y 46 siguen sin marca; el hallazgo no cambia.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="requires_verification" data-prioridad="P2" data-categoria="Accessibility">
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P2" data-categoria="Accesibilidad">
         <div class="tarea-cab">
           <code>SW-033</code>
           <div class="etiquetas">
@@ -416,20 +416,20 @@
             <span class="pill est requires_verification">Requiere verificación</span>
           </div>
         </div>
-        <h3>Verify the cinematic home scenes on a real iPhone and on Safari</h3>
-        <p class="clasif">Accessibility · Requiere confirmación</p>
-        <p class="detalle">The home page opens with a scroll-driven intro and now continues with eight scroll-controlled editorial worlds for Acné, Dermatitis, Antiedad, Manchas, Cabello y Uñas, Piel de Bebé, Protección Solar and Suplementos. Chrome verification covers desktop and phone layouts, the category routes and live catalog counts, horizontal overflow, console errors, reduced motion and no-JavaScript fallbacks. Real iOS Safari and desktop Safari, which handle sticky scenes, 3D transforms and the address bar differently, have not been tested.</p>
+        <h3>Verificar las escenas animadas del inicio en un iPhone real y en Safari</h3>
+        <p class="clasif">Accesibilidad · Requiere confirmación</p>
+        <p class="detalle">El inicio abre con una introducción controlada por el scroll y sigue con ocho mundos editoriales, también controlados por el scroll, para Acné, Dermatitis, Antiedad, Manchas, Cabello y Uñas, Piel de Bebé, Protección Solar y Suplementos. La verificación en Chrome cubre computadora y celular, las rutas de cada categoría y los conteos en vivo del catálogo, desbordes horizontales, errores de consola, movimiento reducido y el respaldo sin JavaScript. No se ha probado en Safari de iPhone real ni en Safari de computadora, que manejan distinto las escenas fijas, las transformaciones 3D y la barra de direcciones.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/components/intro/intro-cinematica.tsx<br>src/components/intro/motor.ts<br>src/components/intro/linea-de-tiempo.ts<br>src/styles/intro.css<br>src/components/header.tsx<br>src/app/layout.tsx<br>src/components/sections/categories.tsx<br>src/components/sections/necesidades-motor.ts<br>src/components/sections/necesidades-timeline.ts<br>src/styles/necesidades.css</p>
-            <p><strong>Terminada cuando</strong><br>Both home scenes are checked on a physical iPhone (Safari) and on desktop Safari: smooth scrolling forward and back, no flicker on load, the butterfly lands in the header logo, every needs world appears in order, all buttons and category links are tappable, and the address-bar show/hide causes no jump.</p>
+            <p><strong>Terminada cuando</strong><br>Las dos escenas del inicio se revisan en un iPhone físico (Safari) y en Safari de computadora: scroll suave hacia adelante y hacia atrás, sin parpadeo al cargar, la mariposa aterriza en el logo del encabezado, cada mundo de necesidades aparece en orden, todos los botones y enlaces de categoría se pueden tocar, y mostrar u ocultar la barra de direcciones no provoca saltos.</p>
             <p><strong>Detectada</strong> 2026-10-01 · <strong>Actualizada</strong> 2026-10-01</p>
-            <ul><li><span>2026-10-01</span> Built and published after the owner approved the plan; the owner asked to drop the claim and the doctor line from the end frame and to keep the butterfly and the name from overlapping, both done. Headless verification listed in details; device verification pending.</li><li><span>2026-10-01</span> Published to production (merge 7d61da7). Re-verified on https://www.skinworld.shop with headless Chrome: no butterfly/name overlap and no covered buttons at 1440×900, 1280×720, 390×844 and 375×667; no console errors or horizontal overflow; reversal, Skip, reduced motion, no-JavaScript and the shop header all behave as on the branch; all main pages answer 200. The Vercel preview could not be tested because it requires Vercel sign-in. Still open for a physical iPhone and desktop Safari check.</li><li><span>2026-10-01</span> Published the eight needs worlds through PR #1 and production merge 8267863. Vercel passed for both preview and main. Re-verified https://www.skinworld.shop at 1440×800 and 375×812: all eight worlds and counts match the catalog, desktop uses the scroll scene, phone uses the stacked layout, there is no horizontal overflow or console error, Acné opens the correct 19-product filter, and product and cart pages still load correctly. Still open only for a physical iPhone and desktop Safari check.</li></ul>
+            <ul><li><span>2026-10-01</span> Construido y publicado después de que la dueña aprobó el plan; pidió quitar el lema y la línea de la doctora del cuadro final y que la mariposa y el nombre no se encimaran, las dos cosas hechas. La verificación sin pantalla está en los detalles; falta la verificación en dispositivo.</li><li><span>2026-10-01</span> Publicado en producción (merge 7d61da7). Se volvió a verificar https://www.skinworld.shop con Chrome sin pantalla: la mariposa y el nombre no se enciman y ningún botón queda tapado a 1440×900, 1280×720, 390×844 y 375×667; sin errores de consola ni desborde horizontal; el regreso, Saltar, movimiento reducido, sin JavaScript y el encabezado de la tienda se comportan igual que en la rama; todas las páginas principales responden 200. La vista previa de Vercel no se pudo probar porque pide iniciar sesión en Vercel. Sigue abierta para revisarla en un iPhone físico y en Safari de computadora.</li><li><span>2026-10-01</span> Se publicaron los ocho mundos de necesidades con el PR #1 y el merge a producción 8267863. Vercel pasó tanto en vista previa como en main. Se volvió a verificar https://www.skinworld.shop a 1440×800 y 375×812: los ocho mundos y sus conteos coinciden con el catálogo, la computadora usa la escena con scroll, el celular usa los bloques apilados, no hay desborde horizontal ni errores de consola, Acné abre el filtro correcto de 19 productos, y las páginas de producto y carrito siguen cargando bien. Sigue abierta solo para revisarla en un iPhone físico y en Safari de computadora.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="requires_verification" data-prioridad="P2" data-categoria="Content and legal">
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P2" data-categoria="Contenido y legal">
         <div class="tarea-cab">
           <code>SW-034</code>
           <div class="etiquetas">
@@ -437,20 +437,20 @@
             <span class="pill est requires_verification">Requiere verificación</span>
           </div>
         </div>
-        <h3>Produce the eight persona sequences for the needs section</h3>
-        <p class="clasif">Content and legal · Requiere confirmación</p>
-        <p class="detalle">The needs section shows one person per category, driven by scroll. The scene stays fixed on desktop, tablet and phone, and only the person moves: they enter from the left, turn on the vertical axis, improve during the turn and exit right, and the next person enters only after the previous one has left. The project has no photographs of people other than Dra. Karina, so no persona is shown yet and each category keeps its sculpture until its sequence exists. docs/personas-necesidades.md describes each condition as it really looks, based on dermatology sources and on what each category sells, with acne lesions only in Acné. It also holds eight different people, the asset specification and the generation prompts. scripts/preparar-persona.mjs turns a video or frame folder into optimised desktop and phone sequences and registers it. AI-generated skin-improvement imagery next to products may read as a result claim, so an &quot;illustrative image&quot; notice should be considered.</p>
+        <h3>La misma mujer entre anillos de cristal en la sección de necesidades</h3>
+        <p class="clasif">Contenido y legal · Requiere confirmación</p>
+        <p class="detalle">La sección «Encuentra soluciones por problema» se queda fija y el scroll gira anillos de cristal rosa claro con bordes redondeados alrededor de la misma mujer, que no se mueve. El anillo ancho es esmerilado: cuando se pone de canto la tapa por completo y solo entonces cambia la foto; los anillos delgados son de cristal transparente y la enmarcan. Por categoría se ve primero el problema y luego la piel perfecta. Son 9 fotos: un solo resultado con piel perfecta para todas las categorías y 8 problemas severos pero no desagradables, hechos en el ChatGPT de la dueña con su permiso y alineados a menos de 1 px. El cristal se dibuja con WebGL (three.js), que solo se descarga cuando la sección está cerca; sin WebGL se muestra la foto sola. Al subir desde la portada la sección ya está llena: el título y el anillo cerrado tapándola, que se abre para revelarla. Todo es local: nada tiene commit, push ni despliegue.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
-            <p><strong>Dónde está</strong><br>docs/personas-necesidades.md<br>src/data/personas-necesidades.json<br>scripts/preparar-persona.mjs<br>src/components/sections/necesidades-personas.ts</p>
-            <p><strong>Terminada cuando</strong><br>All eight sequences show a single person turning (never two heads), each a different person, with the condition shown as it really looks and an improvement that finishes before the end of the turn. All are registered in the manifest, and the owner approves them visually on desktop and phone before publishing.</p>
-            <p><strong>Detectada</strong> 2026-10-01 · <strong>Actualizada</strong> 2026-10-01</p>
-            <ul><li><span>2026-10-01</span> System built on branch personas-necesidades and verified with a test sequence (?muestra=personas): scroll forward and back, eight transitions, links and index, phone layout, reduced motion, about 60 fps with 4x CPU throttling, and at most three sequences in memory. Waiting for the persona assets and the owner visual approval; nothing is published.</li><li><span>2026-10-01</span> The owner liked the movement and asked for: a fixed page where only the person moves, conditions researched and shown only where they make sense, one head that turns, and a different person per problem. Done on the branch: fixed scene on phones as well, one person at a time, and research-based briefs for eight different people. Verified on 390x844, 375x667, 820x1180, 1280x720 and 1440x900 with no overlap or overflow, plus reduced motion and landscape phone as stacked blocks, about 60 fps on a phone with 4x CPU throttling, and at most four sequences in memory. Images still have to be generated with an AI tool; Claude cannot create photographs itself. Waiting for the owner to choose how to generate them.</li><li><span>2026-10-01</span> Acné persona built from eight ChatGPT stills of the same AI-generated woman at different angles, made in the owner&#039;s ChatGPT with permission. ChatGPT can no longer make video because Sora is closed. The stills were aligned and joined by morphing, using Apple Vision face points and a person cut-out, into a 48-frame transparent sequence: 2.2 MB on desktop and 0.9 MB on phone. It is registered in the manifest and verified at 390x844 and 1440x900. The tools are in scripts/personas and the method is in docs/personas-necesidades.md. Seven personas remain. Waiting for the owner visual approval and a decision on the AI-image notice; nothing is published.</li></ul>
+            <p><strong>Dónde está</strong><br>docs/personas-necesidades.md<br>src/data/personas-necesidades.json<br>scripts/personas/preparar-estados.py<br>scripts/personas/puntos.swift<br>src/components/sections/necesidades-anillos.ts<br>src/components/sections/necesidades-motor.ts<br>src/components/sections/necesidades-timeline.ts<br>src/components/sections/necesidades-personas.ts<br>src/styles/necesidades.css<br>package.json (three)</p>
+            <p><strong>Terminada cuando</strong><br>La dueña aprueba visualmente la transición y los 16 estados en computadora y celular, decide si se pone el aviso «Imágenes ilustrativas generadas con IA», y el cambio tiene commit, se despliega y se verifica en producción.</p>
+            <p><strong>Detectada</strong> 2026-10-01 · <strong>Actualizada</strong> 2026-10-03</p>
+            <ul><li><span>2026-10-01</span> Sistema construido en la rama personas-necesidades y verificado con una secuencia de prueba (?muestra=personas): scroll hacia adelante y hacia atrás, ocho transiciones, enlaces e índice, diseño en celular, movimiento reducido, unos 60 fps con el procesador 4 veces más lento y como máximo tres secuencias en memoria. Esperando las imágenes de las personas y la aprobación visual de la dueña; nada publicado.</li><li><span>2026-10-01</span> A la dueña le gustó el movimiento y pidió: una página fija donde solo se mueva la persona, problemas investigados y mostrados solo donde tengan sentido, una sola cabeza que gire y una persona distinta por problema. Hecho en la rama: escena fija también en celular, una persona a la vez e indicaciones basadas en investigación para ocho personas distintas. Verificado a 390x844, 375x667, 820x1180, 1280x720 y 1440x900 sin encimados ni desbordes, más movimiento reducido y celular horizontal como bloques apilados, unos 60 fps en celular con el procesador 4 veces más lento y como máximo cuatro secuencias en memoria. Las imágenes todavía hay que generarlas con una herramienta de IA; Claude no puede crear fotografías. Esperando a que la dueña elija cómo generarlas.</li><li><span>2026-10-01</span> Persona de Acné construida con ocho imágenes de ChatGPT de la misma mujer generada con IA en distintos ángulos, hechas en el ChatGPT de la dueña con su permiso. ChatGPT ya no puede hacer video porque Sora cerró. Las imágenes se alinearon y se unieron con morphing, usando los puntos de la cara de Apple Vision y un recorte de la persona, en una secuencia transparente de 48 cuadros: 2.2 MB en computadora y 0.9 MB en celular. Está registrada en el manifiesto y verificada a 390x844 y 1440x900. Las herramientas están en scripts/personas y el método en docs/personas-necesidades.md. Faltan siete personas. Esperando la aprobación visual de la dueña y la decisión sobre el aviso de imágenes con IA; nada publicado.</li><li><span>2026-10-01</span> Revisión local de Codex: GSAP/ScrollTrigger, recorrido central continuo y traslape entre escenas vecinas, profundidad y paralaje, prioridad exacta de cuadros con máximo nueve cuadros decodificados más tres en camino por secuencia, aislamiento de respuestas canceladas, corrección del cuadro final con movimiento reducido, limpieza de diseño responsivo y tres pruebas de regresión que pasan. La compilación, la revisión de tipos y ESLint en los archivos tocados pasaron; las revisiones en Chrome a 375, 768, 1440 y 1920 px pasaron hacia adelante y atrás, índice, filtros y consola. Los conteos de productos coinciden con los ocho filtros de la tienda. Reusa la foto de Acné existente sin generar personas sustitutas. Faltan siete secuencias de personas, la aprobación visual final y la verificación en Safari físico. Sin despliegue, commit ni push.</li><li><span>2026-10-02</span> Hecho en local encima del trabajo de GSAP sin commit de otra sesión, reemplazando la idea de la persona que gira, los cuadros viejos de Acné y la esfera de prueba. Verificado a 375, 768, 1440 y 1920 px, en una pantalla baja de 1280x600, un celular horizontal de 812x375 y con movimiento reducido (retratos fijos). También verificado: regreso exacto, el recuadro de la cabeza idéntico en 41 posiciones del scroll, una pasada a la vez, los 17 enlaces, salto del índice a cada problema, foco de teclado visible, 60 fps con el procesador 4 veces más lento, sin errores de consola ni de hidratación, y la tienda, una página de producto y el carrito siguen cargando. Seis pruebas de la coreografía pasan, y la revisión de tipos y la compilación pasan. El proyecto no tiene lint configurado. Esperando la aprobación visual.</li><li><span>2026-10-02</span> Rehecho como la esfera B con 9 fotos nuevas. Verificado a 1440 y 390 px, con movimiento reducido, una pantalla baja y un celular horizontal (retratos redondos fijos). El scroll regresa exactamente, el recuadro de la esfera es idéntico en 41 posiciones y las pruebas comprueban que la foto solo cambia mientras la ventana está detrás. También verificado: 17 enlaces, salto del índice a cada problema, foco de teclado, 60 fps con el procesador 4 veces más lento, sin errores de consola, y la tienda, la página de producto y el carrito cargan. Seis pruebas pasan y la compilación pasa. Esperando la aprobación visual de la dueña y la decisión sobre el aviso de imágenes con IA.</li><li><span>2026-10-03</span> La dueña cambió la esfera por los anillos, pidió que se vieran más cristalinos, luego un rosa más claro y bordes más redondeados, y al final que no quedara vacío el espacio entre la portada y esta sección. Hecho en local: anillos de cristal con transmisión real en WebGL (three.js 0.180 instalado como dependencia, en un archivo aparte de unos 125 KB comprimido que solo se descarga cerca de la sección; el inicio sigue en 63.3 kB), un anillo ancho esmerilado que la tapa al cambiar la foto y tres delgados transparentes, entorno rosa propio y bandas con cantos redondeados. La sección entra ya con el título y el anillo cerrado, que se abre para revelarla. Verificado a 1440 y 390 px: el scroll regresa exactamente, el recuadro idéntico en 41 posiciones, los 17 enlaces, el índice 05 lleva al problema de Cabello, foco de teclado visible, p95 de 16.8 ms por cuadro con el procesador 4 veces más lento, sin errores de consola, la tienda, un producto y el carrito cargan, y con movimiento reducido, pantalla baja o celular horizontal se ven los 8 retratos fijos. Seis pruebas pasan (incluida que la foto solo cambia cuando el anillo ancho la tapa), la revisión de tipos y la compilación pasan. La dueña dijo que el resultado está perfecto. Sigue pendiente decidir el aviso de imágenes con IA y autorizar commit, push y despliegue.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P3" data-categoria="Performance">
+      <article class="tarea" data-estado="pending" data-prioridad="P3" data-categoria="Rendimiento">
         <div class="tarea-cab">
           <code>SW-011</code>
           <div class="etiquetas">
@@ -458,20 +458,20 @@
             <span class="pill est pending">Pendiente</span>
           </div>
         </div>
-        <h3>Optimize image delivery and prevent failed product-image fallbacks</h3>
-        <p class="clasif">Performance · Mejora sugerida</p>
-        <p class="detalle">The storefront uses native img elements across product and editorial views. This works, but bypasses Next image sizing/optimization controls. The product-page fallback should also be tested with remote and local URLs. Confirmed by inspection: next/image is not imported anywhere — every image is a plain &lt;img&gt; — so the images.remotePatterns entry in next.config.js is currently inert, and it only lists skinworld.mx while the catalog also serves images from frenchpharmacy.com, www.isdin.com and a lovelyskin.com CDN host plus 38 site-relative paths.</p>
+        <h3>Optimizar la entrega de imágenes y evitar imágenes de producto rotas</h3>
+        <p class="clasif">Rendimiento · Mejora sugerida</p>
+        <p class="detalle">La tienda usa elementos img nativos en las vistas de producto y editoriales. Funciona, pero se salta los controles de tamaño y optimización de imágenes de Next. También hay que probar el respaldo de la página de producto con direcciones remotas y locales. Confirmado al revisar: next/image no se importa en ningún lado (todas las imágenes son &lt;img&gt; simples), así que images.remotePatterns de next.config.js no tiene efecto, y solo menciona skinworld.mx, cuando el catálogo también sirve imágenes de frenchpharmacy.com, www.isdin.com y un CDN de lovelyskin.com, más 38 rutas del propio sitio.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/components/product-card.tsx<br>src/components/search-modal.tsx<br>src/app/producto/[slug]/product-client.tsx<br>src/components/sections/*</p>
-            <p><strong>Terminada cuando</strong><br>A performance measurement identifies the highest-impact images, correct dimensions/loading priority are applied, failed image URLs show an accessible fallback, and mobile Core Web Vitals improve or remain within targets.</p>
+            <p><strong>Terminada cuando</strong><br>Una medición de rendimiento identifica las imágenes de mayor impacto, se les aplican tamaño y prioridad de carga correctos, una imagen que falla muestra un respaldo accesible, y los Core Web Vitals en celular mejoran o se mantienen dentro de la meta.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Improvement, not a claim of current performance failure.</li><li><span>2026-09-30</span> Added verified detail: zero next/image usage across the app; catalog images span four external hosts plus 38 local paths, none of them covered by the configured remotePatterns.</li><li><span>2026-09-30</span> Partly done: created ImagenProducto, which replaces a failed image with a labelled &quot;Imagen no disponible&quot; block instead of a blank rectangle, and wired it into the product cards. Added lazy loading and async decoding to the shop, blog, about, search, brands and expertise images, and marked the images above the fold as eager. next.config.js now lists the four external image hosts the catalog really uses, so a future move to next/image will not drop those products. Still open, and the reason it stays open: no performance measurement has been taken, so the Core Web Vitals part of the completion criteria is unproven.</li><li><span>2026-09-30</span> Redesign audit: 159 of the 201 product images are hot-linked from skinworld.mx, the old WordPress site. If that site is retired or its uploads move, those products lose their photo; copying the images into the project or Supabase Storage would remove that dependency.</li></ul>
+            <ul><li><span>2026-09-30</span> Es una mejora; no se afirma que hoy haya una falla de rendimiento.</li><li><span>2026-09-30</span> Se agregó un detalle verificado: no se usa next/image en ninguna parte; las imágenes del catálogo vienen de cuatro hosts externos más 38 rutas locales, y ninguno está cubierto por los remotePatterns configurados.</li><li><span>2026-09-30</span> Hecho en parte: se creó ImagenProducto, que cambia una imagen rota por un bloque con la leyenda &quot;Imagen no disponible&quot; en lugar de un rectángulo vacío, y se conectó a las tarjetas de producto. Se agregó carga diferida y decodificación asíncrona a las imágenes de tienda, blog, nosotros, búsqueda, marcas y especialidades, y las que se ven al abrir la página se marcaron como inmediatas. next.config.js ya incluye los cuatro hosts externos que de verdad usa el catálogo, para que un cambio futuro a next/image no deje esos productos sin foto. Sigue abierta por esto: no se ha hecho ninguna medición de rendimiento, así que la parte de Core Web Vitals del criterio de cierre no está demostrada.</li><li><span>2026-09-30</span> Auditoría del rediseño: 159 de las 201 imágenes de producto se cargan directo desde skinworld.mx, el sitio anterior en WordPress. Si ese sitio se da de baja o mueve sus archivos, esos productos se quedan sin foto; copiar las imágenes al proyecto o a Supabase Storage quitaría esa dependencia.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="pending" data-prioridad="P3" data-categoria="Code quality">
+      <article class="tarea" data-estado="pending" data-prioridad="P3" data-categoria="Calidad del código">
         <div class="tarea-cab">
           <code>SW-012</code>
           <div class="etiquetas">
@@ -479,20 +479,20 @@
             <span class="pill est pending">Pendiente</span>
           </div>
         </div>
-        <h3>Replace broad any types in payment and product paths</h3>
-        <p class="clasif">Code quality · Mejora sugerida</p>
-        <p class="detalle">The production build passes, but several payment, product, and order values are typed as any. Stronger domain types and runtime schemas will reduce silent integration regressions.</p>
+        <h3>Quitar los tipos any genéricos en el pago y los productos</h3>
+        <p class="clasif">Calidad del código · Mejora sugerida</p>
+        <p class="detalle">La compilación de producción pasa, pero varios valores de pago, producto y pedido están tipados como any. Tipos más precisos y validación en tiempo de ejecución reducirán fallas silenciosas entre integraciones.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/app/api/stripe/webhook/route.ts<br>src/app/api/checkout/route.ts<br>src/app/producto/[slug]/product-client.tsx<br>src/app/admin/pedidos/page.tsx</p>
-            <p><strong>Terminada cuando</strong><br>Affected boundaries use explicit TypeScript types and input schemas; valid checkout, webhook, product, and admin flows continue passing type-check and integration tests.</p>
+            <p><strong>Terminada cuando</strong><br>Esos puntos usan tipos explícitos de TypeScript y validación de entrada; los flujos de pago, webhook, producto y panel siguen pasando la revisión de tipos y las pruebas de integración.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Improvement derived from source audit; build currently passes.</li><li><span>2026-09-30</span> Partly done: the Stripe webhook and the checkout route no longer use `any`. The webhook types the event and session as Stripe types, parses the shipping address through a new DireccionDeEnvio type, and guards the nullable amount and line-item fields; the checkout route validates cart items against an explicit shape and types its line items with Stripe.Checkout.SessionCreateParams.LineItem. Type-check and production build pass. Still open for the remaining `any` in the product detail client and the admin screens.</li></ul>
+            <ul><li><span>2026-09-30</span> Mejora que salió de la auditoría del código; hoy la compilación pasa.</li><li><span>2026-09-30</span> Hecho en parte: el webhook de Stripe y la ruta de pago ya no usan `any`. El webhook tipa el evento y la sesión con los tipos de Stripe, interpreta la dirección de envío con un nuevo tipo DireccionDeEnvio y protege el monto y los artículos que pueden venir vacíos; la ruta de pago valida los artículos del carrito contra una forma explícita y tipa sus líneas con Stripe.Checkout.SessionCreateParams.LineItem. La revisión de tipos y la compilación de producción pasan. Sigue abierta por los `any` que quedan en el detalle de producto y en las pantallas del panel.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="requires_verification" data-prioridad="P3" data-categoria="Content and legal">
+      <article class="tarea" data-estado="requires_verification" data-prioridad="P3" data-categoria="Contenido y legal">
         <div class="tarea-cab">
           <code>SW-031</code>
           <div class="etiquetas">
@@ -500,20 +500,20 @@
             <span class="pill est requires_verification">Requiere verificación</span>
           </div>
         </div>
-        <h3>Decide what product-detail content exists beyond the description</h3>
-        <p class="clasif">Content and legal · Requiere confirmación</p>
-        <p class="detalle">Counted on 2026-09-30: all 201 product rows have a description, but none has ingredients, instructions, presentation, short description, problem type or product type filled in. The redesign can only show usage, benefits or &quot;ideal for&quot; modules with real data, and must not invent medical indications.</p>
+        <h3>Decidir qué información del producto existe además de la descripción</h3>
+        <p class="clasif">Contenido y legal · Requiere confirmación</p>
+        <p class="detalle">Contado el 2026-09-30: los 201 productos tienen descripción, pero ninguno tiene llenos ingredientes, modo de uso, presentación, descripción corta, tipo de problema ni tipo de producto. El rediseño solo puede mostrar módulos de uso, beneficios o &quot;ideal para&quot; con datos reales, y no debe inventar indicaciones médicas.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
-            <p><strong>Dónde está</strong><br>Supabase products table<br>src/app/producto/[slug]/product-client.tsx</p>
-            <p><strong>Terminada cuando</strong><br>The owner either supplies that content for the products or confirms the product page shows the description only.</p>
+            <p><strong>Dónde está</strong><br>Tabla products de Supabase<br>src/app/producto/[slug]/product-client.tsx</p>
+            <p><strong>Terminada cuando</strong><br>La dueña entrega esa información de los productos o confirma que la página de producto muestre solo la descripción.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Found while checking what the redesigned product page could display.</li></ul>
+            <ul><li><span>2026-09-30</span> Se encontró al revisar qué podía mostrar la página de producto rediseñada.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="in_progress" data-prioridad="P3" data-categoria="Ecommerce">
+      <article class="tarea" data-estado="in_progress" data-prioridad="P3" data-categoria="Tienda en línea">
         <div class="tarea-cab">
           <code>SW-035</code>
           <div class="etiquetas">
@@ -521,20 +521,20 @@
             <span class="pill est in_progress">En progreso</span>
           </div>
         </div>
-        <h3>Stop category texts from overlapping during transitions in the needs section</h3>
-        <p class="clasif">Ecommerce · Problema detectado</p>
-        <p class="detalle">On desktop, while one category faded into the next, both names, descriptions, counts and giant words were visible on top of each other for a moment, and the last category overlapped the closing line.</p>
+        <h3>Evitar que los textos de las categorías se encimen en las transiciones de necesidades</h3>
+        <p class="clasif">Tienda en línea · Problema detectado</p>
+        <p class="detalle">En computadora, mientras una categoría pasaba a la siguiente, los dos nombres, descripciones, conteos y palabras gigantes se veían encimados por un momento, y la última categoría se encimaba con la frase de cierre.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/components/sections/necesidades-timeline.ts<br>src/styles/necesidades.css</p>
-            <p><strong>Terminada cuando</strong><br>Each category text leaves before the next one appears and the closing line appears alone, verified in production.</p>
+            <p><strong>Terminada cuando</strong><br>El texto de cada categoría sale antes de que aparezca el siguiente y la frase de cierre aparece sola, verificado en producción.</p>
             <p><strong>Detectada</strong> 2026-10-01 · <strong>Actualizada</strong> 2026-10-01</p>
-            <ul><li><span>2026-10-01</span> Fixed on branch personas-necesidades: texts now have their own staggered fade while the backgrounds still cross-fade. Verified in captures at 0.21 and 0.95 of the section; pending publication with SW-034 approval.</li></ul>
+            <ul><li><span>2026-10-01</span> Corregido en la rama personas-necesidades: los textos ahora tienen su propio desvanecido escalonado mientras los fondos siguen cruzándose. Verificado en capturas al 0.21 y al 0.95 de la sección; falta publicarlo junto con la aprobación de SW-034.</li><li><span>2026-10-01</span> La revisión local mantiene los textos sin encimarse aunque las escenas visuales se traslapen. El último texto sale antes del mensaje de cierre. Las pruebas matemáticas de regresión y la navegación por categorías en Chrome pasan; sigue sin verificarse en producción porque la dueña pidió no publicar.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P0" data-categoria="Reliability">
+      <article class="tarea" data-estado="completed" data-prioridad="P0" data-categoria="Confiabilidad">
         <div class="tarea-cab">
           <code>SW-001</code>
           <div class="etiquetas">
@@ -542,20 +542,20 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Make Stripe webhook failures retryable and observable</h3>
-        <p class="clasif">Reliability · Problema detectado</p>
-        <p class="detalle">The webhook catches failures while reading or writing the order, logs them, and still returns HTTP 200. Stripe therefore treats the event as handled and does not retry it, which can leave a paid order absent from the administration panel.</p>
+        <h3>Hacer que las fallas del webhook de Stripe se reintenten y se noten</h3>
+        <p class="clasif">Confiabilidad · Problema detectado</p>
+        <p class="detalle">El webhook atrapa los errores al leer o guardar el pedido, los registra y aun así responde HTTP 200. Stripe entonces da el evento por atendido y no lo reintenta, lo que puede dejar un pedido pagado sin aparecer en el panel de administración.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/app/api/stripe/webhook/route.ts</p>
-            <p><strong>Terminada cuando</strong><br>A failed durable order write returns a retryable non-2xx response (or is reliably queued), duplicate deliveries remain idempotent, and a Stripe test event proves that a temporary database failure is retried and recorded with an actionable alert.</p>
+            <p><strong>Terminada cuando</strong><br>Si falla el guardado del pedido, la respuesta no es 2xx y Stripe la reintenta (o queda en una cola confiable), las entregas duplicadas siguen sin duplicar pedidos y un evento de prueba de Stripe demuestra que una falla temporal de la base de datos se reintenta y deja una alerta útil.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Verified still open. The handler now short-circuits duplicate deliveries and a unique constraint on orders.stripe_session_id was confirmed live, so repeated events are safe; the catch block around the order write still logs and returns HTTP 200, so a database failure is still swallowed without a retry.</li><li><span>2026-09-30</span> Fixed: the order write and the notification emails are now separate steps. A failure writing the order returns HTTP 500 so Stripe retries, and it also sends the shop an alert naming the Stripe session id so a charge without an order cannot pass unnoticed; a failing email only logs, because the order is already stored and a retry would duplicate the customer mail. Duplicate deliveries still short-circuit on the existing row, backed by the unique constraint on stripe_session_id verified live.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la primera auditoría del código.</li><li><span>2026-09-30</span> Se confirmó que seguía abierto. El manejador ya ignora entregas repetidas y se comprobó en vivo una restricción única sobre orders.stripe_session_id, así que los eventos repetidos son seguros; pero el bloque que envuelve el guardado del pedido todavía registra el error y responde HTTP 200, de modo que una falla de la base de datos se pierde sin reintento.</li><li><span>2026-09-30</span> Corregido: guardar el pedido y mandar los correos ahora son pasos separados. Si falla el guardado, la respuesta es HTTP 500 para que Stripe reintente, y además se manda a la tienda una alerta con el identificador de la sesión de Stripe, para que un cobro sin pedido no pase desapercibido. Si falla un correo solo se registra, porque el pedido ya está guardado y un reintento duplicaría el correo al cliente. Las entregas repetidas siguen deteniéndose en la fila existente, respaldadas por la restricción única sobre stripe_session_id comprobada en vivo.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P0" data-categoria="Reliability">
+      <article class="tarea" data-estado="completed" data-prioridad="P0" data-categoria="Confiabilidad">
         <div class="tarea-cab">
           <code>SW-020</code>
           <div class="etiquetas">
@@ -563,20 +563,20 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Point the Stripe webhook at the domain actually served</h3>
-        <p class="clasif">Reliability · Problema detectado</p>
-        <p class="detalle">The Stripe webhook endpoint was registered against https://skinworld.shop, but that apex domain answers 308 and redirects to https://www.skinworld.shop. Stripe does not follow redirects, so every checkout.session.completed delivery failed and no paid order was ever written to the database.</p>
+        <h3>Apuntar el webhook de Stripe al dominio que de verdad se sirve</h3>
+        <p class="clasif">Confiabilidad · Problema detectado</p>
+        <p class="detalle">El webhook de Stripe estaba registrado en https://skinworld.shop, pero ese dominio sin www responde 308 y redirige a https://www.skinworld.shop. Stripe no sigue redirecciones, así que todas las entregas de checkout.session.completed fallaban y ningún pedido pagado se guardaba en la base de datos.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
-            <p><strong>Dónde está</strong><br>Stripe webhook endpoint configuration<br>src/app/api/stripe/webhook/route.ts</p>
-            <p><strong>Terminada cuando</strong><br>The registered endpoint points at the served domain and a real paid order is recorded automatically.</p>
+            <p><strong>Dónde está</strong><br>Configuración del webhook en Stripe<br>src/app/api/stripe/webhook/route.ts</p>
+            <p><strong>Terminada cuando</strong><br>El webhook registrado apunta al dominio que se sirve y un pedido real pagado se guarda solo.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Fixed by repointing the endpoint to https://www.skinworld.shop/api/stripe/webhook and resending the pending event; the order appeared in the database immediately and a later real test purchase was recorded automatically. Verified against the Stripe API on 2026-09-30: endpoint enabled on the www host.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la reinspección del 2026-09-30.</li><li><span>2026-09-30</span> Corregido al cambiar el webhook a https://www.skinworld.shop/api/stripe/webhook y reenviar el evento pendiente; el pedido apareció de inmediato en la base de datos y una compra de prueba real posterior se guardó sola. Verificado con la API de Stripe el 2026-09-30: el webhook está activo en el dominio con www.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P0" data-categoria="Ecommerce">
+      <article class="tarea" data-estado="completed" data-prioridad="P0" data-categoria="Tienda en línea">
         <div class="tarea-cab">
           <code>SW-021</code>
           <div class="etiquetas">
@@ -584,20 +584,20 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Accept checkout for products whose image is a site-relative path</h3>
-        <p class="clasif">Ecommerce · Problema detectado</p>
-        <p class="detalle">Stripe rejects a checkout session whose line items carry a non-absolute image URL. 38 of the 201 catalog products store their image as a site path such as /images/productos/..., so a cart containing any one of them failed the whole payment with &quot;Error al iniciar el pago&quot;.</p>
+        <h3>Permitir pagar productos cuya imagen es una ruta del propio sitio</h3>
+        <p class="clasif">Tienda en línea · Problema detectado</p>
+        <p class="detalle">Stripe rechaza una sesión de pago si un artículo trae una imagen con dirección no absoluta. 38 de los 201 productos del catálogo guardan su imagen como ruta del sitio, por ejemplo /images/productos/..., así que un carrito con cualquiera de ellos hacía fallar todo el pago con &quot;Error al iniciar el pago&quot;.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/app/api/checkout/route.ts</p>
-            <p><strong>Terminada cuando</strong><br>A cart containing a product with a site-relative image reaches the Stripe payment page.</p>
+            <p><strong>Terminada cuando</strong><br>Un carrito con un producto cuya imagen es ruta del sitio llega a la página de pago de Stripe.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Fixed in commit 7768a24 by resolving site-relative paths against the request origin before sending them to Stripe. Verified on production: a cart with such a product returns a Stripe checkout URL.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la reinspección del 2026-09-30.</li><li><span>2026-09-30</span> Corregido en el commit 7768a24, que completa las rutas del sitio con el origen de la petición antes de mandarlas a Stripe. Verificado en producción: un carrito con uno de esos productos devuelve una dirección de pago de Stripe.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P1" data-categoria="Security">
+      <article class="tarea" data-estado="completed" data-prioridad="P1" data-categoria="Seguridad">
         <div class="tarea-cab">
           <code>SW-003</code>
           <div class="etiquetas">
@@ -605,20 +605,20 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Add abuse protection to public write endpoints</h3>
-        <p class="clasif">Security · Problema detectado</p>
-        <p class="detalle">The endpoints accept unauthenticated writes. Reviews have a honeypot and validation, but none of the three inspected routes applies rate limits, bot verification, or duplicate controls. They can be used to fill storage, create moderation noise, or trigger email notifications.</p>
+        <h3>Proteger contra abuso los formularios públicos</h3>
+        <p class="clasif">Seguridad · Problema detectado</p>
+        <p class="detalle">Estas rutas aceptan escrituras sin iniciar sesión. Las reseñas tienen un campo trampa y validación, pero ninguna de las tres limita la frecuencia, verifica bots ni evita duplicados. Se pueden usar para llenar el almacenamiento, saturar la moderación o disparar correos de aviso.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/app/api/contact/route.ts<br>src/app/api/boletin/route.ts<br>src/app/api/reviews/route.ts</p>
-            <p><strong>Terminada cuando</strong><br>Rate limiting is enforced at an appropriate boundary; contact and newsletter writes have bot/duplicate protection; review moderation policy is implemented; and normal customer submissions still succeed.</p>
+            <p><strong>Terminada cuando</strong><br>Hay un límite de frecuencia en el lugar adecuado; contacto y boletín tienen protección contra bots y duplicados; existe una política de moderación de reseñas, y los envíos normales de los clientes siguen funcionando.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Fixed: contact, newsletter, reviews and the payment-status lookup now share an IP rate limiter (src/lib/limite.ts). Verified locally: three contact messages went through and the fourth returned 429; a filled honeypot returned 200 without storing anything (3 objects, not 4); the same address subscribed twice produced a single stored object, because the newsletter path is now derived from a hash of the email. Reviews get post-moderation: /admin/resenas lists them and deletes any that should not stay. The limiter lives in process memory, so on Vercel it is per instance — enough for repeated abuse from one address, and noted here rather than overstated.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la primera auditoría del código.</li><li><span>2026-09-30</span> Corregido: contacto, boletín, reseñas y la consulta del estado del pago comparten un limitador por IP (src/lib/limite.ts). Verificado en local: tres mensajes de contacto pasaron y el cuarto respondió 429; con el campo trampa lleno respondió 200 sin guardar nada (3 objetos, no 4); el mismo correo suscrito dos veces produjo un solo objeto, porque ahora la ruta del boletín se calcula con un hash del correo. Las reseñas se moderan después de publicarse: /admin/resenas las lista y permite borrar las que no deban quedarse. El limitador vive en la memoria del proceso, así que en Vercel funciona por instancia: basta contra el abuso repetido desde una misma dirección, y se anota aquí sin exagerarlo.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P1" data-categoria="Security">
+      <article class="tarea" data-estado="completed" data-prioridad="P1" data-categoria="Seguridad">
         <div class="tarea-cab">
           <code>SW-004</code>
           <div class="etiquetas">
@@ -626,20 +626,20 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Protect the admin login against repeated password attempts</h3>
-        <p class="clasif">Security · Problema detectado</p>
-        <p class="detalle">The login route compares a single environment password and returns 401 on failure, with no throttling, lockout, or monitoring. The signed cookie has a browser expiry but its token itself contains no expiry or rotation data.</p>
+        <h3>Proteger el acceso al panel contra intentos repetidos de contraseña</h3>
+        <p class="clasif">Seguridad · Problema detectado</p>
+        <p class="detalle">El acceso compara una sola contraseña de entorno y responde 401 si falla, sin límite de intentos, bloqueo ni registro. La cookie firmada caduca en el navegador, pero el token en sí no lleva fecha de vencimiento ni datos de rotación.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/app/api/admin/login/route.ts<br>src/lib/admin-auth.ts</p>
-            <p><strong>Terminada cuando</strong><br>Failed attempts are rate-limited and logged without sensitive data, session revocation/expiry behavior is documented and tested, and the login flow remains usable for the administrator.</p>
+            <p><strong>Terminada cuando</strong><br>Los intentos fallidos tienen límite y se registran sin datos sensibles, la caducidad y revocación de la sesión están documentadas y probadas, y la administradora puede seguir entrando sin problema.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Fixed: five failed attempts per IP in fifteen minutes, then 429; a correct password clears the counter so the owner is not locked out by their own typos. The comparison now runs over SHA-256 digests with timingSafeEqual instead of ===. Failed attempts are logged with the IP and never the password. Session expiry documented in the cookie (seven days). Verified locally: attempts one through five returned 401 and the sixth returned 429.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la primera auditoría del código.</li><li><span>2026-09-30</span> Corregido: cinco intentos fallidos por IP en quince minutos y luego 429; una contraseña correcta reinicia el contador para que la dueña no quede bloqueada por sus propios errores al teclear. La comparación ahora se hace sobre huellas SHA-256 con timingSafeEqual en lugar de ===. Los intentos fallidos se registran con la IP y nunca con la contraseña. La caducidad de la sesión quedó documentada en la cookie (siete días). Verificado en local: los intentos uno a cinco respondieron 401 y el sexto 429.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P1" data-categoria="Security">
+      <article class="tarea" data-estado="completed" data-prioridad="P1" data-categoria="Seguridad">
         <div class="tarea-cab">
           <code>SW-005</code>
           <div class="etiquetas">
@@ -647,20 +647,20 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Harden checkout URL construction against untrusted request hosts</h3>
-        <p class="clasif">Security · Problema detectado</p>
-        <p class="detalle">success_url, cancel_url, and local product image URLs are built from the incoming Origin or Host header. Use a configured canonical application URL or an allowlist instead of trusting request-controlled headers. Since the 2026-09-29 image fix, the same host-derived origin is also used to build the absolute product image URLs sent to Stripe, so a spoofed Host header now affects payment-page content as well as the success and cancel URLs.</p>
+        <h3>Armar las direcciones del pago sin confiar en el host de la petición</h3>
+        <p class="clasif">Seguridad · Problema detectado</p>
+        <p class="detalle">success_url, cancel_url y las direcciones de las imágenes locales se arman con el encabezado Origin o Host que llega en la petición. Hay que usar una dirección canónica configurada o una lista permitida en lugar de confiar en encabezados que controla quien hace la petición. Desde la corrección de imágenes del 2026-09-29, ese mismo origen también arma las direcciones absolutas de las imágenes que se mandan a Stripe, así que un Host falsificado ya afecta el contenido de la página de pago, además de las direcciones de éxito y cancelación.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/app/api/checkout/route.ts</p>
-            <p><strong>Terminada cuando</strong><br>Checkout URLs always use the approved production/preview application origin, unsupported hosts are rejected, and a checkout test confirms the correct return URLs and Stripe image URLs.</p>
+            <p><strong>Terminada cuando</strong><br>Las direcciones del pago siempre usan el origen aprobado de producción o de vista previa, los hosts no admitidos se rechazan y una prueba de pago confirma las direcciones de regreso y de imágenes correctas en Stripe.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Scope widened: the request-derived origin now also builds the product image URLs sent to Stripe.</li><li><span>2026-09-30</span> Fixed: checkout URLs and the product image URLs sent to Stripe now come from src/lib/sitio.ts, which uses the canonical https://www.skinworld.shop and only honours the request origin when it is a localhost development address. A forged Host header can no longer redirect the buyer or place foreign images on the payment page.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la primera auditoría del código.</li><li><span>2026-09-30</span> Se amplió el alcance: el origen tomado de la petición ahora también arma las direcciones de las imágenes que se mandan a Stripe.</li><li><span>2026-09-30</span> Corregido: las direcciones del pago y de las imágenes que se mandan a Stripe ahora salen de src/lib/sitio.ts, que usa la dirección canónica https://www.skinworld.shop y solo acepta el origen de la petición cuando es localhost en desarrollo. Un Host falsificado ya no puede redirigir al comprador ni poner imágenes ajenas en la página de pago.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P1" data-categoria="Reliability">
+      <article class="tarea" data-estado="completed" data-prioridad="P1" data-categoria="Confiabilidad">
         <div class="tarea-cab">
           <code>SW-022</code>
           <div class="etiquetas">
@@ -668,20 +668,20 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Stop truncating the shipping address sent to Stripe</h3>
-        <p class="clasif">Reliability · Problema detectado</p>
-        <p class="detalle">The whole shipping address travelled to Stripe as a single JSON string in one metadata key, and Stripe truncates any metadata value over 500 characters. A long but ordinary Mexican address measures around 494 characters, so a slightly longer one would have been cut, failed to parse in the webhook and been stored as an order with no delivery address.</p>
+        <h3>Dejar de cortar la dirección de envío que se manda a Stripe</h3>
+        <p class="clasif">Confiabilidad · Problema detectado</p>
+        <p class="detalle">La dirección de envío completa viajaba a Stripe como un solo texto JSON en un campo de metadatos, y Stripe corta cualquier valor de metadatos de más de 500 caracteres. Una dirección mexicana larga pero normal mide unos 494 caracteres, así que una un poco más larga se habría cortado, no se habría podido leer en el webhook y el pedido se habría guardado sin dirección de entrega.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/app/api/checkout/route.ts<br>src/app/api/stripe/webhook/route.ts</p>
-            <p><strong>Terminada cuando</strong><br>Each address field travels in its own metadata key, the webhook still reads orders written in the old single-string format, and a long address survives the round trip intact.</p>
+            <p><strong>Terminada cuando</strong><br>Cada campo de la dirección viaja en su propio campo de metadatos, el webhook sigue leyendo pedidos con el formato anterior y una dirección larga llega completa.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Fixed in commit 51d4d03 by sending each field in its own metadata key, with the webhook still reading the previous format. Verified against the Stripe API: a long test address arrived complete.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la reinspección del 2026-09-30.</li><li><span>2026-09-30</span> Corregido en el commit 51d4d03, que manda cada campo en su propio metadato y mantiene la lectura del formato anterior en el webhook. Verificado con la API de Stripe: una dirección de prueba larga llegó completa.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P1" data-categoria="Accessibility">
+      <article class="tarea" data-estado="completed" data-prioridad="P1" data-categoria="Accesibilidad">
         <div class="tarea-cab">
           <code>SW-025</code>
           <div class="etiquetas">
@@ -689,20 +689,20 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Raise text contrast to WCAG AA across the storefront</h3>
-        <p class="clasif">Accessibility · Problema detectado</p>
-        <p class="detalle">Measured against white: body copy in text-slate-600 (#868E96) is 3.32:1 and 3.15:1 on the grey section background; text-slate-500 (#ADB5BD) is 2.07:1; text-slate-400 (#CED4DA), used for &quot;Con IVA&quot;, category labels and dates, is 1.49:1. The small uppercase pink labels in primary-700 (#BC7F8F) are 3.2:1, the gold brand label gold-600 (#B8942A) is 2.87:1, and the About page call to action puts white text on primary-500 at 2.14:1. The project redefines Tailwind slate with much lighter values, so every default-looking grey class is lighter than it appears in code.</p>
+        <h3>Subir el contraste del texto al nivel WCAG AA en toda la tienda</h3>
+        <p class="clasif">Accesibilidad · Problema detectado</p>
+        <p class="detalle">Medido sobre blanco: el texto en text-slate-600 (#868E96) da 3.32:1, y 3.15:1 sobre el fondo gris de las secciones; text-slate-500 (#ADB5BD) da 2.07:1; text-slate-400 (#CED4DA), usado en &quot;Con IVA&quot;, etiquetas de categoría y fechas, da 1.49:1. Las etiquetas rosas pequeñas en mayúsculas con primary-700 (#BC7F8F) dan 3.2:1, la etiqueta dorada de marca gold-600 (#B8942A) da 2.87:1, y el botón de la página Nosotros pone texto blanco sobre primary-500 a 2.14:1. El proyecto redefine el slate de Tailwind con valores mucho más claros, así que cada clase gris que parece normal en el código es más clara de lo que aparenta.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
-            <p><strong>Dónde está</strong><br>tailwind.config.ts (custom slate and primary scales)<br>src/components/**<br>src/app/**</p>
-            <p><strong>Terminada cuando</strong><br>Body and small text reach at least 4.5:1 and large text at least 3:1 on their real backgrounds, verified with a contrast check of every text token in the new design system.</p>
+            <p><strong>Dónde está</strong><br>tailwind.config.ts (escalas slate y primary personalizadas)<br>src/components/**<br>src/app/**</p>
+            <p><strong>Terminada cuando</strong><br>El texto normal y pequeño llega al menos a 4.5:1 y el grande al menos a 3:1 sobre su fondo real, comprobado midiendo el contraste de cada color de texto del nuevo sistema de diseño.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Found in the redesign audit by computing contrast ratios for every grey and pink text colour in use.</li><li><span>2026-09-30</span> Fixed by the Skinworld V1 tokens: ink, body, muted and deep-pink text meet the documented ratios on their real surfaces. The remaining old low-contrast classes in the shipping and confirmation views were replaced, and both views were checked in the browser.</li></ul>
+            <ul><li><span>2026-09-30</span> Se encontró en la auditoría del rediseño calculando el contraste de cada gris y rosa de texto en uso.</li><li><span>2026-09-30</span> Corregido con los colores de Skinworld V1: los textos de tinta, cuerpo, apagado y rosa oscuro cumplen los contrastes documentados sobre sus fondos reales. Se reemplazaron las clases viejas de bajo contraste que quedaban en las vistas de envío y confirmación, y las dos se revisaron en el navegador.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Security">
+      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Seguridad">
         <div class="tarea-cab">
           <code>SW-006</code>
           <div class="etiquetas">
@@ -710,16 +710,16 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Limit checkout-session data exposure</h3>
-        <p class="clasif">Security · Problema detectado</p>
-        <p class="detalle">The unauthenticated session lookup returns a payment status, total, and customer email for any supplied Stripe Checkout Session ID. Session IDs are hard to guess, but the endpoint unnecessarily broadens the impact if one appears in logs, analytics, or a referrer.</p>
+        <h3>Limitar los datos que expone la consulta de la sesión de pago</h3>
+        <p class="clasif">Seguridad · Problema detectado</p>
+        <p class="detalle">La consulta de sesión, que no pide autenticación, devuelve el estado del pago, el total y el correo del cliente para cualquier identificador de sesión de Stripe. Esos identificadores son difíciles de adivinar, pero la ruta amplía sin necesidad el daño si uno aparece en registros, analítica o un referer.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/app/api/checkout/session/route.ts<br>src/app/pedido-confirmado/order-confirmed-client.tsx</p>
-            <p><strong>Terminada cuando</strong><br>The confirmation view receives only the minimum data it needs, with an authorization or one-time confirmation mechanism as appropriate, and no customer email is exposed by a reusable public endpoint.</p>
+            <p><strong>Terminada cuando</strong><br>La página de confirmación recibe solo los datos mínimos que necesita, con autorización o confirmación de un solo uso según convenga, y ninguna ruta pública reutilizable expone el correo del cliente.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Fixed: /api/checkout/session no longer returns the customer email — only payment status and amount, which is all the confirmation page renders. The session id is validated against its expected shape and the endpoint is rate limited. The confirmation page now says the receipt was emailed instead of printing the address back.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la primera auditoría del código.</li><li><span>2026-09-30</span> Corregido: /api/checkout/session ya no devuelve el correo del cliente, solo el estado del pago y el monto, que es todo lo que muestra la página de confirmación. Se valida la forma del identificador de sesión y la ruta tiene límite de frecuencia. La página de confirmación ahora dice que el recibo se mandó por correo en lugar de mostrar la dirección.</li></ul>
           </div>
         </details>
       </article>
@@ -731,20 +731,20 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Complete technical SEO metadata and discovery files</h3>
+        <h3>Completar los metadatos técnicos de SEO y los archivos para buscadores</h3>
         <p class="clasif">SEO · Problema detectado</p>
-        <p class="detalle">The root metadata has basic title and Open Graph text, but the audit found no robots.ts, sitemap.ts, metadataBase, canonical URL handling, Open Graph image, or product/blog-specific metadata generation. Confirmed by inspection: there is no src/app/sitemap.ts and no src/app/robots.ts, metadataBase is not set, and the canonical, author and Open Graph URLs point at https://skinworld.shop, which answers 308 and redirects to https://www.skinworld.shop — the domain actually served in production.</p>
+        <p class="detalle">Los metadatos generales tienen título y texto de Open Graph básicos, pero la auditoría no encontró robots.ts, sitemap.ts, metadataBase, manejo de dirección canónica, imagen de Open Graph ni metadatos propios por producto o artículo. Confirmado al revisar: no existen src/app/sitemap.ts ni src/app/robots.ts, metadataBase no está definido, y las direcciones canónica, de autor y de Open Graph apuntan a https://skinworld.shop, que responde 308 y redirige a https://www.skinworld.shop, el dominio que de verdad sirve producción.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/app/layout.tsx<br>src/app/producto/[slug]/page.tsx<br>src/app/blog/[slug]/page.tsx</p>
-            <p><strong>Terminada cuando</strong><br>robots and sitemap are generated, canonical and social-preview URLs/images resolve correctly, and product/blog pages have accurate unique metadata validated in a production-like build.</p>
+            <p><strong>Terminada cuando</strong><br>robots y sitemap se generan, las direcciones e imágenes canónicas y de vista previa en redes funcionan, y cada producto y artículo tiene metadatos propios y correctos, comprobados en una compilación como la de producción.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected in initial source audit.</li><li><span>2026-09-30</span> Added verified specifics: missing sitemap/robots routes, missing metadataBase, and apex-vs-www mismatch (apex returns 308 to www, confirmed with a live request).</li><li><span>2026-09-30</span> Fixed: added src/app/robots.ts and src/app/sitemap.ts (176 URLs: 9 fixed pages, 164 products, 3 posts, revalidated hourly so catalog changes appear), set metadataBase and a title template on the root layout, and pointed every canonical, author and Open Graph URL at the www domain that production actually serves. Product, post, shop, blog, contact and about pages now emit their own title, description, canonical and Open Graph image. Verified against a production build and the running app: robots.txt and sitemap.xml return the expected content and the shop tab reads &quot;Tienda · Skinworld&quot;.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la primera auditoría del código.</li><li><span>2026-09-30</span> Se agregaron detalles verificados: faltan las rutas sitemap y robots, falta metadataBase y hay diferencia entre el dominio sin www y con www (el primero responde 308 hacia www, confirmado con una petición en vivo).</li><li><span>2026-09-30</span> Corregido: se agregaron src/app/robots.ts y src/app/sitemap.ts (176 direcciones: 9 páginas fijas, 164 productos y 3 artículos, revalidadas cada hora para que aparezcan los cambios del catálogo), se definieron metadataBase y una plantilla de título en el layout principal, y todas las direcciones canónicas, de autor y de Open Graph apuntan al dominio con www que sirve producción. Las páginas de producto, artículo, tienda, blog, contacto y nosotros ya generan su propio título, descripción, dirección canónica e imagen de Open Graph. Verificado en una compilación de producción y en la app corriendo: robots.txt y sitemap.xml devuelven lo esperado y la pestaña de la tienda dice &quot;Tienda · Skinworld&quot;.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Code quality">
+      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Calidad del código">
         <div class="tarea-cab">
           <code>SW-016</code>
           <div class="etiquetas">
@@ -752,20 +752,20 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Stop rendering the shipping address form twice on the cart page</h3>
-        <p class="clasif">Code quality · Problema detectado</p>
-        <p class="detalle">The cart renders &lt;ShippingAddressForm /&gt; twice — once in a lg:hidden block and once inside the desktop summary column — so both copies mount at every viewport and only CSS hides one. Each instance runs its own postal-code lookup effect, so every completed postal code fires two identical requests to /api/codigo-postal and both instances write to the shared store, and per-instance UI state such as the &quot;write my own colonia&quot; toggle can diverge between the two copies.</p>
+        <h3>Dejar de mostrar dos veces el formulario de dirección en el carrito</h3>
+        <p class="clasif">Calidad del código · Problema detectado</p>
+        <p class="detalle">El carrito pinta &lt;ShippingAddressForm /&gt; dos veces, una en un bloque lg:hidden y otra en la columna de resumen de computadora, así que las dos copias existen en cualquier tamaño de pantalla y solo el CSS oculta una. Cada copia hace su propia búsqueda de código postal, por lo que cada código completo dispara dos peticiones iguales a /api/codigo-postal y ambas escriben en el mismo estado; además, el estado de cada copia, como la opción &quot;escribir mi propia colonia&quot;, puede quedar distinto entre las dos.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/app/carrito/page.tsx<br>src/components/checkout/shipping-address-form.tsx</p>
-            <p><strong>Terminada cuando</strong><br>The form mounts once per page, a completed postal code triggers exactly one lookup request, and the layout still places it correctly on both mobile and desktop.</p>
+            <p><strong>Terminada cuando</strong><br>El formulario existe una sola vez por página, un código postal completo dispara exactamente una búsqueda y el diseño lo sigue acomodando bien en celular y en computadora.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Fixed: the cart renders one ShippingAddressForm inside a single column that stacks under the products on mobile and sits in the sticky summary column on desktop. Verified in the browser: typing a postal code now produces exactly one GET /api/codigo-postal request, and the layout was checked at phone and 1400px widths.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la reinspección del 2026-09-30.</li><li><span>2026-09-30</span> Corregido: el carrito pinta un solo ShippingAddressForm dentro de una columna que en celular queda debajo de los productos y en computadora va en la columna fija del resumen. Verificado en el navegador: al escribir un código postal ahora sale exactamente una petición GET /api/codigo-postal, y el diseño se revisó en celular y a 1400 px.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Operations">
+      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Operación">
         <div class="tarea-cab">
           <code>SW-017</code>
           <div class="etiquetas">
@@ -773,20 +773,20 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Record tracking numbers and stage timestamps for orders</h3>
-        <p class="clasif">Operations · Problema detectado</p>
-        <p class="detalle">The orders table exposes only id, stripe_session_id, customer_email, customer_phone, shipping_name, shipping_address, amount_total, currency, status, items and created_at. There is nowhere to store a carrier tracking number, so the shipped notification cannot tell the customer how to follow the parcel, and there is no per-stage timestamp, so neither the panel nor the history shows when an order was packed or shipped. Adding these needs a schema change, which the service key used by the app cannot perform.</p>
+        <h3>Guardar el número de guía y la fecha de cada etapa del pedido</h3>
+        <p class="clasif">Operación · Problema detectado</p>
+        <p class="detalle">La tabla de pedidos solo tiene id, stripe_session_id, customer_email, customer_phone, shipping_name, shipping_address, amount_total, currency, status, items y created_at. No hay dónde guardar el número de guía de la paquetería, así que el aviso de envío no le puede decir al cliente cómo rastrear el paquete, y no hay fecha por etapa, así que ni el panel ni el historial muestran cuándo se empacó o se envió un pedido. Agregarlos requiere cambiar la estructura de la base de datos, cosa que la llave de servicio de la app no puede hacer.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
-            <p><strong>Dónde está</strong><br>src/app/api/admin/pedidos/[id]/route.ts<br>src/lib/pedidos.ts<br>Supabase orders table</p>
-            <p><strong>Terminada cuando</strong><br>The orders table has columns for a tracking reference and stage timestamps, the admin panel captures the tracking number when marking an order shipped, and the shipped email includes it.</p>
+            <p><strong>Dónde está</strong><br>src/app/api/admin/pedidos/[id]/route.ts<br>src/lib/pedidos.ts<br>Tabla orders de Supabase</p>
+            <p><strong>Terminada cuando</strong><br>La tabla de pedidos tiene columnas para la guía y las fechas de cada etapa, el panel pide el número de guía al marcar un pedido como enviado y el correo de envío lo incluye.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Blocked on a database change the application cannot make: the service key can read and write rows but not alter tables. The SQL is written and ready at supabase/migraciones/001-guia-y-mensajes.sql — it adds tracking, tracking_url and the packed/shipped/delivered timestamps. Once it is run in the Supabase SQL editor, the admin panel and the shipped email can be wired to it.</li><li><span>2026-09-30</span> Fixed once the owner ran the migration. The orders table now has tracking, tracking_url and the packed/shipped/delivered timestamps. Marking an order shipped opens a field for the carrier number; the panel shows it, linking to the carrier when the number matches a recognisable FedEx, UPS or DHL format, and the shipped email carries it with a &quot;Seguir el envío&quot; link. Verified: the write persisted and was reverted, the rendered email contains the number and link, and the capture field was exercised in the panel.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la reinspección del 2026-09-30.</li><li><span>2026-09-30</span> Bloqueado por un cambio de base de datos que la aplicación no puede hacer: la llave de servicio lee y escribe filas, pero no modifica tablas. El SQL está listo en supabase/migraciones/001-guia-y-mensajes.sql: agrega tracking, tracking_url y las fechas de empacado, enviado y entregado. En cuanto se corra en el editor SQL de Supabase, el panel y el correo de envío se pueden conectar.</li><li><span>2026-09-30</span> Corregido después de que la dueña corrió la migración. La tabla de pedidos ya tiene tracking, tracking_url y las fechas de empacado, enviado y entregado. Al marcar un pedido como enviado se abre un campo para el número de guía; el panel lo muestra con enlace a la paquetería cuando el número tiene un formato reconocible de FedEx, UPS o DHL, y el correo de envío lo incluye con un enlace &quot;Seguir el envío&quot;. Verificado: la escritura se guardó y se revirtió, el correo generado trae el número y el enlace, y el campo se probó en el panel.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Operations">
+      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Operación">
         <div class="tarea-cab">
           <code>SW-023</code>
           <div class="etiquetas">
@@ -794,20 +794,20 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Surface arriving orders on the admin home</h3>
-        <p class="clasif">Operations · Mejora sugerida</p>
-        <p class="detalle">The owner reported a paid order that &quot;did not appear&quot;. The order was stored correctly and did show under the Pedidos screen, but /admin itself gave no sign that anything had arrived, so noticing a sale depended on remembering to open that screen.</p>
+        <h3>Mostrar en el inicio del panel los pedidos que van llegando</h3>
+        <p class="clasif">Operación · Mejora sugerida</p>
+        <p class="detalle">La dueña reportó un pedido pagado que &quot;no apareció&quot;. El pedido se guardó bien y sí estaba en la pantalla de Pedidos, pero /admin no daba ninguna señal de que hubiera llegado algo, así que notar una venta dependía de acordarse de abrir esa pantalla.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/app/admin/page.tsx<br>src/app/admin/admin-dashboard.tsx</p>
-            <p><strong>Terminada cuando</strong><br>The admin home shows how many orders still need attention and links straight to them, and the count drops as orders are marked shipped.</p>
+            <p><strong>Terminada cuando</strong><br>El inicio del panel muestra cuántos pedidos necesitan atención con un enlace directo a ellos, y el número baja conforme se marcan como enviados.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Fixed in commit f126fb8. The admin home now shows a pending-orders notice and a count on the Pedidos button, both rendered from a live query; confirmed by rendering the panel with the real order data.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la reinspección del 2026-09-30.</li><li><span>2026-09-30</span> Corregido en el commit f126fb8. El inicio del panel ahora muestra un aviso de pedidos pendientes y un contador en el botón de Pedidos, ambos con una consulta en vivo; se confirmó pintando el panel con los datos reales de pedidos.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Ecommerce">
+      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Tienda en línea">
         <div class="tarea-cab">
           <code>SW-027</code>
           <div class="etiquetas">
@@ -815,20 +815,20 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Stop product cards from taking a full phone screen each</h3>
-        <p class="clasif">Ecommerce · Problema detectado</p>
-        <p class="detalle">On a 390px phone the shop grid is one column and each card is about 1,000 CSS px tall (square image, category, name, price, &quot;Con IVA&quot;, full-width black button), so the 164-product catalog is roughly 100 screens of scrolling. On the product page the square image fills the first screen and the price sits below the fold.</p>
+        <h3>Evitar que cada tarjeta de producto ocupe una pantalla entera del celular</h3>
+        <p class="clasif">Tienda en línea · Problema detectado</p>
+        <p class="detalle">En un celular de 390 px la tienda era de una columna y cada tarjeta medía unos 1,000 px CSS de alto (imagen cuadrada, categoría, nombre, precio, &quot;Con IVA&quot; y botón negro a todo lo ancho), así que el catálogo de 164 productos eran unas 100 pantallas de scroll. En la página de producto la imagen cuadrada llenaba la primera pantalla y el precio quedaba abajo.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/app/tienda/shop-client.tsx<br>src/components/product-card.tsx<br>src/app/producto/[slug]/product-client.tsx</p>
-            <p><strong>Terminada cuando</strong><br>The phone catalog shows two products per row with a tappable add button, and the product page shows image, name and price within the first screen at 375-430px.</p>
+            <p><strong>Terminada cuando</strong><br>El catálogo en celular muestra dos productos por fila con un botón de agregar fácil de tocar, y la página de producto muestra imagen, nombre y precio en la primera pantalla entre 375 y 430 px.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Measured from full-page captures of production on 2026-09-30.</li><li><span>2026-09-30</span> Fixed and browser-verified at 390 × 844 px: the shop renders two cards per row with separate accessible add buttons, and the product image, name, price, quantity and add button all fit in the first phone screen.</li></ul>
+            <ul><li><span>2026-09-30</span> Medido con capturas de página completa de producción el 2026-09-30.</li><li><span>2026-09-30</span> Corregido y verificado en el navegador a 390 × 844 px: la tienda muestra dos tarjetas por fila con botones de agregar separados y accesibles, y la imagen, el nombre, el precio, la cantidad y el botón de agregar caben en la primera pantalla del celular.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Accessibility">
+      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Accesibilidad">
         <div class="tarea-cab">
           <code>SW-029</code>
           <div class="etiquetas">
@@ -836,20 +836,20 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Fix keyboard and semantic issues in product cards, menu and filter drawer</h3>
-        <p class="clasif">Accessibility · Problema detectado</p>
-        <p class="detalle">The product card places its &quot;Agregar&quot; button inside the product link, which nests two interactive controls. The mobile menu button does not expose aria-expanded. The mobile filter drawer has no Escape handling or focus management, and the mobile menu the same. Related to SW-010, which covers verifying the journeys on devices.</p>
+        <h3>Corregir problemas de teclado y estructura en tarjetas, menú y filtros</h3>
+        <p class="clasif">Accesibilidad · Problema detectado</p>
+        <p class="detalle">La tarjeta de producto ponía el botón &quot;Agregar&quot; dentro del enlace del producto, lo que mete un control interactivo dentro de otro. El botón del menú en celular no indicaba aria-expanded. El panel de filtros en celular no se cerraba con Escape ni manejaba el foco, y el menú en celular tampoco. Se relaciona con SW-010, que cubre verificar los recorridos en dispositivos.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/components/product-card.tsx<br>src/components/header.tsx<br>src/app/tienda/shop-client.tsx</p>
-            <p><strong>Terminada cuando</strong><br>No interactive element is nested in another, menu and drawers announce their state, close with Escape and return focus, verified by keyboard.</p>
+            <p><strong>Terminada cuando</strong><br>Ningún elemento interactivo queda dentro de otro, el menú y los paneles anuncian su estado, se cierran con Escape y devuelven el foco, verificado con teclado.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Found by reading the components during the redesign audit.</li><li><span>2026-09-30</span> Fixed and manually verified: product add buttons are outside the card links; menu and filter controls expose state; mobile menu, filter drawer and search close with Escape; filter and search dialogs contain and restore focus.</li></ul>
+            <ul><li><span>2026-09-30</span> Se encontró leyendo los componentes en la auditoría del rediseño.</li><li><span>2026-09-30</span> Corregido y verificado a mano: los botones de agregar están fuera de los enlaces de las tarjetas; el menú y los filtros indican su estado; el menú en celular, el panel de filtros y la búsqueda se cierran con Escape, y los diálogos de filtros y búsqueda retienen y devuelven el foco.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Ecommerce">
+      <article class="tarea" data-estado="completed" data-prioridad="P2" data-categoria="Tienda en línea">
         <div class="tarea-cab">
           <code>SW-030</code>
           <div class="etiquetas">
@@ -857,20 +857,20 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Visual redesign Skinworld V1 (presentation layer only)</h3>
-        <p class="clasif">Ecommerce · Mejora sugerida</p>
-        <p class="detalle">Owner-requested redesign completed in nine phases: design system, global components, home, shop and cards, product page, About, Journal, contact and cart, followed by responsive, contrast and keyboard polish. Checkout logic, email behavior, APIs, database and admin remain governed by their own tasks.</p>
+        <h3>Rediseño visual Skinworld V1 (solo la parte visual)</h3>
+        <p class="clasif">Tienda en línea · Mejora sugerida</p>
+        <p class="detalle">Rediseño pedido por la dueña y terminado en nueve fases: sistema de diseño, componentes generales, inicio, tienda y tarjetas, página de producto, Nosotros, Journal, contacto y carrito, y al final ajustes de celular, contraste y teclado. La lógica del pago, los correos, las API, la base de datos y el panel se siguen en sus propias tareas.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
-            <p><strong>Dónde está</strong><br>tailwind.config.ts<br>src/styles/globals.css<br>src/components/**<br>src/app/(storefront pages)</p>
-            <p><strong>Terminada cuando</strong><br>Every phase is built, passes build and browser checks at 375-1920px, and the cart, filters, product add, forms and checkout still behave exactly as before.</p>
+            <p><strong>Dónde está</strong><br>tailwind.config.ts<br>src/styles/globals.css<br>src/components/**<br>src/app/(páginas de la tienda)</p>
+            <p><strong>Terminada cuando</strong><br>Todas las fases están hechas, pasan la compilación y las revisiones en navegador de 375 a 1920 px, y el carrito, los filtros, agregar productos, los formularios y el pago siguen funcionando exactamente igual que antes.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Audit completed and plan presented; no files changed yet.</li><li><span>2026-09-30</span> Completed phases 1–9 and a final audit pass. Production build and type-check pass; browser checks covered desktop plus 390 × 844 px, search, filters, product add, postal-code address completion, cart totals and arrival at a correctly populated Stripe test Checkout. Two 3D butterfly animations were added with reduced-motion support.</li></ul>
+            <ul><li><span>2026-09-30</span> Auditoría terminada y plan presentado; todavía sin cambios en archivos.</li><li><span>2026-09-30</span> Se terminaron las fases 1 a 9 y una auditoría final. La compilación de producción y la revisión de tipos pasan; las revisiones en navegador cubrieron computadora y 390 × 844 px, búsqueda, filtros, agregar productos, dirección por código postal, totales del carrito y la llegada a un pago de prueba de Stripe bien llenado. Se agregaron dos animaciones 3D de la mariposa que respetan la opción de reducir movimiento.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P3" data-categoria="Reliability">
+      <article class="tarea" data-estado="completed" data-prioridad="P3" data-categoria="Confiabilidad">
         <div class="tarea-cab">
           <code>SW-019</code>
           <div class="etiquetas">
@@ -878,20 +878,20 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Move contact and newsletter messages out of object storage</h3>
-        <p class="clasif">Reliability · Mejora sugerida</p>
-        <p class="detalle">Contact messages and newsletter sign-ups are written as individual JSON objects in a private Supabase Storage bucket rather than a table, because the service key can create buckets but not tables. Reading the inbox downloads every object one by one, so the admin screen gets slower with each message and cannot search, sort or paginate.</p>
+        <h3>Sacar los mensajes de contacto y boletín del almacenamiento de archivos</h3>
+        <p class="clasif">Confiabilidad · Mejora sugerida</p>
+        <p class="detalle">Los mensajes de contacto y las suscripciones al boletín se guardan como archivos JSON sueltos en un bucket privado de Supabase Storage en lugar de una tabla, porque la llave de servicio puede crear buckets pero no tablas. Para leer la bandeja se descarga cada archivo uno por uno, así que la pantalla del panel se hace más lenta con cada mensaje y no se puede buscar, ordenar ni paginar.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>src/lib/mensajes.ts<br>src/app/admin/mensajes/page.tsx</p>
-            <p><strong>Terminada cuando</strong><br>Messages live in a table with an index on the date, the admin screen reads them in one query, and the existing stored objects have been migrated.</p>
+            <p><strong>Terminada cuando</strong><br>Los mensajes viven en una tabla con índice por fecha, el panel los lee con una sola consulta y los archivos que ya existían se migraron.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Detected during the 2026-09-30 re-inspection.</li><li><span>2026-09-30</span> Blocked on the same database change: the messages table, its date index and the unique index per newsletter email are written at supabase/migraciones/001-guia-y-mensajes.sql. Meanwhile duplicate newsletter sign-ups no longer pile up, because the stored object is now keyed by a hash of the email, which removes the worst symptom while the table is pending.</li><li><span>2026-09-30</span> Fixed once the owner ran the migration. Contact messages and newsletter sign-ups now live in the messages table, indexed by kind and date, and the admin screen reads them in one query instead of downloading every object. scripts/migrar-mensajes.mjs moves anything left in the old bucket and was run: zero objects remained. Verified: a contact message landed as a row, and the same address subscribed twice in different letter case produced a single row, because the unique index is case-insensitive.</li></ul>
+            <ul><li><span>2026-09-30</span> Detectado en la reinspección del 2026-09-30.</li><li><span>2026-09-30</span> Bloqueado por el mismo cambio de base de datos: la tabla de mensajes, su índice por fecha y el índice único por correo del boletín están escritos en supabase/migraciones/001-guia-y-mensajes.sql. Mientras tanto ya no se acumulan suscripciones repetidas, porque el archivo se nombra con un hash del correo; eso quita el peor síntoma mientras llega la tabla.</li><li><span>2026-09-30</span> Corregido después de que la dueña corrió la migración. Los mensajes de contacto y las suscripciones ya viven en la tabla messages, con índice por tipo y fecha, y el panel los lee con una sola consulta en lugar de descargar cada archivo. scripts/migrar-mensajes.mjs mueve lo que quedara en el bucket anterior y se corrió: no quedaba ningún archivo. Verificado: un mensaje de contacto quedó como fila, y el mismo correo suscrito dos veces con distinta mayúscula produjo una sola fila, porque el índice único no distingue mayúsculas.</li></ul>
           </div>
         </details>
       </article>
-      <article class="tarea" data-estado="completed" data-prioridad="P3" data-categoria="Code quality">
+      <article class="tarea" data-estado="completed" data-prioridad="P3" data-categoria="Calidad del código">
         <div class="tarea-cab">
           <code>SW-028</code>
           <div class="etiquetas">
@@ -899,16 +899,16 @@
             <span class="pill est completed">Terminada</span>
           </div>
         </div>
-        <h3>Consolidate the butterfly and logo assets into one official version</h3>
-        <p class="clasif">Code quality · Mejora sugerida</p>
-        <p class="detalle">The header and footer use a 512x407 PNG butterfly (the footer turns it white with a CSS filter). public/logo.svg is not the butterfly at all but a leaf drawing and is unused. public/images/logo-full.png has damaged transparency (speckled edges) and is unused. The butterfly pink measures #E9A9B9, while the site colour called primary is #D4A5AF, so the brand pink on the page does not match the logo.</p>
+        <h3>Unificar la mariposa y el logo en una sola versión oficial</h3>
+        <p class="clasif">Calidad del código · Mejora sugerida</p>
+        <p class="detalle">El encabezado y el pie usan una mariposa en PNG de 512x407 (el pie la vuelve blanca con un filtro CSS). public/logo.svg no es la mariposa sino el dibujo de una hoja, y no se usa. public/images/logo-full.png tiene la transparencia dañada (bordes con puntitos) y no se usa. El rosa de la mariposa mide #E9A9B9, mientras que el color primary del sitio es #D4A5AF, así que el rosa de la marca en la página no coincide con el logo.</p>
         <details>
           <summary>Origen, criterio de cierre e historial</summary>
           <div class="ficha">
             <p><strong>Dónde está</strong><br>public/images/logo-icon.png<br>public/images/logo-full.png<br>public/logo.svg<br>public/videos/skinworld-logo.mp4<br>tailwind.config.ts</p>
-            <p><strong>Terminada cuando</strong><br>One vector butterfly traced from the current header mark (same proportions) is used everywhere, unused or damaged logo files are retired, and the design system pink is taken from the logo.</p>
+            <p><strong>Terminada cuando</strong><br>Se usa en todos lados una sola mariposa vectorial calcada de la marca actual del encabezado (mismas proporciones), se retiran los archivos de logo dañados o sin uso, y el rosa del sistema de diseño se toma del logo.</p>
             <p><strong>Detectada</strong> 2026-09-30 · <strong>Actualizada</strong> 2026-09-30</p>
-            <ul><li><span>2026-09-30</span> Found in the redesign audit.</li><li><span>2026-09-30</span> Fixed: header, footer, decorative marks and the new 3D motion use one vector component traced from the official butterfly; the design token uses its #E9A9B9 pink, and the unused damaged PNG and leaf SVG were removed.</li></ul>
+            <ul><li><span>2026-09-30</span> Se encontró en la auditoría del rediseño.</li><li><span>2026-09-30</span> Corregido: el encabezado, el pie, los adornos y la nueva animación 3D usan un solo componente vectorial calcado de la mariposa oficial; el color del diseño usa su rosa #E9A9B9, y se quitaron el PNG dañado y el SVG de la hoja que no se usaban.</li></ul>
           </div>
         </details>
       </article></div>
@@ -916,7 +916,7 @@
 
     <h2>Cambios recientes</h2>
     <section class="aviso">
-      <ul><li><span>2026-10-01</span> — Needs section on branch personas-necesidades (not published): the scene now stays fixed on phones as well and shows one person at a time. Persona briefs are based on dermatology research. The first real persona, Acné, was built from eight ChatGPT stills joined by morphing (scripts/personas). SW-034 updated.</li><li><span>2026-10-01</span> — Persona system for the needs section built on branch personas-necesidades (not published): scroll-driven entrance, 3D turn, transformation and exit per category, lazy frame loading, phone and reduced-motion modes, asset pipeline and generation guide. Registered SW-034 (persona assets and approval) and SW-035 (overlapping category texts, fixed on the branch).</li><li><span>2026-10-01</span> — The eight editorial needs worlds are live in production after PR #1 and Vercel deployment 8267863. Desktop, phone, category filtering, product and cart paths passed buyer-facing verification; SW-033 remains open only for a real iPhone and desktop Safari check.</li><li><span>2026-10-01</span> — The cinematic home intro is live in production and passed the same headless checks there; SW-033 stays open for a real iPhone and Safari check.</li><li><span>2026-10-01</span> — Home page intro replaced by a scroll-driven cinematic sequence built only with CSS transforms and one requestAnimationFrame loop (no new libraries). The butterfly vector was split into its three original pieces without changing the shape. One verification task registered, SW-033: test on a real iPhone and on Safari.</li><li><span>2026-09-30</span> — Skinworld V1 redesign completed and audited. SW-025, SW-027, SW-028, SW-029 and SW-030 closed after production build, type-check and browser verification on desktop and 390 × 844 px. Search, product add, cart, postal-code address completion and Stripe test Checkout passed. Two 3D butterfly animations with reduced-motion support were added. SW-010 advanced but stays open for a full screen-reader/automated scan. SW-032 registered two inverted compare-at prices; no catalog price was changed without owner confirmation.</li><li><span>2026-09-30</span> — Redesign audit (phase 0) completed without changing any storefront file. Seven findings registered: SW-025 text contrast below WCAG AA, SW-026 the &quot;free shipping in CDMX&quot; promise versus a $100 charge under $500, SW-027 one-column phone catalog, SW-028 duplicated and mismatched logo assets, SW-029 keyboard and nesting issues, SW-030 the redesign programme itself, and SW-031 missing product-detail content. SW-011 and SW-018 got new evidence.</li><li><span>2026-09-30</span> — The home page brand section was showing 2 laboratories out of 14 and hid the two largest, SESDERMA and Heliocare, behind a hand-written list; it now builds itself from the catalog, shows the four deepest with a real product photo and the rest as an index, and every name links to the shop already filtered. One new finding registered, SW-024: 46 of the 164 products carry no brand at all, so they never appear under any brand filter.</li><li><span>2026-09-30</span> — The owner ran supabase/migraciones/001-guia-y-mensajes.sql, which unblocked the last two code tasks. SW-017 closed: orders carry a tracking number and stage timestamps, captured when marking an order shipped and included in the customer email. SW-019 closed: messages moved from object storage to a table with its own indexes. Four tasks remain open and none of them can be closed from code: SW-011 needs a performance measurement, SW-012 needs the remaining typing, SW-008 needs the legal entity details and a reviewer, and SW-014 needs the Stripe account activated.</li><li><span>2026-09-30</span> — Fix pass over the pending tasks. Seven closed with verification evidence: retryable webhook with an alert (SW-001), rate limiting and review moderation (SW-003), admin login hardening (SW-004), canonical checkout URLs (SW-005), no customer email on the payment-status endpoint (SW-006), robots/sitemap and per-page metadata (SW-007), and the cart address form mounted once (SW-016). SW-011 and SW-012 advanced but stay open for the parts that need a measurement or further typing. SW-017 and SW-019 are blocked on one SQL migration now written at supabase/migraciones/001-guia-y-mensajes.sql. SW-008 and SW-014 remain with the owner.</li><li><span>2026-09-30</span> — Re-inspection after the order-tracking, email and postal-code work. Four defects confirmed fixed and verified in production (SW-020 webhook host, SW-021 checkout images, SW-022 address truncation, SW-023 admin visibility). Six new items registered (SW-014 live payments, SW-015 customer email, SW-016 duplicated address form, SW-017 tracking data, SW-018 catalog decisions, SW-019 message storage). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 and SW-013 updated with evidence. A unique constraint on orders.stripe_session_id was probed and confirmed to exist, so no duplicate-order task was opened.</li><li><span>2026-09-30</span> — Initial full source audit: 13 stable tasks registered; type-check and production build passed; no pre-existing task register was found.</li></ul>
+      <ul><li><span>2026-10-03</span> — El Centro de tareas quedó todo en español: títulos, detalles, criterios de cierre, historial, áreas y cambios recientes, sin cambiar identificadores, estados ni fechas. SW-034 actualizada con la versión final de anillos de cristal rosa claro y la entrada sin hueco desde la portada, que la dueña aprobó visualmente; sigue sin commit ni publicación.</li><li><span>2026-10-02</span> — La sección de necesidades se rehízo en local como una esfera de cristal esmerilado que gira con una sola ventana: la misma mujer muestra el problema severo y luego la piel perfecta, y el cambio ocurre mientras está tapada. Sin commit ni publicación; SW-034 espera aprobación visual.</li><li><span>2026-10-02</span> — La sección de necesidades se rehízo en local (sin commit ni publicación): la misma mujer se queda quieta y un cristal rosa revela el problema y la mejora en las 8 categorías, con 17 fotos hechas con IA en el ChatGPT de la dueña. SW-034 actualizada y esperando aprobación visual.</li><li><span>2026-10-01</span> — Revisión local de la sección de necesidades: se reusaron las fotos de Acné existentes y se verificaron la coreografía con ScrollTrigger y el cargador de cuadros reversible y acotado, conservando el catálogo y la identidad visual. Faltan siete personas distintas y la aprobación visual; nada publicado.</li><li><span>2026-10-01</span> — Sección de necesidades en la rama personas-necesidades (sin publicar): la escena ahora también se queda fija en celular y muestra una persona a la vez. Las indicaciones de cada persona se basan en investigación dermatológica. La primera persona real, Acné, se hizo con ocho imágenes de ChatGPT unidas con morphing (scripts/personas). SW-034 actualizada.</li><li><span>2026-10-01</span> — Sistema de personas para la sección de necesidades en la rama personas-necesidades (sin publicar): entrada controlada por el scroll, giro 3D, transformación y salida por categoría, carga diferida de cuadros, modos de celular y movimiento reducido, proceso para preparar imágenes y guía para generarlas. Se registraron SW-034 (imágenes de personas y aprobación) y SW-035 (textos de categorías encimados, corregido en la rama).</li><li><span>2026-10-01</span> — Los ocho mundos editoriales de necesidades están en producción tras el PR #1 y el despliegue de Vercel 8267863. Computadora, celular, filtros por categoría, producto y carrito pasaron la verificación del comprador; SW-033 sigue abierta solo para revisarla en un iPhone real y en Safari de computadora.</li><li><span>2026-10-01</span> — La introducción animada del inicio está en producción y pasó ahí las mismas revisiones sin pantalla; SW-033 sigue abierta para revisarla en un iPhone real y en Safari.</li><li><span>2026-10-01</span> — La introducción del inicio se reemplazó por una secuencia animada controlada por el scroll, hecha solo con transformaciones CSS y un ciclo de requestAnimationFrame (sin librerías nuevas). La mariposa vectorial se separó en sus tres piezas originales sin cambiar la forma. Se registró una tarea de verificación, SW-033: probar en un iPhone real y en Safari.</li><li><span>2026-09-30</span> — Rediseño Skinworld V1 terminado y auditado. Se cerraron SW-025, SW-027, SW-028, SW-029 y SW-030 tras la compilación de producción, la revisión de tipos y la verificación en navegador en computadora y a 390 × 844 px. Pasaron búsqueda, agregar productos, carrito, dirección por código postal y el pago de prueba de Stripe. Se agregaron dos animaciones 3D de la mariposa que respetan el movimiento reducido. SW-010 avanzó pero sigue abierta hasta una revisión completa con lector de pantalla y análisis automático. SW-032 registró dos precios &quot;Antes&quot; invertidos; no se cambió ningún precio del catálogo sin confirmación de la dueña.</li><li><span>2026-09-30</span> — Auditoría del rediseño (fase 0) terminada sin cambiar ningún archivo de la tienda. Siete hallazgos registrados: SW-025 contraste de texto debajo de WCAG AA, SW-026 la promesa de &quot;envío gratis en CDMX&quot; contra un cobro de $100 abajo de $500, SW-027 catálogo de una columna en celular, SW-028 archivos de logo duplicados y distintos, SW-029 problemas de teclado y controles anidados, SW-030 el propio programa de rediseño y SW-031 falta de información de detalle de producto. SW-011 y SW-018 recibieron evidencia nueva.</li><li><span>2026-09-30</span> — La sección de marcas del inicio mostraba 2 de 14 laboratorios y escondía los dos más grandes, SESDERMA y Heliocare, detrás de una lista escrita a mano; ahora se arma sola desde el catálogo, muestra los cuatro con más productos con una foto real y el resto como índice, y cada nombre lleva a la tienda ya filtrada. Se registró un hallazgo nuevo, SW-024: 46 de los 164 productos no tienen marca, así que nunca aparecen en ningún filtro de marca.</li><li><span>2026-09-30</span> — La dueña corrió supabase/migraciones/001-guia-y-mensajes.sql, lo que desbloqueó las dos últimas tareas de código. Se cerró SW-017: los pedidos guardan número de guía y fechas por etapa, que se capturan al marcar un pedido como enviado y van en el correo al cliente. Se cerró SW-019: los mensajes pasaron del almacenamiento de archivos a una tabla con sus propios índices. Quedan cuatro tareas abiertas y ninguna se puede cerrar con código: SW-011 necesita una medición de rendimiento, SW-012 el tipado que falta, SW-008 los datos legales y un revisor, y SW-014 que se active la cuenta de Stripe.</li><li><span>2026-09-30</span> — Pasada de correcciones sobre las tareas pendientes. Siete cerradas con evidencia: webhook que se reintenta y avisa (SW-001), límite de frecuencia y moderación de reseñas (SW-003), acceso al panel reforzado (SW-004), direcciones de pago canónicas (SW-005), sin correo del cliente en la consulta del estado del pago (SW-006), robots, sitemap y metadatos por página (SW-007), y el formulario de dirección del carrito una sola vez (SW-016). SW-011 y SW-012 avanzaron pero siguen abiertas por las partes que necesitan medición o más tipado. SW-017 y SW-019 quedaron bloqueadas por una migración SQL ya escrita en supabase/migraciones/001-guia-y-mensajes.sql. SW-008 y SW-014 siguen con la dueña.</li><li><span>2026-09-30</span> — Reinspección después del trabajo de seguimiento de pedidos, correos y códigos postales. Cuatro defectos confirmados como corregidos y verificados en producción (SW-020 dominio del webhook, SW-021 imágenes en el pago, SW-022 dirección cortada, SW-023 visibilidad en el panel). Seis tareas nuevas (SW-014 pagos reales, SW-015 correo al cliente, SW-016 formulario de dirección duplicado, SW-017 datos de guía, SW-018 decisiones del catálogo, SW-019 almacenamiento de mensajes). SW-001, SW-005, SW-007, SW-008, SW-009, SW-011 y SW-013 actualizadas con evidencia. Se probó y confirmó una restricción única sobre orders.stripe_session_id, así que no se abrió una tarea por pedidos duplicados.</li><li><span>2026-09-30</span> — Primera auditoría completa del código: 13 tareas registradas con identificador estable; la revisión de tipos y la compilación de producción pasaron; no existía un registro de tareas previo.</li></ul>
     </section>
 
     <h2>Cómo se mantiene</h2>
