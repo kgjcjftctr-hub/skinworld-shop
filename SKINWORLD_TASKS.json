@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-03T14:27:00-06:00",
-  "lastInspectedBy": "Claude Code, al publicar los textos legales de la dueña",
+  "lastInspectedAt": "2026-10-03T14:34:00-06:00",
+  "lastInspectedBy": "Claude Code, al publicar el arreglo de precios y cerrar SW-008",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -227,7 +227,7 @@
       "kind": "detected_problem",
       "category": "Contenido y legal",
       "priority": "P1",
-      "status": "requires_verification",
+      "status": "completed",
       "detectedAt": "2026-09-30",
       "updatedAt": "2026-10-03",
       "origin": [
@@ -273,6 +273,10 @@
         {
           "date": "2026-10-03",
           "note": "Por indicación de la dueña, se resolvieron las tres diferencias con el texto pegado (domicilio una sola vez, sin las notas de ChatGPT y sin el cuadro de envío gratis en CDMX en la página de envíos) y se publicaron los tres textos en producción: /privacidad, /terminos y /envios. La compilación de producción pasa. Queda abierta solo para la revisión legal por un profesional; el arreglo de precios de SW-032 no se incluyó en esta publicación."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Cerrada por indicación de la dueña: confirmó que los textos legales publicados (aviso de privacidad, términos y política de envíos, devoluciones, reembolsos y cancelaciones) ya están revisados y confirmados tal como los entregó. Verificado en producción el 2026-10-03: /privacidad, /terminos y /envios responden 200 con los textos y la fecha del 2 de octubre de 2026."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -999,6 +1003,10 @@
         {
           "date": "2026-10-03",
           "note": "Corregida la parte de código, solo en local (sin commit ni publicación): src/lib/products.ts, donde se lee el catálogo para la tienda, descarta el precio \"Antes\" cuando no es mayor al actual, así que ninguna tarjeta ni página de producto lo muestra. Verificado en local: Sérum Hidratante Intenso y Protector Solar SPF 50 ya no muestran precio \"Antes\", mientras que producción todavía muestra \"Antes $986\" junto a $1,250. La revisión de tipos pasa. No se cambió ningún precio de la base de datos: la dueña debe confirmar el precio regular y el actual de los dos productos para cerrar la tarea. El panel de administración sigue mostrando los valores tal como están guardados."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Arreglo de código publicado en producción por indicación de la dueña (src/lib/products.ts): la tienda ya no muestra un precio \"Antes\" menor o igual al actual. La revisión de tipos y la compilación de producción pasan. Sigue en progreso: no se cambió ningún precio del catálogo; falta que la dueña confirme el precio regular y el actual del Protector Solar SPF 50 y del Sérum Hidratante Intenso."
         }
       ]
     },
@@ -1145,6 +1153,10 @@
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-03",
+      "summary": "Publicado el arreglo de SW-032: la tienda ya no muestra precios \"Antes\" inconsistentes (faltan los precios correctos de dos productos). SW-008 cerrada: la dueña confirmó la revisión de los textos legales ya publicados."
+    },
     {
       "date": "2026-10-03",
       "summary": "Publicados en producción el aviso de privacidad, los términos y la política de envíos, devoluciones, reembolsos y cancelaciones con los textos finales de la dueña. SW-008 sigue abierta solo para la revisión legal profesional."

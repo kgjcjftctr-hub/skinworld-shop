@@ -31,6 +31,10 @@ type ProductRow = {
 };
 
 function mapRow(row: ProductRow): Product & Record<string, any> {
+  // Un precio "Antes" menor o igual al actual es un dato inconsistente: no se muestra.
+  const antesValido =
+    (row.compare_at_price == null || Number(row.compare_at_price) > Number(row.price)) &&
+    (row.compare_at_price_with_iva == null || Number(row.compare_at_price_with_iva) > Number(row.price_with_iva));
   return {
     id: row.id,
     name: row.name,
@@ -38,10 +42,10 @@ function mapRow(row: ProductRow): Product & Record<string, any> {
     description: row.description,
     shortDescription: row.short_description ?? undefined,
     price: Number(row.price),
-    compareAtPrice: row.compare_at_price != null ? Number(row.compare_at_price) : undefined,
+    compareAtPrice: antesValido && row.compare_at_price != null ? Number(row.compare_at_price) : undefined,
     priceWithIVA: Number(row.price_with_iva),
     compareAtPriceWithIVA:
-      row.compare_at_price_with_iva != null ? Number(row.compare_at_price_with_iva) : undefined,
+      antesValido && row.compare_at_price_with_iva != null ? Number(row.compare_at_price_with_iva) : undefined,
     brand: row.brand ?? undefined,
     sku: row.sku ?? undefined,
     image: row.image ?? undefined,
