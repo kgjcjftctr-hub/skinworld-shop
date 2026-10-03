@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-03T14:34:00-06:00",
-  "lastInspectedBy": "Claude Code, al publicar el arreglo de precios y cerrar SW-008",
+  "lastInspectedAt": "2026-10-03T14:53:00-06:00",
+  "lastInspectedBy": "Claude Code, al publicar la portada sin costura y el envío de tarifa única",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -812,22 +812,24 @@
     },
     {
       "id": "SW-026",
-      "title": "Hacer coincidir la promesa de \"envío gratis en CDMX\" con lo que cobra el pago",
+      "title": "Hacer que la promesa de envío coincida con lo que cobra el pago",
       "kind": "requires_confirmation",
       "category": "Tienda en línea",
       "priority": "P1",
-      "status": "requires_verification",
+      "status": "completed",
       "origin": [
         "src/components/header.tsx",
         "src/components/sections/cta.tsx",
         "src/app/envios/page.tsx",
         "src/app/api/checkout/route.ts",
-        "src/app/carrito/page.tsx"
+        "src/app/carrito/page.tsx",
+        "src/lib/envio.ts",
+        "src/app/preguntas-frecuentes/page.tsx"
       ],
-      "details": "La barra superior, la llamada final y la página de envíos prometen envío gratis en CDMX. La ruta de pago cobra una línea de envío de $100 a todo pedido de $500 o menos sin importar el estado, y el carrito muestra la misma regla. Un cliente de CDMX que compra el Cicaplast de $370 paga $470. O el texto o la regla está mal; cuál de los dos es una decisión del negocio.",
+      "details": "La barra superior, la llamada final y la página de envíos prometen envío gratis en CDMX. La ruta de pago cobra una línea de envío de $100 a todo pedido de $500 o menos sin importar el estado, y el carrito muestra la misma regla. Un cliente de CDMX que compra el Cicaplast de $370 paga $470. O el texto o la regla está mal; cuál de los dos es una decisión del negocio. Resuelta el 2026-10-03: la dueña decidió que el envío no es gratis y que cuesta lo mismo a todo el país; se cobra una tarifa única de $80 en cada pedido.",
       "doneWhen": "La dueña dice cuál es la política real de envío, y tanto los textos de la tienda como la regla del pago coinciden con ella.",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-09-30",
+      "updatedAt": "2026-10-03",
       "detectedIn": "2026-09-30T16:40:00-06:00",
       "history": [
         {
@@ -837,6 +839,14 @@
         {
           "date": "2026-09-30",
           "note": "Reconfirmado en el flujo rediseñado: el pago sigue decidiendo el envío solo por el subtotal y nunca lee el estado, mientras cuatro lugares visibles para el cliente prometen envío gratis en CDMX. Sigue siendo una decisión del negocio, no un arreglo de presentación."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Cambio parcial en local por indicación de la dueña: se quitó el texto de envío gratis en CDMX de la entrada de la sección de necesidades en el inicio. Sigue en la barra superior de las demás páginas y en otros textos; la regla del pago no cambió, así que la decisión de política de envío sigue pendiente."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Decisión de la dueña: el envío no será gratis y se cobra siempre lo mismo a todos lados; a ella le cuesta unos $80. Implementado y publicado en producción: una sola tarifa de $80 (src/lib/envio.ts) que muestra el carrito y cobra el pago, para cualquier total y destino (antes eran $100 solo en pedidos de $500 o menos). Se quitaron todas las menciones de envío gratis: barra superior, llamada final, franja de la sección de necesidades y preguntas frecuentes, que ahora dice que el envío cuesta 80 pesos. Verificado en producción con sesiones de pago de prueba de Stripe: un carrito de $370 cobra $80 de envío (total $450) y uno de $1,250 también $80 (total $1,330); ninguna página del sitio dice ya \"gratis\". La revisión de tipos y la compilación pasan. No se tocó la configuración de Stripe ni los pagos reales (SW-014). Nota: $80 es el monto que la dueña indicó como lo que le cuesta; si quiere cobrar otro monto, se cambia en un solo número."
         }
       ]
     },
@@ -1077,9 +1087,12 @@
         "src/components/sections/necesidades-timeline.ts",
         "src/components/sections/necesidades-personas.ts",
         "src/styles/necesidades.css",
-        "package.json (three)"
+        "package.json (three)",
+        "src/components/intro/intro-cinematica.tsx",
+        "src/styles/intro.css",
+        "src/components/barra-avisos.tsx"
       ],
-      "details": "La sección «Encuentra soluciones por problema» se queda fija y el scroll gira anillos de cristal rosa claro con bordes redondeados alrededor de la misma mujer, que no se mueve. El anillo ancho es esmerilado: cuando se pone de canto la tapa por completo y solo entonces cambia la foto; los anillos delgados son de cristal transparente y la enmarcan. Por categoría se ve primero el problema y luego la piel perfecta. Son 9 fotos: un solo resultado con piel perfecta para todas las categorías y 8 problemas severos pero no desagradables, hechos en el ChatGPT de la dueña con su permiso y alineados a menos de 1 px. El cristal se dibuja con WebGL (three.js), que solo se descarga cuando la sección está cerca; sin WebGL se muestra la foto sola. Al subir desde la portada la sección ya está llena: el título y el anillo cerrado tapándola, que se abre para revelarla. Publicado en producción el 2026-10-03 (commit aa1776c en main). Revisado en producción el 2026-10-03 en Chrome de escritorio y vista estrecha, y Safari de escritorio; la sección carga con los anillos y una categoría visible a la vez.",
+      "details": "La sección «Encuentra soluciones por problema» se queda fija y el scroll gira anillos de cristal rosa claro con bordes redondeados alrededor de la misma mujer, que no se mueve. El anillo ancho es esmerilado: cuando se pone de canto la tapa por completo y solo entonces cambia la foto; los anillos delgados son de cristal transparente y la enmarcan. Por categoría se ve primero el problema y luego la piel perfecta. Son 9 fotos: un solo resultado con piel perfecta para todas las categorías y 8 problemas severos pero no desagradables, hechos en el ChatGPT de la dueña con su permiso y alineados a menos de 1 px. El cristal se dibuja con WebGL (three.js), que solo se descarga cuando la sección está cerca; sin WebGL se muestra la foto sola. Al subir desde la portada la sección ya está llena: el título y el anillo cerrado tapándola, que se abre para revelarla. Publicado en producción el 2026-10-03 (commits aa1776c y b1af85c en main). Revisado en producción el 2026-10-03 en Chrome de escritorio y vista estrecha, y Safari de escritorio; la sección carga con los anillos y una categoría visible a la vez.",
       "doneWhen": "La dueña decide si se pone el aviso «Imágenes ilustrativas generadas con IA».",
       "history": [
         {
@@ -1117,6 +1130,14 @@
         {
           "date": "2026-10-03",
           "note": "Publicado en producción y revisado en Chrome de escritorio, vista estrecha y Safari de escritorio. Type-check, build y seis pruebas de regresión pasan. SW-035 se verificó en la página real. Solo falta la decisión de la dueña sobre mostrar el aviso «Imágenes ilustrativas generadas con IA»; queda como requiere verificación hasta esa decisión."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Por indicación de la dueña, en local (sin publicar): se quitó de la entrada de la sección de necesidades la franja «Precios en pesos mexicanos · Envío gratis en CDMX · Productos 100% originales» y se eliminó la costura de color entre la portada y la sección: el contenedor de la página tiene fondo liso #FCF8F7 y la portada terminaba con el brillo rosa cortado justo ahí, así que ahora el final de la portada se funde con ese color (src/styles/intro.css) y el fondo de la escena fija se funde hacia arriba (src/styles/necesidades.css). Además los dos botones de la portada ahora son un par del mismo tamaño y más grandes: «Explorar productos» sólido y «Conocer a la Dra. Karina» con contorno. Verificado con capturas a 1440×900 y 390×844 en varias posiciones del scroll: sin costura, el nombre y los botones se ven nítidos; la revisión de tipos y las 6 pruebas pasan. Falta autorización para publicar."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Publicado en producción por indicación de la dueña (commit b1af85c): sin la franja de avisos entre la portada y la sección, sin costura de color (el final de la portada se funde con el color de la página) y con los botones de la portada rediseñados como un par más grande. Verificado en https://www.skinworld.shop a 1440×900: sin costura, el nombre y los botones se ven nítidos y la sección entra limpia."
         }
       ]
     },
@@ -1153,6 +1174,14 @@
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-03",
+      "summary": "Publicados en producción: portada sin costura ni franja de avisos con botones rediseñados, y envío de tarifa única de $80 para todos los pedidos y destinos, sin menciones de envío gratis. SW-026 cerrada; sigue pendiente SW-014 (pagos reales)."
+    },
+    {
+      "date": "2026-10-03",
+      "summary": "En local, sin publicar: se quitó la franja de avisos (con el envío gratis en CDMX) entre la portada y la sección de necesidades, se eliminó la costura de color con un fundido y los botones de la portada se rediseñaron como un par más grande. SW-034 y SW-026 actualizadas."
+    },
     {
       "date": "2026-10-03",
       "summary": "Publicado el arreglo de SW-032: la tienda ya no muestra precios \"Antes\" inconsistentes (faltan los precios correctos de dos productos). SW-008 cerrada: la dueña confirmó la revisión de los textos legales ya publicados."
