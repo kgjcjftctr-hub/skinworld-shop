@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { isAdminAuthenticated } from '@/lib/admin-auth';
 import { getSupabase } from '@/lib/supabase';
-import { PedidosClient } from './pedidos-client';
+import { PedidosClient, type Pedido } from './pedidos-client';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,7 +35,7 @@ export default async function AdminOrdersPage() {
           Al marcar cada etapa se le avisa al cliente por correo automáticamente.
         </p>
 
-        <PedidosClient pedidos={(pedidos ?? []) as any} />
+        <PedidosClient pedidos={(pedidos ?? []) as Pedido[]} />
       </div>
     </div>
   );

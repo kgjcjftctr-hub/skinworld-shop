@@ -30,7 +30,7 @@ type ProductRow = {
   updated_at: string;
 };
 
-function mapRow(row: ProductRow): Product & Record<string, any> {
+function mapRow(row: ProductRow): Product {
   // Un precio "Antes" menor o igual al actual es un dato inconsistente: no se muestra.
   const antesValido =
     (row.compare_at_price == null || Number(row.compare_at_price) > Number(row.price)) &&

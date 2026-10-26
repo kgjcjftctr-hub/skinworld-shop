@@ -4,6 +4,7 @@ import { getStripe } from '@/lib/stripe';
 import { getSupabase } from '@/lib/supabase';
 import { origenSeguro } from '@/lib/sitio';
 import { COSTO_DE_ENVIO } from '@/lib/envio';
+import { cantidadValida } from '@/lib/carrito';
 
 interface ArticuloDelCarrito {
   id: string;
@@ -76,7 +77,7 @@ export async function POST(request: NextRequest) {
     const product = products.find((p) => p.id === item.id);
     if (!product || !product.in_stock) continue;
 
-    const quantity = Math.max(1, Math.min(99, Math.round(Number(item.cartQuantity)) || 1));
+    const quantity = cantidadValida(item.cartQuantity);
     const unitAmount = Math.round(Number(product.price_with_iva) * 100);
     subtotal += (unitAmount / 100) * quantity;
 

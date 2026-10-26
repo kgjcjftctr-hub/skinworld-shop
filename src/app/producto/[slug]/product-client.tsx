@@ -5,6 +5,8 @@ import { CreditCard, Minus, Plus, ShieldCheck, ShoppingBag, Truck } from 'lucide
 import { toast } from 'sonner';
 import { formatPrice } from '@/utils';
 import { useCart } from '@/store/cart';
+import { CANTIDAD_MAXIMA } from '@/lib/carrito';
+import type { Product } from '@/types';
 import { ProductCard } from '@/components/product-card';
 import Link from 'next/link';
 
@@ -13,9 +15,9 @@ export function ProductClient({
   relatedProducts,
   variants = [],
 }: {
-  product: any;
-  relatedProducts: any[];
-  variants?: any[];
+  product: Product;
+  relatedProducts: Product[];
+  variants?: Product[];
 }) {
   const [quantity, setQuantity] = useState(1);
   // Punto de la imagen sobre el que está el cursor: define qué parte se ve
@@ -192,7 +194,7 @@ export function ProductClient({
                       </span>
                     </li>
                   )}
-                  {variants.map((variant: any) => (
+                  {variants.map((variant) => (
                     <li key={variant.id}>
                       <Link
                         href={`/producto/${encodeURIComponent(variant.slug)}`}
@@ -222,9 +224,11 @@ export function ProductClient({
                 </span>
                 <button
                   type="button"
-                  onClick={() => setQuantity((q) => q + 1)}
+                  onClick={() => setQuantity((q) => Math.min(CANTIDAD_MAXIMA, q + 1))}
+                  disabled={quantity >= CANTIDAD_MAXIMA}
                   aria-label="Aumentar cantidad"
-                  className="flex h-11 w-11 items-center justify-center rounded-full text-sw-ink transition-colors hover:bg-sw-pink-pale"
+                  title={quantity >= CANTIDAD_MAXIMA ? `Máximo ${CANTIDAD_MAXIMA} piezas por producto` : undefined}
+                  className="flex h-11 w-11 items-center justify-center rounded-full text-sw-ink transition-colors hover:bg-sw-pink-pale disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
                 >
                   <Plus className="h-4 w-4" />
                 </button>
@@ -293,7 +297,7 @@ export function ProductClient({
               También para {product.category ? product.category.toLowerCase() : 'tu piel'}
             </h2>
             <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 lg:grid-cols-4 lg:gap-x-8">
-              {relatedProducts.map((related: any) => (
+              {relatedProducts.map((related) => (
                 <ProductCard key={related.id} product={related} />
               ))}
             </div>

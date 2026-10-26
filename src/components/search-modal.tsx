@@ -199,7 +199,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                 results.brands.length === 0 &&
                 results.categories.length === 0 && (
                   <div className="p-6 text-center text-sw-muted">
-                    No se encontraron resultados para "{query}"
+                    No se encontraron resultados para “{query}”
                   </div>
                 )}
             </>

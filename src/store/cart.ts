@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Product } from '@/types';
+import { cantidadValida } from '@/lib/carrito';
 
 export interface CartItem extends Product {
   cartQuantity: number;
@@ -29,14 +30,14 @@ export const useCart = create<CartStore>()(
             return {
               items: state.items.map((item) =>
                 item.id === product.id
-                  ? { ...item, cartQuantity: item.cartQuantity + quantity }
+                  ? { ...item, cartQuantity: cantidadValida(item.cartQuantity + quantity) }
                   : item
               ),
             };
           }
-          
+
           return {
-            items: [...state.items, { ...product, cartQuantity: quantity }],
+            items: [...state.items, { ...product, cartQuantity: cantidadValida(quantity) }],
           };
         });
       },
@@ -55,7 +56,7 @@ export const useCart = create<CartStore>()(
         
         set((state) => ({
           items: state.items.map((item) =>
-            item.id === productId ? { ...item, cartQuantity: quantity } : item
+            item.id === productId ? { ...item, cartQuantity: cantidadValida(quantity) } : item
           ),
         }));
       },
@@ -77,6 +78,15 @@ export const useCart = create<CartStore>()(
     }),
     {
       name: 'skinworld-cart',
+      // Un carrito guardado antes de existir el tope puede traer más piezas de
+      // las que el pago acepta; se recorta al cargarlo.
+      merge: (persisted, current) => {
+        const items = (persisted as Partial<CartStore> | undefined)?.items ?? [];
+        return {
+          ...current,
+          items: items.map((item) => ({ ...item, cartQuantity: cantidadValida(item.cartQuantity) })),
+        };
+      },
     }
   )
 );

@@ -9,6 +9,7 @@ import { useShippingAddress, isShippingAddressComplete } from '@/store/shipping-
 import { ShippingAddressForm } from '@/components/checkout/shipping-address-form';
 import { formatPrice } from '@/utils';
 import { COSTO_DE_ENVIO } from '@/lib/envio';
+import { CANTIDAD_MAXIMA } from '@/lib/carrito';
 import { ShoppingBag, Trash2, ArrowLeft, ArrowRight, Minus, Plus } from 'lucide-react';
 
 export default function CartPage() {
@@ -152,8 +153,10 @@ export default function CartPage() {
                             <button
                               type="button"
                               onClick={() => updateQuantity(item.id, item.cartQuantity + 1)}
+                              disabled={item.cartQuantity >= CANTIDAD_MAXIMA}
                               aria-label={`Aumentar cantidad de ${item.name}`}
-                              className="flex h-9 w-9 items-center justify-center rounded-full text-sw-ink transition-colors hover:bg-sw-pink-pale"
+                              title={item.cartQuantity >= CANTIDAD_MAXIMA ? `Máximo ${CANTIDAD_MAXIMA} piezas por producto` : undefined}
+                              className="flex h-9 w-9 items-center justify-center rounded-full text-sw-ink transition-colors hover:bg-sw-pink-pale disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
                             >
                               <Plus className="h-3.5 w-3.5" />
                             </button>

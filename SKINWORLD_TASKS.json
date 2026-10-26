@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-03T14:53:00-06:00",
-  "lastInspectedBy": "Claude Code, al publicar la portada sin costura y el envío de tarifa única",
+  "lastInspectedAt": "2026-10-26T18:00:00-06:00",
+  "lastInspectedBy": "Claude, arreglos de código y verificación de Stripe",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -327,7 +327,7 @@
       "priority": "P2",
       "status": "requires_verification",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-10-03",
+      "updatedAt": "2026-10-04",
       "origin": [
         "src/components/header.tsx",
         "src/components/search-modal.tsx",
@@ -349,6 +349,10 @@
         {
           "date": "2026-10-03",
           "note": "Inicio, catálogo, detalle, carrito y checkout se revisaron en Chrome de escritorio y vista estrecha; Safari de escritorio también cargó el inicio con navegación y categorías. Esto no sustituye una prueba completa de teclado, lector de pantalla ni auditoría automática, que siguen pendientes."
+        },
+        {
+          "date": "2026-10-04",
+          "note": "Auditoría local a 1440 y 390 px: catálogo, filtros, producto, carrito, contacto y páginas informativas sin desbordamiento horizontal ni imágenes rotas observadas; la búsqueda cerró con Escape y devolvió el foco. No se completó revisión con lector de pantalla ni teclado de punta a punta, por lo que sigue pendiente."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -400,14 +404,16 @@
       "kind": "improvement_suggestion",
       "category": "Calidad del código",
       "priority": "P3",
-      "status": "pending",
+      "status": "completed",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-10-03",
+      "updatedAt": "2026-10-26",
       "origin": [
         "src/app/api/stripe/webhook/route.ts",
         "src/app/api/checkout/route.ts",
         "src/app/producto/[slug]/product-client.tsx",
-        "src/app/admin/pedidos/page.tsx"
+        "src/app/admin/pedidos/page.tsx",
+        "src/lib/products.ts",
+        "src/app/admin/pedidos/pedidos-client.tsx"
       ],
       "details": "La compilación de producción pasa, pero varios valores de pago, producto y pedido están tipados como any. Tipos más precisos y validación en tiempo de ejecución reducirán fallas silenciosas entre integraciones.",
       "doneWhen": "Esos puntos usan tipos explícitos de TypeScript y validación de entrada; los flujos de pago, webhook, producto y panel siguen pasando la revisión de tipos y las pruebas de integración.",
@@ -423,6 +429,10 @@
         {
           "date": "2026-10-03",
           "note": "La revisión de tipos y el build pasan, pero el detalle de producto todavía contiene any en product, relatedProducts y variants, además de parámetros de iteración. No se tipó superficialmente sin inspeccionar los contratos del catálogo y el panel; la limpieza completa sigue pendiente."
+        },
+        {
+          "date": "2026-10-26",
+          "note": "Se quitaron los any: la página de producto usa Product para product, relatedProducts y variants; mapRow de src/lib/products.ts devuelve Product; el panel de pedidos usa el tipo Pedido exportado de pedidos-client. El pago y el webhook ya no tenían any y el pago ya valida su entrada. npx tsc --noEmit y next build pasan. Cambio local, sin publicar."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -435,7 +445,7 @@
       "priority": "P1",
       "status": "requires_verification",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-09-30",
+      "updatedAt": "2026-10-04",
       "origin": [
         "src/app/page.tsx",
         "src/components/sections/featured-products.tsx",
@@ -457,6 +467,10 @@
         {
           "date": "2026-09-30",
           "note": "La sección de marcas del inicio ya no es una lista escrita a mano: se arma desde el catálogo, así que al agregar un laboratorio en el panel la portada se actualiza sola. Verificado en local en computadora y celular; cada marca lleva a la tienda ya filtrada, y el enlace de SESDERMA devuelve exactamente los 31 productos que promete el inicio."
+        },
+        {
+          "date": "2026-10-04",
+          "note": "Auditoría local y lectura de producción: portada, catálogo, variante Anthelios Mineral One, ficha, carrito y precios visibles respondieron. La portada local y producción difieren por cambios visuales aún no publicados. Se detectó que el carrito conserva precios y cantidades locales mientras /api/checkout consulta precios actuales y limita cada cantidad a 99; no se creó sesión de pago ni se modificó catálogo. Sigue pendiente comprobar un cambio de catálogo aprobado de extremo a extremo."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -467,7 +481,7 @@
       "kind": "detected_problem",
       "category": "Operación",
       "priority": "P0",
-      "status": "pending",
+      "status": "requires_verification",
       "origin": [
         "src/lib/stripe.ts",
         "Variables de entorno de Vercel",
@@ -476,7 +490,7 @@
       "details": "Consultado en vivo el 2026-09-30: la llave de Stripe configurada es de prueba y la cuenta reporta charges_enabled=false y payouts_enabled=false. Por eso los clientes reales no pueden pagar: la tienda solo acepta pedidos con tarjetas de prueba de Stripe. Para activar la cuenta, la dueña tiene que conectar una cuenta bancaria; después, las llaves reales (secreta y pública) deben reemplazar a las de prueba.",
       "doneWhen": "La cuenta de Stripe reporta charges_enabled=true, las llaves reales están en Vercel, hay un webhook en modo real registrado en https://www.skinworld.shop/api/stripe/webhook con su propio secreto de firma guardado como STRIPE_WEBHOOK_SECRET, y se completa, registra y reembolsa una compra real de bajo monto.",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-09-30",
+      "updatedAt": "2026-10-26",
       "history": [
         {
           "date": "2026-09-30",
@@ -489,6 +503,18 @@
         {
           "date": "2026-09-30",
           "note": "Se volvió a revisar la cuenta de Stripe configurada: las llaves siguen en modo de prueba y la cuenta reporta charges_enabled=false, payouts_enabled=false y details_submitted=false. El pago rediseñado llega bien a Stripe, pero solo como entorno de prueba declarado."
+        },
+        {
+          "date": "2026-10-26",
+          "note": "La dueña activó la cuenta real de Stripe (llave publicable pk_live visible en el panel) y guardó la llave secreta real en Vercel para Production y Preview. Se volvió a desplegar el mismo código de producción (0c13ce1) y una sesión de pago abierta sin pagar en www.skinworld.shop se creó como cs_live: el pago ya está en modo real. Falta: STRIPE_WEBHOOK_SECRET y NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY siguen con los valores de prueba del 17 de septiembre, así que hay que registrar el webhook en la cuenta real, guardar su secreto de firma y hacer una compra real de bajo monto con reembolso."
+        },
+        {
+          "date": "2026-10-26",
+          "note": "La dueña registró el webhook en la cuenta real de Stripe (https://www.skinworld.shop/api/stripe/webhook) y guardó su secreto de firma en STRIPE_WEBHOOK_SECRET en Vercel. Se volvió a desplegar producción con el mismo código; el pago sigue abriendo como cs_live y la ruta del webhook responde 400 ante una firma inválida. Falta la prueba final: una compra real de bajo monto que se guarde como pedido, mande los correos y se reembolse."
+        },
+        {
+          "date": "2026-10-26",
+          "note": "Primera compra real en producción hecha por el dueño: el webhook guardó el pedido 7DB7536C en la tabla orders con estado Pagado, 679 MXN y sesión cs_live, y el correo «Recibimos tu pedido 7DB7536C» llegó al cliente desde contacto@skinworld.shop. Queda por confirmar que llegó el aviso de pedido nuevo al correo de la tienda y, si se decide, el reembolso desde Stripe."
         }
       ],
       "detectedIn": "2026-09-30T10:40:00-06:00"
@@ -1171,9 +1197,205 @@
           "note": "Verificado en producción el 2026-10-03 en Chrome y Safari de escritorio: los nombres y descripciones de categorías aparecen de uno en uno; la escena final queda después de la categoría. Seis pruebas de regresión, revisión de tipos y build pasan."
         }
       ]
+    },
+    {
+      "id": "SW-036",
+      "title": "Rediseñar las secciones editoriales posteriores a necesidades",
+      "kind": "improvement_suggestion",
+      "category": "Tienda en línea",
+      "priority": "P2",
+      "status": "completed",
+      "detectedAt": "2026-10-03",
+      "updatedAt": "2026-10-04",
+      "origin": [
+        "src/components/sections/skinworld-edit.tsx",
+        "src/components/sections/brands.tsx",
+        "src/components/sections/editorial.tsx",
+        "src/components/sections/expertise.tsx",
+        "src/components/sections/testimonials.tsx",
+        "src/components/sections/blog-preview.tsx",
+        "src/components/sections/cta.tsx",
+        "src/components/footer.tsx",
+        "src/styles/home-editorial.css",
+        "src/components/product-card.tsx",
+        "public/images/editorial/skinworld-edit-silk.webp",
+        "public/images/editorial/age-reverse-day-cutout.webp",
+        "public/images/editorial/skinworld-edit-portrait.webp"
+      ],
+      "details": "Dirección visual aprobada para la selección de la Dra. Karina, galería de marcas, Dra. Karina, opiniones, Journal, cierre y pie. La selección muestra el producto destacado real del catálogo con una composición editorial adaptable. Se conservan las rutas, datos reales y funciones de compra; las transiciones suaves enlazan los cambios de color.",
+      "doneWhen": "La implementación local conserva las rutas y acciones de compra, pasa la revisión de tipos y la compilación, se ve sin desbordes a 1440 y 390 px y no produce errores de consola. El movimiento reducido muestra el contenido sin animación decorativa.",
+      "detectedIn": "2026-10-03T15:26:54-06:00",
+      "history": [
+        {
+          "date": "2026-10-03",
+          "note": "Implementado en local: composiciones editoriales con producto, marcas, retrato, opiniones, Journal, cierre y pie; gradientes de continuidad y animaciones de scroll con alternativa de movimiento reducido. Pasaron tipos y compilación. Revisado en Chrome a 1440 y 390 px, además de anchos 375, 768 y 1920 y pantalla baja 1280×600: sin desbordamiento horizontal ni errores de consola. Las fotos cargaron y el producto principal se agregó al carrito; no se hizo despliegue ni se midieron cuadros por segundo en dispositivo físico."
+        },
+        {
+          "date": "2026-10-03",
+          "note": "Aplicada en local la maqueta aprobada de Skinworld Edit 001: portada de seda y cristal, A.G.E. Reverse Day del catálogo con imagen editorial y foto original conmutables, ficha de datos disponibles, interludio humano y recomendaciones reales. Recursos WebP optimizados; sin inventar beneficios médicos. La compilación de producción pasó. Revisado en Chrome compilado a 1440 y 390 px, y a 375 px: sin desbordamiento ni errores de consola; la galería responde. Sin publicación."
+        },
+        {
+          "date": "2026-10-04",
+          "note": "Retirados del inicio el número 001 y el rótulo Skinworld Edit 001. Reorganizado el encabezado, la foto alternativa del producto destacado y la ficha para impedir cruces de texto e imagen; reforzado el fondo del título móvil. El retrato editorial deja libre el texto, y el título del Journal conserva contraste blanco incluso al pasar el cursor. Verificados seis anchos (375, 390, 768, 834, 1024 y 1440 px), sin solapamientos de encabezado/ficha, desbordamiento ni errores de consola. Compilación y tipos correctos. Cambios solo locales, sin publicación."
+        },
+        {
+          "date": "2026-10-04",
+          "note": "En la auditoría del 4 de octubre, la portada local ya no muestra 001/Skinworld Edit 001, pero producción https://www.skinworld.shop/ aún los muestra. La tarea conserva su cierre local; publicación y verificación en vivo no se realizaron en esta auditoría."
+        }
+      ]
+    },
+    {
+      "id": "SW-037",
+      "title": "Hacer coincidir la cantidad del carrito con la cantidad enviada al pago",
+      "kind": "detected_problem",
+      "category": "Tienda en línea",
+      "priority": "P1",
+      "status": "requires_verification",
+      "origin": [
+        "src/store/cart.ts",
+        "src/app/carrito/page.tsx",
+        "src/app/producto/[slug]/product-client.tsx",
+        "src/app/api/checkout/route.ts",
+        "src/lib/carrito.ts"
+      ],
+      "details": "El producto y el carrito permiten subir la cantidad sin límite, pero /api/checkout reduce cada línea a un máximo de 99. En la interfaz local se llegó a 100 unidades de Anthelios Mineral One FPS50+ Tono 01 Light y el carrito mostró $67,080 con envío; la ruta de pago, por su código, enviaría 99 unidades ($66,410 con envío) sin avisar. No se creó sesión Stripe ni se hizo un pago.",
+      "doneWhen": "El comprador no puede llegar a un total distinto del que se envía a Stripe por este límite, y una prueba autorizada con 99/100 unidades verifica el mensaje o bloqueo y el importe final.",
+      "detectedAt": "2026-10-04",
+      "updatedAt": "2026-10-26",
+      "detectedIn": "2026-10-04T16:24:58-06:00",
+      "history": [
+        {
+          "date": "2026-10-04",
+          "note": "Reproducción sustentada en código: aumentar un producto a 100 en /carrito; el total usa 100 (getTotalPrice), mientras /api/checkout aplica Math.min(99, ...) antes de crear la línea de Stripe. Se evitó llamar a Stripe por el alcance de la auditoría."
+        },
+        {
+          "date": "2026-10-04",
+          "note": "Confirmación en interfaz local móvil a 390 px: 99 pulsaciones del botón Aumentar desde 1 llevaron a Cantidad 100 y Total $67,080, con Proceder al pago habilitado. El código de /api/checkout limita a 99, lo que produciría $66,410. Se quitó el producto del carrito de prueba sin llamar al endpoint."
+        },
+        {
+          "date": "2026-10-26",
+          "note": "Arreglado en código, sin publicar: un solo tope de 99 piezas (src/lib/carrito.ts) lo usan el producto, el carrito y el pago. El botón Aumentar se desactiva al llegar a 99 con el aviso «Máximo 99 piezas por producto», y un carrito guardado con más piezas se recorta al cargarse. Verificado en local: un carrito guardado con 150 unidades de Anthelios Mineral One se mostró con 99 y total $66,410, el mismo importe que manda el pago. Tipos, lint y build pasan. Falta publicarlo y revisarlo en producción."
+        }
+      ]
+    },
+    {
+      "id": "SW-038",
+      "title": "Configurar la revisión estática para que npm run lint pueda ejecutarse",
+      "kind": "detected_problem",
+      "category": "Calidad técnica",
+      "priority": "P3",
+      "status": "completed",
+      "origin": [
+        "package.json",
+        "Configuración de ESLint",
+        ".eslintrc.json"
+      ],
+      "details": "npm run lint ejecuta next lint, pero no existe una configuración que permita completarlo sin interacción: la orden abre el asistente de ESLint y termina con código 1 en esta auditoría. La compilación y la revisión de tipos sí pasan.",
+      "doneWhen": "npm run lint termina sin pedir configuración y devuelve código 0 o errores de reglas concretos, tanto localmente como en CI.",
+      "detectedAt": "2026-10-04",
+      "updatedAt": "2026-10-26",
+      "detectedIn": "2026-10-04T16:24:58-06:00",
+      "history": [
+        {
+          "date": "2026-10-04",
+          "note": "Reproducido en la rama main, commit 0c13ce1 con cambios locales: npm run lint mostró How would you like to configure ESLint? y terminó con código 1. Seis tests, tipos y build pasaron por separado."
+        },
+        {
+          "date": "2026-10-26",
+          "note": "Se agregó .eslintrc.json con next/core-web-vitals. npm run lint ya no abre el asistente y termina con código 0 después de corregir dos comillas sin escapar (admin-dashboard.tsx y search-modal.tsx). Quedan solo advertencias de <img>, que ya sigue SW-011. Ojo: al publicar, next build también corre el lint. Cambio local, sin publicar."
+        }
+      ]
+    },
+    {
+      "id": "SW-039",
+      "title": "Verificar el rediseño de identidad \"receta de farmacia\" en celular y escritorio",
+      "kind": "requires_confirmation",
+      "category": "Accesibilidad",
+      "priority": "P2",
+      "status": "requires_verification",
+      "origin": [
+        "src/app/carrito/page.tsx",
+        "src/app/layout.tsx",
+        "src/app/tienda/shop-client.tsx",
+        "src/components/barra-avisos.tsx",
+        "src/components/header.tsx",
+        "src/components/product-card.tsx",
+        "src/components/search-modal.tsx",
+        "src/styles/globals.css",
+        "src/styles/home-editorial.css",
+        "src/styles/identidad.css",
+        "tailwind.config.ts"
+      ],
+      "details": "Rediseño con la guía frontend-design, solo en local, que reemplaza el estilo Apple del mismo día: papel de consulta verde-gris #F3F5F2, tinta #17211E, rubí #8A2846 para texto y acciones y el rosa de la mariposa en un único bloque grande (el cierre); titulares en Playfair Display y texto en Inter, la misma tipografía de antes del rediseño (se probó Bricolage Grotesque y se retiró por petición de la dueña); productos como etiquetas de farmacia (ficha blanca con filete grueso arriba); botones de 6 px; pie oscuro. La tienda abre con una frase que es el filtro por problema («Busco productos para [acné]»): un menú propio de enlaces, con conteo por problema, que lleva a ?categoria= (se descartó el select nativo porque su lista salía gigante). Se revisó en navegador: tienda (escritorio, 375 px y filtro de Acné con 19 productos), cierre, selección de la Dra., experiencia y pie. No se probó la página de producto, el carrito, el pago, Safari ni un iPhone real.",
+      "doneWhen": "La dueña aprueba la identidad y se revisan portada (con la intro), tienda y su frase de filtro, producto, carrito, pago, nosotros, Journal y contacto en 390 px y 1440 px, en Safari y en un iPhone real, con movimiento reducido y contraste alto, y el filtro de la frase se prueba con teclado y lector de pantalla.",
+      "detectedAt": "2026-10-05",
+      "updatedAt": "2026-10-05",
+      "detectedIn": "2026-10-05T12:00:00-06:00",
+      "history": [
+        {
+          "date": "2026-10-05",
+          "note": "Auditoría contra apple-design y cambios aplicados en local. tsc y next build correctos; sin prueba visual."
+        },
+        {
+          "date": "2026-10-05",
+          "note": "Rediseño estilo Apple aplicado en local. tsc y next build correctos. Revisado en navegador: tienda (escritorio y 375 px), nosotros, Journal, contacto y portada (escenas de necesidades, edición, laboratorios, experiencia, pie). Pendiente producto, carrito, pago, Safari e iPhone real, y la aprobación de la dueña. Sin commit ni publicación."
+        },
+        {
+          "date": "2026-10-05",
+          "note": "A petición de la dueña se cambió el estilo Apple por la identidad «receta de farmacia» con frontend-design. tsc y next build correctos. Revisado en navegador la tienda (escritorio, 375 px, filtro de Acné con 19 productos), cierre rosa, selección de la Dra. y experiencia. Pendiente producto, carrito, pago, Safari e iPhone real, y su aprobación. Sin commit ni publicación."
+        },
+        {
+          "date": "2026-10-05",
+          "note": "La dueña pidió volver a la tipografía anterior y corregir la lista gigante de la frase. Se restauró Playfair Display (archivos recuperados de git), se retiró Bricolage Grotesque y el select se reemplazó por un menú de enlaces. Verificado en navegador: menú con las 9 opciones y conteos, Acné filtra a 19 productos y el menú se cierra. tsc y next build correctos. Sin commit ni publicación."
+        }
+      ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-26",
+      "summary": "Arreglos en código, verificados en local y sin publicar: tope de 99 piezas igual en carrito y pago (SW-037), tipos sin any (SW-012) y lint funcionando (SW-038)."
+    },
+    {
+      "date": "2026-10-26",
+      "summary": "Primera venta real: el pedido 7DB7536C (679 MXN, cs_live) se guardó solo y el cliente recibió su confirmación. Falta confirmar el aviso al correo de la tienda (SW-014)."
+    },
+    {
+      "date": "2026-10-26",
+      "summary": "Stripe pasó a modo real en producción: llave secreta y webhook reales en Vercel, nuevo despliegue y pago verificado como cs_live sin cobrar. Falta una compra real de bajo monto con reembolso (SW-014)."
+    },
+    {
+      "date": "2026-10-05",
+      "summary": "Tipografía anterior restaurada (Playfair Display) y la frase de la tienda ahora usa un menú propio de tamaño normal en lugar del select nativo. Verificado en navegador, sin publicar (SW-039)."
+    },
+    {
+      "date": "2026-10-05",
+      "summary": "Identidad nueva «receta de farmacia» en lugar del estilo Apple, solo en local: papel verde-gris, tinta oscura, rubí, un bloque rosa de cierre, Bricolage Grotesque en titulares, etiquetas de producto y una frase que filtra la tienda por problema. Revisado en navegador, sin publicar (SW-039)."
+    },
+    {
+      "date": "2026-10-05",
+      "summary": "Rediseño de todo el sitio con estilo Apple, solo en local: tipografía del sistema, superficies neutras, mosaicos redondeados, secciones planas y pie claro; se retiró Playfair Display. Revisado en navegador, sin publicar (SW-039)."
+    },
+    {
+      "date": "2026-10-05",
+      "summary": "Auditoría de diseño estilo Apple: respuesta al presionar, material translúcido, movimiento reducido con fundidos, menú móvil con origen y búsqueda más ágil. Tipos y build correctos; falta revisión visual (SW-039)."
+    },
+    {
+      "date": "2026-10-04",
+      "summary": "Auditoría funcional local (1440/390 px) y contraste de producción sin compras ni envíos: seis tests, tipos y build correctos; detectados el límite silencioso de 99 unidades en checkout (SW-037) y el lint no ejecutable (SW-038). Centro de tareas regenerado solo en local."
+    },
+    {
+      "date": "2026-10-04",
+      "summary": "Eliminados 001 y Skinworld Edit 001 de la portada. Ajustada la selección para que el destacado cambiante, el retrato y el Journal mantengan textos legibles; seis anchos revisados, sin solapamientos ni errores. Compilación correcta; sin publicación."
+    },
+    {
+      "date": "2026-10-03",
+      "summary": "Skinworld Edit 001 actualizado en local según la maqueta aprobada: escena rosa con producto protagonista, ficha editorial, retrato y recomendaciones reales. Compilación y revisión en Chrome a 1440/390/375 px correctas. Sin publicación."
+    },
+    {
+      "date": "2026-10-03",
+      "summary": "Implementada en local la secuencia editorial posterior a necesidades: Skinworld Edit 001, marcas, Dra. Karina, opiniones, Journal, cierre y pie con transiciones suaves. Pasaron tipos, compilación y revisión responsive en Chrome; el producto principal se agregó al carrito. Sin publicación."
+    },
     {
       "date": "2026-10-03",
       "summary": "Publicados en producción: portada sin costura ni franja de avisos con botones rediseñados, y envío de tarifa única de $80 para todos los pedidos y destinos, sin menciones de envío gratis. SW-026 cerrada; sigue pendiente SW-014 (pagos reales)."

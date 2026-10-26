@@ -471,7 +471,7 @@ export function AdminDashboard({
                 </p>
                 <p className="mb-3 text-xs text-slate-500">
                   Si tienes el mismo producto en distintos sabores, tonos o tamaños (ej. una
-                  proteína en 3 sabores), ponles a todos el mismo "Grupo de variante" — en la
+                  proteína en 3 sabores), ponles a todos el mismo “Grupo de variante” — en la
                   tienda se mostrarán como uno solo con un selector para elegir la presentación.
                 </p>
                 <div className="grid grid-cols-2 gap-4">

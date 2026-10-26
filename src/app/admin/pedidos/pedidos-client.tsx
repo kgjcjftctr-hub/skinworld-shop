@@ -8,7 +8,7 @@ import { formatDate, formatPrice } from '@/utils';
 
 type Etapa = 'paid' | 'packed' | 'shipped' | 'delivered' | 'cancelled';
 
-interface Pedido {
+export interface Pedido {
   id: string;
   created_at: string;
   status: string;
