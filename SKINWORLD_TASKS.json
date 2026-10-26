@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-26T18:00:00-06:00",
+  "lastInspectedAt": "2026-10-26T18:30:00-06:00",
   "lastInspectedBy": "Claude, arreglos de código y verificación de Stripe",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
@@ -433,6 +433,10 @@
         {
           "date": "2026-10-26",
           "note": "Se quitaron los any: la página de producto usa Product para product, relatedProducts y variants; mapRow de src/lib/products.ts devuelve Product; el panel de pedidos usa el tipo Pedido exportado de pedidos-client. El pago y el webhook ya no tenían any y el pago ya valida su entrada. npx tsc --noEmit y next build pasan. Cambio local, sin publicar."
+        },
+        {
+          "date": "2026-10-26",
+          "note": "Publicado en producción en el commit dcde53d. Antes de subirlo se compiló por separado solo lo publicado, sin el rediseño local: revisión de tipos, lint sin errores y build pasaron, y Vercel completó el despliegue."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -1250,7 +1254,7 @@
       "kind": "detected_problem",
       "category": "Tienda en línea",
       "priority": "P1",
-      "status": "requires_verification",
+      "status": "completed",
       "origin": [
         "src/store/cart.ts",
         "src/app/carrito/page.tsx",
@@ -1275,6 +1279,10 @@
         {
           "date": "2026-10-26",
           "note": "Arreglado en código, sin publicar: un solo tope de 99 piezas (src/lib/carrito.ts) lo usan el producto, el carrito y el pago. El botón Aumentar se desactiva al llegar a 99 con el aviso «Máximo 99 piezas por producto», y un carrito guardado con más piezas se recorta al cargarse. Verificado en local: un carrito guardado con 150 unidades de Anthelios Mineral One se mostró con 99 y total $66,410, el mismo importe que manda el pago. Tipos, lint y build pasan. Falta publicarlo y revisarlo en producción."
+        },
+        {
+          "date": "2026-10-26",
+          "note": "Publicado en producción (commit dcde53d, Vercel completó el despliegue). Verificado en https://www.skinworld.shop/carrito con un carrito guardado de 150 unidades de Anthelios Mineral One: se mostró Cantidad 99, el botón Aumentar quedó desactivado y el total fue $66,410, el mismo importe que manda /api/checkout. El carrito de prueba se borró y no se abrió ningún pago."
         }
       ]
     },
@@ -1303,6 +1311,10 @@
         {
           "date": "2026-10-26",
           "note": "Se agregó .eslintrc.json con next/core-web-vitals. npm run lint ya no abre el asistente y termina con código 0 después de corregir dos comillas sin escapar (admin-dashboard.tsx y search-modal.tsx). Quedan solo advertencias de <img>, que ya sigue SW-011. Ojo: al publicar, next build también corre el lint. Cambio local, sin publicar."
+        },
+        {
+          "date": "2026-10-26",
+          "note": "Publicado en producción en el commit dcde53d. Antes de subirlo se compiló por separado solo lo publicado, sin el rediseño local: revisión de tipos, lint sin errores y build pasaron, y Vercel completó el despliegue."
         }
       ]
     },
@@ -1352,6 +1364,10 @@
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-26",
+      "summary": "Publicados en producción (commit dcde53d) el tope de 99 piezas igual en carrito y pago, los tipos sin any y el lint. SW-037 cerrada y verificada en el sitio real; el rediseño local sigue sin publicar."
+    },
     {
       "date": "2026-10-26",
       "summary": "Arreglos en código, verificados en local y sin publicar: tope de 99 piezas igual en carrito y pago (SW-037), tipos sin any (SW-012) y lint funcionando (SW-038)."
