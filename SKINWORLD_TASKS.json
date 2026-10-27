@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T12:20:00-06:00",
-  "lastInspectedBy": "Claude, decisión sobre la leyenda de la doctora",
+  "lastInspectedAt": "2026-10-27T12:40:00-06:00",
+  "lastInspectedBy": "Claude, fotos de productos desde MEPIEL",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -398,6 +398,10 @@
         {
           "date": "2026-10-27",
           "note": "La imagen de Leche Solar Niños FPS50+ 250 Ml (https://skinworld.mx/wp-content/uploads/2020/08/AVENE-LECHE-SOLAR-NIÑOS-.png.jpg) devuelve una página HTML en vez de una imagen: está rota en la tienda. Además, las fotos de Sun Brush Mineral y Effaclar H muestran el empaque anterior; la dueña confirmó que hoy se venden Isdinceutics Mineral Brush y Effaclar H Iso-Biome."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Leche Solar Niños FPS50+ 250 Ml ya tiene foto (la de MEPIEL), y Sun Brush Mineral y Effaclar H muestran el empaque actual. Ojo con el rendimiento: las fotos de MEPIEL se sirven en tamaño original (hasta 2,500 px; una pesaba 16 MB y se redujo a 1,000 px) y la tienda ahora tiene 1,703 tarjetas; conviene servirlas redimensionadas."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -1556,17 +1560,17 @@
     },
     {
       "id": "SW-046",
-      "title": "Agregar foto y descripción a los 1,539 productos de MEPIEL",
+      "title": "Agregar descripción a los productos de MEPIEL y foto a los 5 que no tienen",
       "kind": "improvement_suggestion",
       "category": "Catálogo",
       "priority": "P2",
-      "status": "pending",
+      "status": "in_progress",
       "origin": [
         "data/mepiel/cambios-tienda.md",
         "Tabla products en Supabase"
       ],
       "details": "Los productos nuevos se publicaron, por decisión de la dueña, sin foto (se ve «Imagen no disponible») ni descripción, con el nombre de la lista de precios en formato normal y sin acentos. 316 quedaron sin categoría porque su sección (limpiadores, hidratantes, antitranspirantes, lanzamientos…) no corresponde a ninguna de las 8 categorías de la tienda.",
-      "doneWhen": "Cada producto nuevo tiene una foto y una descripción aprobadas, y los 316 sin categoría quedan clasificados o se decide crear categorías nuevas.",
+      "doneWhen": "Cada producto nuevo tiene una descripción aprobada; los 5 sin foto en MEPIEL (Pilopeptan Shampoo Anticaida 250 Ml, S-mediderma Crema-gel Antioxidante 50 Ml, S-mediderma FPS50 Fotorreparador Gel-crema 50 Ml, Triclean Mousse 120 Ml, Valuge Valurea Emulsion Corporal 500 Ml) tienen foto, y los 316 sin categoría quedan clasificados.",
       "detectedAt": "2026-10-27",
       "updatedAt": "2026-10-27",
       "detectedIn": "2026-10-27T12:10:00-06:00",
@@ -1574,6 +1578,10 @@
         {
           "date": "2026-10-27",
           "note": "Publicados el 27 de octubre de 2026 sin foto ni descripción; no se inventaron textos."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Fotos tomadas de la tienda de MEPIEL (tienda.mepieldistribuidores.com.mx) con la sesión de la dueña y emparejadas por código de barras exacto. Se subieron 1,704 fotos al bucket público «productos» de Supabase (carpeta mepiel/) mediante un permiso temporal de subida anónima limitado a esa carpeta, que se cerró al terminar y se comprobó cerrado (una subida de prueba con la llave pública es rechazada). Se asignaron a 1,537 productos, con respaldo de la foto anterior en data/mepiel/respaldos/fotos-2026-10-27.json; 5 productos no tienen foto en MEPIEL. Verificado en la tienda: las tarjetas y la página de producto cargan las fotos."
         }
       ]
     },
@@ -1605,6 +1613,10 @@
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "1,537 productos ya tienen foto, tomada de la tienda de MEPIEL por código de barras y guardada en Supabase; el permiso temporal de subida se cerró y se verificó. Faltan descripciones y 5 fotos (SW-046)."
+    },
     {
       "date": "2026-10-27",
       "summary": "La leyenda «Elegido con criterio médico» se queda en todo el catálogo por decisión de la dueña (SW-047 cerrada)."
