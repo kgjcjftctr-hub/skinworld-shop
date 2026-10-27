@@ -65,19 +65,32 @@ function mapRow(row: ProductRow): Product {
   };
 }
 
+// Supabase entrega como máximo 1,000 renglones por consulta; con el catálogo de
+// MEPIEL la tienda pasó de ese tope, así que se pide en páginas.
+const TAMANO_DE_PAGINA = 1000;
+
 export async function getAllProducts() {
   const supabase = getSupabase();
-  const { data, error } = await supabase
-    .from('products')
-    .select('*')
-    .order('name', { ascending: true });
+  const filas: ProductRow[] = [];
 
-  if (error) {
-    console.error('Failed to fetch products:', error);
-    return [];
+  for (let desde = 0; ; desde += TAMANO_DE_PAGINA) {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .order('name', { ascending: true })
+      .order('id', { ascending: true })
+      .range(desde, desde + TAMANO_DE_PAGINA - 1);
+
+    if (error) {
+      console.error('Failed to fetch products:', error);
+      return [];
+    }
+
+    filas.push(...(data as ProductRow[]));
+    if (data.length < TAMANO_DE_PAGINA) break;
   }
 
-  return (data as ProductRow[]).map(mapRow);
+  return filas.map(mapRow);
 }
 
 export async function getProductBySlug(slug: string) {
