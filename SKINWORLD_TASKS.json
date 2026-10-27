@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T12:40:00-06:00",
-  "lastInspectedBy": "Claude, fotos de productos desde MEPIEL",
+  "lastInspectedAt": "2026-10-27T13:10:00-06:00",
+  "lastInspectedBy": "Claude, variantes de tamaño y repetidos",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -1582,6 +1582,10 @@
         {
           "date": "2026-10-27",
           "note": "Fotos tomadas de la tienda de MEPIEL (tienda.mepieldistribuidores.com.mx) con la sesión de la dueña y emparejadas por código de barras exacto. Se subieron 1,704 fotos al bucket público «productos» de Supabase (carpeta mepiel/) mediante un permiso temporal de subida anónima limitado a esa carpeta, que se cerró al terminar y se comprobó cerrado (una subida de prueba con la llave pública es rechazada). Se asignaron a 1,537 productos, con respaldo de la foto anterior en data/mepiel/respaldos/fotos-2026-10-27.json; 5 productos no tienen foto en MEPIEL. Verificado en la tienda: las tarjetas y la página de producto cargan las fotos."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "A petición de la dueña se juntaron como variantes de tamaño (selector «Presentación») las dos aguas micelares de Avène, renombradas «Agua Micelar Desmaquillante» porque MEPIEL las trae como «A-AGUA…» y «A-AV EAU…», y luego otros 61 grupos (128 productos), con respaldo en data/mepiel/respaldos/variantes-61-grupos-2026-10-27.json. La tienda pasó de 1,703 a 1,635 fichas y cada página ofrece los otros tamaños."
         }
       ]
     },
@@ -1610,9 +1614,36 @@
           "note": "La dueña decidió dejar la leyenda «Elegido con criterio médico por la Dra. Karina Alfaro López» en todos los productos, incluidos los 1,539 de MEPIEL. No se cambia el código; la página de producto ya la muestra en todo el catálogo."
         }
       ]
+    },
+    {
+      "id": "SW-048",
+      "title": "Quitar productos de MEPIEL repetidos",
+      "kind": "detected_problem",
+      "category": "Catálogo",
+      "priority": "P2",
+      "status": "pending",
+      "origin": [
+        "Tabla products en Supabase",
+        "data/mepiel/cambios-tienda.json"
+      ],
+      "details": "La lista de precios de MEPIEL trae algunos productos dos veces, con el código de barras anterior y con el actual, y entraron ambos a la tienda. Repetidos claros (la copia sobrante es la del código anterior, descontinuada o con menos existencia): Atoderm Aceite de Ducha 200 Ml, Lipikar Baume Ap+m 200 Ml, Sebium Pore Refiner 30 Ml, Sensibio H2O 250 y 500 Ml, Hydrabio Serum 40 Ml, Triclean Mousse 120 Ml, Isdin SPF50 Fusion Water Bronze 50 Ml e Isdin FPS50+ Fusion WS Pediatrics 50 Ml. Con precio distinto y ambos activos: Sebium H2O 500 Ml ($815/$759), Patyka Fluido Matificante 40 Ml ($850/$750) y Patyka Exfoliante Alisante 50 Ml ($1,070/$290). Además, «Just Bee Clear Crema Matificante 40 Ml» con código 5201279072834 es en realidad «Espuma Limpiadora Rostro y Ojos 200 Ml» según el catálogo de MEPIEL. Y hay 9 productos nuevos que son la versión actual de productos originales de la tienda (p. ej. Effaclar Duo+M frente a Effaclar Duo (+), Hyalu B5 Suractivated frente a Hyalu B5).",
+      "doneWhen": "Cada producto aparece una sola vez en la tienda, el mal nombrado lleva su nombre correcto, y la dueña decide si las versiones anteriores se retiran o conviven con las nuevas.",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T13:10:00-06:00",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Detectado al buscar variantes de tamaño: 13 grupos con el mismo nombre y tamaño. Comparados con el catálogo de MEPIEL por código de barras. No se borró nada."
+        }
+      ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "62 grupos de productos que sólo cambian de tamaño ya son una ficha con selector de presentación (la tienda muestra 1,635). Se detectaron productos repetidos de MEPIEL por código viejo y nuevo (SW-048)."
+    },
     {
       "date": "2026-10-27",
       "summary": "1,537 productos ya tienen foto, tomada de la tienda de MEPIEL por código de barras y guardada en Supabase; el permiso temporal de subida se cerró y se verificó. Faltan descripciones y 5 fotos (SW-046)."
