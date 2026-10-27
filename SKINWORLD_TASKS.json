@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-26T18:30:00-06:00",
-  "lastInspectedBy": "Claude, arreglos de código y verificación de Stripe",
+  "lastInspectedAt": "2026-10-27T10:30:00-06:00",
+  "lastInspectedBy": "Claude, auditoría de lo que falta para vender",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -494,7 +494,7 @@
       "details": "Consultado en vivo el 2026-09-30: la llave de Stripe configurada es de prueba y la cuenta reporta charges_enabled=false y payouts_enabled=false. Por eso los clientes reales no pueden pagar: la tienda solo acepta pedidos con tarjetas de prueba de Stripe. Para activar la cuenta, la dueña tiene que conectar una cuenta bancaria; después, las llaves reales (secreta y pública) deben reemplazar a las de prueba.",
       "doneWhen": "La cuenta de Stripe reporta charges_enabled=true, las llaves reales están en Vercel, hay un webhook en modo real registrado en https://www.skinworld.shop/api/stripe/webhook con su propio secreto de firma guardado como STRIPE_WEBHOOK_SECRET, y se completa, registra y reembolsa una compra real de bajo monto.",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-10-26",
+      "updatedAt": "2026-10-27",
       "history": [
         {
           "date": "2026-09-30",
@@ -519,6 +519,10 @@
         {
           "date": "2026-10-26",
           "note": "Primera compra real en producción hecha por el dueño: el webhook guardó el pedido 7DB7536C en la tabla orders con estado Pagado, 679 MXN y sesión cs_live, y el correo «Recibimos tu pedido 7DB7536C» llegó al cliente desde contacto@skinworld.shop. Queda por confirmar que llegó el aviso de pedido nuevo al correo de la tienda y, si se decide, el reembolso desde Stripe."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Saldo en Stripe tras la primera venta (pedido 7DB7536C, $679): entrante $647.17 después de la comisión de $31.83, disponible el 2 de noviembre de 2026 por la retención del primer pago; el saldo disponible es $0, por eso la transferencia manual no hace nada. Se recomendó activar transferencias automáticas diarias. Sigue sin confirmarse que el correo «Pedido nuevo» llegara al buzón de la tienda, y falta el reembolso de prueba."
         }
       ],
       "detectedIn": "2026-09-30T10:40:00-06:00"
@@ -1361,9 +1365,61 @@
           "note": "La dueña pidió volver a la tipografía anterior y corregir la lista gigante de la frase. Se restauró Playfair Display (archivos recuperados de git), se retiró Bricolage Grotesque y el select se reemplazó por un menú de enlaces. Verificado en navegador: menú con las 9 opciones y conteos, Acné filtra a 19 productos y el menú se cierra. tsc y next build correctos. Sin commit ni publicación."
         }
       ]
+    },
+    {
+      "id": "SW-040",
+      "title": "La tienda muestra 0 productos: Supabase rechaza la llave secreta",
+      "kind": "detected_problem",
+      "category": "Tienda en línea",
+      "priority": "P0",
+      "status": "pending",
+      "origin": [
+        "src/lib/supabase.ts",
+        "src/lib/products.ts",
+        "Variable SUPABASE_SECRET_KEY en Vercel y .env.local"
+      ],
+      "details": "El 27 de octubre /tienda muestra «0 productos disponibles», /producto/flavo-c responde «Producto no encontrado», /api/search devuelve listas vacías y el sitemap ya no incluye ningún producto (12 URL, solo páginas fijas y artículos). La llave sb_secret_ de .env.local recibe «Unregistered API key» de Supabase; el proyecto sí responde. El 26 de octubre, después del despliegue de dcde53d, la tienda sí mostraba productos, así que la llave se borró o se rotó después. No está en el historial de git. Sin catálogo nadie puede comprar, y /api/checkout respondería «Error al validar los productos». El webhook ya reintenta y avisa a la tienda si no puede guardar un pedido.",
+      "doneWhen": "Hay una llave secreta nueva y activa en SUPABASE_SECRET_KEY de Vercel (Producción y Preview) y en .env.local, se redespliega, y /tienda vuelve a mostrar el catálogo completo, una página de producto carga, la búsqueda devuelve resultados y el sitemap vuelve a listar los productos.",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T10:30:00-06:00",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Detectado en producción: /tienda con 0 productos, página de producto no encontrada, búsqueda vacía y sitemap sin productos. Prueba directa a la API de Supabase con la llave local: 401 «Unregistered API key». Último despliegue: 26 oct 23:18 UTC (commit 049e0cd), verificado entonces con catálogo. No se pudieron leer los registros de Vercel porque la sesión del navegador está cerrada."
+        }
+      ]
+    },
+    {
+      "id": "SW-041",
+      "title": "Definir cómo pide factura un cliente",
+      "kind": "requires_confirmation",
+      "category": "Operación",
+      "priority": "P2",
+      "status": "requires_verification",
+      "origin": [
+        "src/app/terminos/page.tsx",
+        "src/app/preguntas-frecuentes/page.tsx",
+        "src/app/contacto/page.tsx"
+      ],
+      "details": "Los términos dicen que el cliente puede pedir su comprobante fiscal «a través del mecanismo habilitado por Skinworld», pero ninguna página del sitio (preguntas frecuentes, contacto, confirmación del pedido ni correos) explica cómo pedirla ni en qué plazo.",
+      "doneWhen": "La dueña decide el mecanismo (por ejemplo, escribir a contacto@skinworld.shop con número de pedido y datos fiscales dentro del mes de la compra) y ese texto aparece en preguntas frecuentes y en la confirmación del pedido.",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T10:30:00-06:00",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Búsqueda de «factur» en src: solo aparece en la sección Facturación de los términos; no hay instrucciones para el cliente en ninguna otra página."
+        }
+      ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "Auditoría para empezar a vender: la tienda en producción muestra 0 productos porque Supabase rechaza la llave secreta (SW-040, urgente). Se registró cómo pedir factura (SW-041) y el saldo de la primera venta, disponible el 2 de noviembre (SW-014)."
+    },
     {
       "date": "2026-10-26",
       "summary": "Publicados en producción (commit dcde53d) el tope de 99 piezas igual en carrito y pago, los tipos sin any y el lint. SW-037 cerrada y verificada en el sitio real; el rediseño local sigue sin publicar."
