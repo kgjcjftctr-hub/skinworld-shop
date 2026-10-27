@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T13:25:00-06:00",
-  "lastInspectedBy": "Claude, limpieza de repetidos",
+  "lastInspectedAt": "2026-10-27T13:35:00-06:00",
+  "lastInspectedBy": "Claude, cierre de SW-014",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -493,7 +493,7 @@
       "kind": "detected_problem",
       "category": "Operación",
       "priority": "P0",
-      "status": "requires_verification",
+      "status": "completed",
       "origin": [
         "src/lib/stripe.ts",
         "Variables de entorno de Vercel",
@@ -531,6 +531,10 @@
         {
           "date": "2026-10-27",
           "note": "Saldo en Stripe tras la primera venta (pedido 7DB7536C, $679): entrante $647.17 después de la comisión de $31.83, disponible el 2 de noviembre de 2026 por la retención del primer pago; el saldo disponible es $0, por eso la transferencia manual no hace nada. Se recomendó activar transferencias automáticas diarias. Sigue sin confirmarse que el correo «Pedido nuevo» llegara al buzón de la tienda, y falta el reembolso de prueba."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "La dueña confirma que el paso a pagos reales quedó listo. Evidencia ya verificada: llaves reales y webhook en modo real en Vercel, y compra real 7DB7536C cobrada en cs_live, guardada como Pagado y con correo al cliente. Por decisión de la dueña se cierra sin el reembolso de prueba; Claude no comprobó por su cuenta el aviso «Pedido nuevo» al buzón de la tienda. El depósito de esa venta queda programado por Stripe para el 2 de noviembre de 2026."
         }
       ],
       "detectedIn": "2026-09-30T10:40:00-06:00"
@@ -1644,6 +1648,10 @@
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "SW-014 cerrada: la tienda cobra con Stripe en modo real, confirmado por la dueña."
+    },
     {
       "date": "2026-10-27",
       "summary": "Borrados con respaldo 9 productos repetidos de MEPIEL, corregido el nombre de la Espuma Limpiadora de Apivita y juntados 2 grupos más por tamaño; la tienda muestra 1,623 productos (SW-048)."
