@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T12:10:00-06:00",
-  "lastInspectedBy": "Claude, aplicación del catálogo MEPIEL en producción",
+  "lastInspectedAt": "2026-10-27T12:20:00-06:00",
+  "lastInspectedBy": "Claude, decisión sobre la leyenda de la doctora",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -1583,7 +1583,7 @@
       "kind": "requires_confirmation",
       "category": "Contenido",
       "priority": "P1",
-      "status": "requires_verification",
+      "status": "completed",
       "origin": [
         "src/app/producto/[slug]/product-client.tsx"
       ],
@@ -1596,11 +1596,19 @@
         {
           "date": "2026-10-27",
           "note": "Visto en producción en /producto/cetaphil-advanced-defense-serum-30-ml. No se cambió el texto."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "La dueña decidió dejar la leyenda «Elegido con criterio médico por la Dra. Karina Alfaro López» en todos los productos, incluidos los 1,539 de MEPIEL. No se cambia el código; la página de producto ya la muestra en todo el catálogo."
         }
       ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "La leyenda «Elegido con criterio médico» se queda en todo el catálogo por decisión de la dueña (SW-047 cerrada)."
+    },
     {
       "date": "2026-10-27",
       "summary": "Catálogo MEPIEL aplicado en producción: 132 precios al precio público, 2 marcas corregidas (SW-044) y 1,539 productos nuevos; la tienda muestra 1,703 productos tras arreglar el tope de 1,000 de Supabase (SW-045)."
