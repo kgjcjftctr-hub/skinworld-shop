@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T13:10:00-06:00",
-  "lastInspectedBy": "Claude, variantes de tamaño y repetidos",
+  "lastInspectedAt": "2026-10-27T13:25:00-06:00",
+  "lastInspectedBy": "Claude, limpieza de repetidos",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -1621,13 +1621,13 @@
       "kind": "detected_problem",
       "category": "Catálogo",
       "priority": "P2",
-      "status": "pending",
+      "status": "in_progress",
       "origin": [
         "Tabla products en Supabase",
         "data/mepiel/cambios-tienda.json"
       ],
       "details": "La lista de precios de MEPIEL trae algunos productos dos veces, con el código de barras anterior y con el actual, y entraron ambos a la tienda. Repetidos claros (la copia sobrante es la del código anterior, descontinuada o con menos existencia): Atoderm Aceite de Ducha 200 Ml, Lipikar Baume Ap+m 200 Ml, Sebium Pore Refiner 30 Ml, Sensibio H2O 250 y 500 Ml, Hydrabio Serum 40 Ml, Triclean Mousse 120 Ml, Isdin SPF50 Fusion Water Bronze 50 Ml e Isdin FPS50+ Fusion WS Pediatrics 50 Ml. Con precio distinto y ambos activos: Sebium H2O 500 Ml ($815/$759), Patyka Fluido Matificante 40 Ml ($850/$750) y Patyka Exfoliante Alisante 50 Ml ($1,070/$290). Además, «Just Bee Clear Crema Matificante 40 Ml» con código 5201279072834 es en realidad «Espuma Limpiadora Rostro y Ojos 200 Ml» según el catálogo de MEPIEL. Y hay 9 productos nuevos que son la versión actual de productos originales de la tienda (p. ej. Effaclar Duo+M frente a Effaclar Duo (+), Hyalu B5 Suractivated frente a Hyalu B5).",
-      "doneWhen": "Cada producto aparece una sola vez en la tienda, el mal nombrado lleva su nombre correcto, y la dueña decide si las versiones anteriores se retiran o conviven con las nuevas.",
+      "doneWhen": "La dueña decide los 3 casos con precio distinto (Sebium H2O 500 Ml, Patyka Fluido Matificante 40 Ml, Patyka Exfoliante Alisante 50 Ml) y si las 9 versiones anteriores de productos originales se retiran o conviven con las nuevas.",
       "detectedAt": "2026-10-27",
       "updatedAt": "2026-10-27",
       "detectedIn": "2026-10-27T13:10:00-06:00",
@@ -1635,11 +1635,19 @@
         {
           "date": "2026-10-27",
           "note": "Detectado al buscar variantes de tamaño: 13 grupos con el mismo nombre y tamaño. Comparados con el catálogo de MEPIEL por código de barras. No se borró nada."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Con aprobación de la dueña se borraron los 9 repetidos claros (se quedó la copia con código actual, activa y con más existencia), con respaldo completo en data/mepiel/respaldos/repetidos-borrados-2026-10-27.json; antes de borrar se comprobó que cada uno tenía su gemelo y que se había creado hoy. «Just Bee Clear Crema Matificante 40 Ml» (5201279072834) se renombró «Espuma Limpiadora Rostro y Ojos 200 Ml», como indica el catálogo de MEPIEL. Al quedar libres, Sensibio H2O (100/250/500 Ml) y Atoderm Aceite de Ducha (100/200 Ml) se juntaron como variantes. Verificado en producción: cada producto sale una vez y la tienda muestra 1,623."
         }
       ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "Borrados con respaldo 9 productos repetidos de MEPIEL, corregido el nombre de la Espuma Limpiadora de Apivita y juntados 2 grupos más por tamaño; la tienda muestra 1,623 productos (SW-048)."
+    },
     {
       "date": "2026-10-27",
       "summary": "62 grupos de productos que sólo cambian de tamaño ya son una ficha con selector de presentación (la tienda muestra 1,635). Se detectaron productos repetidos de MEPIEL por código viejo y nuevo (SW-048)."
