@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T13:35:00-06:00",
-  "lastInspectedBy": "Claude, cierre de SW-014",
+  "lastInspectedAt": "2026-10-27T13:50:00-06:00",
+  "lastInspectedBy": "Claude, variantes de color",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -1643,11 +1643,19 @@
         {
           "date": "2026-10-27",
           "note": "Con aprobación de la dueña se borraron los 9 repetidos claros (se quedó la copia con código actual, activa y con más existencia), con respaldo completo en data/mepiel/respaldos/repetidos-borrados-2026-10-27.json; antes de borrar se comprobó que cada uno tenía su gemelo y que se había creado hoy. «Just Bee Clear Crema Matificante 40 Ml» (5201279072834) se renombró «Espuma Limpiadora Rostro y Ojos 200 Ml», como indica el catálogo de MEPIEL. Al quedar libres, Sensibio H2O (100/250/500 Ml) y Atoderm Aceite de Ducha (100/200 Ml) se juntaron como variantes. Verificado en producción: cada producto sale una vez y la tienda muestra 1,623."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "La dueña reportó que seguían viéndose repetidos: eran variantes de color o tono. Se juntaron 24 grupos (53 productos) con selector (Con Color/Sin Color, Tono Claro/Medio/Oscuro, Gold/Nude/Opal/Sand…), y se renombraron con el nombre de su etiqueta los 7 productos Avène que MEPIEL trae en código «A-…» (p. ej. «A-CREMA C/C 50+EP 50ML» → «Crema Solar FPS50+ con Color 50 Ml»; Cutalgan pasó a marca A-DERMA). Respaldo en data/mepiel/respaldos/variantes-color-2026-10-27.json. Verificado en producción: la tienda muestra 1,594 productos y la crema solar de Avène aparece una vez con selector."
         }
       ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "24 grupos de productos que sólo cambian de color o tono ya son una ficha con selector, y se corrigieron 7 nombres en código de Avène; la tienda muestra 1,594 productos (SW-048)."
+    },
     {
       "date": "2026-10-27",
       "summary": "SW-014 cerrada: la tienda cobra con Stripe en modo real, confirmado por la dueña."
