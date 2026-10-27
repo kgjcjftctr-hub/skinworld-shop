@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T13:50:00-06:00",
-  "lastInspectedBy": "Claude, variantes de color",
+  "lastInspectedAt": "2026-10-27T15:05:00-06:00",
+  "lastInspectedBy": "Claude, publicación del flujo de pedidos",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -289,7 +289,7 @@
       "priority": "P0",
       "status": "requires_verification",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-10-03",
+      "updatedAt": "2026-10-27",
       "origin": [
         ".env.local (solo los nombres, no los valores)",
         "src/lib/stripe.ts",
@@ -315,6 +315,10 @@
         {
           "date": "2026-10-03",
           "note": "En producción se recorrieron producto, carrito y checkout con datos sintéticos. Stripe abrió una sesión cs_test_ y mostró el entorno de prueba y el total de $1,600 MXN; no se completó el pago. El webhook, el guardado final del pedido, la cancelación y el surtido no se verificaron en esta sesión. SW-014 y SW-015 llevan el estado de pagos reales y correos."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "El flujo de pedidos cambió (SW-049): ahora hay 9 etapas, historial y más correos. Además de lo que ya pedía esta tarea, hay que verificar en producción los correos de disponibilidad confirmada, preparación, cancelación y reembolso, y los avisos de pago diferido y reembolso de Stripe. Nada de esto se probó con Stripe ni con Resend reales."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -1448,7 +1452,7 @@
       "kind": "improvement_suggestion",
       "category": "Catálogo",
       "priority": "P2",
-      "status": "requires_verification",
+      "status": "completed",
       "origin": [
         "data/mepiel/coincidencias.json",
         "data/mepiel/revision.md",
@@ -1463,7 +1467,7 @@
         "data/mepiel/cambios-tienda.md"
       ],
       "details": "El Excel de MEPIEL (catálogo al 20 de octubre de 2026, 4,212 artículos) es su catálogo interno de distribuidor: códigos SAP, códigos de barras, descripción, laboratorio, marca, estatus y existencias por lote. No trae precios de venta; el «Precio promedio» es costo de proveedor y se descarta. Se cruzaron los 201 productos de la tienda: 37 coinciden por código de barras, 109 por nombre, marca y presentación, 24 son probables y 31 no aparecen. No se cambió ningún precio, existencia, ficha ni marca, y no se crearon productos nuevos porque la tienda no tiene estado de borrador. Hay dos marcas dudosas: Kelual DS Shampoo aparece como LA ROCHE-POSAY y MEPIEL lo registra como DUCRAY; Retinol B3 Sérum aparece como SESDERMA y MEPIEL solo tiene uno de LA ROCHE-POSAY. Hay un posible duplicado: Melaclear Sérum y Melaclear Advanced.",
-      "doneWhen": "Se corre la migración 002 en Supabase y luego scripts/mepiel/importar-coincidencias.mjs --aplicar para guardar la relación interna con MEPIEL; los precios y productos nuevos ya están aplicados y verificados.",
+      "doneWhen": "Se corre la migración 002 en Supabase y luego scripts/mepiel/importar-coincidencias.mjs --aplicar --costos \"<lista de precios>\" para guardar la relación interna con MEPIEL de los productos originales y de los creados desde MEPIEL, con su costo y presentación; los precios y productos nuevos ya están aplicados y verificados.",
       "detectedAt": "2026-10-27",
       "updatedAt": "2026-10-27",
       "detectedIn": "2026-10-27T13:30:00-06:00",
@@ -1483,6 +1487,14 @@
         {
           "date": "2026-10-27",
           "note": "Aplicado en producción con scripts/mepiel/actualizar-tienda.mjs --aplicar, con respaldo completo en data/mepiel/respaldos/respaldo-completo-2026-10-27.json. Verificado en la base: 132 de 132 precios, 2 marcas y 1,539 de 1,539 productos nuevos. La tienda muestra 1,703 productos; Indoxyl Gel queda en $1,188, Kelual DS en DUCRAY y Retinol B3 en LA ROCHE-POSAY. La primera corrida se detuvo después de 100 productos porque Supabase responde sin cuerpo; se corrigió el script y se completó. Se renombraron 21 productos que traían el nombre interno de empaque (p. ej. «ANT UVM DP SPRAY 50+ F200ML_ES(PT)») usando la descripción del catálogo de MEPIEL."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Para el flujo de pedidos (SW-049) la migración 002, que aún no se corre, ahora también guarda presentación, costo del proveedor (precio cliente c/IVA, sólo en la tabla interna) y la disponibilidad que confirme MEPIEL. El importador cubre ya los productos creados desde MEPIEL (se reconocen por código de barras, porque el id del plan no es el de la base) y no borra la disponibilidad al volver a correrse. Vista previa sin escribir: 1,700 de 1,731 productos con código MEPIEL, 1,603 con presentación y 1,662 con costo; los 31 restantes son originales que no están en MEPIEL."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Completada: migración 002 aplicada y relación interna con MEPIEL guardada para 1,700 de 1,731 productos (170 originales confirmados y 1,530 creados desde MEPIEL), con costo en 1,662 y presentación en 1,603. Verificado contando filas en product_suppliers. Los 31 sin relación son productos originales que no aparecen en el catálogo de MEPIEL; salen en la pestaña «Productos por revisar»."
         }
       ]
     },
@@ -1649,9 +1661,80 @@
           "note": "La dueña reportó que seguían viéndose repetidos: eran variantes de color o tono. Se juntaron 24 grupos (53 productos) con selector (Con Color/Sin Color, Tono Claro/Medio/Oscuro, Gold/Nude/Opal/Sand…), y se renombraron con el nombre de su etiqueta los 7 productos Avène que MEPIEL trae en código «A-…» (p. ej. «A-CREMA C/C 50+EP 50ML» → «Crema Solar FPS50+ con Color 50 Ml»; Cutalgan pasó a marca A-DERMA). Respaldo en data/mepiel/respaldos/variantes-color-2026-10-27.json. Verificado en producción: la tienda muestra 1,594 productos y la crema solar de Avène aparece una vez con selector."
         }
       ]
+    },
+    {
+      "id": "SW-049",
+      "title": "Gestionar los pedidos con MEPIEL: etapas, historial, compra y correos",
+      "kind": "improvement_suggestion",
+      "category": "Operación",
+      "priority": "P1",
+      "status": "requires_verification",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T14:25:00-06:00",
+      "origin": [
+        "supabase/migraciones/003-pedidos-mepiel.sql",
+        "supabase/migraciones/002-productos-proveedor.sql",
+        "src/lib/estados-pedido.ts",
+        "src/lib/pedidos-db.ts",
+        "src/lib/pedidos.ts",
+        "src/app/admin/pedidos/page.tsx",
+        "src/app/admin/pedidos/pedidos-client.tsx",
+        "src/app/api/admin/pedidos/[id]/route.ts",
+        "src/app/api/admin/pedidos/articulos/route.ts",
+        "src/app/api/stripe/webhook/route.ts",
+        "src/app/api/checkout/route.ts",
+        "scripts/mepiel/importar-coincidencias.mjs"
+      ],
+      "details": "La tienda ya tenía 5 etapas (pagado, empaquetado, enviado, entregado, cancelado), guía, correos por Resend, panel con contraseña y protección contra avisos repetidos de Stripe; eso se conservó. Faltaba: las líneas del pedido no guardaban qué producto eran (no había de dónde sacar el código MEPIEL), no había historial, faltaban 4 etapas y no existía una vista para comprarle a MEPIEL. Se preparó: 9 etapas (pago pendiente, recibido, por confirmar con MEPIEL, confirmado, en preparación, enviado, entregado, cancelado, reembolsado) con reglas en la base; historial de cada cambio en la misma transacción que el cambio; renglones de pedido con código MEPIEL, presentación, disponibilidad y compra con folio; pestaña «Compra a MEPIEL» que junta los productos por código con cantidades, pedidos relacionados y costo estimado; pestaña «Productos por revisar» (sin precio, sin código MEPIEL, agotado o descontinuado según MEPIEL); filtros por etapa y fecha; correos al cliente por etapa con sólo lo necesario (el teléfono ya no va en los correos al cliente); costo del proveedor, disponibilidad y presentación en la tabla interna product_suppliers, que ninguna página pública lee. El pago ya no cobra en $0 un producto sin precio de venta y valida código postal y teléfono. Nada se publicó ni se cambió en producción.",
+      "doneWhen": "Se corren en Supabase las migraciones 002 y 003 (en ese orden), luego scripts/mepiel/importar-coincidencias.mjs --aplicar --costos con la lista de precios, se publica el código y en el webhook de Stripe se agregan los eventos checkout.session.async_payment_succeeded, checkout.session.async_payment_failed y charge.refunded. Un pedido real o controlado recorre todas las etapas en producción, cada paso queda en el historial y el cliente recibe los correos de confirmación, disponibilidad confirmada, preparación, envío con guía y entrega.",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Probado en local sin tocar producción. Las migraciones 002 y 003 se corrieron sobre un Postgres en memoria con el esquema actual de orders y products: 25 de 25 pruebas (pedidos viejos convertidos, aviso repetido de Stripe sin duplicar, saltos de etapa rechazados, no se confirma sin disponibilidad, no se prepara sin compra, no se envía sin guía o nota, reembolso desde el panel pide motivo, el público no puede llamar las funciones). Con la tienda local apuntada a esa base se recorrió el panel: 2 pedidos pasados a «Por confirmar con MEPIEL», disponibilidad marcada, compra con folio, confirmado, en preparación, enviado con guía y entregado; el historial mostró 13 renglones y un doble envío del mismo cambio dejó sólo el primero (el segundo respondió 409). Las rutas del panel responden 401 sin sesión y 400 con datos inválidos. type-check, lint y build pasan. Con la base real el panel abre en modo consulta y avisa que faltan las migraciones. Vista previa del importador: 1,700 de 1,731 productos con código MEPIEL y 1,662 con costo. Los correos no se enviaron en local (sin RESEND_API_KEY) y el webhook con Stripe real no se probó."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Con autorización de la dueña: la migración 002 se corrió en Supabase («Success. No rows returned») y el importador guardó 1,700 productos en product_suppliers, verificado en la base: 1,662 con costo, 1,603 con presentación y todos con disponibilidad «sin confirmar». El código se publicó solo (commit 67903d6, sin el rediseño local sin publicar); antes se compiló aparte sobre main con sólo estos cambios. Verificado en producción: el pago rechaza un código postal de 3 dígitos con el mensaje nuevo, /admin/pedidos manda al inicio de sesión y las rutas nuevas responden 401 sin sesión, y la tienda carga. Pendiente: la migración 003 quedó pegada y verificada (mismo contenido que la probada) en el editor SQL de Supabase, pero la herramienta de seguridad no permitió que Claude la ejecutara; la dueña debe darle Run. Mientras tanto el panel abre en modo consulta y el webhook guarda los pedidos como antes. También falta agregar en Stripe (modo producción) los eventos checkout.session.async_payment_succeeded, checkout.session.async_payment_failed y charge.refunded: Stripe pide iniciar sesión y el cambio por API también fue bloqueado; la llave local además es de modo prueba."
+        }
+      ]
+    },
+    {
+      "id": "SW-050",
+      "title": "Un pago con OXXO o transferencia se guardaba como pagado antes de acreditarse",
+      "kind": "detected_problem",
+      "category": "Confiabilidad",
+      "priority": "P2",
+      "status": "requires_verification",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T14:25:00-06:00",
+      "origin": [
+        "src/app/api/stripe/webhook/route.ts"
+      ],
+      "details": "El webhook guardaba todo pedido con estado «paid» al terminar la sesión de Stripe, sin revisar payment_status. Con métodos de pago diferido (OXXO, transferencia) la sesión termina antes de que llegue el dinero, así que el pedido aparecería como pagado y se le confirmaría al cliente aunque nunca pagara. Sólo ocurre si esos métodos están activos en Stripe; no se pudo revisar la configuración de Stripe. Ya se corrigió en el código local: el pedido entra como «Pago pendiente», pasa a «Recibido» cuando Stripe avisa que se acreditó y se cancela si el pago vence.",
+      "doneWhen": "Se publica el cambio, el webhook de Stripe recibe checkout.session.async_payment_succeeded y checkout.session.async_payment_failed, y la dueña confirma si OXXO o transferencia están activos; si lo están, un pago de prueba diferido muestra «Pago pendiente» y luego «Recibido».",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Encontrado al revisar el webhook para el flujo con MEPIEL (SW-049). Corrección escrita y revisada con type-check y build; no publicada."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Corrección publicada (commit 67903d6). Sigue por verificar: falta que Stripe mande los eventos de pago diferido al webhook de producción y confirmar si OXXO o transferencia están activos."
+        }
+      ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "Flujo de pedidos con MEPIEL publicado y 1,700 productos relacionados con su código y costo de MEPIEL (SW-042 cerrada); faltan correr la migración 003 y agregar los eventos en Stripe (SW-049)."
+    },
+    {
+      "date": "2026-10-27",
+      "summary": "Flujo de pedidos con MEPIEL listo en local, sin publicar: 9 etapas, historial, compra agrupada por código MEPIEL, productos por revisar y correos por etapa; faltan las migraciones 002 y 003 (SW-049, SW-050)."
+    },
     {
       "date": "2026-10-27",
       "summary": "24 grupos de productos que sólo cambian de color o tono ya son una ficha con selector, y se corrigieron 7 nombres en código de Avène; la tienda muestra 1,594 productos (SW-048)."
