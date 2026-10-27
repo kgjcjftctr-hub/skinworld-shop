@@ -1,9 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { isAdminAuthenticated } from '@/lib/admin-auth';
-import { getSupabase } from '@/lib/supabase';
-import { MOMENTO_DE_ETAPA, avisarEtapaAlCliente, esEtapa, type Pedido } from '@/lib/pedidos';
+import { avisarEtapaAlCliente, avisarGuiaAlCliente } from '@/lib/pedidos';
+import { LISTA_DE_ESTADOS, transicionPermitida, type Estado } from '@/lib/estados-pedido';
+import { ErrorDePedido, actualizarGuia, cambiarEstado, registrarCorreo } from '@/lib/pedidos-db';
 
-/** Cambia la etapa de un pedido, guarda el momento y avisa al cliente. */
+const estado = z.enum(LISTA_DE_ESTADOS as [Estado, ...Estado[]]);
+const texto = (max: number) =>
+  z
+    .string()
+    .trim()
+    .max(max)
+    .optional()
+    .transform((v) => v || null);
+
+/**
+ * `de` es la etapa que el panel estaba mostrando: si el pedido ya cambió (otra
+ * pestaña, doble clic), la base rechaza el cambio en vez de repetirlo.
+ */
+const CambioDeEtapa = z.object({
+  de: estado,
+  a: estado,
+  nota: texto(500),
+  guia: texto(100),
+});
+
+const CambioDeGuia = z.object({ guia: z.string().trim().min(1).max(100) });
+
+const ID_DE_PEDIDO = z.string().uuid();
+
+/** Cambia la etapa de un pedido, lo deja en el historial y avisa al cliente. */
 export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   if (!(await isAdminAuthenticated())) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
@@ -11,46 +37,74 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
 
   const { id } = await context.params;
   const body = await request.json().catch(() => null);
-  const etapa = body?.estado;
+  const cambio = CambioDeEtapa.safeParse(body);
 
-  if (!esEtapa(etapa)) {
-    return NextResponse.json({ error: 'Etapa desconocida' }, { status: 400 });
+  if (!ID_DE_PEDIDO.safeParse(id).success || !cambio.success) {
+    return NextResponse.json({ error: 'Datos del cambio incompletos o no válidos' }, { status: 400 });
+  }
+  const { de, a, nota, guia } = cambio.data;
+  if (!transicionPermitida(de, a)) {
+    return NextResponse.json({ error: 'Ese cambio de etapa no está permitido' }, { status: 409 });
   }
 
-  const cambios: Record<string, string | null> = { status: etapa };
+  try {
+    const pedido = await cambiarEstado({
+      pedido: id,
+      de,
+      a,
+      actor: 'tienda',
+      nota,
+      guia,
+      guiaUrl: guia ? enlaceDeRastreo(guia) : null,
+    });
 
-  const momento = MOMENTO_DE_ETAPA[etapa];
-  if (momento) cambios[momento] = new Date().toISOString();
+    // El aviso al cliente no debe impedir que la etapa quede guardada.
+    const aviso = await avisarEtapaAlCliente(pedido, a);
+    if (aviso.motivo !== 'esta etapa no manda correo') {
+      if (!aviso.enviado) console.warn('Aviso de etapa no enviado:', aviso.motivo);
+      await registrarCorreo(pedido.id, a, aviso);
+    }
 
-  // El número de guía se captura al marcar el envío y es opcional: si la tienda
-  // lo deja en blanco, el pedido avanza igual y el correo sale sin él.
-  if (typeof body?.guia === 'string') {
-    const guia = body.guia.trim().slice(0, 100);
-    cambios.tracking = guia || null;
-    cambios.tracking_url = guia ? enlaceDeRastreo(guia) : null;
+    return NextResponse.json({ estado: a, avisoEnviado: aviso.enviado });
+  } catch (err) {
+    return respuestaDeError(err);
+  }
+}
+
+/** Captura o corrige el número de guía sin cambiar la etapa. */
+export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  if (!(await isAdminAuthenticated())) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   }
 
-  const supabase = getSupabase();
-  const { data: pedido, error } = await supabase
-    .from('orders')
-    .update(cambios)
-    .eq('id', id)
-    .select()
-    .maybeSingle();
-
-  if (error) {
-    console.error('No se pudo cambiar la etapa del pedido:', error);
-    return NextResponse.json({ error: 'No se pudo guardar el cambio' }, { status: 500 });
-  }
-  if (!pedido) {
-    return NextResponse.json({ error: 'El pedido no existe' }, { status: 404 });
+  const { id } = await context.params;
+  const cambio = CambioDeGuia.safeParse(await request.json().catch(() => null));
+  if (!ID_DE_PEDIDO.safeParse(id).success || !cambio.success) {
+    return NextResponse.json({ error: 'Escribe el número de guía' }, { status: 400 });
   }
 
-  // El aviso al cliente no debe impedir que la etapa quede guardada.
-  const aviso = await avisarEtapaAlCliente(pedido as Pedido, etapa);
-  if (!aviso.enviado) console.warn('Aviso de etapa no enviado:', aviso.motivo);
+  try {
+    const guia = cambio.data.guia;
+    const pedido = await actualizarGuia(id, guia, enlaceDeRastreo(guia), 'tienda');
+    // Si el paquete ya salió, el cliente necesita la guía nueva.
+    let avisoEnviado = false;
+    if (pedido.status === 'shipped') {
+      const aviso = await avisarGuiaAlCliente(pedido);
+      await registrarCorreo(pedido.id, 'guia', aviso);
+      avisoEnviado = aviso.enviado;
+    }
+    return NextResponse.json({ guia: pedido.tracking, avisoEnviado });
+  } catch (err) {
+    return respuestaDeError(err);
+  }
+}
 
-  return NextResponse.json({ estado: etapa, avisoEnviado: aviso.enviado });
+function respuestaDeError(err: unknown) {
+  if (err instanceof ErrorDePedido) {
+    return NextResponse.json({ error: err.message }, { status: err.status });
+  }
+  console.error('No se pudo cambiar el pedido:', err);
+  return NextResponse.json({ error: 'No se pudo guardar el cambio' }, { status: 500 });
 }
 
 /**

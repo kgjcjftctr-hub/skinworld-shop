@@ -42,6 +42,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Falta completar la dirección de envío' }, { status: 400 });
   }
 
+  // El código postal y el teléfono se validan aquí también, no sólo en el
+  // formulario: con datos imposibles el paquete no se puede entregar.
+  if (!/^\d{5}$/.test(String(shippingAddress.codigoPostal).trim())) {
+    return NextResponse.json({ error: 'El código postal debe tener 5 dígitos' }, { status: 400 });
+  }
+  const digitosDelTelefono = String(shippingAddress.telefono).replace(/\D/g, '');
+  if (digitosDelTelefono.length < 10 || digitosDelTelefono.length > 13) {
+    return NextResponse.json({ error: 'Revisa el teléfono: debe tener 10 dígitos' }, { status: 400 });
+  }
+
   const origin = origenSeguro(request);
 
   // Stripe sólo acepta URLs absolutas para las imágenes; varias fotos del
@@ -77,8 +87,15 @@ export async function POST(request: NextRequest) {
     const product = products.find((p) => p.id === item.id);
     if (!product || !product.in_stock) continue;
 
-    const quantity = cantidadValida(item.cartQuantity);
+    // Un producto sin precio de venta no se cobra en $0: se queda fuera hasta
+    // que alguien le ponga precio en el panel.
     const unitAmount = Math.round(Number(product.price_with_iva) * 100);
+    if (!Number.isFinite(unitAmount) || unitAmount <= 0) {
+      console.warn('Producto sin precio de venta en el carrito:', product.id);
+      continue;
+    }
+
+    const quantity = cantidadValida(item.cartQuantity);
     subtotal += (unitAmount / 100) * quantity;
 
     line_items.push({
@@ -90,6 +107,9 @@ export async function POST(request: NextRequest) {
           name: product.name,
           description: product.description ? product.description.slice(0, 500) : undefined,
           images: imagenParaStripe(product.image),
+          // Para saber qué producto es cada renglón al guardar el pedido y
+          // pedírselo a MEPIEL con su código.
+          metadata: { product_id: product.id },
         },
       },
     });

@@ -6,7 +6,7 @@ import { correoConfirmacion, type Pedido } from '@/lib/pedidos';
 const PEDIDO_DE_MUESTRA: Pedido = {
   id: 'prueba00-0000-0000-0000-000000000000',
   created_at: new Date().toISOString(),
-  status: 'paid',
+  status: 'received',
   customer_email: '',
   customer_phone: '55 1234 5678',
   shipping_name: 'Nombre del cliente',

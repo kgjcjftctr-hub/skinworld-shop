@@ -1,29 +1,7 @@
 import 'server-only';
 import { formatPrice } from '@/utils';
 import { CORREO_TIENDA, SITIO, enviarCorreo, escaparHtml, plantilla } from '@/lib/correo';
-
-/**
- * Etapas por las que pasa un pedido. El valor se guarda en la columna `status`
- * de la tabla `orders`; `paid` es el que escribe el webhook de Stripe al
- * confirmarse el pago.
- */
-export const ETAPAS = {
-  paid: { etiqueta: 'Pagado', siguiente: 'packed', accion: 'Marcar empaquetado' },
-  packed: { etiqueta: 'Empaquetado', siguiente: 'shipped', accion: 'Marcar enviado' },
-  shipped: { etiqueta: 'Enviado', siguiente: 'delivered', accion: 'Marcar entregado' },
-  delivered: { etiqueta: 'Entregado', siguiente: null, accion: null },
-  cancelled: { etiqueta: 'Cancelado', siguiente: null, accion: null },
-} as const;
-
-export type Etapa = keyof typeof ETAPAS;
-
-export function esEtapa(valor: unknown): valor is Etapa {
-  return typeof valor === 'string' && valor in ETAPAS;
-}
-
-export function etiquetaDeEtapa(valor: unknown): string {
-  return esEtapa(valor) ? ETAPAS[valor].etiqueta : String(valor ?? '—');
-}
+import { etiquetaDeEstado, type Estado } from '@/lib/estados-pedido';
 
 export interface DireccionDeEnvio {
   nombre: string;
@@ -60,14 +38,8 @@ export interface Pedido {
   packed_at?: string | null;
   shipped_at?: string | null;
   delivered_at?: string | null;
+  stripe_payment_intent?: string | null;
 }
-
-/** Columna donde se guarda el momento en que el pedido llegó a cada etapa. */
-export const MOMENTO_DE_ETAPA: Partial<Record<Etapa, string>> = {
-  packed: 'packed_at',
-  shipped: 'shipped_at',
-  delivered: 'delivered_at',
-};
 
 export function direccionEnUnaLinea(pedido: Pedido): string {
   const d = pedido.shipping_address;
@@ -104,10 +76,14 @@ function tablaDeProductos(pedido: Pedido) {
   </table>`;
 }
 
-function bloqueDeEnvio(pedido: Pedido) {
+/**
+ * Dirección de entrega. Al cliente se le muestra sólo a dónde va su paquete;
+ * el teléfono sale únicamente en el aviso a la tienda, que es quien lo usa.
+ */
+function bloqueDeEnvio(pedido: Pedido, { conTelefono = false } = {}) {
   return `<p style="margin:16px 0 4px;font-weight:700;color:#1c1c22;">Se entrega en</p>
     <p style="margin:0;color:#4a4a55;">${escaparHtml(pedido.shipping_name)}<br>${escaparHtml(direccionEnUnaLinea(pedido))}${
-      pedido.customer_phone ? `<br>Tel. ${escaparHtml(pedido.customer_phone)}` : ''
+      conTelefono && pedido.customer_phone ? `<br>Tel. ${escaparHtml(pedido.customer_phone)}` : ''
     }</p>`;
 }
 
@@ -125,15 +101,20 @@ function bloqueDeGuia(pedido: Pedido) {
 
 /** Aviso a la tienda de que entró un pedido. */
 export function correoPedidoNuevo(pedido: Pedido) {
+  const pagoPendiente = pedido.status === 'pending_payment';
   return {
     para: CORREO_TIENDA,
-    asunto: `Pedido nuevo ${referencia(pedido)} · ${formatPrice(pedido.amount_total)}`,
+    asunto: `${pagoPendiente ? 'Pedido con pago pendiente' : 'Pedido nuevo'} ${referencia(pedido)} · ${formatPrice(pedido.amount_total)}`,
     responderA: pedido.customer_email ?? undefined,
     html: plantilla(
       `Pedido nuevo de ${pedido.shipping_name ?? 'un cliente'}`,
-      `<p style="margin:0;">Referencia <strong>${referencia(pedido)}</strong>, pagado con Stripe.</p>
+      `<p style="margin:0;">Referencia <strong>${referencia(pedido)}</strong>, ${
+        pagoPendiente
+          ? 'con pago pendiente en Stripe. No lo pidas a MEPIEL hasta que el pago se acredite: te llegará otro aviso.'
+          : 'pagado con Stripe. Está en «Recibido», listo para pedirse a MEPIEL.'
+      }</p>
        ${tablaDeProductos(pedido)}
-       ${bloqueDeEnvio(pedido)}
+       ${bloqueDeEnvio(pedido, { conTelefono: true })}
        <p style="margin:16px 0 0;">Correo del cliente: ${escaparHtml(pedido.customer_email ?? '—')}</p>
        <p style="margin:24px 0 0;">
          <a href="${SITIO}/admin/pedidos" style="display:inline-block;background:#1c1c22;color:#ffffff;text-decoration:none;padding:12px 22px;border-radius:8px;font-weight:600;">Ver en el panel</a>
@@ -150,7 +131,7 @@ export function correoConfirmacion(pedido: Pedido) {
     responderA: CORREO_TIENDA,
     html: plantilla(
       '¡Gracias por tu compra!',
-      `<p style="margin:0;">Ya recibimos tu pedido <strong>${referencia(pedido)}</strong> y lo estamos preparando. Te avisamos en cuanto salga a entrega.</p>
+      `<p style="margin:0;">Ya recibimos tu pedido <strong>${referencia(pedido)}</strong>. Ahora confirmamos la disponibilidad de tus productos y te escribimos en cuanto esté confirmado y otra vez cuando salga a entrega.</p>
        ${tablaDeProductos(pedido)}
        ${bloqueDeEnvio(pedido)}
        <p style="margin:20px 0 0;color:#9a9aa6;font-size:13px;">El recibo del pago te llega por separado desde Stripe, nuestra plataforma de cobro. Si algo no cuadra, responde este correo.</p>`
@@ -158,27 +139,67 @@ export function correoConfirmacion(pedido: Pedido) {
   };
 }
 
-const AVISOS: Partial<Record<Etapa, { asunto: string; titulo: string; texto: string }>> = {
-  packed: {
-    asunto: 'Tu pedido ya está empaquetado',
-    titulo: 'Tu pedido ya está listo',
-    texto: 'Ya empaquetamos tu pedido y está esperando a la paquetería. Te escribimos otra vez cuando salga.',
+interface Aviso {
+  asunto: string;
+  titulo: string;
+  texto: string;
+  /** La dirección sólo acompaña a los avisos en los que el paquete se mueve. */
+  conDireccion?: boolean;
+  conGuia?: boolean;
+}
+
+/**
+ * Correo al cliente al llegar a cada etapa. «Por confirmar con MEPIEL» no avisa
+ * porque es trabajo interno: el cliente ya sabe por la confirmación que se está
+ * revisando la disponibilidad, y el siguiente aviso es cuando queda confirmada.
+ */
+const AVISOS: Partial<Record<Estado, Aviso>> = {
+  pending_payment: {
+    asunto: 'Recibimos tu pedido, falta el pago',
+    titulo: 'Tu pedido quedó registrado',
+    texto:
+      'Tu pedido quedó registrado y el pago todavía no se acredita. En cuanto se confirme te escribimos; si el pago no se completa, el pedido se cancela y no se te cobra nada.',
+  },
+  confirmed: {
+    asunto: 'Confirmamos tus productos',
+    titulo: 'Tus productos están confirmados',
+    texto: 'Ya confirmamos la disponibilidad de todos los productos de tu pedido. Lo siguiente es prepararlo para el envío; te avisamos cuando salga.',
+  },
+  preparing: {
+    asunto: 'Estamos preparando tu pedido',
+    titulo: 'Estamos preparando tu pedido',
+    texto: 'Tu pedido ya se está preparando para el envío. Te escribimos otra vez cuando salga, con el número de guía.',
+    conDireccion: true,
   },
   shipped: {
     asunto: 'Tu pedido va en camino',
     titulo: 'Tu pedido va en camino',
     texto:
       'Tu pedido ya salió. En la Ciudad de México y Área Metropolitana la entrega tarda de 1 a 3 días hábiles; al resto de la República, de 3 a 5 días hábiles.',
+    conDireccion: true,
+    conGuia: true,
   },
   delivered: {
     asunto: 'Tu pedido fue entregado',
     titulo: 'Tu pedido fue entregado',
     texto: 'Nos marcan tu pedido como entregado. Si algo no llegó bien, respóndenos este correo y lo resolvemos.',
   },
+  cancelled: {
+    asunto: 'Tu pedido fue cancelado',
+    titulo: 'Tu pedido fue cancelado',
+    texto:
+      'Cancelamos tu pedido. Si ya se había hecho el cobro, te escribimos cuando procesemos el reembolso. Si tienes dudas, responde este correo.',
+  },
+  refunded: {
+    asunto: 'Procesamos tu reembolso',
+    titulo: 'Procesamos tu reembolso',
+    texto:
+      'Procesamos el reembolso de tu pedido al mismo método con el que pagaste. El tiempo para que se refleje depende de tu banco. Si tienes dudas, responde este correo.',
+  },
 };
 
 /** Correo que se le manda al cliente en cada etapa. */
-export function correoEtapa(pedido: Pedido, etapa: Etapa) {
+export function correoEtapa(pedido: Pedido, etapa: Estado) {
   const aviso = AVISOS[etapa];
   if (!aviso) return null;
 
@@ -189,10 +210,24 @@ export function correoEtapa(pedido: Pedido, etapa: Etapa) {
     html: plantilla(
       aviso.titulo,
       `<p style="margin:0;">${escaparHtml(aviso.texto)}</p>
-       <p style="margin:16px 0 0;">Pedido <strong>${referencia(pedido)}</strong></p>
-       ${bloqueDeGuia(pedido)}
+       <p style="margin:16px 0 0;">Pedido <strong>${referencia(pedido)}</strong> · ${escaparHtml(etiquetaDeEstado(etapa))}</p>
+       ${aviso.conGuia ? bloqueDeGuia(pedido) : ''}
        ${tablaDeProductos(pedido)}
-       ${bloqueDeEnvio(pedido)}`
+       ${aviso.conDireccion ? bloqueDeEnvio(pedido) : ''}`
+    ),
+  };
+}
+
+/** Aviso al cliente cuando la guía se captura o corrige después de salir el pedido. */
+export function correoGuia(pedido: Pedido) {
+  return {
+    para: pedido.customer_email ?? '',
+    asunto: `Número de guía de tu pedido · ${referencia(pedido)}`,
+    responderA: CORREO_TIENDA,
+    html: plantilla(
+      'Este es el número de guía de tu pedido',
+      `<p style="margin:0;">Pedido <strong>${referencia(pedido)}</strong></p>
+       ${bloqueDeGuia(pedido)}`
     ),
   };
 }
@@ -205,10 +240,14 @@ export async function confirmarPedidoAlCliente(pedido: Pedido) {
   return enviarCorreo(correoConfirmacion(pedido));
 }
 
-export async function avisarEtapaAlCliente(pedido: Pedido, etapa: Etapa) {
+export async function avisarEtapaAlCliente(pedido: Pedido, etapa: Estado) {
   const correo = correoEtapa(pedido, etapa);
   if (!correo) return { enviado: false, motivo: 'esta etapa no manda correo' };
   return enviarCorreo(correo);
+}
+
+export async function avisarGuiaAlCliente(pedido: Pedido) {
+  return enviarCorreo(correoGuia(pedido));
 }
 
 /**
