@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T11:30:00-06:00",
-  "lastInspectedBy": "Claude, auditoría de lo que falta para vender",
+  "lastInspectedAt": "2026-10-27T12:10:00-06:00",
+  "lastInspectedBy": "Claude, aplicación del catálogo MEPIEL en producción",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -365,7 +365,7 @@
       "priority": "P3",
       "status": "requires_verification",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-10-03",
+      "updatedAt": "2026-10-27",
       "origin": [
         "src/components/product-card.tsx",
         "src/components/search-modal.tsx",
@@ -394,6 +394,10 @@
         {
           "date": "2026-10-03",
           "note": "Verificación en producción: las tarjetas de producto usan ImagenProducto con respaldo accesible, y las imágenes cargan de forma diferida con decodificación asíncrona en secciones de tienda. El fallback está implementado; no se midieron Core Web Vitals de campo, así que no se afirma una mejora de rendimiento y queda pendiente esa medición."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "La imagen de Leche Solar Niños FPS50+ 250 Ml (https://skinworld.mx/wp-content/uploads/2020/08/AVENE-LECHE-SOLAR-NIÑOS-.png.jpg) devuelve una página HTML en vez de una imagen: está rota en la tienda. Además, las fotos de Sun Brush Mineral y Effaclar H muestran el empaque anterior; la dueña confirmó que hoy se venden Isdinceutics Mineral Brush y Effaclar H Iso-Biome."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -633,7 +637,7 @@
       "details": "El stick de ISDIN Pediatrics y el probiótico Daeha ya aparecen en el catálogo a $580 y $1,250 respectivamente, pero esta auditoría no encontró evidencia de que esos precios se hayan aprobado. Sigue sin resolverse Flavo C: solo existe el genérico \"Flavo C Sérum 30 Ml\", sin decir si es Ultraglican, Melatonin, Forte, Intense o Día+Noche.",
       "doneWhen": "La dueña confirma la versión de Flavo C y los dos precios ya publicados; el catálogo queda con los valores con IVA, nombres e imágenes aprobados.",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-09-30",
+      "updatedAt": "2026-10-27",
       "history": [
         {
           "date": "2026-09-30",
@@ -646,6 +650,10 @@
         {
           "date": "2026-09-30",
           "note": "Revisión del catálogo actual: Pediatrics Stick y Daeha se ven con precio, así que lo que falta es que la dueña apruebe esos valores y diga la versión exacta de Flavo C."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "El catálogo de MEPIEL del 20 de octubre tiene activo «ISDINCEUTICS FLAVO-C SERUM 30ML» y descontinuado «ISDINCEUTICS FLAVO-C SUERO 30ML»; la tienda quedó relacionada con el activo."
         }
       ],
       "detectedIn": "2026-09-30T10:40:00-06:00"
@@ -796,7 +804,7 @@
       "priority": "P2",
       "status": "pending",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-09-30",
+      "updatedAt": "2026-10-27",
       "detectedIn": "2026-09-30T15:10:00-06:00",
       "origin": [
         "Tabla products de Supabase",
@@ -813,6 +821,10 @@
         {
           "date": "2026-09-30",
           "note": "Se volvió a contar con el catálogo actual: el cliente ve 164 productos agrupados y 46 siguen sin marca; el hallazgo no cambia."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "El catálogo de MEPIEL trae laboratorio y marca o línea de cada artículo. data/mepiel/coincidencias.json los registra para los productos relacionados y puede servir de referencia para asignar marcas, pero no se cambió ninguna marca. Además, MEPIEL contradice la marca de dos productos (ver SW-042)."
         }
       ]
     },
@@ -1037,7 +1049,7 @@
       "details": "Dos productos del catálogo actual tienen compare_at_price_with_iva menor que price_with_iva, así que la tienda muestra como \"Antes\" una cantidad más baja: el Protector Solar SPF 50 cuesta $760 con un antes de $754, y el Sérum Hidratante Intenso cuesta $1,250 con un antes de $986. La tarjeta oculta la etiqueta de descuento negativo, pero sigue mostrando el precio tachado contradictorio.",
       "doneWhen": "La dueña confirma el precio regular y el actual de los dos productos, el catálogo se corrige y las tarjetas nunca muestran un precio \"Antes\" menor o igual al actual.",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-10-03",
+      "updatedAt": "2026-10-27",
       "detectedIn": "2026-09-30T17:55:00-06:00",
       "history": [
         {
@@ -1051,6 +1063,10 @@
         {
           "date": "2026-10-03",
           "note": "Arreglo de código publicado en producción por indicación de la dueña (src/lib/products.ts): la tienda ya no muestra un precio \"Antes\" menor o igual al actual. La revisión de tipos y la compilación de producción pasan. Sigue en progreso: no se cambió ningún precio del catálogo; falta que la dueña confirme el precio regular y el actual del Protector Solar SPF 50 y del Sérum Hidratante Intenso."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Ni el Protector Solar SPF 50 de ISDIN ni el Sérum Hidratante Intenso de Avène tienen un equivalente claro en MEPIEL, y el catálogo no trae precios de venta, así que no sirve para resolver estos precios."
         }
       ]
     },
@@ -1417,9 +1433,190 @@
           "note": "Búsqueda de «factur» en src: solo aparece en la sección Facturación de los términos; no hay instrucciones para el cliente en ninguna otra página."
         }
       ]
+    },
+    {
+      "id": "SW-042",
+      "title": "Relacionar el catálogo de la tienda con el de MEPIEL",
+      "kind": "improvement_suggestion",
+      "category": "Catálogo",
+      "priority": "P2",
+      "status": "requires_verification",
+      "origin": [
+        "data/mepiel/coincidencias.json",
+        "data/mepiel/revision.md",
+        "data/mepiel/README.md",
+        "scripts/mepiel/convertir-catalogo.mjs",
+        "scripts/mepiel/revisar-coincidencias.mjs",
+        "scripts/mepiel/importar-coincidencias.mjs",
+        "scripts/mepiel/leer-excel.mjs",
+        "supabase/migraciones/002-productos-proveedor.sql",
+        "scripts/mepiel/convertir-precios.mjs",
+        "scripts/mepiel/actualizar-tienda.mjs",
+        "data/mepiel/cambios-tienda.md"
+      ],
+      "details": "El Excel de MEPIEL (catálogo al 20 de octubre de 2026, 4,212 artículos) es su catálogo interno de distribuidor: códigos SAP, códigos de barras, descripción, laboratorio, marca, estatus y existencias por lote. No trae precios de venta; el «Precio promedio» es costo de proveedor y se descarta. Se cruzaron los 201 productos de la tienda: 37 coinciden por código de barras, 109 por nombre, marca y presentación, 24 son probables y 31 no aparecen. No se cambió ningún precio, existencia, ficha ni marca, y no se crearon productos nuevos porque la tienda no tiene estado de borrador. Hay dos marcas dudosas: Kelual DS Shampoo aparece como LA ROCHE-POSAY y MEPIEL lo registra como DUCRAY; Retinol B3 Sérum aparece como SESDERMA y MEPIEL solo tiene uno de LA ROCHE-POSAY. Hay un posible duplicado: Melaclear Sérum y Melaclear Advanced.",
+      "doneWhen": "Se corre la migración 002 en Supabase y luego scripts/mepiel/importar-coincidencias.mjs --aplicar para guardar la relación interna con MEPIEL; los precios y productos nuevos ya están aplicados y verificados.",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T13:30:00-06:00",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Excel convertido con un lector propio, sin dependencias nuevas, y comparado contra un segundo lector en Python: mismos 4,212 artículos (las únicas diferencias eran espacios dobles). Catálogo de la tienda leído de las páginas públicas (201 productos con variantes). Cada producto sin código de barras se revisó a mano. Type-check correcto; lint sin errores nuevos. Nada publicado: sin commit, sin migración y sin escritura en Supabase."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "La dueña revisó una por una las 24 coincidencias probables, con la foto de cada producto en la tienda como evidencia, y confirmó las 24; Anthelios Fluido Invisible se cambió a «ANTHELIOS FLUIDO SHAKA FPS50+ 50ML», que es el de la foto. Melaclear Sérum no es duplicado: es el original de 15 ml. Resultado: 170 productos confirmados (37 por código de barras, 109 por nombre y presentación, 24 en revisión) y 31 sin coincidencia. Falta correr la migración y la importación; no se ha escrito nada en Supabase."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "La dueña entregó la «Lista de precios 2026» de MEPIEL (2,268 productos con precio público) y decidió: usar el precio público c/IVA redondeado hacia arriba al peso, también en los 132 productos que ya se venden (115 suben, hasta +70%; 17 bajan); agregar los productos activos y con existencia en MEPIEL; dejar fuera los medicamentos, y publicar sin foto ni descripción. El plan (data/mepiel/cambios-tienda.md) da 1,539 productos nuevos (316 sin categoría) y 94 medicamentos excluidos, incluidos los de laboratorios farmacéuticos y los que tienen dosis en mg aunque estén en otras secciones. Corrección: la primera cuenta de 1,369 dejaba fuera por error los nombres con «+» (SPF50+, AP+). No se aplicó porque la llave local de Supabase sigue siendo la revocada; el precio cliente (costo) se descarta al convertir."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Aplicado en producción con scripts/mepiel/actualizar-tienda.mjs --aplicar, con respaldo completo en data/mepiel/respaldos/respaldo-completo-2026-10-27.json. Verificado en la base: 132 de 132 precios, 2 marcas y 1,539 de 1,539 productos nuevos. La tienda muestra 1,703 productos; Indoxyl Gel queda en $1,188, Kelual DS en DUCRAY y Retinol B3 en LA ROCHE-POSAY. La primera corrida se detuvo después de 100 productos porque Supabase responde sin cuerpo; se corrigió el script y se completó. Se renombraron 21 productos que traían el nombre interno de empaque (p. ej. «ANT UVM DP SPRAY 50+ F200ML_ES(PT)») usando la descripción del catálogo de MEPIEL."
+        }
+      ]
+    },
+    {
+      "id": "SW-043",
+      "title": "Confirmar el surtido de productos que MEPIEL marca como descontinuados",
+      "kind": "requires_confirmation",
+      "category": "Operación",
+      "priority": "P2",
+      "status": "requires_verification",
+      "origin": [
+        "data/mepiel/revision.md",
+        "data/mepiel/coincidencias.json"
+      ],
+      "details": "De los 170 productos de la tienda que coinciden con MEPIEL, 39 aparecen como DESCONTINUADO en su catálogo del 20 de octubre (por ejemplo, Hyalu B5 Crema, Anthelios Mineral One y varios sérums liposomales de Sesderma). Siguen a la venta en la tienda; si se acaban, quizá no se puedan volver a surtir con MEPIEL. Para varios, MEPIEL tiene un sustituto activo, que se anota en la revisión.",
+      "doneWhen": "La dueña confirma con MEPIEL, producto por producto, si quedan piezas o cuál es el sustituto, y decide si se mantiene, se reemplaza o se marca como agotado.",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T13:30:00-06:00",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Lista generada por scripts/mepiel/revisar-coincidencias.mjs en la sección «Confirmados que MEPIEL marca como descontinuados» de data/mepiel/revision.md. No se cambió la existencia de ningún producto."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Tras confirmar las 24 probables, la lista subió a 39: se agregaron Fotoprotector Fusion Water clásico, Melaclear 15 ml, Anthelios Shaka y la Crema Gel Color Mediderma."
+        }
+      ]
+    },
+    {
+      "id": "SW-044",
+      "title": "Corregir la marca de Kelual DS Shampoo y Retinol B3 Sérum",
+      "kind": "detected_problem",
+      "category": "Catálogo",
+      "priority": "P2",
+      "status": "completed",
+      "origin": [
+        "Tabla products en Supabase (campo brand)",
+        "data/mepiel/coincidencias.json"
+      ],
+      "details": "Kelual DS Shampoo Capilar 100 Ml aparece en la tienda como LA ROCHE-POSAY, pero su foto muestra el logo de DUCRAY y MEPIEL lo registra como Ducray. Retinol B3 Sérum 30 Ml aparece como SESDERMA, pero su foto es el frasco rojo de La Roche-Posay y MEPIEL lo registra como La Roche-Posay (Redermic Retinol B3). Por eso el filtro de marcas los muestra en la marca equivocada.",
+      "doneWhen": "En el panel, Kelual DS Shampoo queda con marca DUCRAY y Retinol B3 Sérum con LA ROCHE-POSAY, y el filtro de marcas de la tienda los muestra en su marca correcta.",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T14:30:00-06:00",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "La dueña confirmó las dos marcas correctas durante la revisión del catálogo de MEPIEL. No se cambiaron en producción porque se pidió no tocar producción en esta tarea."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Corregido en producción: Kelual DS Shampoo Capilar 100 Ml quedó con marca DUCRAY y Retinol B3 Sérum 30 Ml con LA ROCHE-POSAY. Verificado en el título de su página y en el filtro /tienda?marca=DUCRAY."
+        }
+      ]
+    },
+    {
+      "id": "SW-045",
+      "title": "La tienda sólo veía 1,000 productos",
+      "kind": "detected_problem",
+      "category": "Tienda en línea",
+      "priority": "P0",
+      "status": "completed",
+      "origin": [
+        "src/lib/products.ts"
+      ],
+      "details": "Supabase entrega como máximo 1,000 renglones por consulta. Al llegar el catálogo a 1,740 productos, la tienda mostraba 975, y la búsqueda, las categorías y el sitemap dejaban fuera todo lo que va después en orden alfabético (por ejemplo, buscar «xeracalm» no encontraba nada, aunque se vendían tres productos Xeracalm).",
+      "doneWhen": "getAllProducts lee el catálogo en páginas de 1,000 y la tienda muestra todos los productos.",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T12:10:00-06:00",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Arreglado en el commit 481368d (sólo src/lib/products.ts), con type-check y lint correctos. Probado en local: 1,703 productos. Verificado en producción tras el despliegue: /tienda muestra «1703 productos disponibles» y buscar «xeracalm» vuelve a dar resultados."
+        }
+      ]
+    },
+    {
+      "id": "SW-046",
+      "title": "Agregar foto y descripción a los 1,539 productos de MEPIEL",
+      "kind": "improvement_suggestion",
+      "category": "Catálogo",
+      "priority": "P2",
+      "status": "pending",
+      "origin": [
+        "data/mepiel/cambios-tienda.md",
+        "Tabla products en Supabase"
+      ],
+      "details": "Los productos nuevos se publicaron, por decisión de la dueña, sin foto (se ve «Imagen no disponible») ni descripción, con el nombre de la lista de precios en formato normal y sin acentos. 316 quedaron sin categoría porque su sección (limpiadores, hidratantes, antitranspirantes, lanzamientos…) no corresponde a ninguna de las 8 categorías de la tienda.",
+      "doneWhen": "Cada producto nuevo tiene una foto y una descripción aprobadas, y los 316 sin categoría quedan clasificados o se decide crear categorías nuevas.",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T12:10:00-06:00",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Publicados el 27 de octubre de 2026 sin foto ni descripción; no se inventaron textos."
+        }
+      ]
+    },
+    {
+      "id": "SW-047",
+      "title": "Revisar la leyenda «Elegido con criterio médico» en los productos agregados en bloque",
+      "kind": "requires_confirmation",
+      "category": "Contenido",
+      "priority": "P1",
+      "status": "requires_verification",
+      "origin": [
+        "src/app/producto/[slug]/product-client.tsx"
+      ],
+      "details": "Todas las páginas de producto muestran «Selección Skinworld — Elegido con criterio médico por la Dra. Karina Alfaro López, especialista en dermatología.» Desde el 27 de octubre aparece también en los 1,539 productos de MEPIEL que se agregaron en bloque y que la doctora no seleccionó uno por uno.",
+      "doneWhen": "La dueña decide si la leyenda aplica a todo el catálogo o sólo a una selección, y la página de producto la muestra sólo donde corresponde.",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T12:10:00-06:00",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Visto en producción en /producto/cetaphil-advanced-defense-serum-30-ml. No se cambió el texto."
+        }
+      ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "Catálogo MEPIEL aplicado en producción: 132 precios al precio público, 2 marcas corregidas (SW-044) y 1,539 productos nuevos; la tienda muestra 1,703 productos tras arreglar el tope de 1,000 de Supabase (SW-045)."
+    },
+    {
+      "date": "2026-10-27",
+      "summary": "Plan listo para llevar a la tienda la lista de precios 2026 de MEPIEL: 132 precios, 2 marcas y 1,539 productos nuevos sin medicamentos. Falta la llave de Supabase para aplicarlo (SW-042)."
+    },
+    {
+      "date": "2026-10-27",
+      "summary": "La dueña confirmó las 24 coincidencias probables con MEPIEL: 170 productos relacionados y 31 sin coincidencia. Se registraron dos marcas equivocadas (SW-044) y una foto rota (SW-011). Sigue sin publicarse nada."
+    },
+    {
+      "date": "2026-10-27",
+      "summary": "Cruce del catálogo de MEPIEL con la tienda, sin publicar: 146 productos relacionados, 24 por confirmar y 31 sin coincidencia; 35 están descontinuados en MEPIEL (SW-042, SW-043). Ningún precio ni ficha cambió."
+    },
     {
       "date": "2026-10-27",
       "summary": "Tienda restablecida: con la llave nueva de Supabase y un despliegue nuevo, el catálogo vuelve a mostrar 164 productos (SW-040 cerrada)."
