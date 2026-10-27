@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T10:30:00-06:00",
+  "lastInspectedAt": "2026-10-27T11:30:00-06:00",
   "lastInspectedBy": "Claude, auditoría de lo que falta para vender",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
@@ -1372,7 +1372,7 @@
       "kind": "detected_problem",
       "category": "Tienda en línea",
       "priority": "P0",
-      "status": "pending",
+      "status": "completed",
       "origin": [
         "src/lib/supabase.ts",
         "src/lib/products.ts",
@@ -1387,6 +1387,10 @@
         {
           "date": "2026-10-27",
           "note": "Detectado en producción: /tienda con 0 productos, página de producto no encontrada, búsqueda vacía y sitemap sin productos. Prueba directa a la API de Supabase con la llave local: 401 «Unregistered API key». Último despliegue: 26 oct 23:18 UTC (commit 049e0cd), verificado entonces con catálogo. No se pudieron leer los registros de Vercel porque la sesión del navegador está cerrada."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "La dueña creó una llave secreta nueva en Supabase y la guardó en SUPABASE_SECRET_KEY de Vercel (Producción y Preview). El redeploy desde el panel de Vercel no respondió, así que se publicó el commit 1a219a1 (solo Task Center), que generó un despliegue nuevo con la llave. Verificado en producción: /tienda muestra 164 productos, /producto/leche-solar-ninos-fps50-250-ml carga, /api/search devuelve resultados y el sitemap vuelve a listar 164 productos. Falta reemplazar la llave en .env.local para el trabajo local; no se creó ninguna sesión de pago."
         }
       ]
     },
@@ -1416,6 +1420,10 @@
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "Tienda restablecida: con la llave nueva de Supabase y un despliegue nuevo, el catálogo vuelve a mostrar 164 productos (SW-040 cerrada)."
+    },
     {
       "date": "2026-10-27",
       "summary": "Auditoría para empezar a vender: la tienda en producción muestra 0 productos porque Supabase rechaza la llave secreta (SW-040, urgente). Se registró cómo pedir factura (SW-041) y el saldo de la primera venta, disponible el 2 de noviembre (SW-014)."
