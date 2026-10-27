@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T15:05:00-06:00",
-  "lastInspectedBy": "Claude, publicación del flujo de pedidos",
+  "lastInspectedAt": "2026-10-27T15:30:00-06:00",
+  "lastInspectedBy": "Claude, verificación de la migración 003",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -1522,6 +1522,10 @@
         {
           "date": "2026-10-27",
           "note": "Tras confirmar las 24 probables, la lista subió a 39: se agregaron Fotoprotector Fusion Water clásico, Melaclear 15 ml, Anthelios Shaka y la Crema Gel Color Mediderma."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "La pestaña «Productos por revisar» del panel de pedidos (SW-049) ya los lista: 39 productos a la venta que el catálogo de MEPIEL marca como descontinuados (p. ej. Acglicolic Sérum Liposomal 30 Ml y varios Anthelios). No se cambió su existencia; sigue pendiente que la dueña decida."
         }
       ]
     },
@@ -1687,7 +1691,7 @@
         "scripts/mepiel/importar-coincidencias.mjs"
       ],
       "details": "La tienda ya tenía 5 etapas (pagado, empaquetado, enviado, entregado, cancelado), guía, correos por Resend, panel con contraseña y protección contra avisos repetidos de Stripe; eso se conservó. Faltaba: las líneas del pedido no guardaban qué producto eran (no había de dónde sacar el código MEPIEL), no había historial, faltaban 4 etapas y no existía una vista para comprarle a MEPIEL. Se preparó: 9 etapas (pago pendiente, recibido, por confirmar con MEPIEL, confirmado, en preparación, enviado, entregado, cancelado, reembolsado) con reglas en la base; historial de cada cambio en la misma transacción que el cambio; renglones de pedido con código MEPIEL, presentación, disponibilidad y compra con folio; pestaña «Compra a MEPIEL» que junta los productos por código con cantidades, pedidos relacionados y costo estimado; pestaña «Productos por revisar» (sin precio, sin código MEPIEL, agotado o descontinuado según MEPIEL); filtros por etapa y fecha; correos al cliente por etapa con sólo lo necesario (el teléfono ya no va en los correos al cliente); costo del proveedor, disponibilidad y presentación en la tabla interna product_suppliers, que ninguna página pública lee. El pago ya no cobra en $0 un producto sin precio de venta y valida código postal y teléfono. Nada se publicó ni se cambió en producción.",
-      "doneWhen": "Se corren en Supabase las migraciones 002 y 003 (en ese orden), luego scripts/mepiel/importar-coincidencias.mjs --aplicar --costos con la lista de precios, se publica el código y en el webhook de Stripe se agregan los eventos checkout.session.async_payment_succeeded, checkout.session.async_payment_failed y charge.refunded. Un pedido real o controlado recorre todas las etapas en producción, cada paso queda en el historial y el cliente recibe los correos de confirmación, disponibilidad confirmada, preparación, envío con guía y entrega.",
+      "doneWhen": "En Stripe (modo producción) se agregan al webhook los eventos checkout.session.async_payment_succeeded, checkout.session.async_payment_failed y charge.refunded, y un pedido real o controlado recorre todas las etapas en producción: cada paso queda en el historial y el cliente recibe los correos de confirmación, disponibilidad confirmada, preparación, envío con guía y entrega.",
       "history": [
         {
           "date": "2026-10-27",
@@ -1696,6 +1700,10 @@
         {
           "date": "2026-10-27",
           "note": "Con autorización de la dueña: la migración 002 se corrió en Supabase («Success. No rows returned») y el importador guardó 1,700 productos en product_suppliers, verificado en la base: 1,662 con costo, 1,603 con presentación y todos con disponibilidad «sin confirmar». El código se publicó solo (commit 67903d6, sin el rediseño local sin publicar); antes se compiló aparte sobre main con sólo estos cambios. Verificado en producción: el pago rechaza un código postal de 3 dígitos con el mensaje nuevo, /admin/pedidos manda al inicio de sesión y las rutas nuevas responden 401 sin sesión, y la tienda carga. Pendiente: la migración 003 quedó pegada y verificada (mismo contenido que la probada) en el editor SQL de Supabase, pero la herramienta de seguridad no permitió que Claude la ejecutara; la dueña debe darle Run. Mientras tanto el panel abre en modo consulta y el webhook guarda los pedidos como antes. También falta agregar en Stripe (modo producción) los eventos checkout.session.async_payment_succeeded, checkout.session.async_payment_failed y charge.refunded: Stripe pide iniciar sesión y el cambio por API también fue bloqueado; la llave local además es de modo prueba."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "La dueña corrió la migración 003 en Supabase. Verificado: existen order_items, order_events, las 5 funciones y las columnas nuevas de orders; los 4 pedidos anteriores (todos entregados) tienen sus 6 renglones relacionados con producto y código MEPIEL y su renglón inicial de historial; la función responde PEDIDO_NO_EXISTE con un id inexistente. Con la llave pública, orders, order_items, order_events y product_suppliers regresan vacías y las 4 funciones responden «permission denied». El panel, abierto en local con la base real y sin tocar botones, ya no muestra el aviso de migración: lista los 4 pedidos con código MEPIEL e historial, «Compra a MEPIEL» vacía (no hay pedidos abiertos) y «Productos por revisar» con 69 productos (30 a la venta sin código MEPIEL y 39 que MEPIEL marca descontinuados). Faltan los eventos en Stripe y una compra real para ver los correos."
         }
       ]
     },
@@ -1727,6 +1735,10 @@
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "Migración 003 aplicada y verificada: el panel de pedidos ya registra etapas e historial y el público no puede leer pedidos ni costos; faltan los eventos en Stripe (SW-049)."
+    },
     {
       "date": "2026-10-27",
       "summary": "Flujo de pedidos con MEPIEL publicado y 1,700 productos relacionados con su código y costo de MEPIEL (SW-042 cerrada); faltan correr la migración 003 y agregar los eventos en Stripe (SW-049)."
