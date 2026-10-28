@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-28T02:56:45.084Z",
-  "lastInspectedBy": "Codex, verificación de despliegue",
+  "lastInspectedAt": "2026-10-28T15:29:14.111Z",
+  "lastInspectedBy": "Codex, verificación visual de migración",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -1967,9 +1967,9 @@
       "kind": "detected_problem",
       "category": "Confiabilidad",
       "priority": "P1",
-      "status": "in_progress",
+      "status": "requires_verification",
       "detectedAt": "2026-10-27",
-      "updatedAt": "2026-10-27",
+      "updatedAt": "2026-10-28",
       "detectedIn": "2026-10-27T20:43:13-06:00",
       "origin": [
         "src/app/api/stripe/webhook/route.ts",
@@ -1986,6 +1986,10 @@
         {
           "date": "2026-10-27",
           "note": "El código y la migración 005 están publicados en el repositorio, pero el índice no se aplicó a Supabase; la idempotencia del reembolso parcial aún no está garantizada."
+        },
+        {
+          "date": "2026-10-28",
+          "note": "La dueña ejecutó la migración 005 en el SQL Editor del proyecto skinworld-store/main; la captura mostró «Success. No rows returned». El índice quedó creado o ya existía. Falta verificar una entrega repetida controlada del evento, sin usar cobros ni reembolsos reales."
         }
       ]
     },
@@ -2046,6 +2050,10 @@
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-28",
+      "summary": "Supabase confirmó sin error la migración 005 para evitar notas duplicadas de reembolso parcial; sigue pendiente la prueba controlada de idempotencia."
+    },
     {
       "date": "2026-10-27",
       "summary": "Topicrem ya aparece con su marca en 15 productos; antes salía como Martiderm por cómo lo registra MEPIEL (SW-024)."
