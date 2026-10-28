@@ -857,6 +857,10 @@
         {
           "date": "2026-10-27",
           "note": "Se llenó la marca de 46 productos con la del catálogo de MEPIEL, con la misma regla que dio marca a los productos nuevos (p. ej. Desowen → GALDERMA, Icaden → LEO PHARMA; «BACTOBAN» de MEPIEL se corrigió a BACTROBAN). Quedan 18 sin marca porque MEPIEL no los tiene: Tx Ginza Sérum Tranexa, Colágeno Verisol, 8 Proteínas y 6 BCAA, Lanolyx Pasta Blanca, Eldoquin Crema 4% y Kinor Solución. No se inventó ninguna marca."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Los 15 productos Topicrem salían con marca MARTIDERM porque MEPIEL los registra con el prefijo SAP de Martiderm (MAR). Son marcas distintas y el nombre del producto dice Topicrem, así que se cambiaron a TOPICREM (respaldo en data/mepiel/respaldos/marca-topicrem-2026-10-27.json; verificado en la base: 15). Se revisaron los otros 43 productos MARTIDERM: todos son líneas de Martiderm (Acniover, Proteos, DSP, Black Diamond, Krono-Age…). scripts/mepiel/actualizar-tienda.mjs ya asigna TOPICREM para que una próxima importación no lo revierta. La portada y el filtro de marcas lo reflejan al vencer la caché (hasta 1 h)."
         }
       ]
     },
@@ -2042,6 +2046,10 @@
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "Topicrem ya aparece con su marca en 15 productos; antes salía como Martiderm por cómo lo registra MEPIEL (SW-024)."
+    },
     {
       "date": "2026-10-27",
       "summary": "Se publicó f1c89f1 en Vercel; se verificaron tienda paginada, ficha 404 y datos estructurados. La migración 005 sigue pendiente de aplicar."
