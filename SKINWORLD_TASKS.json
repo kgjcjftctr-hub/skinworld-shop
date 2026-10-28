@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T16:35:00-06:00",
-  "lastInspectedBy": "Claude, eventos del webhook de Stripe",
+  "lastInspectedAt": "2026-10-27T20:15:00-06:00",
+  "lastInspectedBy": "Claude, decisiones de la dueña y facturas",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -59,9 +59,9 @@
       "kind": "requires_confirmation",
       "category": "Tienda en línea",
       "priority": "P0",
-      "status": "requires_verification",
+      "status": "completed",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-09-30",
+      "updatedAt": "2026-10-27",
       "origin": [
         "src/app/api/checkout/route.ts",
         "src/app/api/stripe/webhook/route.ts",
@@ -73,6 +73,10 @@
         {
           "date": "2026-09-30",
           "note": "Necesita que se confirme la regla del negocio; no se afirma que sea un defecto."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Decidido por la dueña: todo se surte con MEPIEL. El inventario queda como disponible/agotado por producto y la existencia se confirma con MEPIEL en cada pedido (pestaña «Compra a MEPIEL», SW-049); no hace falta apartar ni descontar cantidades. Lo que MEPIEL no puede surtir se marca agotado (SW-043)."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -465,7 +469,7 @@
       "priority": "P1",
       "status": "requires_verification",
       "detectedAt": "2026-09-30",
-      "updatedAt": "2026-10-04",
+      "updatedAt": "2026-10-27",
       "origin": [
         "src/app/page.tsx",
         "src/components/sections/featured-products.tsx",
@@ -491,6 +495,10 @@
         {
           "date": "2026-10-04",
           "note": "Auditoría local y lectura de producción: portada, catálogo, variante Anthelios Mineral One, ficha, carrito y precios visibles respondieron. La portada local y producción difieren por cambios visuales aún no publicados. Se detectó que el carrito conserva precios y cantidades locales mientras /api/checkout consulta precios actuales y limita cada cantidad a 99; no se creó sesión de pago ni se modificó catálogo. Sigue pendiente comprobar un cambio de catálogo aprobado de extremo a extremo."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Revisado en producción después de los ajustes de hoy: la tienda muestra 1,592 productos; A.G.E. Reverse Day $1,891 coincide con la base; Sebium H2O tiene selector 100/250/500 Ml; Hyalu B5 Crema aparece agotado sin botón de compra. No se abrió el pago de Stripe en esta pasada."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
@@ -651,7 +659,7 @@
         "src/app/admin/admin-dashboard.tsx"
       ],
       "details": "El stick de ISDIN Pediatrics y el probiótico Daeha ya aparecen en el catálogo a $580 y $1,250 respectivamente, pero esta auditoría no encontró evidencia de que esos precios se hayan aprobado. Sigue sin resolverse Flavo C: solo existe el genérico \"Flavo C Sérum 30 Ml\", sin decir si es Ultraglican, Melatonin, Forte, Intense o Día+Noche.",
-      "doneWhen": "La dueña confirma la versión de Flavo C y los dos precios ya publicados; el catálogo queda con los valores con IVA, nombres e imágenes aprobados.",
+      "doneWhen": "La dueña confirma el precio de Daeha Probiótico 30 Sachets ($1,250), que no viene en la lista de precios de MEPIEL.",
       "detectedAt": "2026-09-30",
       "updatedAt": "2026-10-27",
       "history": [
@@ -670,6 +678,10 @@
         {
           "date": "2026-10-27",
           "note": "El catálogo de MEPIEL del 20 de octubre tiene activo «ISDINCEUTICS FLAVO-C SERUM 30ML» y descontinuado «ISDINCEUTICS FLAVO-C SUERO 30ML»; la tienda quedó relacionada con el activo."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Con la lista de precios de MEPIEL aprobada por la dueña: el stick de ISDIN Pediatrics es «Heliocare 360° Pediatrics Stick FPS50+ 25 G» y quedó en $593; «Flavo C Sérum 30 Ml» está relacionado con ISDINCEUTICS FLAVO-C SERUM 30ML (activo en MEPIEL) a $1,399. Sólo queda el precio de Daeha Probiótico 30 Sachets ($1,250), que no viene en la lista de precios de MEPIEL."
         }
       ],
       "detectedIn": "2026-09-30T10:40:00-06:00"
@@ -818,7 +830,7 @@
       "kind": "detected_problem",
       "category": "Tienda en línea",
       "priority": "P2",
-      "status": "pending",
+      "status": "in_progress",
       "detectedAt": "2026-09-30",
       "updatedAt": "2026-10-27",
       "detectedIn": "2026-09-30T15:10:00-06:00",
@@ -841,6 +853,10 @@
         {
           "date": "2026-10-27",
           "note": "El catálogo de MEPIEL trae laboratorio y marca o línea de cada artículo. data/mepiel/coincidencias.json los registra para los productos relacionados y puede servir de referencia para asignar marcas, pero no se cambió ninguna marca. Además, MEPIEL contradice la marca de dos productos (ver SW-042)."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Se llenó la marca de 46 productos con la del catálogo de MEPIEL, con la misma regla que dio marca a los productos nuevos (p. ej. Desowen → GALDERMA, Icaden → LEO PHARMA; «BACTOBAN» de MEPIEL se corrigió a BACTROBAN). Quedan 18 sin marca porque MEPIEL no los tiene: Tx Ginza Sérum Tranexa, Colágeno Verisol, 8 Proteínas y 6 BCAA, Lanolyx Pasta Blanca, Eldoquin Crema 4% y Kinor Solución. No se inventó ninguna marca."
         }
       ]
     },
@@ -1056,7 +1072,7 @@
       "kind": "detected_problem",
       "category": "Tienda en línea",
       "priority": "P1",
-      "status": "in_progress",
+      "status": "completed",
       "origin": [
         "Tabla products de Supabase",
         "src/components/product-card.tsx",
@@ -1083,6 +1099,10 @@
         {
           "date": "2026-10-27",
           "note": "Ni el Protector Solar SPF 50 de ISDIN ni el Sérum Hidratante Intenso de Avène tienen un equivalente claro en MEPIEL, y el catálogo no trae precios de venta, así que no sirve para resolver estos precios."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Por decisión de la dueña («arregla todo») y sin inventar precios: se quitó el precio «Antes» de Sérum Hidratante Intenso ($1,250, antes $986) y Protector Solar SPF 50 ($760, antes $754); ninguno tiene equivalente en la lista de MEPIEL. Respaldo en data/mepiel/respaldos/ajustes-catalogo-2026-10-27.json; verificado en la base que ya no queda ningún «Antes» menor o igual al precio actual."
         }
       ]
     },
@@ -1360,7 +1380,7 @@
       "kind": "requires_confirmation",
       "category": "Accesibilidad",
       "priority": "P2",
-      "status": "requires_verification",
+      "status": "completed",
       "origin": [
         "src/app/carrito/page.tsx",
         "src/app/layout.tsx",
@@ -1377,7 +1397,7 @@
       "details": "Rediseño con la guía frontend-design, solo en local, que reemplaza el estilo Apple del mismo día: papel de consulta verde-gris #F3F5F2, tinta #17211E, rubí #8A2846 para texto y acciones y el rosa de la mariposa en un único bloque grande (el cierre); titulares en Playfair Display y texto en Inter, la misma tipografía de antes del rediseño (se probó Bricolage Grotesque y se retiró por petición de la dueña); productos como etiquetas de farmacia (ficha blanca con filete grueso arriba); botones de 6 px; pie oscuro. La tienda abre con una frase que es el filtro por problema («Busco productos para [acné]»): un menú propio de enlaces, con conteo por problema, que lleva a ?categoria= (se descartó el select nativo porque su lista salía gigante). Se revisó en navegador: tienda (escritorio, 375 px y filtro de Acné con 19 productos), cierre, selección de la Dra., experiencia y pie. No se probó la página de producto, el carrito, el pago, Safari ni un iPhone real.",
       "doneWhen": "La dueña aprueba la identidad y se revisan portada (con la intro), tienda y su frase de filtro, producto, carrito, pago, nosotros, Journal y contacto en 390 px y 1440 px, en Safari y en un iPhone real, con movimiento reducido y contraste alto, y el filtro de la frase se prueba con teclado y lector de pantalla.",
       "detectedAt": "2026-10-05",
-      "updatedAt": "2026-10-05",
+      "updatedAt": "2026-10-27",
       "detectedIn": "2026-10-05T12:00:00-06:00",
       "history": [
         {
@@ -1395,6 +1415,10 @@
         {
           "date": "2026-10-05",
           "note": "La dueña pidió volver a la tipografía anterior y corregir la lista gigante de la frase. Se restauró Playfair Display (archivos recuperados de git), se retiró Bricolage Grotesque y el select se reemplazó por un menú de enlaces. Verificado en navegador: menú con las 9 opciones y conteos, Acné filtra a 19 productos y el menú se cierra. tsc y next build correctos. Sin commit ni publicación."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "La dueña decidió descartar el rediseño local («receta de farmacia» y ajustes posteriores) y quedarse con el sitio publicado. Se borró del proyecto local con respaldo en respaldos/rediseno-2026-10-27/ (parche de 22 archivos y los 3 archivos nuevos). Se conservaron el arreglo que actualiza la tienda al guardar un producto en el panel (publicado en f93a544) y los datos de MEPIEL."
         }
       ]
     },
@@ -1436,10 +1460,19 @@
       "origin": [
         "src/app/terminos/page.tsx",
         "src/app/preguntas-frecuentes/page.tsx",
-        "src/app/contacto/page.tsx"
+        "src/app/contacto/page.tsx",
+        "src/app/facturacion/page.tsx",
+        "src/app/facturacion/formulario.tsx",
+        "src/app/api/factura/route.ts",
+        "src/app/admin/facturas/page.tsx",
+        "src/app/admin/facturas/facturas-client.tsx",
+        "src/app/api/admin/facturas/[id]/route.ts",
+        "src/lib/facturas.ts",
+        "src/lib/facturas-db.ts",
+        "supabase/migraciones/004-facturas.sql"
       ],
       "details": "Los términos dicen que el cliente puede pedir su comprobante fiscal «a través del mecanismo habilitado por Skinworld», pero ninguna página del sitio (preguntas frecuentes, contacto, confirmación del pedido ni correos) explica cómo pedirla ni en qué plazo.",
-      "doneWhen": "La dueña decide el mecanismo (por ejemplo, escribir a contacto@skinworld.shop con número de pedido y datos fiscales dentro del mes de la compra) y ese texto aparece en preguntas frecuentes y en la confirmación del pedido.",
+      "doneWhen": "Se corre supabase/migraciones/004-facturas.sql en Supabase y una solicitud real llega al panel /admin/facturas, la dueña sube el PDF y el XML y el cliente recibe su factura por correo.",
       "detectedAt": "2026-10-27",
       "updatedAt": "2026-10-27",
       "detectedIn": "2026-10-27T10:30:00-06:00",
@@ -1447,6 +1480,10 @@
         {
           "date": "2026-10-27",
           "note": "Búsqueda de «factur» en src: solo aparece en la sección Facturación de los términos; no hay instrucciones para el cliente en ninguna otra página."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "La dueña pidió un formulario. Stripe no puede emitir CFDI (lo timbra un proveedor autorizado por el SAT), así que se hizo así: /facturacion pide la referencia del pedido, el correo de compra y los datos fiscales (RFC, razón social, régimen, CP fiscal, uso del CFDI), en el mismo mes de la compra; el panel /admin/facturas muestra los datos para copiarlos, valida que el XML esté timbrado a nombre del RFC pedido y manda PDF y XML al cliente por correo; también se puede rechazar con motivo. Explicado en preguntas frecuentes, términos, aviso de privacidad, pie y correo de confirmación. Probado en local con base de prueba: 12 pruebas de la migración y el recorrido completo (solicitud, validaciones de XML y PDF, rechazo con historial); el envío con adjuntos no se pudo probar en local por falta de llave de Resend. Publicado (f93a544): en producción la página responde y, sin la migración 004, el formulario pide escribir a contacto@skinworld.shop."
         }
       ]
     },
@@ -1508,7 +1545,7 @@
       "kind": "requires_confirmation",
       "category": "Operación",
       "priority": "P2",
-      "status": "requires_verification",
+      "status": "completed",
       "origin": [
         "data/mepiel/revision.md",
         "data/mepiel/coincidencias.json"
@@ -1530,6 +1567,10 @@
         {
           "date": "2026-10-27",
           "note": "La pestaña «Productos por revisar» del panel de pedidos (SW-049) ya los lista: 39 productos a la venta que el catálogo de MEPIEL marca como descontinuados (p. ej. Acglicolic Sérum Liposomal 30 Ml y varios Anthelios). No se cambió su existencia; sigue pendiente que la dueña decida."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Decidido por la dueña (todo se surte con MEPIEL): los 39 productos que MEPIEL marca DESCONTINUADO tenían 0 piezas en su catálogo del 20 de octubre, así que se marcaron agotados en producción. Respaldo en data/mepiel/respaldos/ajustes-catalogo-2026-10-27.json. Verificado en la base (42 agotados en total) y en el sitio: Hyalu B5 Crema 40 Ml muestra «Agotado»."
         }
       ]
     },
@@ -1610,6 +1651,10 @@
         {
           "date": "2026-10-27",
           "note": "A petición de la dueña se juntaron como variantes de tamaño (selector «Presentación») las dos aguas micelares de Avène, renombradas «Agua Micelar Desmaquillante» porque MEPIEL las trae como «A-AGUA…» y «A-AV EAU…», y luego otros 61 grupos (128 productos), con respaldo en data/mepiel/respaldos/variantes-61-grupos-2026-10-27.json. La tienda pasó de 1,703 a 1,635 fichas y cada página ofrece los otros tamaños."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "La tienda B2B de MEPIEL trae descripción en 1,977 de sus 5,719 artículos (textos de una a varias frases). Son demasiados para pasarlos por el chat (1.2 millones de caracteres); se pidió permiso a la dueña para descargarlos como archivo desde su sesión y cruzarlos por código de barras con los 1,530 productos sin descripción."
         }
       ]
     },
@@ -1645,7 +1690,7 @@
       "kind": "detected_problem",
       "category": "Catálogo",
       "priority": "P2",
-      "status": "in_progress",
+      "status": "completed",
       "origin": [
         "Tabla products en Supabase",
         "data/mepiel/cambios-tienda.json"
@@ -1667,6 +1712,10 @@
         {
           "date": "2026-10-27",
           "note": "La dueña reportó que seguían viéndose repetidos: eran variantes de color o tono. Se juntaron 24 grupos (53 productos) con selector (Con Color/Sin Color, Tono Claro/Medio/Oscuro, Gold/Nude/Opal/Sand…), y se renombraron con el nombre de su etiqueta los 7 productos Avène que MEPIEL trae en código «A-…» (p. ej. «A-CREMA C/C 50+EP 50ML» → «Crema Solar FPS50+ con Color 50 Ml»; Cutalgan pasó a marca A-DERMA). Respaldo en data/mepiel/respaldos/variantes-color-2026-10-27.json. Verificado en producción: la tienda muestra 1,594 productos y la crema solar de Avène aparece una vez con selector."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Decidido por la dueña: de cada Patyka repetido queda a la venta el que tiene más piezas en MEPIEL (Fluido Matificante a $750 con 30 piezas y Exfoliante Alisante a $1,070 con 25) y el otro quedó agotado. El caso Sebium H2O 500 Ml ya no es repetido: el segundo es «Bomba Inversa», otro producto, y ambos cuestan $815; además Sebium H2O 100/250/500 Ml quedó como una ficha con selector (verificado en el sitio). Las versiones anteriores que convivían con las nuevas (Effaclar Duo (+), Hyalu B5, Lipikar Baume AP+ y otras) están descontinuadas en MEPIEL y quedaron agotadas (SW-043)."
         }
       ]
     },
@@ -1760,9 +1809,39 @@
           "note": "Los eventos de pago diferido ya están en el webhook de producción (según el reporte del chat que hizo el cambio). Falta confirmar si OXXO o transferencia están activos y, si lo están, ver un pago diferido pasar de «Pago pendiente» a «Recibido»."
         }
       ]
+    },
+    {
+      "id": "SW-051",
+      "title": "La tienda dejaba agregar productos agotados y el pago los quitaba sin avisar",
+      "kind": "detected_problem",
+      "category": "Tienda en línea",
+      "priority": "P1",
+      "status": "completed",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T20:15:00-06:00",
+      "origin": [
+        "src/components/product-card.tsx",
+        "src/app/producto/[slug]/product-client.tsx",
+        "src/app/api/checkout/route.ts",
+        "src/lib/products.ts",
+        "src/app/tienda/shop-client.tsx"
+      ],
+      "details": "Ninguna página revisaba in_stock: un producto agotado mostraba «Agregar al carrito» y el pago lo quitaba en silencio, así que el cliente podía pagar el resto creyendo que también lo había comprado. Con los 42 agotados de hoy el riesgo era real.",
+      "doneWhen": "Tarjetas y página de producto muestran «Agotado» sin poder agregarlo, el pago avisa qué producto ya no está disponible en lugar de quitarlo, y está verificado en producción.",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Corregido y publicado (commit 05dcd41): botón «Agotado» deshabilitado en tarjetas y página de producto, la tarjeta de un grupo de variantes muestra una presentación disponible, el pago responde 409 con el nombre de lo no disponible y el contador de la tienda ya no dice «disponibles». Verificado en local con el catálogo real (el pago respondió 409 nombrando Hyalu B5 Crema 40 Ml) y en producción (la página de Hyalu B5 Crema muestra «Agotado»)."
+        }
+      ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "Decisiones de la dueña aplicadas: 41 agotados (descontinuados sin piezas y Patyka repetidos), 46 marcas, Sebium agrupado, «Antes» corregido, rediseño local descartado; facturas por formulario publicadas (falta la migración 004) y arreglado que se pudieran comprar agotados (SW-051)."
+    },
     {
       "date": "2026-10-27",
       "summary": "El webhook de Stripe en modo real ya escucha pagos diferidos y reembolsos; sólo falta una compra real para verificar el flujo de pedidos (SW-049)."
