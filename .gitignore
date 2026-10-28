@@ -53,6 +53,7 @@ next-env.d.ts
 /data/mepiel/catalogo-mepiel.json
 *.xlsx
 /data/mepiel/precios-mepiel.json
+/data/mepiel/descripciones-mepiel-*.json
 /data/mepiel/respaldos/
 
 # Respaldos locales de trabajo descartado
