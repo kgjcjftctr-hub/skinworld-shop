@@ -1,7 +1,7 @@
 import { PaginaLegal, type SeccionLegal } from '@/components/legal-page';
 
 export const metadata = {
-  title: 'Términos y Condiciones · Skinworld',
+  title: 'Términos y Condiciones',
   description: 'Términos legales de uso del sitio y de los productos de Skinworld.',
 };
 
@@ -59,7 +59,7 @@ const secciones: SeccionLegal[] = [
   {
     titulo: 'Facturación',
     bloques: [
-      'El cliente podrá solicitar el comprobante fiscal correspondiente proporcionando la información fiscal necesaria a través del mecanismo habilitado por Skinworld.',
+      'El cliente podrá solicitar el comprobante fiscal correspondiente proporcionando la información fiscal necesaria a través del formulario de facturación en skinworld.shop/facturacion, dentro del mismo mes de la compra. La factura se envía al correo con el que se hizo la compra.',
     ],
   },
   {

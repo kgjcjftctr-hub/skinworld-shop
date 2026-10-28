@@ -42,13 +42,15 @@ interface Correo {
   asunto: string;
   html: string;
   responderA?: string;
+  /** Archivos adjuntos (p. ej. el PDF y el XML de una factura), en base64. */
+  adjuntos?: { nombre: string; contenido: string }[];
 }
 
 /**
  * Manda un correo con Resend. Si no hay llave configurada no falla: devuelve el
  * motivo para que quede en el registro y el resto del pedido siga su curso.
  */
-export async function enviarCorreo({ para, asunto, html, responderA }: Correo) {
+export async function enviarCorreo({ para, asunto, html, responderA, adjuntos }: Correo) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return { enviado: false, motivo: 'sin RESEND_API_KEY' };
   if (!para) return { enviado: false, motivo: 'sin destinatario' };
@@ -63,6 +65,9 @@ export async function enviarCorreo({ para, asunto, html, responderA }: Correo) {
         subject: asunto,
         html,
         ...(responderA ? { reply_to: responderA } : {}),
+        ...(adjuntos?.length
+          ? { attachments: adjuntos.map((a) => ({ filename: a.nombre, content: a.contenido })) }
+          : {}),
       }),
     });
     if (!res.ok) {

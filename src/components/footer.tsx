@@ -19,6 +19,7 @@ const companyLinks = [
   { label: 'Journal', href: '/blog' },
   { label: 'Contacto', href: '/contacto' },
   { label: 'Preguntas frecuentes', href: '/preguntas-frecuentes' },
+  { label: 'Facturación', href: '/facturacion' },
 ];
 
 export function Footer() {

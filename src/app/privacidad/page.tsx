@@ -1,7 +1,7 @@
 import { PaginaLegal, type SeccionLegal } from '@/components/legal-page';
 
 export const metadata = {
-  title: 'Aviso de Privacidad · Skinworld',
+  title: 'Aviso de Privacidad',
   description:
     'Cómo Skinworld recaba, usa y protege tus datos personales, y cómo ejercer tus derechos ARCO.',
 };
@@ -37,6 +37,7 @@ const secciones: SeccionLegal[] = [
         'Número telefónico.',
         'Domicilio de entrega.',
         'Información relacionada con sus pedidos y transacciones.',
+        'Datos fiscales (RFC, nombre o razón social, régimen fiscal y código postal fiscal), sólo si solicita factura.',
       ],
       'Skinworld no almacena directamente los datos completos de tarjetas bancarias utilizados para procesar pagos. Estos son tratados por la plataforma de pagos correspondiente.',
       'No solicitamos datos personales sensibles para realizar compras a través de la tienda.',

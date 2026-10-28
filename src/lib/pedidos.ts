@@ -134,6 +134,7 @@ export function correoConfirmacion(pedido: Pedido) {
       `<p style="margin:0;">Ya recibimos tu pedido <strong>${referencia(pedido)}</strong>. Ahora confirmamos la disponibilidad de tus productos y te escribimos en cuanto esté confirmado y otra vez cuando salga a entrega.</p>
        ${tablaDeProductos(pedido)}
        ${bloqueDeEnvio(pedido)}
+       <p style="margin:20px 0 0;">¿Necesitas factura? Pídela en <a href="${SITIO}/facturacion" style="color:#b08ba5;">skinworld.shop/facturacion</a> con la referencia <strong>${referencia(pedido)}</strong>, en el mismo mes de tu compra.</p>
        <p style="margin:20px 0 0;color:#9a9aa6;font-size:13px;">El recibo del pago te llega por separado desde Stripe, nuestra plataforma de cobro. Si algo no cuadra, responde este correo.</p>`
     ),
   };

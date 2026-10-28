@@ -4,7 +4,7 @@ import { useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { AlertTriangle, Check, ChevronDown, ClipboardCopy, History, Loader2, Truck, X } from 'lucide-react';
-import { formatDate, formatPrice } from '@/utils';
+import { formatDateMx, formatPrice } from '@/utils';
 import {
   ACCION_HACIA,
   DISPONIBILIDAD,
@@ -38,7 +38,7 @@ export interface Articulo {
 export interface Evento {
   id: number;
   created_at: string;
-  kind: 'estado' | 'disponibilidad' | 'compra' | 'guia' | 'correo' | 'pago' | 'nota';
+  kind: 'estado' | 'disponibilidad' | 'compra' | 'guia' | 'correo' | 'pago' | 'nota' | 'factura';
   from_status: string | null;
   to_status: string | null;
   actor: string;
@@ -163,14 +163,22 @@ function describirEvento(e: Evento): string {
       return `Guía ${d.guia}${d.anterior ? ` (antes ${d.anterior})` : ''}`;
     case 'correo': {
       const plantilla = String(d.plantilla ?? '');
-      const nombre =
-        plantilla === 'confirmacion' ? 'confirmación' : plantilla === 'guia' ? 'número de guía' : etiquetaDeEstado(plantilla);
+      const nombre = PLANTILLAS[plantilla] ?? etiquetaDeEstado(plantilla);
       return d.enviado ? `Correo al cliente: ${nombre}` : `Correo al cliente NO enviado (${nombre}): ${d.motivo ?? ''}`;
     }
     default:
       return e.note ?? '';
   }
 }
+
+/** Correos que no son de una etapa. */
+const PLANTILLAS: Record<string, string> = {
+  confirmacion: 'confirmación',
+  guia: 'número de guía',
+  factura_solicitada: 'solicitud de factura recibida',
+  factura: 'factura',
+  factura_rechazada: 'factura rechazada',
+};
 
 const ACTOR: Record<string, string> = { tienda: 'Panel', stripe: 'Stripe', sistema: 'Sistema' };
 
@@ -443,7 +451,7 @@ function TarjetaDePedido({ pedido, acciones }: { pedido: PedidoDelPanel; accione
             </span>
           </p>
           <p className="text-sm text-slate-500">
-            {formatDate(pedido.created_at)} · {pedido.customer_email || 'sin correo'}
+            {formatDateMx(pedido.created_at)} · {pedido.customer_email || 'sin correo'}
             {pedido.customer_phone ? ` · ${pedido.customer_phone}` : ''}
           </p>
         </div>

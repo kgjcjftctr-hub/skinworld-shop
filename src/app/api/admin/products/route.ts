@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminAuthenticated } from '@/lib/admin-auth';
 import { getSupabase } from '@/lib/supabase';
+import { refrescarTienda } from '@/lib/refrescar-tienda';
 
 function slugify(text: string) {
   return text
@@ -75,5 +76,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: message }, { status: 400 });
   }
 
+  refrescarTienda();
   return NextResponse.json({ product: data }, { status: 201 });
 }

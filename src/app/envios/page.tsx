@@ -1,7 +1,7 @@
 import { PaginaLegal, type SeccionLegal } from '@/components/legal-page';
 
 export const metadata = {
-  title: 'Envíos, Devoluciones y Reembolsos · Skinworld',
+  title: 'Envíos, Devoluciones y Reembolsos',
   description:
     'Tiempos de entrega, rastreo, devoluciones, reembolsos y cancelaciones de Skinworld.',
 };

@@ -29,6 +29,21 @@ export function formatDate(date: string | Date): string {
   }).format(d);
 }
 
+/**
+ * Fecha de un momento (pedido, solicitud) en la hora del centro de México.
+ * formatDate usa UTC a propósito para fechas escritas a mano; con un momento
+ * real, UTC adelanta un día todo lo que pasa después de las 6 de la tarde.
+ */
+export function formatDateMx(date: string | Date): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return new Intl.DateTimeFormat('es-MX', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'America/Mexico_City',
+  }).format(d);
+}
+
 // Generador de IDs
 export function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;

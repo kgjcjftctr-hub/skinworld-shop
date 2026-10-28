@@ -48,3 +48,12 @@ next-env.d.ts
 # Local tooling
 .claude/
 .artifact/
+
+# Catálogo de proveedor convertido: trae existencias de MEPIEL
+/data/mepiel/catalogo-mepiel.json
+*.xlsx
+/data/mepiel/precios-mepiel.json
+/data/mepiel/respaldos/
+
+# Respaldos locales de trabajo descartado
+/respaldos/

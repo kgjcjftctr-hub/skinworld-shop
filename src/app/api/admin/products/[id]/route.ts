@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminAuthenticated } from '@/lib/admin-auth';
 import { getSupabase } from '@/lib/supabase';
+import { refrescarTienda } from '@/lib/refrescar-tienda';
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   if (!(await isAdminAuthenticated())) {
@@ -62,6 +63,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     return NextResponse.json({ error: 'Error al actualizar el producto' }, { status: 400 });
   }
 
+  refrescarTienda();
   return NextResponse.json({ product: data });
 }
 
@@ -82,5 +84,6 @@ export async function DELETE(
     return NextResponse.json({ error: 'Error al eliminar el producto' }, { status: 400 });
   }
 
+  refrescarTienda();
   return NextResponse.json({ ok: true });
 }

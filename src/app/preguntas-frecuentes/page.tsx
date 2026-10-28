@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { COSTO_DE_ENVIO } from '@/lib/envio';
 
 export const metadata = {
-  title: 'Preguntas Frecuentes · Skinworld',
+  title: 'Preguntas Frecuentes',
   description: 'Dudas sobre envíos, devoluciones, pagos y productos de Skinworld.',
 };
 
@@ -26,6 +26,10 @@ const faqs = [
   {
     q: '¿Qué métodos de pago aceptan?',
     a: 'Los pagos se procesan con Stripe, que muestra al momento de pagar todos los métodos disponibles para tu caso, incluidas tarjetas de crédito y débito.',
+  },
+  {
+    q: '¿Cómo pido factura?',
+    a: 'En la página de Facturación (skinworld.shop/facturacion) escribe la referencia de tu pedido —los 8 caracteres que aparecen como «Pedido» en tu correo de confirmación—, el correo con el que compraste y tus datos fiscales. Se pide en el mismo mes de la compra, y la factura (PDF y XML) te llega por correo.',
   },
   {
     q: '¿Los productos son originales?',
