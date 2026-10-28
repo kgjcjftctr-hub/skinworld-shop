@@ -70,6 +70,8 @@ export function Filters({
       params.delete(key);
     }
 
+    params.delete('pagina');
+
     router.push(`/tienda?${params.toString()}`);
   };
 

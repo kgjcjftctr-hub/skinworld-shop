@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T20:20:00-06:00",
-  "lastInspectedBy": "Claude, descripciones de MEPIEL",
+  "lastInspectedAt": "2026-10-27T20:43:13-06:00",
+  "lastInspectedBy": "Codex, implementación local",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -1659,6 +1659,10 @@
         {
           "date": "2026-10-27",
           "note": "Con permiso de la dueña se descargaron desde su sesión en la tienda de MEPIEL las descripciones de 2,077 artículos (data/mepiel/descripciones-mepiel-2026-10-27.json, fuera del repositorio) y se cruzaron por código de barras con los 1,530 productos sin descripción. Se aplicaron 1,026, sólo donde el nombre de MEPIEL también coincide con el de la tienda; se dejaron fuera 15 con nombre dudoso (p. ej. «Secalia Ato Shower Cream 400 Ml» contra «SECALIA CREMA DE DUCHA 200ML») y MEPIEL no tiene descripción para 489. Se revisó que ningún texto trajera precios, enlaces ni menciones a MEPIEL. Respaldo en data/mepiel/respaldos/descripciones-2026-10-27.json. Verificado: quedan 504 sin descripción en la base y la ficha de Topicrem Serum Intensivo muestra la suya en producción."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Se generó fuera del repositorio una lista de 778 fichas para revisión de descripciones, categorías, imágenes y coincidencias MEPIEL; no se modificaron datos de producto. La decisión sobre contenidos y precios sigue abierta."
         }
       ]
     },
@@ -1811,6 +1815,10 @@
         {
           "date": "2026-10-27",
           "note": "Los eventos de pago diferido ya están en el webhook de producción (según el reporte del chat que hizo el cambio). Falta confirmar si OXXO o transferencia están activos y, si lo están, ver un pago diferido pasar de «Pago pendiente» a «Recibido»."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "La página de regreso ya distingue pago pendiente de fallido en el cambio local y consulta si el pedido quedó registrado; las pruebas unitarias pasan. Siguen pendientes una prueba diferida controlada y la publicación."
         }
       ]
     },
@@ -1839,9 +1847,177 @@
           "note": "Corregido y publicado (commit 05dcd41): botón «Agotado» deshabilitado en tarjetas y página de producto, la tarjeta de un grupo de variantes muestra una presentación disponible, el pago responde 409 con el nombre de lo no disponible y el contador de la tienda ya no dice «disponibles». Verificado en local con el catálogo real (el pago respondió 409 nombrando Hyalu B5 Crema 40 Ml) y en producción (la página de Hyalu B5 Crema muestra «Agotado»)."
         }
       ]
+    },
+    {
+      "id": "SW-052",
+      "title": "Distinguir pago pendiente, cobro acreditado y pedido registrado",
+      "kind": "detected_problem",
+      "category": "Tienda en línea",
+      "priority": "P1",
+      "status": "in_progress",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T20:43:13-06:00",
+      "origin": [
+        "src/app/pedido-confirmado/order-confirmed-client.tsx",
+        "src/app/api/checkout/session/route.ts",
+        "src/lib/estado-confirmacion.ts"
+      ],
+      "details": "La página de regreso trataba un pago diferido como fallido y afirmaba que el correo había salido sólo por ver un pago acreditado en Stripe.",
+      "doneWhen": "La página separa pago pendiente, pedido aún no registrado, pedido registrado, cancelación y reembolso; una prueba controlada verifica los mensajes tras el retorno real.",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Implementación local: la consulta devuelve el estado del pedido sin datos personales; la página espera el registro antes de limpiar el carrito y no promete un correo sin comprobarlo. Pruebas unitarias pasan; falta publicar y verificar el retorno real."
+        }
+      ]
+    },
+    {
+      "id": "SW-053",
+      "title": "Caducar en el servidor las sesiones del panel",
+      "kind": "detected_problem",
+      "category": "Seguridad",
+      "priority": "P1",
+      "status": "in_progress",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T20:43:13-06:00",
+      "origin": [
+        "src/lib/admin-auth.ts",
+        "src/lib/admin-session.ts"
+      ],
+      "details": "La cookie caducaba a los siete días, pero un token firmado podía reproducirse manualmente después de ese plazo.",
+      "doneWhen": "El servidor rechaza tokens vencidos, futuros y alterados, y se verifica el inicio de sesión tras publicar.",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Implementación local: el token firmado lleva fecha y el servidor comprueba siete días; prueba de límites y manipulación aprobada. Los tokens anteriores caducan al publicar."
+        }
+      ]
+    },
+    {
+      "id": "SW-054",
+      "title": "Limitar la conservación del domicilio de envío",
+      "kind": "improvement_suggestion",
+      "category": "Seguridad",
+      "priority": "P2",
+      "status": "in_progress",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T20:43:13-06:00",
+      "origin": [
+        "src/store/shipping-address.ts",
+        "src/app/pedido-confirmado/order-confirmed-client.tsx"
+      ],
+      "details": "El domicilio completo quedaba guardado en localStorage sin fecha de caducidad y no se limpiaba tras completar la compra.",
+      "doneWhen": "El domicilio deja de persistir entre sesiones y se borra tras registrar el pedido; se verifica el comportamiento en un navegador real.",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Implementación local: se usa sessionStorage, se elimina el valor legado de localStorage al iniciar la tienda y se limpia la dirección cuando el pedido queda registrado. Falta verificar tras publicar."
+        }
+      ]
+    },
+    {
+      "id": "SW-055",
+      "title": "Actualizar dependencias con avisos de seguridad",
+      "kind": "detected_problem",
+      "category": "Calidad del código",
+      "priority": "P1",
+      "status": "in_progress",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T20:43:13-06:00",
+      "origin": [
+        "package.json",
+        "package-lock.json"
+      ],
+      "details": "El lockfile anterior tenía seis avisos de producción, incluido uno crítico para Next.js.",
+      "doneWhen": "Una instalación limpia, la revisión de tipos, la compilación y npm audit terminan sin avisos y el despliegue funciona con las versiones nuevas.",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Implementación local: Next 15.5.28, Zod 4.6.7 y dependencias transitivas actualizadas; npm audit completo da cero avisos y la compilación local pasa. Falta desplegar y verificar."
+        }
+      ]
+    },
+    {
+      "id": "SW-056",
+      "title": "Hacer idempotentes las notas de reembolso parcial",
+      "kind": "detected_problem",
+      "category": "Confiabilidad",
+      "priority": "P1",
+      "status": "in_progress",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T20:43:13-06:00",
+      "origin": [
+        "src/app/api/stripe/webhook/route.ts",
+        "src/lib/pedidos-db.ts",
+        "supabase/migraciones/005-idempotencia-reembolsos.sql"
+      ],
+      "details": "Un reenvío del mismo evento charge.refunded parcial podía repetir su nota en el historial.",
+      "doneWhen": "Se aplica el índice único en producción y una entrega repetida controlada deja una sola nota sin duplicar otros efectos.",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Implementación local: la nota incluye el ID del evento y la migración 005 crea la restricción única. No se ejecutó la migración ni se enviaron eventos reales."
+        }
+      ]
+    },
+    {
+      "id": "SW-057",
+      "title": "Paginar el catálogo público",
+      "kind": "improvement_suggestion",
+      "category": "Rendimiento",
+      "priority": "P2",
+      "status": "in_progress",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T20:43:13-06:00",
+      "origin": [
+        "src/app/tienda/page.tsx",
+        "src/app/tienda/shop-client.tsx",
+        "src/components/filters.tsx"
+      ],
+      "details": "La tienda enviaba 1,592 tarjetas en una sola respuesta HTML, con 5.8 MB sin comprimir en la medición previa.",
+      "doneWhen": "La tienda conserva filtros y navegación accesible, muestra pocas tarjetas por página y se miden tiempos en móvil después del despliegue.",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Implementación local: 24 tarjetas por página; las primeras dos páginas y un filtro respondieron 200 con 24 fichas y el HTML local bajó a unos 147 KB. Falta medir producción y móvil real."
+        }
+      ]
+    },
+    {
+      "id": "SW-058",
+      "title": "Responder 404 en fichas inexistentes y describir productos para buscadores",
+      "kind": "improvement_suggestion",
+      "category": "SEO",
+      "priority": "P3",
+      "status": "in_progress",
+      "detectedAt": "2026-10-27",
+      "updatedAt": "2026-10-27",
+      "detectedIn": "2026-10-27T20:43:13-06:00",
+      "origin": [
+        "src/app/producto/[slug]/page.tsx",
+        "src/app/producto/[slug]/not-found.tsx"
+      ],
+      "details": "Una ficha inexistente respondía 200 y las fichas revisadas no emitían datos estructurados Product.",
+      "doneWhen": "Una ficha inexistente responde 404, una ficha real emite datos estructurados sólo con datos publicados y se comprueba tras desplegar.",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "note": "Implementación local: la ruta inexistente responde 404 y las fichas emiten JSON-LD Product con precio y existencia de la base; falta verificar la salida pública."
+        }
+      ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "Correcciones locales de estados de pago, sesión administrativa, privacidad del domicilio, paginación, SEO y dependencias; migración de idempotencia preparada sin aplicarla y catálogo listado para revisión."
+    },
     {
       "date": "2026-10-27",
       "summary": "1,026 productos ya tienen la descripción de MEPIEL (cruzada por código de barras y nombre); quedan 504 sin descripción (SW-046)."

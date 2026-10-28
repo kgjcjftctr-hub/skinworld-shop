@@ -24,7 +24,7 @@
     "framer-motion": "^11.3.19",
     "gsap": "3.15.0",
     "lucide-react": "^0.408.0",
-    "next": "^15.1.0",
+    "next": "^15.5.28",
     "postcss": "^8.4.38",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -35,12 +35,15 @@
     "tailwindcss": "^3.4.3",
     "three": "^0.180.0",
     "typescript": "^5.4.5",
-    "zod": "^3.23.8",
+    "zod": "^4.6.7",
     "zustand": "^4.4.8"
   },
   "devDependencies": {
     "@types/three": "^0.180.0",
     "eslint": "^8.57.0",
-    "eslint-config-next": "^15.1.0"
+    "eslint-config-next": "^15.5.28"
+  },
+  "overrides": {
+    "postcss": "$postcss"
   }
 }

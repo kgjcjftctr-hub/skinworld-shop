@@ -150,7 +150,18 @@ export async function registrarCorreo(pedido: string, plantilla: string, resulta
 }
 
 /** Algo que pasó con el pago y no cambia la etapa (p. ej. un reembolso parcial). */
-export async function registrarNota(pedido: string, kind: 'pago' | 'nota', actor: Actor, nota: string, datos: Record<string, unknown> = {}) {
-  const { error } = await getSupabase().from('order_events').insert({ order_id: pedido, kind, actor, note: nota, data: datos });
-  if (error && !faltaMigracion(error)) console.warn('No se registró la nota en el historial:', error.message);
+export async function registrarNota(
+  pedido: string,
+  kind: 'pago' | 'nota',
+  actor: Actor,
+  nota: string,
+  datos: Record<string, unknown> = {},
+  eventoStripe?: string
+) {
+  const data = eventoStripe ? { ...datos, stripe_event_id: eventoStripe } : datos;
+  const { error } = await getSupabase().from('order_events').insert({ order_id: pedido, kind, actor, note: nota, data });
+  // Stripe reenvía eventos; el índice único de la migración 005 evita otra nota.
+  if (error?.code === '23505' && eventoStripe) return;
+  if (error && faltaMigracion(error)) return;
+  if (error) throw traducir(error);
 }

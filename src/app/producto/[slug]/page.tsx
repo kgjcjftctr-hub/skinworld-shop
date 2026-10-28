@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { getProductBySlug, getRelatedProducts, getProductVariants } from '@/lib/products';
 import { ProductClient } from './product-client';
+import { URL_SITIO } from '@/lib/sitio';
 
 export async function generateMetadata({
   params,
@@ -48,17 +49,7 @@ export default async function ProductPage({
   const product = await getProductBySlug(slug);
 
   if (!product) {
-    return (
-      <div className="sw-container py-sw-section text-center">
-        <h1 className="font-display text-sw-h2 font-semibold text-sw-ink">Producto no encontrado</h1>
-        <p className="mx-auto mt-4 max-w-sw-prose text-sw-body text-sw-muted">
-          Este producto ya no está en el catálogo o la dirección cambió.
-        </p>
-        <Link href="/tienda" className="sw-btn sw-btn-primary mt-8 h-12">
-          Ir a la tienda
-        </Link>
-      </div>
-    );
+    notFound();
   }
 
   const [relatedProducts, variants] = await Promise.all([
@@ -66,5 +57,36 @@ export default async function ProductPage({
     getProductVariants(product.variantGroup, product.slug),
   ]);
 
-  return <ProductClient product={product} relatedProducts={relatedProducts} variants={variants} />;
+  const precio = product.priceWithIVA;
+  const datosEstructurados = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    url: `${URL_SITIO}/producto/${encodeURIComponent(product.slug)}`,
+    ...(product.description ? { description: product.description } : {}),
+    ...(product.image ? { image: product.image } : {}),
+    ...(product.brand ? { brand: { '@type': 'Brand', name: product.brand } } : {}),
+    ...(product.sku ? { sku: product.sku } : {}),
+    ...(typeof precio === 'number' && Number.isFinite(precio) && precio > 0
+      ? {
+          offers: {
+            '@type': 'Offer',
+            price: precio,
+            priceCurrency: 'MXN',
+            availability: product.inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+            url: `${URL_SITIO}/producto/${encodeURIComponent(product.slug)}`,
+          },
+        }
+      : {}),
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados).replace(/</g, '\\u003c') }}
+      />
+      <ProductClient product={product} relatedProducts={relatedProducts} variants={variants} />
+    </>
+  );
 }

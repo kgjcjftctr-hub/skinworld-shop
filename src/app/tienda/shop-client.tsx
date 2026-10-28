@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { SlidersHorizontal, X } from 'lucide-react';
 import { Filters } from '@/components/filters';
 import { ProductCard } from '@/components/product-card';
@@ -9,57 +10,37 @@ import type { Product } from '@/types';
 
 export function ShopClient({
   products,
+  totalProducts,
+  currentPage,
+  totalPages,
+  categoryOptions,
+  brandOptions,
   initialCategories,
   initialBrands,
 }: {
   products: (Product & Record<string, any>)[];
+  totalProducts: number;
+  currentPage: number;
+  totalPages: number;
+  categoryOptions: { name: string; count: number }[];
+  brandOptions: { name: string; count: number }[];
   initialCategories: string[];
   initialBrands: string[];
 }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const searchParams = useSearchParams();
 
   const selectedCategories = initialCategories;
   const selectedBrands = initialBrands;
 
-  const { categoryOptions, brandOptions } = useMemo(() => {
-    const categoryCounts: Record<string, number> = {};
-    const brandCounts: Record<string, number> = {};
-
-    for (const p of products) {
-      if (p.category && p.category !== 'Productos') {
-        categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1;
-      }
-      if (p.brand) {
-        brandCounts[p.brand] = (brandCounts[p.brand] || 0) + 1;
-      }
-    }
-
-    return {
-      categoryOptions: Object.entries(categoryCounts)
-        .sort((a, b) => b[1] - a[1])
-        .map(([name, count]) => ({ name, count })),
-      brandOptions: Object.entries(brandCounts)
-        .sort((a, b) => b[1] - a[1])
-        .map(([name, count]) => ({ name, count })),
-    };
-  }, [products]);
-
-  const filteredProducts = useMemo(() => {
-    let result = products;
-
-    if (selectedCategories.length > 0) {
-      result = result.filter((p) => p.category && selectedCategories.includes(p.category));
-    }
-
-    if (selectedBrands.length > 0) {
-      result = result.filter((p) => p.brand && selectedBrands.includes(p.brand));
-    }
-
-    return result;
-  }, [products, selectedCategories, selectedBrands]);
-
   const filterProps = { selectedCategories, selectedBrands, categoryOptions, brandOptions };
   const filtrosActivos = [...selectedCategories, ...selectedBrands];
+  const pageHref = (page: number) => {
+    const params = new URLSearchParams(searchParams);
+    if (page === 1) params.delete('pagina');
+    else params.set('pagina', String(page));
+    return `/tienda${params.size ? `?${params.toString()}` : ''}`;
+  };
 
   return (
     <div className="pb-sw-section pt-10 sm:pt-14">
@@ -70,7 +51,7 @@ export function ShopClient({
             <h1 className="mt-2 font-display text-sw-h1 font-semibold text-sw-ink">Tienda</h1>
             <p className="mt-3 text-sw-body text-sw-muted" aria-live="polite">
               {/* «Disponibles» ya no aplica: la lista también muestra los agotados, marcados como tales. */}
-              {filteredProducts.length} producto{filteredProducts.length !== 1 && 's'}
+              {totalProducts} producto{totalProducts !== 1 && 's'}
               {filtrosActivos.length > 0 && (
                 <>
                   {' '}en <span className="font-semibold text-sw-ink">{filtrosActivos.join(', ')}</span>
@@ -108,7 +89,7 @@ export function ShopClient({
           </aside>
 
           <section aria-label="Productos">
-            {filteredProducts.length === 0 ? (
+            {totalProducts === 0 ? (
               <div className="rounded-sw-lg border border-dashed border-sw-border px-6 py-16 text-center">
                 <p className="font-display text-2xl text-sw-ink">No hay productos con estos filtros</p>
                 <Link href="/tienda" className="sw-link mt-4 inline-block">
@@ -116,17 +97,26 @@ export function ShopClient({
                 </Link>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-12">
-                {filteredProducts.map((product, i) => (
-                  <ProductCard key={product.id} product={product} prioritaria={i < 4} />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-12">
+                  {products.map((product, i) => (
+                    <ProductCard key={product.id} product={product} prioritaria={i < 4} />
+                  ))}
+                </div>
+                {totalPages > 1 && (
+                  <nav aria-label="Páginas del catálogo" className="mt-12 flex flex-wrap items-center justify-center gap-2">
+                    {currentPage > 1 && <Link href={pageHref(currentPage - 1)} className="sw-btn sw-btn-secondary min-h-11 px-4">Anterior</Link>}
+                    <span className="px-3 text-sw-small text-sw-muted">Página {currentPage} de {totalPages}</span>
+                    {currentPage < totalPages && <Link href={pageHref(currentPage + 1)} className="sw-btn sw-btn-secondary min-h-11 px-4">Siguiente</Link>}
+                  </nav>
+                )}
+              </>
             )}
           </section>
         </div>
       </div>
 
-      {isDrawerOpen && <CajonDeFiltros onClose={() => setIsDrawerOpen(false)} total={filteredProducts.length}>
+      {isDrawerOpen && <CajonDeFiltros onClose={() => setIsDrawerOpen(false)} total={totalProducts}>
         <Filters {...filterProps} />
       </CajonDeFiltros>}
     </div>

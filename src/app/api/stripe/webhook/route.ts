@@ -222,7 +222,7 @@ async function pagoDiferido(session: Stripe.Checkout.Session, acreditado: boolea
  * «Reembolsado»; si fue parcial sólo queda anotado en el historial, porque el
  * pedido puede seguir su curso.
  */
-async function reembolso(cargo: Stripe.Charge) {
+async function reembolso(cargo: Stripe.Charge, eventoStripe: string) {
   const intento = intentoDePago(cargo.payment_intent);
   if (!intento) return NextResponse.json({ received: true });
 
@@ -241,7 +241,7 @@ async function reembolso(cargo: Stripe.Charge) {
   if (!cargo.refunded) {
     await registrarNota(pedido.id, 'pago', 'stripe', `Reembolso parcial en Stripe: ${formatPrice(devuelto)} en total.`, {
       reembolsado: devuelto,
-    });
+    }, eventoStripe);
     return NextResponse.json({ received: true });
   }
   if (estado === 'refunded' || !transicionPermitida(estado, 'refunded')) return NextResponse.json({ received: true, sinCambio: true });
@@ -284,7 +284,7 @@ export async function POST(request: NextRequest) {
       case 'checkout.session.async_payment_failed':
         return await pagoDiferido(event.data.object, false);
       case 'charge.refunded':
-        return await reembolso(event.data.object);
+        return await reembolso(event.data.object, event.id);
       default:
         return NextResponse.json({ received: true });
     }

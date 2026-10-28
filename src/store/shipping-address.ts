@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 export interface ShippingAddress {
   nombre: string;
@@ -46,6 +46,7 @@ interface ShippingAddressStore {
   address: ShippingAddress;
   setAddress: (address: ShippingAddress) => void;
   updateField: (field: keyof ShippingAddress, value: string) => void;
+  clearAddress: () => void;
 }
 
 export const useShippingAddress = create<ShippingAddressStore>()(
@@ -55,9 +56,16 @@ export const useShippingAddress = create<ShippingAddressStore>()(
       setAddress: (address) => set({ address }),
       updateField: (field, value) =>
         set((state) => ({ address: { ...state.address, [field]: value } })),
+      clearAddress: () => set({ address: emptyShippingAddress }),
     }),
     {
       name: 'skinworld-shipping-address',
+      // Los datos de entrega sólo se conservan durante esta pestaña.
+      // Borra también el almacenamiento persistente de versiones anteriores.
+      storage: createJSONStorage(() => {
+        localStorage.removeItem('skinworld-shipping-address');
+        return sessionStorage;
+      }),
     }
   )
 );

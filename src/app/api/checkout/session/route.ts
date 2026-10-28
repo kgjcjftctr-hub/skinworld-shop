@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
+import { getSupabase } from '@/lib/supabase';
 import { ipDe, limitar, respuestaDeLimite } from '@/lib/limite';
 
 /**
@@ -22,9 +23,18 @@ export async function GET(request: NextRequest) {
   try {
     const session = await getStripe().checkout.sessions.retrieve(sessionId);
 
+    const { data: order, error } = await getSupabase()
+      .from('orders')
+      .select('status')
+      .eq('stripe_session_id', sessionId)
+      .maybeSingle();
+    if (error) throw error;
+
     return NextResponse.json({
       status: session.payment_status,
       amountTotal: session.amount_total != null ? session.amount_total / 100 : null,
+      orderRecorded: Boolean(order),
+      orderStatus: order?.status ?? null,
     });
   } catch (err) {
     console.error('Failed to retrieve checkout session:', err);
