@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T15:55:00-06:00",
+  "lastInspectedAt": "2026-10-27T16:20:00-06:00",
   "lastInspectedBy": "Claude, eventos del webhook de Stripe",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
@@ -1691,7 +1691,7 @@
         "scripts/mepiel/importar-coincidencias.mjs"
       ],
       "details": "La tienda ya tenía 5 etapas (pagado, empaquetado, enviado, entregado, cancelado), guía, correos por Resend, panel con contraseña y protección contra avisos repetidos de Stripe; eso se conservó. Faltaba: las líneas del pedido no guardaban qué producto eran (no había de dónde sacar el código MEPIEL), no había historial, faltaban 4 etapas y no existía una vista para comprarle a MEPIEL. Se preparó: 9 etapas (pago pendiente, recibido, por confirmar con MEPIEL, confirmado, en preparación, enviado, entregado, cancelado, reembolsado) con reglas en la base; historial de cada cambio en la misma transacción que el cambio; renglones de pedido con código MEPIEL, presentación, disponibilidad y compra con folio; pestaña «Compra a MEPIEL» que junta los productos por código con cantidades, pedidos relacionados y costo estimado; pestaña «Productos por revisar» (sin precio, sin código MEPIEL, agotado o descontinuado según MEPIEL); filtros por etapa y fecha; correos al cliente por etapa con sólo lo necesario (el teléfono ya no va en los correos al cliente); costo del proveedor, disponibilidad y presentación en la tabla interna product_suppliers, que ninguna página pública lee. El pago ya no cobra en $0 un producto sin precio de venta y valida código postal y teléfono. Nada se publicó ni se cambió en producción.",
-      "doneWhen": "En Stripe (modo producción) se agregan al webhook los eventos checkout.session.async_payment_succeeded, checkout.session.async_payment_failed y charge.refunded, y un pedido real o controlado recorre todas las etapas en producción: cada paso queda en el historial y el cliente recibe los correos de confirmación, disponibilidad confirmada, preparación, envío con guía y entrega.",
+      "doneWhen": "Un pedido real o controlado recorre todas las etapas en producción: cada paso queda en el historial y el cliente recibe los correos de confirmación, disponibilidad confirmada, preparación, envío con guía y entrega.",
       "history": [
         {
           "date": "2026-10-27",
@@ -1712,6 +1712,10 @@
         {
           "date": "2026-10-27",
           "note": "Corrección: la dueña aclara que todavía no agregó los eventos en Stripe; la nota anterior no aplica. Se le dieron los pasos para hacerlo."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Webhook de Stripe en modo real actualizado con un chat que maneja el navegador de la dueña: el destino existente (https://www.skinworld.shop/api/stripe/webhook) quedó con 4 eventos (checkout.session.completed, checkout.session.async_payment_succeeded, checkout.session.async_payment_failed, charge.refunded), sin destino nuevo ni cambio de clave de firma; Stripe muestra «escucha 4 eventos». Evidencia: el reporte de ese chat que pegó la dueña; Claude no lo vio directamente porque la llave local es de modo prueba. Falta sólo la compra real para verificar correos y etapas."
         }
       ]
     },
@@ -1746,11 +1750,19 @@
         {
           "date": "2026-10-27",
           "note": "Corrección: los eventos de pago diferido aún no están agregados en Stripe."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Los eventos de pago diferido ya están en el webhook de producción (según el reporte del chat que hizo el cambio). Falta confirmar si OXXO o transferencia están activos y, si lo están, ver un pago diferido pasar de «Pago pendiente» a «Recibido»."
         }
       ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "El webhook de Stripe en modo real ya escucha pagos diferidos y reembolsos; sólo falta una compra real para verificar el flujo de pedidos (SW-049)."
+    },
     {
       "date": "2026-10-27",
       "summary": "Los eventos de pago diferido y reembolso todavía no están en el webhook de Stripe; la dueña los agregará con la guía paso a paso (SW-049)."
