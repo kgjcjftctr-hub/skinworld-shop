@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T16:20:00-06:00",
+  "lastInspectedAt": "2026-10-27T16:35:00-06:00",
   "lastInspectedBy": "Claude, eventos del webhook de Stripe",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
@@ -319,6 +319,10 @@
         {
           "date": "2026-10-27",
           "note": "El flujo de pedidos cambió (SW-049): ahora hay 9 etapas, historial y más correos. Además de lo que ya pedía esta tarea, hay que verificar en producción los correos de disponibilidad confirmada, preparación, cancelación y reembolso, y los avisos de pago diferido y reembolso de Stripe. Nada de esto se probó con Stripe ni con Resend reales."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "La dueña informa que ya hizo una compra real y salió bien. En la base consta: pedido del 26 de octubre de 2026 guardado por el webhook en producción, que la tienda llevó hasta «Entregado». Esa compra fue antes del flujo nuevo (SW-049), así que confirma pago, guardado y confirmación, pero no los correos de las etapas nuevas ni la cancelación o el reembolso; esos se verán con el siguiente pedido real."
         }
       ],
       "detectedIn": "2026-09-30T00:00:00-06:00"
