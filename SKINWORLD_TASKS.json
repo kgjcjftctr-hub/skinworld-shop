@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T20:15:00-06:00",
-  "lastInspectedBy": "Claude, decisiones de la dueña y facturas",
+  "lastInspectedAt": "2026-10-27T20:20:00-06:00",
+  "lastInspectedBy": "Claude, descripciones de MEPIEL",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -1635,7 +1635,7 @@
         "Tabla products en Supabase"
       ],
       "details": "Los productos nuevos se publicaron, por decisión de la dueña, sin foto (se ve «Imagen no disponible») ni descripción, con el nombre de la lista de precios en formato normal y sin acentos. 316 quedaron sin categoría porque su sección (limpiadores, hidratantes, antitranspirantes, lanzamientos…) no corresponde a ninguna de las 8 categorías de la tienda.",
-      "doneWhen": "Cada producto nuevo tiene una descripción aprobada; los 5 sin foto en MEPIEL (Pilopeptan Shampoo Anticaida 250 Ml, S-mediderma Crema-gel Antioxidante 50 Ml, S-mediderma FPS50 Fotorreparador Gel-crema 50 Ml, Triclean Mousse 120 Ml, Valuge Valurea Emulsion Corporal 500 Ml) tienen foto, y los 316 sin categoría quedan clasificados.",
+      "doneWhen": "Los 504 productos que siguen sin descripción la tienen (MEPIEL no la trae para 489 y en 15 el nombre no coincidía con su código de barras), y los 5 sin foto en MEPIEL (Pilopeptan Shampoo Anticaida 250 Ml, S-mediderma Crema-gel Antioxidante 50 Ml, S-mediderma FPS50 Fotorreparador Gel-crema 50 Ml, Triclean Mousse 120 Ml, Valuge Valurea Emulsion Corporal 500 Ml) tienen foto aprobada.",
       "detectedAt": "2026-10-27",
       "updatedAt": "2026-10-27",
       "detectedIn": "2026-10-27T12:10:00-06:00",
@@ -1655,6 +1655,10 @@
         {
           "date": "2026-10-27",
           "note": "La tienda B2B de MEPIEL trae descripción en 1,977 de sus 5,719 artículos (textos de una a varias frases). Son demasiados para pasarlos por el chat (1.2 millones de caracteres); se pidió permiso a la dueña para descargarlos como archivo desde su sesión y cruzarlos por código de barras con los 1,530 productos sin descripción."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Con permiso de la dueña se descargaron desde su sesión en la tienda de MEPIEL las descripciones de 2,077 artículos (data/mepiel/descripciones-mepiel-2026-10-27.json, fuera del repositorio) y se cruzaron por código de barras con los 1,530 productos sin descripción. Se aplicaron 1,026, sólo donde el nombre de MEPIEL también coincide con el de la tienda; se dejaron fuera 15 con nombre dudoso (p. ej. «Secalia Ato Shower Cream 400 Ml» contra «SECALIA CREMA DE DUCHA 200ML») y MEPIEL no tiene descripción para 489. Se revisó que ningún texto trajera precios, enlaces ni menciones a MEPIEL. Respaldo en data/mepiel/respaldos/descripciones-2026-10-27.json. Verificado: quedan 504 sin descripción en la base y la ficha de Topicrem Serum Intensivo muestra la suya en producción."
         }
       ]
     },
@@ -1838,6 +1842,10 @@
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "1,026 productos ya tienen la descripción de MEPIEL (cruzada por código de barras y nombre); quedan 504 sin descripción (SW-046)."
+    },
     {
       "date": "2026-10-27",
       "summary": "Decisiones de la dueña aplicadas: 41 agotados (descontinuados sin piezas y Patyka repetidos), 46 marcas, Sebium agrupado, «Antes» corregido, rediseño local descartado; facturas por formulario publicadas (falta la migración 004) y arreglado que se pudieran comprar agotados (SW-051)."
