@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T20:43:13-06:00",
-  "lastInspectedBy": "Codex, implementación local",
+  "lastInspectedAt": "2026-10-28T02:56:45.084Z",
+  "lastInspectedBy": "Codex, verificación de despliegue",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
     "pending": "Trabajo abierto que ya se detectó o se aceptó.",
@@ -1869,6 +1869,10 @@
         {
           "date": "2026-10-27",
           "note": "Implementación local: la consulta devuelve el estado del pedido sin datos personales; la página espera el registro antes de limpiar el carrito y no promete un correo sin comprobarlo. Pruebas unitarias pasan; falta publicar y verificar el retorno real."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "El commit f1c89f1 está publicado en Vercel. La ruta de regreso requiere aún verificar un retorno de pago controlado; no se realizaron cobros reales."
         }
       ]
     },
@@ -1892,6 +1896,10 @@
         {
           "date": "2026-10-27",
           "note": "Implementación local: el token firmado lleva fecha y el servidor comprueba siete días; prueba de límites y manipulación aprobada. Los tokens anteriores caducan al publicar."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "El commit f1c89f1 está publicado en Vercel. Falta comprobar el inicio de sesión administrativo en navegador tras el cambio de token."
         }
       ]
     },
@@ -1915,6 +1923,10 @@
         {
           "date": "2026-10-27",
           "note": "Implementación local: se usa sessionStorage, se elimina el valor legado de localStorage al iniciar la tienda y se limpia la dirección cuando el pedido queda registrado. Falta verificar tras publicar."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "El commit f1c89f1 está publicado en Vercel. Falta verificar en navegador la limpieza del domicilio después de una compra registrada."
         }
       ]
     },
@@ -1924,7 +1936,7 @@
       "kind": "detected_problem",
       "category": "Calidad del código",
       "priority": "P1",
-      "status": "in_progress",
+      "status": "completed",
       "detectedAt": "2026-10-27",
       "updatedAt": "2026-10-27",
       "detectedIn": "2026-10-27T20:43:13-06:00",
@@ -1938,6 +1950,10 @@
         {
           "date": "2026-10-27",
           "note": "Implementación local: Next 15.5.28, Zod 4.6.7 y dependencias transitivas actualizadas; npm audit completo da cero avisos y la compilación local pasa. Falta desplegar y verificar."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Completado: instalación limpia, nueve pruebas, type-check, build y npm audit sin vulnerabilidades; Vercel marcó exitoso el despliegue de f1c89f1 y la tienda respondió 200 en producción."
         }
       ]
     },
@@ -1962,6 +1978,10 @@
         {
           "date": "2026-10-27",
           "note": "Implementación local: la nota incluye el ID del evento y la migración 005 crea la restricción única. No se ejecutó la migración ni se enviaron eventos reales."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "El código y la migración 005 están publicados en el repositorio, pero el índice no se aplicó a Supabase; la idempotencia del reembolso parcial aún no está garantizada."
         }
       ]
     },
@@ -1986,6 +2006,10 @@
         {
           "date": "2026-10-27",
           "note": "Implementación local: 24 tarjetas por página; las primeras dos páginas y un filtro respondieron 200 con 24 fichas y el HTML local bajó a unos 147 KB. Falta medir producción y móvil real."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "La tienda publicada respondió 200 con 24 productos en la primera y segunda página; falta medir el comportamiento en celular."
         }
       ]
     },
@@ -1995,7 +2019,7 @@
       "kind": "improvement_suggestion",
       "category": "SEO",
       "priority": "P3",
-      "status": "in_progress",
+      "status": "completed",
       "detectedAt": "2026-10-27",
       "updatedAt": "2026-10-27",
       "detectedIn": "2026-10-27T20:43:13-06:00",
@@ -2009,11 +2033,19 @@
         {
           "date": "2026-10-27",
           "note": "Implementación local: la ruta inexistente responde 404 y las fichas emiten JSON-LD Product con precio y existencia de la base; falta verificar la salida pública."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Completado en producción: una ficha inexistente respondió 404; una ficha real respondió 200 con un bloque Product JSON-LD y oferta generada de los datos publicados."
         }
       ]
     }
   ],
   "recentChanges": [
+    {
+      "date": "2026-10-27",
+      "summary": "Se publicó f1c89f1 en Vercel; se verificaron tienda paginada, ficha 404 y datos estructurados. La migración 005 sigue pendiente de aplicar."
+    },
     {
       "date": "2026-10-27",
       "summary": "Correcciones locales de estados de pago, sesión administrativa, privacidad del domicilio, paginación, SEO y dependencias; migración de idempotencia preparada sin aplicarla y catálogo listado para revisión."
