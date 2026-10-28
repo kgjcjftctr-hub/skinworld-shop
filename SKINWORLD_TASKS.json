@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "project": "SkinWorld",
   "title": "Centro de tareas de SkinWorld",
-  "lastInspectedAt": "2026-10-27T15:45:00-06:00",
+  "lastInspectedAt": "2026-10-27T15:55:00-06:00",
   "lastInspectedBy": "Claude, eventos del webhook de Stripe",
   "sourceOfTruth": "Este archivo es la fuente de verdad permanente. No se reemplaza por una lista nueva: las tareas se actualizan por su identificador estable y se conservan las terminadas y su historial. Cada tarea lleva detectedIn, el valor de lastInspectedAt de la inspección que la registró por primera vez; eso es lo que marca un hallazgo como nuevo. La página generada se publica como artefacto de Claude en artifactUrl; siempre se vuelve a publicar en esa misma dirección en lugar de crear un segundo Centro de tareas. Todo el contenido se escribe en español.",
   "statusDefinitions": {
@@ -1708,6 +1708,10 @@
         {
           "date": "2026-10-27",
           "note": "La dueña informa que agregó en Stripe (modo producción) los eventos checkout.session.async_payment_succeeded, checkout.session.async_payment_failed y charge.refunded. Claude no pudo comprobarlo: la llave local es de modo prueba (su webhook sigue sólo con checkout.session.completed) y el Dashboard de Stripe pide iniciar sesión. Se confirmará con el primer evento real en el registro del webhook o con una captura de la lista de eventos. Sigue pendiente una compra real para ver los correos."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Corrección: la dueña aclara que todavía no agregó los eventos en Stripe; la nota anterior no aplica. Se le dieron los pasos para hacerlo."
         }
       ]
     },
@@ -1738,6 +1742,10 @@
         {
           "date": "2026-10-27",
           "note": "La dueña informa que el webhook de producción ya recibe los eventos de pago diferido; sin verificar por Claude. Falta confirmar si OXXO o transferencia están activos."
+        },
+        {
+          "date": "2026-10-27",
+          "note": "Corrección: los eventos de pago diferido aún no están agregados en Stripe."
         }
       ]
     }
@@ -1745,7 +1753,7 @@
   "recentChanges": [
     {
       "date": "2026-10-27",
-      "summary": "La dueña agregó en Stripe los eventos de pago diferido y reembolso (sin verificar todavía); falta una compra real para ver los correos (SW-049)."
+      "summary": "Los eventos de pago diferido y reembolso todavía no están en el webhook de Stripe; la dueña los agregará con la guía paso a paso (SW-049)."
     },
     {
       "date": "2026-10-27",
