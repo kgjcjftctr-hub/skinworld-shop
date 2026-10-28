@@ -153,12 +153,23 @@ export async function getProductVariants(variantGroup: string | undefined, exclu
 // tono, tamaño, concentración), sólo mostramos uno en listados de catálogo;
 // las demás opciones aparecen como variantes dentro de la página del producto.
 export function dedupeVariants(products: Product[]): Product[] {
+  // La tarjeta del grupo muestra una presentación que se pueda comprar, si hay;
+  // así un tamaño agotado no hace parecer agotado todo el producto.
+  const representante = new Map<string, Product>();
+  for (const product of products) {
+    if (!product.variantGroup) continue;
+    const actual = representante.get(product.variantGroup);
+    if (!actual || (!actual.inStock && product.inStock)) representante.set(product.variantGroup, product);
+  }
+
   const seenGroups = new Set<string>();
   const result: Product[] = [];
   for (const product of products) {
     if (product.variantGroup) {
       if (seenGroups.has(product.variantGroup)) continue;
       seenGroups.add(product.variantGroup);
+      result.push(representante.get(product.variantGroup) ?? product);
+      continue;
     }
     result.push(product);
   }

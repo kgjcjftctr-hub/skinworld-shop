@@ -69,8 +69,8 @@ export function ShopClient({
             <p className="sw-label">Catálogo</p>
             <h1 className="mt-2 font-display text-sw-h1 font-semibold text-sw-ink">Tienda</h1>
             <p className="mt-3 text-sw-body text-sw-muted" aria-live="polite">
-              {filteredProducts.length} producto{filteredProducts.length !== 1 && 's'} disponible
-              {filteredProducts.length !== 1 && 's'}
+              {/* «Disponibles» ya no aplica: la lista también muestra los agotados, marcados como tales. */}
+              {filteredProducts.length} producto{filteredProducts.length !== 1 && 's'}
               {filtrosActivos.length > 0 && (
                 <>
                   {' '}en <span className="font-semibold text-sw-ink">{filtrosActivos.join(', ')}</span>

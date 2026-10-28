@@ -42,7 +42,10 @@ export function ProductClient({
     ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
     : 0;
 
+  const agotado = !product.inStock;
+
   const handleAddToCart = () => {
+    if (agotado) return;
     addItem(product, quantity);
     toast.success('Agregado al carrito', { description: `${quantity} × ${product.name}` });
   };
@@ -234,9 +237,14 @@ export function ProductClient({
                 </button>
               </div>
 
-              <button type="button" onClick={handleAddToCart} className="sw-btn sw-btn-primary h-14 flex-1 text-base">
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                disabled={agotado}
+                className="sw-btn sw-btn-primary h-14 flex-1 text-base disabled:cursor-not-allowed disabled:opacity-50"
+              >
                 <ShoppingBag className="h-5 w-5" aria-hidden />
-                <span>Agregar al carrito</span>
+                <span>{agotado ? 'Agotado' : 'Agregar al carrito'}</span>
               </button>
             </div>
 

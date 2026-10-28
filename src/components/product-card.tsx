@@ -37,9 +37,12 @@ export function ProductCard({
     ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
     : 0;
 
+  const agotado = !product.inStock;
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (agotado) return;
     addItem(product, 1);
     toast.success('Agregado al carrito', { description: product.name });
   };
@@ -91,11 +94,12 @@ export function ProductCard({
           <button
             type="button"
             onClick={handleAddToCart}
-            aria-label={`Agregar ${product.name} al carrito`}
-            className="sw-btn sw-btn-primary relative z-10 mt-5 h-12"
+            disabled={agotado}
+            aria-label={agotado ? `${product.name} está agotado` : `Agregar ${product.name} al carrito`}
+            className="sw-btn sw-btn-primary relative z-10 mt-5 h-12 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <ShoppingBag className="h-4 w-4" aria-hidden />
-            Agregar al carrito
+            {agotado ? 'Agotado' : 'Agregar al carrito'}
           </button>
         </div>
       </article>
@@ -158,15 +162,17 @@ export function ProductCard({
           <button
             type="button"
             onClick={handleAddToCart}
-            aria-label={`Agregar ${product.name} al carrito`}
+            disabled={agotado}
+            aria-label={agotado ? `${product.name} está agotado` : `Agregar ${product.name} al carrito`}
             className={cn(
               'relative z-10 inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full px-4',
               'bg-sw-pink-pale text-sw-small font-semibold text-sw-pink-deep',
-              'transition-colors duration-sw-fast ease-sw hover:bg-sw-pink-deep hover:text-white'
+              'transition-colors duration-sw-fast ease-sw hover:bg-sw-pink-deep hover:text-white',
+              'disabled:cursor-not-allowed disabled:bg-sw-border disabled:text-sw-muted disabled:hover:bg-sw-border disabled:hover:text-sw-muted'
             )}
           >
-            <ShoppingBag className="h-4 w-4" aria-hidden />
-            <span>Agregar</span>
+            {!agotado && <ShoppingBag className="h-4 w-4" aria-hidden />}
+            <span>{agotado ? 'Agotado' : 'Agregar'}</span>
           </button>
         </div>
       </div>

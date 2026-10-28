@@ -82,16 +82,15 @@ export async function POST(request: NextRequest) {
   // nunca de lo que mande el cliente, para evitar manipulación de precios.
   let subtotal = 0;
   const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
+  const noDisponibles: string[] = [];
 
   for (const item of cartItems) {
     const product = products.find((p) => p.id === item.id);
-    if (!product || !product.in_stock) continue;
-
-    // Un producto sin precio de venta no se cobra en $0: se queda fuera hasta
-    // que alguien le ponga precio en el panel.
-    const unitAmount = Math.round(Number(product.price_with_iva) * 100);
-    if (!Number.isFinite(unitAmount) || unitAmount <= 0) {
-      console.warn('Producto sin precio de venta en el carrito:', product.id);
+    // Un producto agotado, borrado o sin precio de venta no se cobra (y nunca
+    // en $0). Se le dice al cliente cuál es en vez de quitarlo sin avisar.
+    const unitAmount = Math.round(Number(product?.price_with_iva) * 100);
+    if (!product || !product.in_stock || !Number.isFinite(unitAmount) || unitAmount <= 0) {
+      noDisponibles.push(product?.name ?? 'Un producto que ya no está en la tienda');
       continue;
     }
 
@@ -115,10 +114,13 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  if (line_items.length === 0) {
+  if (noDisponibles.length > 0) {
     return NextResponse.json(
-      { error: 'Los productos del carrito ya no están disponibles' },
-      { status: 400 }
+      {
+        error: `Ya no está disponible: ${noDisponibles.join(', ')}. Quítalo del carrito para continuar.`,
+        noDisponibles,
+      },
+      { status: 409 }
     );
   }
 
