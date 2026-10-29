@@ -40,13 +40,13 @@ export function SkinworldEdit({ destacados }: { destacados: (Product & Record<st
         </div>
 
         <div className="mt-10 sm:mt-12">
-          <ProductCard product={principal} variante="destacada" />
+          <ProductCard verProducto product={principal} variante="destacada" />
         </div>
 
         {resto.length > 0 && (
           <div className="mt-12 grid grid-cols-2 gap-x-4 gap-y-10 border-t border-sw-ink/15 pt-10 sm:gap-x-6 lg:grid-cols-4 lg:gap-x-8">
             {resto.map((producto) => (
-              <ProductCard key={producto.id} product={producto} />
+              <ProductCard verProducto key={producto.id} product={producto} />
             ))}
           </div>
         )}

@@ -68,7 +68,6 @@ export function Header() {
       <header
         className={cn(
           'sticky top-0 z-50 border-b bg-sw-warm-white transition-[height,margin,box-shadow,border-color] duration-sw ease-sw',
-          enInicio && 'sw-header-intro',
           isScrolled
             ? 'mb-3 h-[60px] border-transparent shadow-sw-sm'
             : 'mb-0 h-[72px] border-sw-border'
@@ -123,7 +122,7 @@ export function Header() {
               type="button"
               onClick={() => setIsSearchOpen(true)}
               aria-label="Buscar productos"
-              className="hidden h-11 w-11 items-center justify-center rounded-full text-sw-text transition-colors duration-sw-fast hover:bg-sw-pink-pale hover:text-sw-ink md:inline-flex"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full text-sw-text transition-colors duration-sw-fast hover:bg-sw-pink-pale hover:text-sw-ink"
             >
               <Search className="h-5 w-5" />
             </button>

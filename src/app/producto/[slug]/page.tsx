@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getProductBySlug, getRelatedProducts, getProductVariants } from '@/lib/products';
+import { getProductBySlug, getProductVariants } from '@/lib/products';
 import { ProductClient } from './product-client';
 import { URL_SITIO } from '@/lib/sitio';
 
@@ -52,10 +52,7 @@ export default async function ProductPage({
     notFound();
   }
 
-  const [relatedProducts, variants] = await Promise.all([
-    getRelatedProducts(product.category, product.slug),
-    getProductVariants(product.variantGroup, product.slug),
-  ]);
+  const variants = await getProductVariants(product.variantGroup, product.slug);
 
   const precio = product.priceWithIVA;
   const datosEstructurados = {
@@ -86,7 +83,7 @@ export default async function ProductPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados).replace(/</g, '\\u003c') }}
       />
-      <ProductClient product={product} relatedProducts={relatedProducts} variants={variants} />
+      <ProductClient product={product} variants={variants} />
     </>
   );
 }

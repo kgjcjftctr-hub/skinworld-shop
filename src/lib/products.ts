@@ -1,4 +1,5 @@
 import 'server-only';
+import { readFile } from 'node:fs/promises';
 import { getSupabase } from '@/lib/supabase';
 import type { Product } from '@/types';
 
@@ -70,6 +71,12 @@ function mapRow(row: ProductRow): Product {
 const TAMANO_DE_PAGINA = 1000;
 
 export async function getAllProducts() {
+  if (process.env.SKINWORLD_LOCAL_PREVIEW === '1') {
+    const path = process.env.SKINWORLD_PREVIEW_CATALOG;
+    if (!path) throw new Error('Falta el catálogo local de prueba');
+    const rows: ProductRow[] = JSON.parse(await readFile(path, 'utf8'));
+    return rows.map(mapRow).sort((a,b) => a.name.localeCompare(b.name, 'es'));
+  }
   const supabase = getSupabase();
   const filas: ProductRow[] = [];
 
@@ -94,6 +101,7 @@ export async function getAllProducts() {
 }
 
 export async function getProductBySlug(slug: string) {
+  if (process.env.SKINWORLD_LOCAL_PREVIEW === '1') return (await getAllProducts()).find(p => p.slug === slug) ?? null;
   const supabase = getSupabase();
   const { data, error } = await supabase
     .from('products')
@@ -106,6 +114,7 @@ export async function getProductBySlug(slug: string) {
 }
 
 export async function getFeaturedProducts() {
+  if (process.env.SKINWORLD_LOCAL_PREVIEW === '1') return (await getAllProducts()).filter(p => p.featured);
   const supabase = getSupabase();
   const { data, error } = await supabase
     .from('products')
@@ -136,6 +145,7 @@ export async function getRelatedProducts(category: string | undefined, excludeSl
 }
 
 export async function getProductVariants(variantGroup: string | undefined, excludeSlug: string) {
+  if (process.env.SKINWORLD_LOCAL_PREVIEW === '1') return variantGroup ? (await getAllProducts()).filter(p => p.variantGroup === variantGroup && p.slug !== excludeSlug) : [];
   if (!variantGroup) return [];
   const supabase = getSupabase();
   const { data, error } = await supabase

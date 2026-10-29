@@ -7,16 +7,14 @@ import { formatPrice } from '@/utils';
 import { useCart } from '@/store/cart';
 import { CANTIDAD_MAXIMA } from '@/lib/carrito';
 import type { Product } from '@/types';
-import { ProductCard } from '@/components/product-card';
+import { ConsultaDermatologa } from '@/components/consulta-dermatologa';
 import Link from 'next/link';
 
 export function ProductClient({
   product,
-  relatedProducts,
   variants = [],
 }: {
   product: Product;
-  relatedProducts: Product[];
   variants?: Product[];
 }) {
   const [quantity, setQuantity] = useState(1);
@@ -299,18 +297,7 @@ export function ProductClient({
           </div>
         </div>
 
-        {relatedProducts.length > 0 && (
-          <section aria-labelledby="relacionados-titulo" className="mt-sw-section border-t border-sw-border pt-12">
-            <h2 id="relacionados-titulo" className="font-display text-sw-h3 font-semibold text-sw-ink">
-              También para {product.category ? product.category.toLowerCase() : 'tu piel'}
-            </h2>
-            <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 lg:grid-cols-4 lg:gap-x-8">
-              {relatedProducts.map((related) => (
-                <ProductCard key={related.id} product={related} />
-              ))}
-            </div>
-          </section>
-        )}
+        <ConsultaDermatologa className="mt-sw-section border-t border-sw-border pt-10" />
       </div>
     </div>
   );

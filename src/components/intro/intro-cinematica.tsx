@@ -1,40 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useId, useLayoutEffect, useRef } from 'react';
+import { useId } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { ALA_DERECHA, ALA_IZQUIERDA, CUERPO, Mariposa } from '@/components/ui/mariposa';
-import { iniciarIntro } from './motor';
 import '@/styles/intro.css';
-
-// useLayoutEffect evita un parpadeo al llegar al inicio desde otra página;
-// en el servidor no existe y se usa useEffect para no generar avisos.
-const useEfectoAntesDePintar = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 const LETRAS = Array.from('Skinworld');
 
-/**
- * Intro cinematográfica del inicio: la mariposa nace en la oscuridad, cruza
- * la escena, gira, se queda viva al centro y se convierte en el logo del
- * encabezado. Todo lo controla el scroll (ver linea-de-tiempo.ts y motor.ts).
- *
- * Sin JavaScript o con "reducir movimiento" se muestra una composición fija:
- * la mariposa, Skinworld y los dos botones.
- */
+/** Firma de Skinworld visible desde el primer render, sin transición inicial. */
 export function IntroCinematica() {
-  const raiz = useRef<HTMLElement>(null);
   const id = useId().replace(/:/g, '');
-
-  useEfectoAntesDePintar(() => {
-    if (!raiz.current) return;
-    return iniciarIntro(raiz.current);
-  }, []);
 
   const gradienteIzq = `${id}-ala-izq`;
   const gradienteDer = `${id}-ala-der`;
 
   return (
-    <section ref={raiz} className="sw-intro" aria-labelledby={`${id}-titulo`}>
+    <section className="sw-intro" aria-labelledby={`${id}-titulo`}>
       <div className="sw-intro__escena" data-intro="escena">
         <div className="sw-intro__sonda" data-intro="sonda" aria-hidden />
 

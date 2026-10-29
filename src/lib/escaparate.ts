@@ -17,7 +17,8 @@ export interface MarcaDelEscaparate {
  * (cuatro veces por render). Solo lee: no cambia productos ni precios.
  */
 export async function datosDeLaPortada() {
-  const catalogo: ProductoDelCatalogo[] = dedupeVariants(await getAllProducts());
+  const todos = await getAllProducts();
+  const catalogo: ProductoDelCatalogo[] = dedupeVariants(todos);
 
   const marcas = new Map<string, MarcaDelEscaparate>();
   const porCategoria: Record<string, number> = {};
@@ -42,7 +43,7 @@ export async function datosDeLaPortada() {
     marcas: marcasOrdenadas,
     porCategoria,
     // Los que el panel marca como destacados: son la selección de la Dra. Karina.
-    destacados: catalogo.filter((p) => p.featured),
+    destacados: dedupeVariants(todos.filter((p) => p.featured)),
     // Para la portada: un producto real de cada una de las tres marcas con más catálogo.
     portada: marcasOrdenadas
       .slice(0, 3)
