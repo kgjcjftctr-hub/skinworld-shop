@@ -1,3 +1,14 @@
+# Skin World
+
+- Stack: Next.js 15 (App Router), TypeScript, Supabase (base de datos; migraciones SQL en `supabase/migraciones`),
+  Stripe (pagos), Tailwind CSS.
+- Comandos: `npm run dev` (desarrollo), `npm test` (pruebas), `npm run build`, `npm run type-check`, `npm run lint`.
+  `npm test` corre `node --test "tests/**/*.test.mjs"`; las pruebas importan archivos `.ts` sin compilar,
+  así que requieren Node 22.18+ o 23.6+ (type stripping activado por defecto).
+- Convenciones: componentes en `src/components`, rutas en `src/app`, lógica compartida en `src/lib`.
+- Migración desde WooCommerce: no tocar los scripts de migración (`scripts/migrar-*.mjs`) ni
+  `supabase/migraciones` sin confirmar.
+
 # SkinWorld Task Center maintenance
 
 `SKINWORLD_TASKS.json` is the persistent source of truth for the SkinWorld Task Center.
