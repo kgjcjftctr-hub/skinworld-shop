@@ -21,9 +21,11 @@ export function ProductCard({
   product,
   prioritaria = false,
   variante = 'estandar',
+  verProducto = false,
 }: {
   product: Product & Record<string, any>;
   prioritaria?: boolean;
+  verProducto?: boolean;
   /** 'destacada' ocupa una columna completa con foto grande y descripción. */
   variante?: 'estandar' | 'destacada';
 }) {
@@ -91,7 +93,7 @@ export function ProductCard({
             )}
             <span className="text-sw-xs text-sw-muted">IVA incluido</span>
           </p>
-          <button
+          {verProducto ? <Link href={enlace} className="sw-btn sw-btn-primary relative z-10 mt-5 min-h-11 px-4">Ver producto</Link> : <button
             type="button"
             onClick={handleAddToCart}
             disabled={agotado}
@@ -100,7 +102,7 @@ export function ProductCard({
           >
             <ShoppingBag className="h-4 w-4" aria-hidden />
             {agotado ? 'Agotado' : 'Agregar al carrito'}
-          </button>
+          </button>}
         </div>
       </article>
     );
@@ -159,7 +161,7 @@ export function ProductCard({
             <p className="text-[0.6875rem] text-sw-muted sm:text-sw-xs">IVA incluido</p>
           </div>
 
-          <button
+          {verProducto ? <Link href={enlace} className="sw-btn sw-btn-primary relative z-10 mt-5 min-h-11 px-4">Ver producto</Link> : <button
             type="button"
             onClick={handleAddToCart}
             disabled={agotado}
@@ -173,7 +175,7 @@ export function ProductCard({
           >
             {!agotado && <ShoppingBag className="h-4 w-4" aria-hidden />}
             <span>{agotado ? 'Agotado' : 'Agregar'}</span>
-          </button>
+          </button>}
         </div>
       </div>
     </article>

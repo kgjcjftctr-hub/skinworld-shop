@@ -5,11 +5,34 @@ import { createPortal } from 'react-dom';
 import { Search, X } from 'lucide-react';
 import Link from 'next/link';
 import { formatPrice } from '@/utils';
+import { ConsultaDermatologa } from './consulta-dermatologa';
+import { ImagenProducto } from './imagen-producto';
+
+interface SearchProduct { id: string; name: string; slug: string; price?: number; image?: string; brand?: string; presentation?: string; inStock?: boolean; }
+interface Results { products: SearchProduct[]; brands: string[]; categories: string[]; }
+const emptyResults: Results = { products: [], brands: [], categories: [] };
+const historyKey = 'skinworld-productos-vistos';
 
 export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<any>({ products: [], brands: [], categories: [] });
+  const [results, setResults] = useState<Results>(emptyResults);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [recent, setRecent] = useState<SearchProduct[]>([]);
+  const remember = (product: SearchProduct) => {
+    const { price: _price, inStock: _stock, ...entry } = product;
+    const next = [entry, ...recent.filter(p => p.slug !== entry.slug)].slice(0, 6);
+    setRecent(next);
+    try { localStorage.setItem(historyKey, JSON.stringify(next)); } catch {}
+    onClose();
+  };
+  const clearHistory = () => { setRecent([]); try { localStorage.removeItem(historyKey); } catch {} };
+  useEffect(() => {
+    try {
+      const saved: unknown = JSON.parse(localStorage.getItem(historyKey) ?? '[]');
+      if (Array.isArray(saved)) setRecent(saved.filter(p => p && typeof p.name === 'string' && typeof p.slug === 'string' && typeof p.id === 'string').slice(0, 6));
+    } catch {}
+  }, []);
   const [mounted, setMounted] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -51,24 +74,27 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
   }, [isOpen]);
 
   useEffect(() => {
+    if (!isOpen) { setQuery(''); setResults(emptyResults); setError(false); setLoading(false); return; }
+    const term = query.trim();
+    const controller = new AbortController();
+    let active = true;
+    setResults(emptyResults);
+    setError(false);
+    setLoading(term.length >= 2);
+    if (term.length < 2) return;
     const timer = setTimeout(async () => {
-      if (query.length >= 2) {
-        setLoading(true);
-        try {
-          const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-          const data = await res.json();
-          setResults(data);
-        } catch (error) {
-          console.error('Search error:', error);
-        }
-        setLoading(false);
-      } else {
-        setResults({ products: [], brands: [], categories: [] });
-      }
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [query]);
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(term)}`, { signal: controller.signal });
+        if (!res.ok) throw new Error('Error de búsqueda');
+        const data = await res.json();
+        if (!Array.isArray(data.products) || !Array.isArray(data.brands) || !Array.isArray(data.categories)) throw new Error('Respuesta inválida');
+        if (active) setResults(data);
+      } catch {
+        if (active && !controller.signal.aborted) setError(true);
+      } finally { if (active) setLoading(false); }
+    }, 250);
+    return () => { active = false; controller.abort(); clearTimeout(timer); };
+  }, [query, isOpen]);
 
   if (!isOpen || !mounted) return null;
 
@@ -88,6 +114,10 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
         aria-label="Buscar productos"
         className="w-full max-w-2xl overflow-hidden rounded-sw-lg bg-sw-warm-white shadow-sw-md"
       >
+        <div className="flex items-center justify-between px-5 pt-4 pb-2">
+          <h2 className="font-display text-2xl">Buscar</h2>
+          <button type="button" onClick={onClose} aria-label="Cerrar búsqueda" className="min-h-11 rounded-sw px-3 text-sw-muted hover:bg-sw-pink-pale">Cerrar</button>
+        </div>
         <div className="relative">
           <Search className="absolute left-5 top-[1.15rem] h-5 w-5 text-sw-muted" aria-hidden />
           <input
@@ -95,13 +125,15 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
             type="text"
             aria-label="Buscar productos, marcas o categorías"
             placeholder="Buscar productos, marcas, categorías..."
+            maxLength={120}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="!h-14 w-full !rounded-none !border-0 !border-b !border-sw-border !bg-sw-warm-white !py-4 !pl-14 !pr-14 font-display !text-lg focus:!ring-0"
           />
           <button
-            onClick={onClose}
-            aria-label="Cerrar búsqueda"
+            onClick={() => { setQuery(''); inputRef.current?.focus(); }}
+            hidden={!query}
+            aria-label="Borrar búsqueda"
             className="absolute right-2 top-1.5 inline-flex h-11 w-11 items-center justify-center rounded-full text-sw-muted hover:bg-sw-pink-pale hover:text-sw-ink"
           >
             <X className="h-5 w-5" />
@@ -113,7 +145,12 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
             <div className="p-4 text-center text-sw-muted">Buscando...</div>
           )}
 
-          {!loading && query.length >= 2 && (
+          {error && <div role="alert" className="p-5"><p>No pudimos cargar la búsqueda. Intenta escribir de nuevo.</p><ConsultaDermatologa className="mt-5" /></div>}
+          {!query.trim() && <div className="px-5 py-4">
+            <div className="flex items-center justify-between gap-3"><h3 className="font-semibold">Vistos recientemente</h3>{recent.length > 0 && <button onClick={clearHistory} className="min-h-11 text-sm text-sw-pink-deep underline">Borrar historial</button>}</div>
+            {recent.length === 0 ? <p className="mt-2 text-sm text-sw-muted">Aquí aparecerán los productos que abras desde el buscador.</p> : recent.map(p => <Link key={p.slug} href={`/producto/${encodeURIComponent(p.slug)}`} onClick={() => remember(p)} className="flex min-h-14 items-center gap-3 border-b border-sw-border py-3"><span className="h-14 w-14 shrink-0"><ImagenProducto src={p.image} alt="" className="h-full w-full object-contain" /></span><span>{p.name}<span className="block text-sm text-sw-muted">{p.brand}{p.presentation ? ` · ${p.presentation}` : ''}</span></span></Link>)}
+          </div>}
+          {!loading && !error && query.trim().length >= 2 && (
             <>
               {results.products.length > 0 && (
                 <div className="border-b border-sw-border px-5 py-4">
@@ -121,11 +158,11 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                     Productos
                   </p>
                   <div className="space-y-1">
-                    {results.products.map((product: any) => (
+                    {results.products.map((product) => (
                       <Link
                         key={product.id}
                         href={`/producto/${encodeURIComponent(product.slug)}`}
-                        onClick={onClose}
+                        onClick={() => remember(product)}
                         className="block rounded-sw text-sw-ink"
                       >
                         <div className="flex cursor-pointer items-center gap-3 rounded-sw p-2 hover:bg-sw-pink-pale">
@@ -139,10 +176,11 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                             />
                           )}
                           <div className="min-w-0">
-                            <p className="truncate font-display font-medium text-sw-ink">
+                            <p className="font-display font-medium leading-snug text-sw-ink">
                               {product.name}
                             </p>
-                            <p className="text-sw-small tabular-nums text-sw-muted">{formatPrice(product.price)}</p>
+                            <p className="text-sm text-sw-muted">{product.brand}{product.presentation ? ` · ${product.presentation}` : ''}{product.inStock === false ? ' · Agotado' : ''}</p>
+                            <p className="text-sw-small tabular-nums text-sw-muted">{product.price != null ? formatPrice(product.price) : 'Precio por confirmar'}</p>
                           </div>
                         </div>
                       </Link>
@@ -199,7 +237,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                 results.brands.length === 0 &&
                 results.categories.length === 0 && (
                   <div className="p-6 text-center text-sw-muted">
-                    No se encontraron resultados para “{query}”
+                    <ConsultaDermatologa className="text-left" />
                   </div>
                 )}
             </>

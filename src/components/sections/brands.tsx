@@ -1,137 +1,76 @@
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
-import { ImagenProducto } from '@/components/imagen-producto';
+import Image from 'next/image';
 import type { MarcaDelEscaparate } from '@/lib/escaparate';
-import { cn } from '@/utils';
 
-const enlaceDeMarca = (nombre: string) => `/tienda?marca=${encodeURIComponent(nombre)}`;
-const productos = (n: number) => `${n} ${n === 1 ? 'producto' : 'productos'}`;
-// Evita que "LA ROCHE-POSAY" se parta en el guion: un word joiner (U+2060)
-// después del guion quita ese punto de corte sin cambiar lo que se ve.
-const sinCorteEnGuion = (nombre: string) => nombre.replace(/-/g, '-\u2060');
+const LOGOTIPOS: Record<string, { archivo: string; ancho: number; alto: number; cuadrado?: boolean }> = {
+  isdin: { archivo: 'isdin-icon.png', ancho: 260, alto: 260, cuadrado: true },
+  larocheposay: { archivo: 'larocheposay.png', ancho: 200, alto: 51 },
+  bioderma: { archivo: 'bioderma.png', ancho: 480, alto: 95 },
+  avene: { archivo: 'avene.png', ancho: 244, alto: 100 },
+  vichy: { archivo: 'vichy.svg', ancho: 161, alto: 47 },
+  uriage: { archivo: 'uriage.svg', ancho: 123, alto: 38 },
+  sesderma: { archivo: 'sesderma.svg', ancho: 215, alto: 85 },
+  eucerin: { archivo: 'eucerin.svg', ancho: 209, alto: 78 },
+};
 
-/**
- * Los laboratorios de la tienda, calculados del catálogo. Es el momento de
- * contraste de la página: fondo carbón, el nombre de cada laboratorio a gran
- * escala y una foto real de uno de sus productos. No se usan logotipos ni
- * campañas de las marcas, porque no hay material autorizado para eso.
- */
-export function BrandsSection({ marcas }: { marcas: MarcaDelEscaparate[] }) {
-  if (marcas.length === 0) return null;
-
-  const principales = marcas.slice(0, 4);
-  const resto = marcas.slice(4);
-
-  return (
-    <section aria-labelledby="marcas-titulo" className="sw-section bg-sw-charcoal text-sw-cream">
-      <div className="sw-container">
-        <div className="max-w-2xl">
-          <p className="font-sans text-sw-small font-semibold text-sw-pink">Laboratorios</p>
-          <h2 id="marcas-titulo" className="mt-3 font-display text-sw-h2 font-semibold text-sw-cream">
-            Los laboratorios que trabajamos
-          </h2>
-          <p className="mt-4 text-sw-body text-sw-cream-muted">
-            {marcas.length} laboratorios dermatológicos en la tienda. Cada uno lleva a su catálogo
-            completo.
-          </p>
-        </div>
-
-        <ul className="mt-12 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:grid-rows-2">
-          {principales.map((marca, i) => (
-            <li
-              key={marca.nombre}
-              className={cn(
-                i === 0 && 'col-span-2 lg:row-span-2',
-                i === 3 && 'col-span-2'
-              )}
-            >
-              <BloqueDeMarca marca={marca} grande={i === 0} ancho={i === 3} />
-            </li>
-          ))}
-        </ul>
-
-        {resto.length > 0 && (
-          <div className="mt-12 border-t border-sw-cream/15 pt-8">
-            <h3 className="text-sw-small font-semibold text-sw-cream-muted">Más laboratorios</h3>
-            <ul className="mt-5 grid grid-cols-1 gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
-              {resto.map((marca) => (
-                <li key={marca.nombre} className="border-b border-sw-cream/10">
-                  <Link
-                    href={enlaceDeMarca(marca.nombre)}
-                    className="group flex min-h-[3.25rem] items-baseline justify-between gap-4 py-3 text-sw-cream"
-                  >
-                    <span className="font-display text-xl transition-colors duration-sw-fast group-hover:text-sw-pink">
-                      {sinCorteEnGuion(marca.nombre)}
-                    </span>
-                    <span className="text-sw-small tabular-nums text-sw-cream-muted">
-                      {productos(marca.productos)}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-    </section>
-  );
+function claveMarca(nombre: string) {
+  return nombre
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '');
 }
 
-function BloqueDeMarca({
-  marca,
-  grande,
-  ancho,
-}: {
-  marca: MarcaDelEscaparate;
-  grande: boolean;
-  ancho: boolean;
-}) {
+/** Acceso directo por laboratorio: muestra marcas con logo, sin productos aleatorios ni el listado completo. */
+export function BrandsSection({ marcas }: { marcas: MarcaDelEscaparate[] }) {
+  const visibles = marcas
+    .filter((marca) => Boolean(LOGOTIPOS[claveMarca(marca.nombre)]))
+    .slice(0, 8);
+
+  if (visibles.length === 0) return null;
+
   return (
-    <Link
-      href={enlaceDeMarca(marca.nombre)}
-      className={cn(
-        'group relative flex h-full overflow-hidden rounded-sw bg-sw-white text-sw-ink',
-        ancho ? 'flex-row' : 'flex-col'
-      )}
-    >
-      <span
-        className={cn(
-          'relative block overflow-hidden bg-sw-white',
-          grande ? 'aspect-[4/3] sm:aspect-square lg:aspect-auto lg:flex-1' : 'aspect-square',
-          ancho && 'aspect-auto min-h-[10rem] w-1/2 sm:min-h-[12rem]'
-        )}
-      >
-        <ImagenProducto
-          src={marca.muestra?.image}
-          alt=""
-          className={cn(
-            'absolute inset-0 h-full w-full object-contain transition-transform duration-sw-slow ease-sw [@media(hover:hover)]:group-hover:scale-[1.04]',
-            grande ? 'p-[12%]' : 'p-[14%]'
-          )}
-        />
-      </span>
-      <span
-        className={cn(
-          'flex flex-col justify-end border-t border-sw-border p-4 sm:p-5',
-          ancho && 'w-1/2 border-l border-t-0'
-        )}
-      >
-        <span
-          className={cn(
-            'font-display font-semibold leading-[1.05] tracking-tight transition-colors duration-sw-fast group-hover:text-sw-pink-deep',
-            grande ? 'text-[clamp(2rem,1.2rem+3.4vw,4.25rem)]' : 'text-[clamp(1.125rem,0.95rem+0.8vw,1.625rem)]'
-          )}
-        >
-          {sinCorteEnGuion(marca.nombre)}
-        </span>
-        <span className="mt-4 flex items-center justify-between gap-3 text-sw-small text-sw-muted">
-          <span className="tabular-nums">{productos(marca.productos)}</span>
-          <ArrowUpRight
-            aria-hidden
-            className="h-5 w-5 text-sw-pink-deep transition-transform duration-sw ease-sw group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-          />
-        </span>
-      </span>
-    </Link>
+    <section aria-labelledby="marcas-titulo" className="bg-sw-charcoal py-10 text-sw-cream sm:py-12 lg:py-14">
+      <div className="sw-container">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="text-sm font-medium text-sw-pink">Laboratorios</p>
+            <h2 id="marcas-titulo" className="mt-1 font-display text-2xl font-semibold text-sw-cream sm:text-3xl">
+              Explora por marca
+            </h2>
+          </div>
+          <Link href="/tienda" className="sw-link shrink-0 text-sm text-sw-cream sm:text-base">
+            Todas las marcas
+          </Link>
+        </div>
+
+        <ul className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+          {visibles.map((marca) => {
+            const logo = LOGOTIPOS[claveMarca(marca.nombre)];
+            return (
+              <li key={marca.nombre}>
+                <Link
+                  href={`/tienda?marca=${encodeURIComponent(marca.nombre)}`}
+                  aria-label={`Ver productos de ${marca.nombre}`}
+                  className="group flex min-h-28 flex-col items-center justify-center gap-3 rounded-sw border border-sw-border bg-sw-warm-white px-3 py-4 text-center transition-[border-color,transform] duration-sw-fast hover:-translate-y-0.5 hover:border-sw-pink-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sw-pink"
+                >
+                  <Image
+                    src={`/images/laboratorios/${logo.archivo}`}
+                    alt=""
+                    width={logo.ancho}
+                    height={logo.alto}
+                    className={logo.cuadrado ? 'h-12 w-12 object-contain' : 'h-10 w-auto max-w-40 object-contain sm:h-12'}
+                    loading="lazy"
+                  />
+                  <span className="text-xs font-medium text-sw-muted transition-colors group-hover:text-sw-pink-deep">
+                    Ver productos
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
   );
 }

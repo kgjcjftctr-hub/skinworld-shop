@@ -82,14 +82,15 @@
 
 .sw-intro__plano {
   position: relative;
-  min-height: 100vh;
-  min-height: 100svh;
+  /* Header is in normal flow, so fill only the viewport area beneath it. */
+  min-height: calc(100vh - var(--sw-header-h, 4.5rem));
+  min-height: calc(100svh - var(--sw-header-h, 4.5rem));
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(1.75rem, 4vh, 2.75rem);
-  padding: 6.5rem 1rem 4rem;
+  gap: clamp(1.5rem, 3.5vh, 2.5rem);
+  padding: clamp(1rem, 2.5svh, 2rem) 1rem;
 }
 
 .sw-intro__mariposa {
