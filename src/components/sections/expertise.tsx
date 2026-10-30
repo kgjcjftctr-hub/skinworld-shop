@@ -53,7 +53,7 @@ export function ExpertiseSection() {
           </dl>
 
           <Link href="/sobre-nosotros" className="sw-link mt-10 inline-block">
-            Conocer su trayectoria
+            Conoce cómo elegimos
           </Link>
         </div>
       </div>

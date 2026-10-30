@@ -2,7 +2,6 @@ import { IntroCinematica } from '@/components/intro/intro-cinematica';
 import { CategoriesSection } from '@/components/sections/categories';
 import { SkinworldEdit } from '@/components/sections/skinworld-edit';
 import { BrandsSection } from '@/components/sections/brands';
-import { EditorialSection } from '@/components/sections/editorial';
 import { ExpertiseSection } from '@/components/sections/expertise';
 import { TestimonialsSection } from '@/components/sections/testimonials';
 import { BlogPreview } from '@/components/sections/blog-preview';
@@ -23,7 +22,6 @@ export default async function Home() {
         <CategoriesSection porCategoria={porCategoria} />
         <SkinworldEdit destacados={destacados} />
         <BrandsSection marcas={marcas} />
-        <EditorialSection />
         <ExpertiseSection />
         <TestimonialsSection />
         <BlogPreview />
