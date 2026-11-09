@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<title>SEGURO · escena 3D</title>
+<style>
+  @font-face { font-family: 'Inter'; font-weight: 500; src: local('Inter Medium'), url('/fonts/Inter-Medium.otf') format('opentype'); }
+  @font-face { font-family: 'Inter'; font-weight: 600; src: local('Inter SemiBold'), url('/fonts/Inter-SemiBold.otf') format('opentype'); }
+  @font-face { font-family: 'Inter'; font-weight: 700; src: local('Inter Bold'), url('/fonts/Inter-Bold.otf') format('opentype'); }
+  @font-face { font-family: 'Inter'; font-weight: 800; src: local('Inter ExtraBold'), url('/fonts/Inter-ExtraBold.otf') format('opentype'); }
+  html, body { margin: 0; padding: 0; width: 1920px; height: 1080px; overflow: hidden; background: #050C1A; }
+  body { font-family: 'Inter', sans-serif; color: #fff; }
+  #stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
+  canvas { display: block; position: absolute; inset: 0; }
+  .layer { position: absolute; inset: 0; pointer-events: none; }
+  #vignette { background: radial-gradient(ellipse 75% 70% at 50% 52%, rgba(5,12,26,0) 55%, rgba(3,8,18,0.72) 100%); }
+  #fade { background: #03070F; }
+  #scrimTop { background: linear-gradient(180deg, rgba(4,10,22,0.86) 0px, rgba(4,10,22,0.62) 230px, rgba(4,10,22,0) 360px); }
+  #scrimEnd { background: radial-gradient(ellipse 48% 40% at 50% 66%, rgba(4,10,22,0.78) 0%, rgba(4,10,22,0.35) 70%, rgba(4,10,22,0) 100%); }
+
+  #headline { position: absolute; left: 0; right: 0; top: 74px; text-align: center;
+    font-size: 92px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05;
+    text-shadow: 0 6px 28px rgba(0,0,0,0.55); }
+  #headline .hl { color: #2EE0CB; }
+
+  .cap { position: absolute; left: 104px; top: 66px; max-width: 1500px; }
+  .cap .step { display: inline-flex; align-items: center; gap: 14px; font-size: 25px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: #2EE0CB; }
+  .cap .step i { display: inline-block; width: 38px; height: 4px; border-radius: 2px; background: #FF8A3D; }
+  .cap h2 { margin: 14px 0 0; font-size: 68px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05;
+    text-shadow: 0 6px 26px rgba(0,0,0,0.6); }
+  .cap p { margin: 14px 0 0; font-size: 33px; font-weight: 500; color: #C3D1E4; line-height: 1.25;
+    text-shadow: 0 4px 18px rgba(0,0,0,0.7); }
+
+  #corner { position: absolute; right: 44px; bottom: 34px; font-size: 22px; font-weight: 600;
+    letter-spacing: 0.04em; color: rgba(190,206,228,0.82); }
+
+  #end { position: absolute; left: 0; right: 0; text-align: center; }
+  #end .brand { position: absolute; left: 0; right: 0; top: 548px; font-size: 156px; font-weight: 800;
+    letter-spacing: 0.12em; text-indent: 0.12em; line-height: 1; }
+  #end .tag { position: absolute; left: 0; right: 0; top: 742px; font-size: 56px; font-weight: 600;
+    color: #DDE8F5; letter-spacing: -0.01em; }
+  #end .tag b { color: #2EE0CB; font-weight: 700; }
+  #end .small { position: absolute; left: 0; right: 0; top: 968px; font-size: 25px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase; color: rgba(190,206,228,0.85); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="layer" id="vignette"></div>
+  <div class="layer" id="scrimTop"></div>
+  <div class="layer" id="scrimEnd"></div>
+
+  <div id="headline">¿Qué pasa después<br>de <span class="hl">cotizar</span>?</div>
+
+  <div class="cap" id="cap2"><div class="step"><i></i>Estado</div>
+    <h2>Sabes cuáles esperan respuesta.</h2></div>
+
+  <div class="cap" id="cap3"><div class="step"><i></i>Siguiente paso</div>
+    <h2>Quién sigue, y cuándo.</h2>
+    <p>Cada cotización con responsable y próxima acción.</p></div>
+
+  <div class="cap" id="cap4"><div class="step"><i></i>Borrador</div>
+    <h2>Un borrador, listo para revisar.</h2>
+    <p>Tu equipo lo ajusta y decide si lo envía. Nada sale sin aprobación.</p></div>
+
+  <div class="cap" id="cap5"><div class="step"><i></i>Registro</div>
+    <h2>Y queda registro de lo que pasó.</h2>
+    <p>Sin suponer resultados: se confirman cuando llegan.</p></div>
+
+  <div id="end" class="layer">
+    <div class="brand">SEGURO</div>
+    <div class="tag">Cada cotización, <b>con un siguiente paso.</b></div>
+    <div class="small">Demostración simulada</div>
+  </div>
+
+  <div id="corner">Demostración simulada · datos ficticios</div>
+  <div class="layer" id="fade"></div>
+</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "/node_modules/three/build/three.module.js",
+  "three/addons/": "/node_modules/three/examples/jsm/"
+} }
+</script>
+<script type="module" src="/scene.js"></script>
+</body>
+</html>
